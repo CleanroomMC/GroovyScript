@@ -22,5 +22,4 @@ public class RecipeName {
     public static ResourceLocation generateRl(String prefix) {
         return new ResourceLocation(GroovyScript.getRunConfig().getPackId(), generate(prefix));
     }
-
 }

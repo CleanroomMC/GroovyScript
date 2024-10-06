@@ -99,5 +99,4 @@ public class GasificationUnit extends StandardListRegistry<IGasificationUnitReci
         }
 
     }
-
 }

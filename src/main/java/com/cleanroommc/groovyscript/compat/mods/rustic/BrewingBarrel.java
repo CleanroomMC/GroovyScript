@@ -76,5 +76,4 @@ public class BrewingBarrel extends StandardListRegistry<IBrewingBarrelRecipe> {
         }
 
     }
-
 }

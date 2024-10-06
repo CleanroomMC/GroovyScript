@@ -47,5 +47,4 @@ public abstract class AbstractPraescriptumRegistry extends StandardListRegistry<
             return false;
         });
     }
-
 }

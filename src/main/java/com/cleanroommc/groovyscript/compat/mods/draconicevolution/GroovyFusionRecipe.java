@@ -150,5 +150,4 @@ public class GroovyFusionRecipe implements IFusionRecipe {
 
         return "tierLow";
     }
-
 }

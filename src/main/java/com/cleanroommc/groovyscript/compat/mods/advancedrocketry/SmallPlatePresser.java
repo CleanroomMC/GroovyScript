@@ -53,5 +53,4 @@ public class SmallPlatePresser extends BaseRegistry {
         }
 
     }
-
 }

@@ -60,5 +60,4 @@ public class ArcaneWorkbench extends NamedRegistry {
             ReloadableRegistryManager.removeRegistryEntry(ForgeRegistries.RECIPES, recipe.getRegistryName());
         }
     }
-
 }

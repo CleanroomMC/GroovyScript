@@ -83,5 +83,4 @@ public abstract class ItemStackMixin implements ItemStackMixinExpansion {
     public void grs$setMark(String mark) {
         this.groovyScript$mark = mark;
     }
-
 }

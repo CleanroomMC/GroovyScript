@@ -338,5 +338,4 @@ public class LootEntryBuilder {
                         new LootEntryItem(item, weight, quality, functions.toArray(new LootFunction[0]), conditions.toArray(new LootCondition[0]), name)
                 );
     }
-
 }

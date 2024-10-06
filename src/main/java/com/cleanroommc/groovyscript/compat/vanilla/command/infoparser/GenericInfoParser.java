@@ -212,5 +212,4 @@ public abstract class GenericInfoParser<T> implements InfoParser {
         if (blocked(info.getArgs())) return;
         if (enabled || allowed(info.getArgs())) parse(info);
     }
-
 }

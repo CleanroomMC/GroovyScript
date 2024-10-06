@@ -406,5 +406,4 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         prevDiagnosticsByFile = diagnosticsByFile;
         return diagnosticsByFile.values();
     }
-
 }

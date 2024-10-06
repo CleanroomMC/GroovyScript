@@ -64,5 +64,4 @@ public class Smoker extends StandardListRegistry<SimpleRecipe> {
         }
 
     }
-
 }

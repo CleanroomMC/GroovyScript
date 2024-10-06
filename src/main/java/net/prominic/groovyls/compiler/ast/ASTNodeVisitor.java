@@ -831,5 +831,4 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
             popASTNode();
         }
     }
-
 }

@@ -57,5 +57,4 @@ public class AltarInputOrder {
         if (rVal != null) Arrays.fill(rVal, null);
         return rVal;
     }
-
 }

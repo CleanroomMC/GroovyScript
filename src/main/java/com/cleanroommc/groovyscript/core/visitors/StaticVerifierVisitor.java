@@ -159,5 +159,4 @@ public class StaticVerifierVisitor extends ClassVisitor implements Opcodes {
         }
 
     }
-
 }

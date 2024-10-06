@@ -125,5 +125,4 @@ public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
         }
 
     }
-
 }

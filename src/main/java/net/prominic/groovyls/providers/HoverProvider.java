@@ -85,5 +85,4 @@ public class HoverProvider extends DocProvider {
         }
         return null;
     }
-
 }

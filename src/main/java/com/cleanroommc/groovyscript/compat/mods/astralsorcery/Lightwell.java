@@ -194,5 +194,4 @@ public class Lightwell extends VirtualizedRegistry<WellLiquefaction.Liquefaction
         }
 
     }
-
 }

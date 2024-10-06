@@ -26,5 +26,4 @@ public interface InsolatorManagerAccessor {
     static Set<ComparableItemStackValidatedNBT> getLockSet() {
         throw new UnsupportedOperationException();
     }
-
 }

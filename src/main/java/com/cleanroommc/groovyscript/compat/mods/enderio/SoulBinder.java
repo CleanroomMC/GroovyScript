@@ -209,5 +209,4 @@ public class SoulBinder extends VirtualizedRegistry<ISoulBinderRecipe> {
         }
 
     }
-
 }

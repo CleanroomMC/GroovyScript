@@ -49,5 +49,4 @@ public class Heat extends StandardListRegistry<BWMHeatRegistry.HeatSource> {
     public void add(int heat, IIngredient input) {
         add(heat, new BlockIngredient(input.toMcIngredient()));
     }
-
 }

@@ -14,5 +14,4 @@ public interface CrushingTableRecipeManagerAccessor {
     static List<ICrushingTableRecipe> getRecipes() {
         throw new UnsupportedOperationException();
     }
-
 }

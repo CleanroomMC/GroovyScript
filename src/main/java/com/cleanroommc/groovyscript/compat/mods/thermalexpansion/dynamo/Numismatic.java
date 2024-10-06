@@ -115,5 +115,4 @@ public class Numismatic extends VirtualizedRegistry<Numismatic.NumismaticRecipe>
         }
 
     }
-
 }

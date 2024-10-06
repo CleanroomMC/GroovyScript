@@ -113,5 +113,4 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
         }
 
     }
-
 }

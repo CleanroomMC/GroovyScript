@@ -100,5 +100,4 @@ public interface TextureBinder<T> extends Function<T, List<String>> {
         bufferBuilder.pos(0, 0, 0).tex(uMin, vMin).endVertex();
         tessellator.draw();
     }
-
 }

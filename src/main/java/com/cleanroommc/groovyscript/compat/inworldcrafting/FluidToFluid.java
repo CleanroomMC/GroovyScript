@@ -138,5 +138,4 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         }
 
     }
-
 }

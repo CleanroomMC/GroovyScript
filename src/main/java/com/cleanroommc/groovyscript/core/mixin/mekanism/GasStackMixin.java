@@ -62,5 +62,4 @@ public abstract class GasStackMixin implements IIngredient, IResourceStack {
     public void setMark(String mark) {
         this.groovyScript$mark = mark;
     }
-
 }

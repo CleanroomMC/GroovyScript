@@ -65,5 +65,4 @@ public class InvisECoreBlockLogic {
         }
         return ItemStack.EMPTY;
     }
-
 }

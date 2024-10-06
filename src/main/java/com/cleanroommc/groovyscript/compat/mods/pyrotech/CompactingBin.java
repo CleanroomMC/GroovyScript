@@ -101,5 +101,4 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         }
 
     }
-
 }

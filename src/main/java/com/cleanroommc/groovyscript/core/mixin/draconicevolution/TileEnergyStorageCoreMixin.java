@@ -52,5 +52,4 @@ public abstract class TileEnergyStorageCoreMixin {
         }
         cir.setReturnValue(valid);
     }
-
 }

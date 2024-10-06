@@ -163,5 +163,4 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
         }
 
     }
-
 }

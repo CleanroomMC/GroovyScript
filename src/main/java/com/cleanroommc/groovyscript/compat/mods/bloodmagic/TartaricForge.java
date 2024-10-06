@@ -152,5 +152,4 @@ public class TartaricForge extends StandardListRegistry<RecipeTartaricForge> {
         }
 
     }
-
 }

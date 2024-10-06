@@ -32,5 +32,4 @@ public class Helper {
         if (IngredientHelper.isItem(ingredient)) return ItemStackInputIngredient.of(IngredientHelper.toItemStack(ingredient));
         return ItemStackInputIngredient.of(ItemStack.EMPTY);
     }
-
 }

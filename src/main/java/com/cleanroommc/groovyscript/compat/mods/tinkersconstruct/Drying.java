@@ -121,5 +121,4 @@ public class Drying extends StandardListRegistry<DryingRecipe> {
         }
 
     }
-
 }

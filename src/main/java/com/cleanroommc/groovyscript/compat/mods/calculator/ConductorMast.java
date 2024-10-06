@@ -101,5 +101,4 @@ public class ConductorMast extends StandardListRegistry<DefaultSonarRecipe.Value
         }
 
     }
-
 }

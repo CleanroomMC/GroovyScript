@@ -228,5 +228,4 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         }
 
     }
-
 }

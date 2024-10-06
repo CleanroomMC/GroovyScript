@@ -81,5 +81,4 @@ public class OilHeater extends StandardListRegistry<IOilHeaterRecipe> {
         }
 
     }
-
 }

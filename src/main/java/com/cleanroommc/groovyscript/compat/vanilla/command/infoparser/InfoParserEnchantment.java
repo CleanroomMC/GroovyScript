@@ -34,5 +34,4 @@ public class InfoParserEnchantment extends GenericInfoParser<Enchantment> {
         List<Enchantment> list = new ArrayList<>(EnchantmentHelper.getEnchantments(info.getStack()).keySet());
         instance.add(info.getMessages(), list, info.isPrettyNbt());
     }
-
 }

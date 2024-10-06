@@ -64,5 +64,4 @@ public class GroovyScriptLanguageServerImpl extends GroovyLanguageServer<GroovyS
                                                                  ILanguageServerContext languageServerContext) {
         return new GroovyScriptServices(compilationUnitFactory, languageServerContext);
     }
-
 }

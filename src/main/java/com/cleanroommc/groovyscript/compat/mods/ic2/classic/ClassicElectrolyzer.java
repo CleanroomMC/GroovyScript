@@ -197,5 +197,4 @@ public class ClassicElectrolyzer extends VirtualizedRegistry<ClassicElectrolyzer
         DISCHARGE,
         BOTH
     }
-
 }

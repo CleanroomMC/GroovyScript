@@ -95,5 +95,4 @@ public class TreasureChest extends StandardListRegistry<TreasureChestLoot> {
         }
 
     }
-
 }

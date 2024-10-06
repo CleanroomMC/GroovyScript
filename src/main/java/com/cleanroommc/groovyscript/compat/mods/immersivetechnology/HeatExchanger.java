@@ -104,5 +104,4 @@ public class HeatExchanger extends StandardListRegistry<HeatExchangerRecipe> {
         }
 
     }
-
 }

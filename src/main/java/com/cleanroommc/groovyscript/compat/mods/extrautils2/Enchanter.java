@@ -135,5 +135,4 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
         }
 
     }
-
 }

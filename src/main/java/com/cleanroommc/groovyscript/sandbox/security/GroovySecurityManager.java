@@ -206,5 +206,4 @@ public class GroovySecurityManager {
         }
         return false;
     }
-
 }

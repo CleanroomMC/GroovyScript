@@ -85,5 +85,4 @@ public interface Result<T> {
         }
 
     }
-
 }

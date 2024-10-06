@@ -142,5 +142,4 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
 
     }
-
 }

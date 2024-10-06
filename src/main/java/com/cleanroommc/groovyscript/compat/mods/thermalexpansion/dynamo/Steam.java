@@ -115,5 +115,4 @@ public class Steam extends VirtualizedRegistry<Steam.SteamRecipe> {
         }
 
     }
-
 }

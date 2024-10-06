@@ -54,5 +54,4 @@ public class PrecisionLaserEtcher extends BaseRegistry {
         }
 
     }
-
 }

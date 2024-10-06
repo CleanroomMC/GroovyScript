@@ -83,5 +83,4 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
     public Iterator<ItemStack> iterator() {
         return Iterators.unmodifiableIterator(this.itemStacks.iterator());
     }
-
 }

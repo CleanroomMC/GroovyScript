@@ -13,5 +13,4 @@ public class MaterialRepairIngredient {
         this.amountNeeded = amountNeeded;
         this.amountMatched = amountMatched;
     }
-
 }

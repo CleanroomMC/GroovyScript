@@ -158,5 +158,4 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
         }
         return list;
     }
-
 }

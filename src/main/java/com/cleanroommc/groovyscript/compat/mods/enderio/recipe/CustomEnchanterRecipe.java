@@ -63,5 +63,4 @@ public class CustomEnchanterRecipe extends EnchanterRecipe {
         ItemStack slot2 = MachineRecipeInput.getInputForSlot(2, inputs);
         return (Prep.isInvalid(slot0) || getBook().contains(slot0)) && (Prep.isInvalid(slot1) || this.getInput().contains(slot1)) && (Prep.isInvalid(slot2) || getLapis().contains(slot2));
     }
-
 }

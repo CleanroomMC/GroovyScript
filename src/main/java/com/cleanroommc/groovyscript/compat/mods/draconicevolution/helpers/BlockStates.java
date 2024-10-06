@@ -123,5 +123,4 @@ public class BlockStates {
     public static boolean statesEqual(IBlockState a, IBlockState b) {
         return a.getBlock() == b.getBlock() && a.getBlock().getMetaFromState(a) == b.getBlock().getMetaFromState(b);
     }
-
 }

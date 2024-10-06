@@ -111,5 +111,4 @@ public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
         }
 
     }
-
 }

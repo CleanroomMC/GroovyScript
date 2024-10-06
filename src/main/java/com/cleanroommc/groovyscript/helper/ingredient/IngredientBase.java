@@ -58,5 +58,4 @@ public abstract class IngredientBase implements IIngredient {
     public void setMark(String mark) {
         this.mark = mark;
     }
-
 }

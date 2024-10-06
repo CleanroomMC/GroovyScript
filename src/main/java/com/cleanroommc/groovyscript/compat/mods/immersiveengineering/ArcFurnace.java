@@ -196,5 +196,4 @@ public class ArcFurnace extends StandardListRegistry<ArcFurnaceRecipe> {
         }
 
     }
-
 }

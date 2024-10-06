@@ -245,5 +245,4 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
         }
 
     }
-
 }

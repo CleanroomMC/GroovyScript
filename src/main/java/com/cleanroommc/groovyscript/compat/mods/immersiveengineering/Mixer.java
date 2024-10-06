@@ -142,5 +142,4 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
         }
 
     }
-
 }

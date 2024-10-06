@@ -62,5 +62,4 @@ public class PrecisionAssembler extends BaseRegistry {
         }
 
     }
-
 }

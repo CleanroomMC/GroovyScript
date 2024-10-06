@@ -108,5 +108,4 @@ public class AbstractReloadableStorage<R> {
     protected boolean compareRecipe(R recipe, R recipe2) {
         return recipe == recipe2;
     }
-
 }

@@ -89,5 +89,4 @@ public class Melter extends StandardListRegistry<RecipeMelter> {
         }
 
     }
-
 }

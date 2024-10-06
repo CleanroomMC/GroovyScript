@@ -85,5 +85,4 @@ public class PurificationChamber extends VirtualizedMekanismRegistry<Purificatio
         }
 
     }
-
 }

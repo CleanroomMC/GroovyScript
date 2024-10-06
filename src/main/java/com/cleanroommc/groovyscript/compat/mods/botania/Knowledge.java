@@ -44,5 +44,4 @@ public class Knowledge extends VirtualizedRegistry<KnowledgeType> {
     public SimpleObjectStream<KnowledgeType> streamKnowledgeTypes() {
         return new SimpleObjectStream<>(BotaniaAPI.knowledgeTypes.values());
     }
-
 }

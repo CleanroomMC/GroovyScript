@@ -158,5 +158,4 @@ public class CondenserRecipe implements ICondenserRecipe {
     public ItemStack getResult() {
         return this.output.copy();
     }
-
 }

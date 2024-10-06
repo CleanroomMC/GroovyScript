@@ -68,5 +68,4 @@ public class OrechidIgnem extends Orechid {
         getAllRecipes().forEach(this::addBackup);
         BotaniaAPI.oreWeightsNether.clear();
     }
-
 }

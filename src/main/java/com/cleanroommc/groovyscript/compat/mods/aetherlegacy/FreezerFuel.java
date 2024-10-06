@@ -39,5 +39,4 @@ public class FreezerFuel extends ForgeRegistryWrapper<AetherFreezableFuel> {
             }
         });
     }
-
 }

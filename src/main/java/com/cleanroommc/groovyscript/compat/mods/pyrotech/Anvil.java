@@ -157,5 +157,4 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         }
 
     }
-
 }

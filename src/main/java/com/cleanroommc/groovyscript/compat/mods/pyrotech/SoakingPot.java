@@ -117,5 +117,4 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         }
 
     }
-
 }

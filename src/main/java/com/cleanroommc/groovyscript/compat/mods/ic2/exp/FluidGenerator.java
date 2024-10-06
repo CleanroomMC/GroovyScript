@@ -82,5 +82,4 @@ public class FluidGenerator extends VirtualizedRegistry<Pair<String, ISemiFluidF
 
         return false;
     }
-
 }

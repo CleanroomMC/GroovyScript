@@ -12,5 +12,4 @@ public interface MachineInitAccessor {
     static MachineSlotItem getSLOT_SLIME_SECONDARY() {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -148,5 +148,4 @@ public class CastingTable extends StandardListRegistry<ICastingRecipe> {
         }
 
     }
-
 }

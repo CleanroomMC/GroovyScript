@@ -68,5 +68,4 @@ public class ExternalModContainer extends GroovyContainer<GroovyPropertyContaine
     public @NotNull GroovyPlugin.Priority getOverridePriority() {
         return priority;
     }
-
 }

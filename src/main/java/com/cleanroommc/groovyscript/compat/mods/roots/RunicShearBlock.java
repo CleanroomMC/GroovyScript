@@ -162,5 +162,4 @@ public class RunicShearBlock extends VirtualizedRegistry<RunicShearRecipe> {
         }
 
     }
-
 }

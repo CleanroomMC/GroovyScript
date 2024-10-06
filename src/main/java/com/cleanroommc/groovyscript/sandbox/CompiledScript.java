@@ -124,5 +124,4 @@ class CompiledScript extends CompiledClass {
                 .append("lastEdited", lastEdited)
                 .toString();
     }
-
 }

@@ -78,5 +78,4 @@ public class Thaumcraft extends GroovyPropertyContainer {
     public static thaumcraft.api.aspects.Aspect getAspect(String tag) {
         return thaumcraft.api.aspects.Aspect.getAspect(tag);
     }
-
 }

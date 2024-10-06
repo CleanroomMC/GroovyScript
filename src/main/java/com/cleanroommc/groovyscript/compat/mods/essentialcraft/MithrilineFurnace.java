@@ -102,5 +102,4 @@ public class MithrilineFurnace extends VirtualizedRegistry<MithrilineFurnaceReci
         }
 
     }
-
 }

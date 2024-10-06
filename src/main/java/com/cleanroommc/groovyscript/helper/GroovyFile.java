@@ -1028,5 +1028,4 @@ public final class GroovyFile implements Comparable<GroovyFile> {
         checkAccessible();
         return ResourceGroovyMethods.deleteDir(this.internal);
     }
-
 }

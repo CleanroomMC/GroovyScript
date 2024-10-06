@@ -144,5 +144,4 @@ public class Sacrificial extends VirtualizedRegistry<Pair<ResourceLocation, Inte
         }
 
     }
-
 }

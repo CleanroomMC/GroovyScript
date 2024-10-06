@@ -89,5 +89,4 @@ public class Thermopile extends StandardListRegistry<IThermopileRecipe> {
         }
 
     }
-
 }

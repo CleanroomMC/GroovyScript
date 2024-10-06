@@ -98,5 +98,4 @@ public class StoneMiningLens extends StandardListRegistry<WeightedOre> {
         }
 
     }
-
 }

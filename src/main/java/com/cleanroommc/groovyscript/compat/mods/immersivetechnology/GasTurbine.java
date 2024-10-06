@@ -95,5 +95,4 @@ public class GasTurbine extends StandardListRegistry<GasTurbineRecipe> {
         }
 
     }
-
 }

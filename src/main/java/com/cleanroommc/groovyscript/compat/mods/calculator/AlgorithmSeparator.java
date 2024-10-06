@@ -91,5 +91,4 @@ public class AlgorithmSeparator extends StandardListRegistry<CalculatorRecipe> {
         }
 
     }
-
 }

@@ -149,5 +149,4 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
             }
         }
     }
-
 }

@@ -85,5 +85,4 @@ public class GlowstoneExtractor extends StandardListRegistry<DefaultSonarRecipe.
         }
 
     }
-
 }

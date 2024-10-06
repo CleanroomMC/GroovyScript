@@ -198,5 +198,4 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
         }
 
     }
-
 }

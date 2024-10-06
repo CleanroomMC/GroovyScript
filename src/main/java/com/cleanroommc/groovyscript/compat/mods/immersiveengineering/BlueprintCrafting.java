@@ -199,5 +199,4 @@ public class BlueprintCrafting extends VirtualizedRegistry<BlueprintCraftingReci
         }
 
     }
-
 }

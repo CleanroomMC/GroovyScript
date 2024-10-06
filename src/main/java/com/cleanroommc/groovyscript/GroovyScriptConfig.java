@@ -28,5 +28,4 @@ public class GroovyScriptConfig {
         public boolean extendedCraftingRecipeMakerMakesGrsRecipes = true;
 
     }
-
 }

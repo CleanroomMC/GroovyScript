@@ -389,5 +389,4 @@ public class AltarRecipeBuilder {
         }
 
     }
-
 }

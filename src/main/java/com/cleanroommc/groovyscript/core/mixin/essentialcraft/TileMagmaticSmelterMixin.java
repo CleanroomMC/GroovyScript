@@ -32,5 +32,4 @@ public abstract class TileMagmaticSmelterMixin extends TileMRUGeneric {
             ci.cancel();
         }
     }
-
 }

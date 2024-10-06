@@ -117,5 +117,4 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         }
 
     }
-
 }

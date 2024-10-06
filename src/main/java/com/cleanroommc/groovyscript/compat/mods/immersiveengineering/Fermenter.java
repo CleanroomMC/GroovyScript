@@ -112,5 +112,4 @@ public class Fermenter extends StandardListRegistry<FermenterRecipe> {
         }
 
     }
-
 }

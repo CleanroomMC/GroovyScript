@@ -158,5 +158,4 @@ public class PureDaisy extends StandardListRegistry<RecipePureDaisy> {
         }
 
     }
-
 }

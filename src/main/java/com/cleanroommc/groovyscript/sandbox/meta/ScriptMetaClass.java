@@ -8,5 +8,4 @@ public class ScriptMetaClass extends MetaClassImpl {
     public ScriptMetaClass(MetaClassRegistry registry, Class theClass) {
         super(registry, theClass);
     }
-
 }

@@ -14,5 +14,4 @@ public interface SqueezerRecipeManagerAccessor {
     static Set<ISqueezerRecipe> getRecipes() {
         throw new AssertionError();
     }
-
 }

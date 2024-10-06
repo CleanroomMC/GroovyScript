@@ -131,5 +131,4 @@ public class Distillation extends StandardListRegistry<DistillationRecipe> {
         }
 
     }
-
 }

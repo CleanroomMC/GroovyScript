@@ -208,5 +208,4 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
         }
 
     }
-
 }

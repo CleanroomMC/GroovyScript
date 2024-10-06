@@ -14,5 +14,4 @@ public interface ModifierRegistryAccessor {
     static Set<ResourceLocation> getDisabledModifiers() {
         throw new UnsupportedOperationException();
     }
-
 }

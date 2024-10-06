@@ -84,5 +84,4 @@ public class InjectionChamber extends VirtualizedMekanismRegistry<InjectionRecip
         }
 
     }
-
 }

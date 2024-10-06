@@ -65,5 +65,4 @@ public class Scrapbox extends VirtualizedRegistry<Object> {
         }
 
     }
-
 }

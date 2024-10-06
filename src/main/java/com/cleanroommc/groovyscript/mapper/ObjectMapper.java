@@ -380,5 +380,4 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         }
 
     }
-
 }

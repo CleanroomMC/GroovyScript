@@ -187,5 +187,4 @@ public class AlchemyArray extends StandardListRegistry<RecipeAlchemyArray> {
         }
 
     }
-
 }

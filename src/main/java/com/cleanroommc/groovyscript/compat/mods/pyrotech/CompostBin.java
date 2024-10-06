@@ -118,5 +118,4 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         }
 
     }
-
 }

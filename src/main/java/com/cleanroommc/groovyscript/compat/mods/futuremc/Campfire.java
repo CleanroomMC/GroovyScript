@@ -74,5 +74,4 @@ public class Campfire extends StandardListRegistry<CampfireRecipe> {
         }
 
     }
-
 }

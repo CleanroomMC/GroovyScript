@@ -45,5 +45,4 @@ public class VirtualizedForgeRegistryEntry<T extends IForgeRegistryEntry<T>> {
     public String toString() {
         return value.getRegistryName().toString();
     }
-
 }

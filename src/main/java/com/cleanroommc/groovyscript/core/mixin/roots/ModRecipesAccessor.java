@@ -40,5 +40,4 @@ public interface ModRecipesAccessor {
     static Map<ResourceLocation, MortarRecipe> getMortarRecipes() {
         throw new AssertionError();
     }
-
 }

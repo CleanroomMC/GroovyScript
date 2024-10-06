@@ -127,5 +127,4 @@ public class Extractor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
         }
         return list;
     }
-
 }

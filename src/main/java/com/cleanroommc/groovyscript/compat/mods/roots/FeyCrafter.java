@@ -135,5 +135,4 @@ public class FeyCrafter extends VirtualizedRegistry<Pair<ResourceLocation, FeyCr
         }
 
     }
-
 }

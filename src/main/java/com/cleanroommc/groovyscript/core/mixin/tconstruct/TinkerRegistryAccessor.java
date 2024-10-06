@@ -62,5 +62,4 @@ public interface TinkerRegistryAccessor {
     static Map<String, ITrait> getTraits() {
         throw new AssertionError();
     }
-
 }

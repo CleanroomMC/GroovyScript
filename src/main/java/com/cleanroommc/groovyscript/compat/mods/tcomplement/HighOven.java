@@ -413,5 +413,4 @@ public class HighOven extends StandardListRegistry<MeltingRecipe> {
         }
 
     }
-
 }

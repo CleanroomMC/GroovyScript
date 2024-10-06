@@ -70,5 +70,4 @@ public class Washer extends VirtualizedMekanismRegistry<WasherRecipe> {
         }
 
     }
-
 }

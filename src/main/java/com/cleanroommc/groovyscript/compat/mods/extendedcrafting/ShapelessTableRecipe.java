@@ -41,5 +41,4 @@ public class ShapelessTableRecipe extends TableRecipeShapeless {
     public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull InventoryCrafting inv) {
         return this.groovyRecipe.getRemainingItems(inv);
     }
-
 }

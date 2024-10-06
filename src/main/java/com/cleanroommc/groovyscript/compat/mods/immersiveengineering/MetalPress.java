@@ -223,5 +223,4 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
         }
 
     }
-
 }

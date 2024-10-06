@@ -175,5 +175,4 @@ public class Meteor extends VirtualizedRegistry<WayofTime.bloodmagic.meteor.Mete
         }
 
     }
-
 }

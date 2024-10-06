@@ -8,5 +8,4 @@ public class OutputFormat {
 
     private OutputFormat() {
     }
-
 }

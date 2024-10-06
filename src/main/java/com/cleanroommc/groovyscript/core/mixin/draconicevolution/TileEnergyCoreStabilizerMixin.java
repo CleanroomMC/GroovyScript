@@ -18,5 +18,4 @@ public abstract class TileEnergyCoreStabilizerMixin {
             cir.setReturnValue(TileEnergyCoreStabilizerLogic.getBlocksForFrameMove((TileEnergyCoreStabilizer) (Object) this));
         }
     }
-
 }

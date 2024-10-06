@@ -242,5 +242,4 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
             if (groovyScript$vanilla == null) groovyScript$vanilla = new DummyRFG<>();
         }
     }
-
 }

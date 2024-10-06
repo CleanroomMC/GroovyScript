@@ -53,5 +53,4 @@ public class SimpleCommand extends CommandBase {
     public @NotNull List<String> getAliases() {
         return aliases;
     }
-
 }

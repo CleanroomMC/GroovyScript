@@ -226,5 +226,4 @@ public class Refinery extends VirtualizedRegistry<RefineryRecipe> {
         }
 
     }
-
 }

@@ -115,5 +115,4 @@ public class ShapelessArcaneCR extends ShapelessArcaneRecipe implements ICraftin
 
         return craftingRecipe.matches(dummy, world);
     }
-
 }

@@ -121,5 +121,4 @@ public class AnimalHarvest extends VirtualizedRegistry<AnimalHarvestRecipe> {
         }
 
     }
-
 }

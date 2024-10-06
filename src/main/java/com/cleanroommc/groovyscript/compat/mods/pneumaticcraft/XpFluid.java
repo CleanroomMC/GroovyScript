@@ -106,5 +106,4 @@ public class XpFluid extends VirtualizedRegistry<Pair<Fluid, Integer>> {
         }
 
     }
-
 }

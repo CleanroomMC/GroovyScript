@@ -73,5 +73,4 @@ public class NetworkUtils {
         buffer.writeVarInt(bytes.length);
         buffer.writeBytes(bytes);
     }
-
 }

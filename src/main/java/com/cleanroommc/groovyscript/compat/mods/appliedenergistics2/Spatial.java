@@ -61,5 +61,4 @@ public class Spatial extends VirtualizedRegistry<Class<? extends TileEntity>> {
         }
         return null;
     }
-
 }

@@ -37,5 +37,4 @@ public class CachedClassMethodsVisitor extends ClassVisitor implements Opcodes {
         }
 
     }
-
 }

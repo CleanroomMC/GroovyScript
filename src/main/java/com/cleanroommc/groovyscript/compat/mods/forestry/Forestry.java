@@ -58,5 +58,4 @@ public class Forestry extends GroovyPropertyContainer {
                 .docOfType("allele bee species")
                 .register();
     }
-
 }

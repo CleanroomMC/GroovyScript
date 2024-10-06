@@ -51,5 +51,4 @@ public class CannonAmmo extends VirtualizedRegistry<Pair<ItemStack, Double>> {
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().forEach((item, value) -> addBackup(Pair.of(item, value)));
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().clear();
     }
-
 }

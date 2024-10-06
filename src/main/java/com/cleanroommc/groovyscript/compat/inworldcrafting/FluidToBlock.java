@@ -152,5 +152,4 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         }
 
     }
-
 }

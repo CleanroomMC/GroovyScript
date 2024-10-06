@@ -80,5 +80,4 @@ public class SemiFluidGenerator extends AbstractGeneratorRegistry {
         }
 
     }
-
 }

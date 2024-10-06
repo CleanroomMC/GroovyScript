@@ -14,5 +14,4 @@ public interface FabricatorRecipeManagerAccessor {
     static Set<IFabricatorRecipe> getRecipes() {
         throw new AssertionError();
     }
-
 }

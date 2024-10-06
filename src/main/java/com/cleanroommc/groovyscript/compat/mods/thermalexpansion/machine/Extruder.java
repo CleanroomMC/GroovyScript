@@ -220,5 +220,4 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
         }
 
     }
-
 }

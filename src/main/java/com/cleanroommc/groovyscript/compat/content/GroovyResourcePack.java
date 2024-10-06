@@ -40,5 +40,4 @@ public class GroovyResourcePack extends FolderResourcePack {
     public @NotNull String getPackName() {
         return "GroovyScriptResources";
     }
-
 }

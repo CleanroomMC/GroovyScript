@@ -148,5 +148,4 @@ public class Attunement extends VirtualizedRegistry<Pair<Object, TunnelType>> {
         ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getCapTunnels().forEach((item, value) -> addBackup(Pair.of(item, value)));
         ((P2PTunnelRegistryAccessor) AEApi.instance().registries().p2pTunnel()).getCapTunnels().clear();
     }
-
 }

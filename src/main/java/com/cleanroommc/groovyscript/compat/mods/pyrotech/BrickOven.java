@@ -105,5 +105,4 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
         }
 
     }
-
 }

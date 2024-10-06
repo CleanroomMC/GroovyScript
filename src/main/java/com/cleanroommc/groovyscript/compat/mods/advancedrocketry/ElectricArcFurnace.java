@@ -60,5 +60,4 @@ public class ElectricArcFurnace extends BaseRegistry {
         }
 
     }
-
 }

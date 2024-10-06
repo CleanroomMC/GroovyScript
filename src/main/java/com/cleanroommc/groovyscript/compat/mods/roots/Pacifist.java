@@ -126,5 +126,4 @@ public class Pacifist extends VirtualizedRegistry<PacifistEntry> {
         }
 
     }
-
 }

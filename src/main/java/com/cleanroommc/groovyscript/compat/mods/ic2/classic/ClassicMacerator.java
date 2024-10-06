@@ -139,5 +139,4 @@ public class ClassicMacerator extends Macerator {
 
         return list;
     }
-
 }

@@ -14,5 +14,4 @@ public abstract class LootTableMixin {
     public void freeze(CallbackInfo ci) {
         ci.cancel();
     }
-
 }

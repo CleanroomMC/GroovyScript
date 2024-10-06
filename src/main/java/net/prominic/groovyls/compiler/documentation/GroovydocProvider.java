@@ -99,5 +99,4 @@ public class GroovydocProvider implements IDocumentationProvider {
         line = line.replaceAll("</?\\w+/?>", "");
         return line;
     }
-
 }

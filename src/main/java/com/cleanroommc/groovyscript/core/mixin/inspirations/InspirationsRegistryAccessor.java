@@ -34,5 +34,4 @@ public interface InspirationsRegistryAccessor {
     static List<ICauldronRecipe> getCauldronRecipes() {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -130,5 +130,4 @@ public abstract class ItemRecipeMakerMixin {
         }
         return GroovyScriptCodeConverter.asGroovyCode(stack, false);
     }
-
 }

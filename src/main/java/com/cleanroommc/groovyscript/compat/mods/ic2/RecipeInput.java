@@ -29,5 +29,4 @@ public class RecipeInput implements IRecipeInput {
     public List<ItemStack> getInputs() {
         return Arrays.asList(this.ingredient.getMatchingStacks());
     }
-
 }

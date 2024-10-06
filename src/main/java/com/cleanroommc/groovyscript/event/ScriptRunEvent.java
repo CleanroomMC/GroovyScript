@@ -20,10 +20,7 @@ public class ScriptRunEvent extends Event {
      */
     public static class Pre extends ScriptRunEvent {
 
-        public Pre(LoadStage loadStage) {
-            super(loadStage);
-        }
-
+        public Pre(LoadStage loadStage) {super(loadStage);}
     }
 
     /**
@@ -31,10 +28,6 @@ public class ScriptRunEvent extends Event {
      */
     public static class Post extends ScriptRunEvent {
 
-        public Post(LoadStage loadStage) {
-            super(loadStage);
-        }
-
+        public Post(LoadStage loadStage) {super(loadStage);}
     }
-
 }

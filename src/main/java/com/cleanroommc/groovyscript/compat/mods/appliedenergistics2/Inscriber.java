@@ -148,5 +148,4 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
         }
 
     }
-
 }

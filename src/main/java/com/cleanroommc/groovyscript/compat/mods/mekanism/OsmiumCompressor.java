@@ -87,5 +87,4 @@ public class OsmiumCompressor extends VirtualizedMekanismRegistry<OsmiumCompress
         }
 
     }
-
 }

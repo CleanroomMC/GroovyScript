@@ -31,5 +31,4 @@ public class EvilCraft extends GroovyPropertyContainer {
 
         InfoParserRegistry.addInfoParser(InfoParserWeather.instance);
     }
-
 }

@@ -23,5 +23,4 @@ public class ClassGraphUtils {
 
         return result;
     }
-
 }

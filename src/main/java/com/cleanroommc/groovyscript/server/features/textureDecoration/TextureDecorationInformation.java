@@ -39,5 +39,4 @@ public class TextureDecorationInformation {
     public void setTooltips(List<String> tooltips) {
         this.tooltips = tooltips;
     }
-
 }

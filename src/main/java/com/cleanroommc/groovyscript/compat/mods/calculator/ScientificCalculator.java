@@ -91,5 +91,4 @@ public class ScientificCalculator extends StandardListRegistry<CalculatorRecipe>
         }
 
     }
-
 }

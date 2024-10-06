@@ -144,5 +144,4 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
         }
 
     }
-
 }

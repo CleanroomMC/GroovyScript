@@ -127,5 +127,4 @@ public class Macerator extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
         }
         return list;
     }
-
 }

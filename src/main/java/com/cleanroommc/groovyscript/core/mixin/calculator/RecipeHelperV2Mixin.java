@@ -16,5 +16,4 @@ public class RecipeHelperV2Mixin {
     @Inject(method = "buildRecipe", at = @At("RETURN"), cancellable = true)
     public void buildRecipe(List<ISonarRecipeObject> recipeInputs, List<ISonarRecipeObject> recipeOutputs, List<?> additionals, boolean shapeless, CallbackInfoReturnable<CalculatorRecipe> cir) {
     }
-
 }

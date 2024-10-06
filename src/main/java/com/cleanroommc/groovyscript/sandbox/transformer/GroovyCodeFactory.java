@@ -131,5 +131,4 @@ public class GroovyCodeFactory {
         copy.setVariableScope(original.getVariableScope());
         return copy;
     }
-
 }

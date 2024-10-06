@@ -53,5 +53,4 @@ public class ProteinReactor extends StandardListRegistry<IReactorEntry> {
             return false;
         });
     }
-
 }

@@ -122,5 +122,4 @@ public class BrewRecipe extends StandardListRegistry<RecipeBrew> {
         }
 
     }
-
 }

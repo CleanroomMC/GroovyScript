@@ -92,5 +92,4 @@ public abstract class VirtualizedRegistry<R> extends NamedRegistry implements IS
     protected Collection<R> removeScripted() {
         return recipeStorage.removeScripted();
     }
-
 }

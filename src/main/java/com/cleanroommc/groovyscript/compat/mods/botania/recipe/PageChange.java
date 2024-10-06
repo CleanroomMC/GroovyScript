@@ -14,5 +14,4 @@ public class PageChange {
         this.parent = parent;
         this.index = index;
     }
-
 }

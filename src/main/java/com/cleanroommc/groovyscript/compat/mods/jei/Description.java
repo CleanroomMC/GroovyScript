@@ -95,5 +95,4 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
     public void remove(IIngredient... target) {
         addBackup(Pair.of(Arrays.asList(target), null));
     }
-
 }

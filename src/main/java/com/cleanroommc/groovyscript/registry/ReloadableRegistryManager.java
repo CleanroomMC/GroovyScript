@@ -185,5 +185,4 @@ public class ReloadableRegistryManager {
     private static void unfreezeForgeRegistries() {
         ((ForgeRegistry<IRecipe>) ForgeRegistries.RECIPES).unfreeze();
     }
-
 }

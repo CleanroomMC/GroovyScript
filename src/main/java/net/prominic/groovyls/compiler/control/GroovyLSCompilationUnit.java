@@ -145,5 +145,4 @@ public class GroovyLSCompilationUnit extends CompilationUnit {
 
         return compileAndVisitAST(context);
     }
-
 }

@@ -82,5 +82,4 @@ public class ChemicalOxidizer extends VirtualizedMekanismRegistry<OxidationRecip
         }
 
     }
-
 }

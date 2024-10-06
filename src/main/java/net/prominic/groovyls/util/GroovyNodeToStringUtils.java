@@ -144,5 +144,4 @@ public class GroovyNodeToStringUtils {
         builder.append(variable.getName());
         return builder.toString();
     }
-
 }

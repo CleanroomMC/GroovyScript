@@ -109,5 +109,4 @@ public class LiquidFuelGenerator extends VirtualizedRegistry<LiquidFuelGenerator
         }
 
     }
-
 }

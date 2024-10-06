@@ -94,5 +94,4 @@ public abstract class CompilationUnitFactoryBase implements ICompilationUnitFact
                 compilationUnit.getErrorCollector());
         compilationUnit.addSource(sourceUnit);
     }
-
 }

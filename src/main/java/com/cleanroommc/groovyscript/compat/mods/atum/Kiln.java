@@ -109,5 +109,4 @@ public class Kiln extends ForgeRegistryWrapper<IKilnRecipe> {
         }
 
     }
-
 }

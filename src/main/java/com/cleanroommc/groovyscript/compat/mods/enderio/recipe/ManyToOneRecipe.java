@@ -51,5 +51,4 @@ public class ManyToOneRecipe extends Recipe {
         }
         return false;
     }
-
 }

@@ -485,5 +485,4 @@ public class Constellation extends VirtualizedRegistry<IConstellation> {
         }
 
     }
-
 }

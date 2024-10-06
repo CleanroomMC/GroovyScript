@@ -180,5 +180,4 @@ public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> {
         }
 
     }
-
 }

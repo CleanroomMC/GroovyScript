@@ -91,5 +91,4 @@ public class Grinder extends StandardListRegistry<IGrinderRecipe> {
         }
 
     }
-
 }

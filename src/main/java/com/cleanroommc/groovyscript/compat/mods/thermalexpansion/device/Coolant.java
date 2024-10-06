@@ -134,5 +134,4 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
         }
 
     }
-
 }

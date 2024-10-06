@@ -16,5 +16,4 @@ public class BeeProduct {
         this.chance = chance;
         this.special = special;
     }
-
 }

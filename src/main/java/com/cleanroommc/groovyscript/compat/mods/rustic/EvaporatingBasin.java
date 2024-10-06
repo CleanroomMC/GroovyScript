@@ -96,5 +96,4 @@ public class EvaporatingBasin extends StandardListRegistry<IEvaporatingBasinReci
         }
 
     }
-
 }

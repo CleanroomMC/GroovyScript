@@ -111,5 +111,4 @@ public class RadiatingChamber extends StandardListRegistry<RadiatingChamberRecip
         }
 
     }
-
 }

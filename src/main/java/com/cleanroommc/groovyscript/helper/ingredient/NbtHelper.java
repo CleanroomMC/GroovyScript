@@ -247,5 +247,4 @@ public class NbtHelper {
         builder.append('\n');
         for (int i = 0; i < indents; i++) builder.append("    ");
     }
-
 }

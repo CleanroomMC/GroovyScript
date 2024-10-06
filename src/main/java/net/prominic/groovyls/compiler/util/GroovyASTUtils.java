@@ -546,5 +546,4 @@ public class GroovyASTUtils {
         }
         return property;
     }
-
 }

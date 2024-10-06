@@ -161,5 +161,4 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         }
 
     }
-
 }

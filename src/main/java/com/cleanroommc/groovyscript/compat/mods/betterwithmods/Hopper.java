@@ -109,5 +109,4 @@ public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe
         }
 
     }
-
 }

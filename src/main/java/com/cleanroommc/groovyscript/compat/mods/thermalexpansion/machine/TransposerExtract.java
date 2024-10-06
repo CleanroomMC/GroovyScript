@@ -164,5 +164,4 @@ public class TransposerExtract extends VirtualizedRegistry<TransposerRecipe> {
         }
 
     }
-
 }

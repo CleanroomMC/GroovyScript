@@ -106,5 +106,4 @@ public class TapperFertilizer extends VirtualizedRegistry<TapperFertilizer.Tappe
         }
 
     }
-
 }

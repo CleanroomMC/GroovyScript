@@ -51,5 +51,4 @@ public class Lathe extends BaseRegistry {
         }
 
     }
-
 }

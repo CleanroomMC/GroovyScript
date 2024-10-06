@@ -103,5 +103,4 @@ public class GroovyHelper {
     public static GroovyFile file(String... parts) {
         return new GroovyFile(parts);
     }
-
 }

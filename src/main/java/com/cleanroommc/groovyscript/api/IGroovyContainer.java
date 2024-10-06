@@ -90,5 +90,4 @@ public interface IGroovyContainer {
          */
         OVERRIDE_HIGHEST
     }
-
 }

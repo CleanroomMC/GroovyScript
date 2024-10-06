@@ -87,5 +87,4 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
         List<IIngredient> items = Stream.concat(normalRecipes, oreDictRecipes).collect(Collectors.toList());
         return new SimpleObjectStream<>(items).setRemover(this::remove);
     }
-
 }

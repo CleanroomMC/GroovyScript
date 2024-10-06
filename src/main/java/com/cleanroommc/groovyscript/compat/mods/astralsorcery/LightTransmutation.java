@@ -206,5 +206,4 @@ public class LightTransmutation extends StandardListRegistry<LightOreTransmutati
         }
 
     }
-
 }

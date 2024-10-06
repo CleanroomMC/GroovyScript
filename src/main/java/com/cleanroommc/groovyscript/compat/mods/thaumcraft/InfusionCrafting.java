@@ -228,5 +228,4 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
 
     }
-
 }

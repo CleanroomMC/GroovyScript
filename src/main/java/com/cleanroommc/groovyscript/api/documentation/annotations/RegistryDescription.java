@@ -170,5 +170,4 @@ public @interface RegistryDescription {
         }
 
     }
-
 }

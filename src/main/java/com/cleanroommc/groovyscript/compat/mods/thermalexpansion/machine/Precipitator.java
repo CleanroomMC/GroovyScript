@@ -151,5 +151,4 @@ public class Precipitator extends VirtualizedRegistry<PrecipitatorRecipe> {
         }
 
     }
-
 }

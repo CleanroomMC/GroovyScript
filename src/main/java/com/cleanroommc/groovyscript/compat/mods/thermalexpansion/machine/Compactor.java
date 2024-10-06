@@ -193,5 +193,4 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
         }
 
     }
-
 }

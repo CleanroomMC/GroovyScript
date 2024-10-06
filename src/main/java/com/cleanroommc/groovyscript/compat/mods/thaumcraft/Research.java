@@ -242,5 +242,4 @@ public class Research extends VirtualizedRegistry<ResearchCategory> {
         }
 
     }
-
 }

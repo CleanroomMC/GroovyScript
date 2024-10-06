@@ -340,5 +340,4 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         }
 
     }
-
 }

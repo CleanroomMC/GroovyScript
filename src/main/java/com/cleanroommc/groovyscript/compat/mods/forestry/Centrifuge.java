@@ -131,5 +131,4 @@ public class Centrifuge extends ForestryRegistry<ICentrifugeRecipe> {
         }
 
     }
-
 }

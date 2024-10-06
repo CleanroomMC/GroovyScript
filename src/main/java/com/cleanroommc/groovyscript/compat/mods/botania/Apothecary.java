@@ -122,5 +122,4 @@ public class Apothecary extends StandardListRegistry<RecipePetals> {
         }
 
     }
-
 }

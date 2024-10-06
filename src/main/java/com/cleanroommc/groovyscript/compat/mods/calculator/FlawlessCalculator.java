@@ -91,5 +91,4 @@ public class FlawlessCalculator extends StandardListRegistry<CalculatorRecipe> {
         }
 
     }
-
 }

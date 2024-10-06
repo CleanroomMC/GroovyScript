@@ -167,5 +167,4 @@ public class Squeezer extends StandardListRegistry<IRecipe<IngredientRecipeCompo
         }
 
     }
-
 }

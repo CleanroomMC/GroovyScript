@@ -187,5 +187,4 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
         }
 
     }
-
 }

@@ -18,5 +18,4 @@ public class GroovyMaterialIntegration extends MaterialIntegration {
     public void integrate() {
         if (material.isCastable()) TinkerSmeltery.registerToolpartMeltingCasting(material);
     }
-
 }

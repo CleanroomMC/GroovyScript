@@ -118,5 +118,4 @@ public class Compression extends VirtualizedRegistry<Compression.CompressionReci
         }
 
     }
-
 }

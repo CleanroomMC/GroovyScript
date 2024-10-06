@@ -690,5 +690,4 @@ public class CompletionProvider extends DocProvider {
     private TextEdit createAddImportTextEdit(String className, Range range) {
         return new TextEdit(range, "import " + className + "\n");
     }
-
 }

@@ -118,5 +118,4 @@ public class Magmatic extends VirtualizedRegistry<Magmatic.MagmaticRecipe> {
         }
 
     }
-
 }

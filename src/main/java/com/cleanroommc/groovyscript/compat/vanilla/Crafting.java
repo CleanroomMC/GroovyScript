@@ -213,5 +213,4 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> {
     public CraftingRecipeBuilder.Shapeless shapelessBuilder() {
         return new CraftingRecipeBuilder.Shapeless();
     }
-
 }

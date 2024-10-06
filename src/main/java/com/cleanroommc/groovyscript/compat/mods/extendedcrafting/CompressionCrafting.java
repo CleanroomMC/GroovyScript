@@ -164,5 +164,4 @@ public class CompressionCrafting extends StandardListRegistry<CompressorRecipe> 
         }
 
     }
-
 }

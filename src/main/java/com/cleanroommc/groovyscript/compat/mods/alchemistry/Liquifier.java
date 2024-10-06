@@ -83,5 +83,4 @@ public class Liquifier extends StandardListRegistry<LiquifierRecipe> {
         }
 
     }
-
 }

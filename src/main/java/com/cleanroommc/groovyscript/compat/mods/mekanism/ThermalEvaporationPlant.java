@@ -70,5 +70,4 @@ public class ThermalEvaporationPlant extends VirtualizedMekanismRegistry<Thermal
         }
 
     }
-
 }

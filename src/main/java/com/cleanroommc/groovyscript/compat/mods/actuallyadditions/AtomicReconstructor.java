@@ -118,5 +118,4 @@ public class AtomicReconstructor extends StandardListRegistry<LensConversionReci
         }
 
     }
-
 }

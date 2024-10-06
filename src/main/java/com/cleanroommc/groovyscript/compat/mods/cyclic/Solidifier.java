@@ -92,5 +92,4 @@ public class Solidifier extends StandardListRegistry<RecipeSolidifier> {
         }
 
     }
-
 }

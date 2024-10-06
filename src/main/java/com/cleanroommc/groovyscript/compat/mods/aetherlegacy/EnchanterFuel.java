@@ -39,5 +39,4 @@ public class EnchanterFuel extends ForgeRegistryWrapper<AetherEnchantmentFuel> {
             }
         });
     }
-
 }

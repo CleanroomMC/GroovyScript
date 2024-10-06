@@ -93,5 +93,4 @@ public class JeiPlugin implements IModPlugin {
                             .appendSibling(GSCommand.getTextForFile("Groovy Log", GroovyLog.get().getLogFilePath().toString(), new TextComponentString("Click to open GroovyScript log"))));
         });
     }
-
 }

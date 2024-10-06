@@ -23,5 +23,4 @@ public class IngredientList<T extends IIngredient> extends ArrayList<T> {
             removeIf(IngredientHelper::isEmpty);
         }
     }
-
 }

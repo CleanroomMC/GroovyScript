@@ -64,5 +64,4 @@ public class Stonecutter extends StandardListRegistry<SimpleRecipe> {
         }
 
     }
-
 }

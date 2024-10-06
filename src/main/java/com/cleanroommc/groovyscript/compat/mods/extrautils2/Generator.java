@@ -329,5 +329,4 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         }
 
     }
-
 }

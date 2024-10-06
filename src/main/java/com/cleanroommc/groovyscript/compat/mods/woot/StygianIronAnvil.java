@@ -137,5 +137,4 @@ public class StygianIronAnvil extends StandardListRegistry<IAnvilRecipe> {
         }
 
     }
-
 }

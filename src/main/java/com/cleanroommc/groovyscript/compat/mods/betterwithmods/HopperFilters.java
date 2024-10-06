@@ -139,5 +139,4 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
         }
 
     }
-
 }

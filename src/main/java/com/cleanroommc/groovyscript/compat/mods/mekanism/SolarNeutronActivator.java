@@ -70,5 +70,4 @@ public class SolarNeutronActivator extends VirtualizedMekanismRegistry<SolarNeut
         }
 
     }
-
 }

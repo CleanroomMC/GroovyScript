@@ -258,5 +258,4 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         }
 
     }
-
 }

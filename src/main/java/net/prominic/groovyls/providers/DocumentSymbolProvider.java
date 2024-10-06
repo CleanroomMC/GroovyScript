@@ -65,5 +65,4 @@ public class DocumentSymbolProvider extends DocProvider {
         }
         return symbols;
     }
-
 }

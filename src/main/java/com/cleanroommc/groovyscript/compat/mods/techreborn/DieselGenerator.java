@@ -80,5 +80,4 @@ public class DieselGenerator extends AbstractGeneratorRegistry {
         }
 
     }
-
 }

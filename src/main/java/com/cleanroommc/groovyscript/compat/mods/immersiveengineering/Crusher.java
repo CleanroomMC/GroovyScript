@@ -139,5 +139,4 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
         }
 
     }
-
 }

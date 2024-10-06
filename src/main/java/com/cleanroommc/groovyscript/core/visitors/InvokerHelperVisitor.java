@@ -77,5 +77,4 @@ public class InvokerHelperVisitor extends ClassVisitor implements Opcodes {
         }
 
     }
-
 }

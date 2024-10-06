@@ -119,5 +119,4 @@ public class Cauldron extends StandardListRegistry<CookingPotRecipe> {
         }
 
     }
-
 }

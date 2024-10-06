@@ -101,5 +101,4 @@ public class Atomizer extends StandardListRegistry<AtomizerRecipe> {
         }
 
     }
-
 }

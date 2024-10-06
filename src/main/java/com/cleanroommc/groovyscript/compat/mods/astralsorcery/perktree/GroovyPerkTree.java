@@ -161,5 +161,4 @@ public class GroovyPerkTree extends VirtualizedRegistry<AbstractPerk> {
         }
         ((PerkTreeAccessor) PERK_TREE).setFrozen(true);
     }
-
 }

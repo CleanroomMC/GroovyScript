@@ -329,5 +329,4 @@ public class RunConfig {
         }
         return valid;
     }
-
 }

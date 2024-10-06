@@ -189,5 +189,4 @@ public class AnvilSmashing extends VirtualizedRegistry<Pair<IBlockState, IBlockS
         }
 
     }
-
 }

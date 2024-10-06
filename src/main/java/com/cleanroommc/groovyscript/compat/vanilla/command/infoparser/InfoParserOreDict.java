@@ -39,5 +39,4 @@ public class InfoParserOreDict extends GenericInfoParser<String> {
         List<String> ores = Arrays.stream(OreDictionary.getOreIDs(info.getStack())).mapToObj(OreDictionary::getOreName).collect(Collectors.toList());
         instance.add(info.getMessages(), ores, info.isPrettyNbt());
     }
-
 }

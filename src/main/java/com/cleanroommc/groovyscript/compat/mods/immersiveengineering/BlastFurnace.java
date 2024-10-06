@@ -117,5 +117,4 @@ public class BlastFurnace extends StandardListRegistry<BlastFurnaceRecipe> {
         }
 
     }
-
 }

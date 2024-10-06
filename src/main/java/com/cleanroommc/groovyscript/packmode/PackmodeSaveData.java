@@ -71,5 +71,4 @@ public class PackmodeSaveData extends WorldSavedData {
     public boolean hasPackmode() {
         return packmode != null && !packmode.isEmpty();
     }
-
 }

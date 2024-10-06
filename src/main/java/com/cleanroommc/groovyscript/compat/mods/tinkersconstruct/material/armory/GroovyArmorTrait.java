@@ -20,5 +20,4 @@ public class GroovyArmorTrait extends ArmorModifierTrait implements IArmorTrait 
         else addItem(ingredient.getMatchingStacks()[0], amountNeeded, amountMatched * 144);
         return this;
     }
-
 }

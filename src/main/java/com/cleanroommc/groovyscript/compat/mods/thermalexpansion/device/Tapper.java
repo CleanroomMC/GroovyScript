@@ -232,5 +232,4 @@ public class Tapper extends VirtualizedRegistry<Tapper.TapperItemRecipe> {
         }
 
     }
-
 }

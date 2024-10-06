@@ -167,5 +167,4 @@ public class CombinationCrafting extends StandardListRegistry<CombinationRecipe>
         }
 
     }
-
 }

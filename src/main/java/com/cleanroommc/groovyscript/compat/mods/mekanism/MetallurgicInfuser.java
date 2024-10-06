@@ -117,5 +117,4 @@ public class MetallurgicInfuser extends VirtualizedMekanismRegistry<MetallurgicI
         }
 
     }
-
 }

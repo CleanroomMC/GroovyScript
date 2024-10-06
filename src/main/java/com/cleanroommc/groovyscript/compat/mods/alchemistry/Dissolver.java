@@ -155,5 +155,4 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
         }
 
     }
-
 }

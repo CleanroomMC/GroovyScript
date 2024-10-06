@@ -35,5 +35,4 @@ public class InfoParserElement extends GenericInfoParser<ChemicalElement> {
             }
         }
     }
-
 }

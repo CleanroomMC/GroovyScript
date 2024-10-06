@@ -226,5 +226,4 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
         }
 
     }
-
 }

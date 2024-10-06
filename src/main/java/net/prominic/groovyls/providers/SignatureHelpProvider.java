@@ -110,5 +110,4 @@ public class SignatureHelpProvider extends DocProvider {
         }
         return expressions.size();
     }
-
 }

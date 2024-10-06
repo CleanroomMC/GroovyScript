@@ -54,5 +54,4 @@ public interface IReloadableForgeRegistry<V extends IForgeRegistryEntry<V>> {
         }
 
     }
-
 }

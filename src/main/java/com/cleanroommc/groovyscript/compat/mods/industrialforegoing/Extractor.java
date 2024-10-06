@@ -66,5 +66,4 @@ public class Extractor extends StandardListRegistry<ExtractorEntry> {
             return false;
         });
     }
-
 }

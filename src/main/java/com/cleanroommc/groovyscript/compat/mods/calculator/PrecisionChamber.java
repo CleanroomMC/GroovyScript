@@ -94,5 +94,4 @@ public class PrecisionChamber extends StandardListRegistry<CalculatorRecipe> {
         }
 
     }
-
 }

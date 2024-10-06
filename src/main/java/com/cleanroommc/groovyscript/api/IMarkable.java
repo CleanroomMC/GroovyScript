@@ -18,5 +18,4 @@ public interface IMarkable {
         setMark(mark);
         return this;
     }
-
 }

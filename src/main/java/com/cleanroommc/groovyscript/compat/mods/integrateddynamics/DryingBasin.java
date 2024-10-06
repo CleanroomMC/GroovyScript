@@ -154,5 +154,4 @@ public class DryingBasin extends StandardListRegistry<IRecipe<IngredientAndFluid
         }
 
     }
-
 }

@@ -96,5 +96,4 @@ public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extend
         return new SimpleObjectStream<>(instance.getAllRecipes())
                 .setRemover(this::backupAndRemove);
     }
-
 }

@@ -147,5 +147,4 @@ public class LootTablesLoadedEvent extends Event {
         }
 
     }
-
 }

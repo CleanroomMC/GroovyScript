@@ -123,5 +123,4 @@ public interface EnderRecipeBuilder {
         }
 
     }
-
 }

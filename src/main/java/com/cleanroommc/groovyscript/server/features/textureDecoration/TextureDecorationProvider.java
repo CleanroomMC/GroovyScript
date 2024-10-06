@@ -312,5 +312,4 @@ public class TextureDecorationProvider extends DocProvider {
         }
 
     }
-
 }

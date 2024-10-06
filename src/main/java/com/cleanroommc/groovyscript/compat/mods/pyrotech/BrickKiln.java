@@ -136,5 +136,4 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
         }
 
     }
-
 }

@@ -18,5 +18,4 @@ public interface BotaniaAPIAccessor {
     static String invokeGetMagnetKey(Block block, int meta) {
         throw new AssertionError();
     }
-
 }

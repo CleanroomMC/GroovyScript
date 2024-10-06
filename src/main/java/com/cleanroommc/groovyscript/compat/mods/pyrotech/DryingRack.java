@@ -107,5 +107,4 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         }
 
     }
-
 }

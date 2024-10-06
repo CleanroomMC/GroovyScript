@@ -132,5 +132,4 @@ public class AnimalHarvestFish extends VirtualizedRegistry<AnimalHarvestFishReci
         }
 
     }
-
 }

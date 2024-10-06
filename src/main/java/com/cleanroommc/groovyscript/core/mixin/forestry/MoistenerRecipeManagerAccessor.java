@@ -14,5 +14,4 @@ public interface MoistenerRecipeManagerAccessor {
     static Set<IMoistenerRecipe> getRecipes() {
         throw new AssertionError();
     }
-
 }

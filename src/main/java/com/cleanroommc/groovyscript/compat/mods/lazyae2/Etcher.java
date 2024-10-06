@@ -99,5 +99,4 @@ public class Etcher extends StandardListRegistry<EtchRecipe> {
         }
 
     }
-
 }

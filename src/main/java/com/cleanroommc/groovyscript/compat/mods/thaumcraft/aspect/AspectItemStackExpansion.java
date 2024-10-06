@@ -16,5 +16,4 @@ public class AspectItemStackExpansion {
     public static void clearAspects(ItemStack itemStack) {
         ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(itemStack);
     }
-
 }

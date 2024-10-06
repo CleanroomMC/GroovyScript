@@ -57,5 +57,4 @@ public class ThermalExpansion extends GroovyPropertyContainer {
                 .defaultValue(() -> CompactorManager.Mode.ALL)
                 .register();
     }
-
 }

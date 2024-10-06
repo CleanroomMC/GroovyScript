@@ -37,5 +37,4 @@ public class CachedClassFieldsVisitor extends ClassVisitor implements Opcodes {
         }
 
     }
-
 }

@@ -71,5 +71,4 @@ public class Catalyst extends VirtualizedRegistry<Pair<String, ItemStack>> {
     public void removeByType(String category) {
         addBackup(Pair.of(category, null));
     }
-
 }

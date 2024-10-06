@@ -46,5 +46,4 @@ public class AnvilShapelessRecipe extends ShapelessAnvilRecipe {
     public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull InventoryCrafting inv) {
         return this.groovyRecipe.getRemainingItems(inv);
     }
-
 }

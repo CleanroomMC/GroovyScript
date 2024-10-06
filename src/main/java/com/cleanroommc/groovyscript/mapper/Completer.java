@@ -38,5 +38,4 @@ public interface Completer {
             other.complete(paramIndex, items);
         };
     }
-
 }

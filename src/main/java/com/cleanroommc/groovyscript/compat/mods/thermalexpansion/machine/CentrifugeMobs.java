@@ -163,5 +163,4 @@ public class CentrifugeMobs extends VirtualizedRegistry<CentrifugeRecipe> {
         }
 
     }
-
 }

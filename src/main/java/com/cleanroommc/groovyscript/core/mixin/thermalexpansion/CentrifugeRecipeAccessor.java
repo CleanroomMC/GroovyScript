@@ -20,5 +20,4 @@ public interface CentrifugeRecipeAccessor {
                                                                      int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

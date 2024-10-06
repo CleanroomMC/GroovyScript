@@ -88,5 +88,4 @@ public class PistonPushRecipeCategory extends BaseCategory<PistonPushRecipeCateg
         }
 
     }
-
 }

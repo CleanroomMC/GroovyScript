@@ -207,5 +207,4 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         }
         return null;
     }
-
 }

@@ -76,5 +76,4 @@ public class TileInvisECoreBlockLogic {
             invisState.setMetadata(Integer.parseInt(input[1]));
         }
     }
-
 }

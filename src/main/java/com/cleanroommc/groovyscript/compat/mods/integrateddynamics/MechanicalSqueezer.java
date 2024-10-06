@@ -41,5 +41,4 @@ public class MechanicalSqueezer extends StandardListRegistry<IRecipe<IngredientR
             return false;
         });
     }
-
 }

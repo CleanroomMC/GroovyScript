@@ -139,5 +139,4 @@ public class GroovyBlock extends Block {
             JsonHelper.saveJson(file, modelJson);
         }
     }
-
 }

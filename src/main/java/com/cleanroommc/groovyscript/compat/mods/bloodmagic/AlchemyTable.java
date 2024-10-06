@@ -171,5 +171,4 @@ public class AlchemyTable extends StandardListRegistry<RecipeAlchemyTable> {
         }
 
     }
-
 }

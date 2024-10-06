@@ -193,5 +193,4 @@ public class Resonator extends StandardListRegistry<IResonatorRecipe> {
         }
 
     }
-
 }

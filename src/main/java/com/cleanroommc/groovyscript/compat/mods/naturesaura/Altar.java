@@ -171,5 +171,4 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         }
 
     }
-
 }

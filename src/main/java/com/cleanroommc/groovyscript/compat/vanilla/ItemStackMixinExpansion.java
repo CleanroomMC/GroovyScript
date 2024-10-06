@@ -230,5 +230,4 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
     default void setMark(String mark) {
         grs$setMark(mark);
     }
-
 }

@@ -266,5 +266,4 @@ public class Category extends VirtualizedRegistry<String> {
         }
 
     }
-
 }

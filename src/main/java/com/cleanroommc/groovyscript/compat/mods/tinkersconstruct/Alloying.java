@@ -104,5 +104,4 @@ public class Alloying extends StandardListRegistry<AlloyRecipe> {
         }
 
     }
-
 }

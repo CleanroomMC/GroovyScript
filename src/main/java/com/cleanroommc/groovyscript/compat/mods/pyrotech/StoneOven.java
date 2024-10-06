@@ -105,5 +105,4 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
         }
 
     }
-
 }

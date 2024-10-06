@@ -142,5 +142,4 @@ public class CompilationUnitFactory extends CompilationUnitFactoryBase {
             addOpenFileToCompilationUnit(uri, contents, compilationUnit);
         });
     }
-
 }

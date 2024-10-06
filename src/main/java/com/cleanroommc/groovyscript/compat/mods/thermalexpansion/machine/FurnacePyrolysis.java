@@ -142,5 +142,4 @@ public class FurnacePyrolysis extends VirtualizedRegistry<FurnaceRecipe> {
         }
 
     }
-
 }

@@ -95,5 +95,4 @@ public class HighPressureSteamTurbine extends StandardListRegistry<HighPressureS
         }
 
     }
-
 }

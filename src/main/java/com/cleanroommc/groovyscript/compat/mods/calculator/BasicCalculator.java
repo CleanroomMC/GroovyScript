@@ -96,5 +96,4 @@ public class BasicCalculator extends StandardListRegistry<CalculatorRecipe> {
         }
 
     }
-
 }

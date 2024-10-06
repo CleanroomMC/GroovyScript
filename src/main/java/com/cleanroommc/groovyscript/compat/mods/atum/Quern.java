@@ -109,5 +109,4 @@ public class Quern extends ForgeRegistryWrapper<IQuernRecipe> {
         }
 
     }
-
 }

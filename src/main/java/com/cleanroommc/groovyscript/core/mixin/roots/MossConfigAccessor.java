@@ -27,5 +27,4 @@ public interface MossConfigAccessor {
     static BiMap<IBlockState, IBlockState> getMossyStates() {
         throw new UnsupportedOperationException();
     }
-
 }

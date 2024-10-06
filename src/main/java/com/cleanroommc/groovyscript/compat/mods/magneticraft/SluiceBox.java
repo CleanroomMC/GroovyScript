@@ -101,5 +101,4 @@ public class SluiceBox extends StandardListRegistry<ISluiceBoxRecipe> {
         }
 
     }
-
 }

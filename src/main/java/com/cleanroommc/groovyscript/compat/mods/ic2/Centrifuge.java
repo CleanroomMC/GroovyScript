@@ -130,5 +130,4 @@ public class Centrifuge extends VirtualizedRegistry<MachineRecipe<IRecipeInput, 
         }
         return list;
     }
-
 }

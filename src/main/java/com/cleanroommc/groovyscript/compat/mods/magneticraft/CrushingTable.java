@@ -79,5 +79,4 @@ public class CrushingTable extends StandardListRegistry<ICrushingTableRecipe> {
         }
 
     }
-
 }

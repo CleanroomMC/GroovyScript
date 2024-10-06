@@ -85,5 +85,4 @@ public class OreRaw extends StandardListRegistry<OreFluidEntryRaw> {
             return false;
         });
     }
-
 }

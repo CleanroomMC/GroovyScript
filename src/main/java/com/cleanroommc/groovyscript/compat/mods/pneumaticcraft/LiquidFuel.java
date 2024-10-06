@@ -96,5 +96,4 @@ public class LiquidFuel extends VirtualizedRegistry<Pair<String, Integer>> {
         }
 
     }
-
 }

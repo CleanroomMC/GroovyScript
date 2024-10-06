@@ -163,5 +163,4 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         }
 
     }
-
 }

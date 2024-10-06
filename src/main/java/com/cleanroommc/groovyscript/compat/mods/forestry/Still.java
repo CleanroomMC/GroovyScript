@@ -106,5 +106,4 @@ public class Still extends ForestryRegistry<IStillRecipe> {
         }
 
     }
-
 }

@@ -127,5 +127,4 @@ public class CokeOven extends StandardListRegistry<CokeOvenRecipe> {
         }
 
     }
-
 }

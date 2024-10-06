@@ -19,5 +19,4 @@ public class ASTContext {
     public ILanguageServerContext getLanguageServerContext() {
         return languageServerContext;
     }
-
 }

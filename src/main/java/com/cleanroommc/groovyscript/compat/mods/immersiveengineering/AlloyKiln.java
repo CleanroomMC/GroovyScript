@@ -108,5 +108,4 @@ public class AlloyKiln extends StandardListRegistry<AlloyRecipe> {
         }
 
     }
-
 }

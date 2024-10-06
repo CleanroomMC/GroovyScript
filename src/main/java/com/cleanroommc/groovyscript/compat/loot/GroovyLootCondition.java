@@ -31,5 +31,4 @@ public class GroovyLootCondition implements LootCondition {
     public boolean testCondition(@NotNull Random rand, @NotNull LootContext context) {
         return ClosureHelper.call(true, condition, rand, context);
     }
-
 }

@@ -95,5 +95,4 @@ public class Boiler extends StandardListRegistry<BoilerRecipe> {
         }
 
     }
-
 }

@@ -80,5 +80,4 @@ public class Content extends NamedRegistry {
     public void setDefaultCreativeTab(CreativeTabs tab) {
         this.defaultTab = tab;
     }
-
 }

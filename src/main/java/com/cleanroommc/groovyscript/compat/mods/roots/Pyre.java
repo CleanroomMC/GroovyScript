@@ -157,5 +157,4 @@ public class Pyre extends VirtualizedRegistry<PyreCraftingRecipe> {
         }
 
     }
-
 }

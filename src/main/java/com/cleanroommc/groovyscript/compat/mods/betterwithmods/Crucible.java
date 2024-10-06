@@ -124,5 +124,4 @@ public class Crucible extends StandardListRegistry<CookingPotRecipe> {
         }
 
     }
-
 }

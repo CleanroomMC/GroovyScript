@@ -226,5 +226,4 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
         }
 
     }
-
 }

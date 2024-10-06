@@ -316,5 +316,4 @@ public class GroovyScript {
         runnable.run();
         Loader.instance().setActiveModContainer(current);
     }
-
 }

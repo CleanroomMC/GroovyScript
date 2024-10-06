@@ -19,5 +19,4 @@ public class CReload implements IPacket {
         GSCommand.runReload(handler.player, handler.player.getServer());
         return null;
     }
-
 }

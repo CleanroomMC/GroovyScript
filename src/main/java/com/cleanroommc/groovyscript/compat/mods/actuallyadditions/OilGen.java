@@ -103,5 +103,4 @@ public class OilGen extends StandardListRegistry<OilGenRecipe> {
         }
 
     }
-
 }

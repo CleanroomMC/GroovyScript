@@ -128,5 +128,4 @@ public class BlockStateMultiblockStorage extends MultiBlockStorage {
     public int getSize() {
         return size;
     }
-
 }

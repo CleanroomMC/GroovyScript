@@ -121,5 +121,4 @@ public class Documentation {
         if (string.isEmpty()) return "";
         return PUNCTUATION_CHARACTERS.contains(string.charAt(string.length() - 1)) ? string : string + ".";
     }
-
 }

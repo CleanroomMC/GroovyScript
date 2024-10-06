@@ -161,5 +161,4 @@ public class Squeezer extends StandardListRegistry<SqueezerRecipe> {
         }
 
     }
-
 }

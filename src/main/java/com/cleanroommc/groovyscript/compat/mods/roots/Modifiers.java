@@ -119,5 +119,4 @@ public class Modifiers extends VirtualizedRegistry<ResourceLocation> {
     public SimpleObjectStream<ResourceLocation> streamRecipes() {
         return new SimpleObjectStream<>(ModifierRegistryAccessor.getDisabledModifiers()).setRemover(this::disable);
     }
-
 }

@@ -131,5 +131,4 @@ public class MagmaticSmeltery extends VirtualizedRegistry<OreSmeltingRecipe> {
         }
 
     }
-
 }

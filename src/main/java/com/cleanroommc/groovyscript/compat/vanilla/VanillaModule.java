@@ -63,5 +63,4 @@ public class VanillaModule extends GroovyPropertyContainer implements IScriptRel
     public Collection<String> getAliases() {
         return Collections.emptyList();
     }
-
 }

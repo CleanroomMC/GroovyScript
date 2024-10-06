@@ -98,5 +98,4 @@ public class ClayKiln extends StandardListRegistry<ClayKilnRecipes> {
         }
 
     }
-
 }

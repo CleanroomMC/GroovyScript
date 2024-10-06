@@ -66,5 +66,4 @@ public class Smithing extends StandardListRegistry<SmithingRecipe> {
         }
 
     }
-
 }

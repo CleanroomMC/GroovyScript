@@ -243,5 +243,4 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
         }
 
     }
-
 }

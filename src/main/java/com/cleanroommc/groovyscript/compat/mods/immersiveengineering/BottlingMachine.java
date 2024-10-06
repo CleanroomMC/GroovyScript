@@ -118,5 +118,4 @@ public class BottlingMachine extends StandardListRegistry<BottlingMachineRecipe>
         }
 
     }
-
 }

@@ -85,5 +85,4 @@ public class StarchExtractor extends StandardListRegistry<DefaultSonarRecipe.Val
         }
 
     }
-
 }

@@ -49,5 +49,4 @@ public class InfoParserConstellation extends GenericInfoParser<IConstellation> {
         instance.add(info.getMessages(), constellation, info.isPrettyNbt());
         InfoParserTranslationKey.instance.add(info.getMessages(), constellation.getUnlocalizedName(), info.isPrettyNbt());
     }
-
 }

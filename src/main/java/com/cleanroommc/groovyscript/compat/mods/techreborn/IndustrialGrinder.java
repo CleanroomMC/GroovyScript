@@ -105,5 +105,4 @@ public class IndustrialGrinder extends AbstractGenericTechRebornRegistry {
         }
 
     }
-
 }

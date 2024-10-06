@@ -70,5 +70,4 @@ public class Crystallizer extends VirtualizedMekanismRegistry<CrystallizerRecipe
         }
 
     }
-
 }

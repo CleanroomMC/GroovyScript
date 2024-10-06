@@ -807,5 +807,4 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
         storage.mirrorHalf();
         return storage;
     }
-
 }

@@ -149,5 +149,4 @@ public abstract class BaseInfoCommand extends CommandBase {
             print(player, messages, argList);
         }
     }
-
 }

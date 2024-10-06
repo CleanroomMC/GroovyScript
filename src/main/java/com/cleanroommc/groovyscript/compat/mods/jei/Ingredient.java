@@ -254,5 +254,4 @@ public class Ingredient extends VirtualizedRegistry<Void> {
     public void yeet(Iterable<IIngredient> ingredients) {
         removeAndHide(ingredients);
     }
-
 }

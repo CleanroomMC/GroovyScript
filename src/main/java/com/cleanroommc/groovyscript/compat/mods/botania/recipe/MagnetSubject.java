@@ -29,5 +29,4 @@ public class MagnetSubject {
     public String getMagnetKey() {
         return isBlock() ? BotaniaAPIAccessor.invokeGetMagnetKey(block, meta) : BotaniaAPIAccessor.invokeGetMagnetKey(item.getMatchingStacks()[0]);
     }
-
 }

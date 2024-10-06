@@ -131,5 +131,4 @@ public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
         }
 
     }
-
 }

@@ -85,5 +85,4 @@ public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
         }
 
     }
-
 }

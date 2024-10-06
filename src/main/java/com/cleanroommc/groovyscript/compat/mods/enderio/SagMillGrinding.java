@@ -108,5 +108,4 @@ public class SagMillGrinding extends StandardListRegistry<GrindingBall> {
         }
 
     }
-
 }

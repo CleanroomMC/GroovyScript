@@ -58,5 +58,4 @@ public class ChemicalReactor extends BaseRegistry {
         }
 
     }
-
 }

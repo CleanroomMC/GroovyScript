@@ -41,5 +41,4 @@ public abstract class EnderIORecipeBuilder<T> extends AbstractRecipeBuilder<T> {
         this.energy = energy;
         return this;
     }
-
 }

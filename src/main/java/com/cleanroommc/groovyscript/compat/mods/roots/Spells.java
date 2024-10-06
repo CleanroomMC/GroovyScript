@@ -316,5 +316,4 @@ public class Spells extends VirtualizedRegistry<SpellBase> {
         }
 
     }
-
 }

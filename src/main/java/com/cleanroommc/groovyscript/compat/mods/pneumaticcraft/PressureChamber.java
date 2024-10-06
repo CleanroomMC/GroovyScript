@@ -86,5 +86,4 @@ public class PressureChamber extends StandardListRegistry<IPressureChamberRecipe
         }
 
     }
-
 }

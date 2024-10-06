@@ -105,5 +105,4 @@ public class MobConfig extends VirtualizedRegistry<Pair<String, Integer>> {
         ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap().forEach((key, value) -> addBackup(Pair.of(key, value)));
         ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap().clear();
     }
-
 }

@@ -26,5 +26,4 @@ public class CompUnitClassGenMixin {
     public void call(SourceUnit source, GeneratorContext context, ClassNode classNode, CallbackInfo ci, GroovyClassVisitor visitor) {
         GroovyCodeFactory.remapOverrides(classNode);
     }
-
 }

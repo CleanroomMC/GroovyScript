@@ -68,5 +68,4 @@ public class GroovyScriptCompiler extends CompilationCustomizer {
             }
         }
     }
-
 }

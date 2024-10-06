@@ -95,5 +95,4 @@ public class SolarTower extends StandardListRegistry<SolarTowerRecipe> {
         }
 
     }
-
 }

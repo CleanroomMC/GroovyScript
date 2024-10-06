@@ -24,5 +24,4 @@ public class StartLanguageServerPacket implements IPacket {
         }
         return null;
     }
-
 }

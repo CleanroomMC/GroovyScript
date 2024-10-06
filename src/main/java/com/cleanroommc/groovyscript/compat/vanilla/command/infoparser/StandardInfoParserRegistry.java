@@ -20,5 +20,4 @@ public class StandardInfoParserRegistry {
         InfoParserRegistry.addInfoParser(InfoParserEnchantment.instance);
         InfoParserRegistry.addInfoParser(InfoParserPotionEffect.instance);
     }
-
 }

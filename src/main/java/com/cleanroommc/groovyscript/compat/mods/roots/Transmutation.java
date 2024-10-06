@@ -191,5 +191,4 @@ public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
         }
 
     }
-
 }

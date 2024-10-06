@@ -179,5 +179,4 @@ public class FlowerGeneration extends VirtualizedRegistry<FlowerRecipe> {
         }
 
     }
-
 }

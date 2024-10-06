@@ -103,5 +103,4 @@ public class Straw extends ForgeRegistryWrapper<StrawHandler> {
         }
 
     }
-
 }

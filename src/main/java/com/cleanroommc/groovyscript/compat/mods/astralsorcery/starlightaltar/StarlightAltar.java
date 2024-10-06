@@ -105,5 +105,4 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
             recipes.clear();
         });
     }
-
 }

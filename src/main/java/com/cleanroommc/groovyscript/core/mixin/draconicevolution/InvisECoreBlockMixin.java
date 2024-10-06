@@ -36,5 +36,4 @@ public class InvisECoreBlockMixin {
             cir.setReturnValue(InvisECoreBlockLogic.getPickBlock(world, pos));
         }
     }
-
 }

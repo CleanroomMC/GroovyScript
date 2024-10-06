@@ -156,5 +156,4 @@ public class Chrysopoeia extends VirtualizedRegistry<ChrysopoeiaRecipe> {
         }
 
     }
-
 }

@@ -73,5 +73,4 @@ public class Refinery extends StandardListRegistry<IRefineryRecipe> {
         }
 
     }
-
 }

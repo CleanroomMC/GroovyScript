@@ -86,5 +86,4 @@ public class BurningRecipeCategory extends BaseCategory<BurningRecipeCategory.Re
         }
 
     }
-
 }

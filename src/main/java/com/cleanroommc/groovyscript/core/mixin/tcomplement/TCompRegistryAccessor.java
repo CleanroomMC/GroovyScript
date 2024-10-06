@@ -51,5 +51,4 @@ public interface TCompRegistryAccessor {
     static List<MeltingRecipe> getHighOvenOverrides() {
         throw new AssertionError();
     }
-
 }

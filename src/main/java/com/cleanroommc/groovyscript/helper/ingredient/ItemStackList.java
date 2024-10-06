@@ -48,5 +48,4 @@ public class ItemStackList extends ArrayList<ItemStack> {
             }
         }
     }
-
 }

@@ -90,5 +90,4 @@ public class Melting extends StandardListRegistry<MeltingRecipe> {
         }
 
     }
-
 }

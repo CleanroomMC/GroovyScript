@@ -384,5 +384,4 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         }
 
     }
-
 }

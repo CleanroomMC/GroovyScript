@@ -66,5 +66,4 @@ public class OrIngredient extends IngredientBase {
     public void addIngredient(IIngredient ingredient) {
         this.ingredients.add(ingredient);
     }
-
 }

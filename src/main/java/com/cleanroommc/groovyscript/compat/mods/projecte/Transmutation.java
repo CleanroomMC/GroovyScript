@@ -138,5 +138,4 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
         }
 
     }
-
 }

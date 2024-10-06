@@ -32,5 +32,4 @@ public class GrSMetaClassCreationHandle extends MetaClassRegistry.MetaClassCreat
         }
         return super.createNormalMetaClass(theClass, registry);
     }
-
 }

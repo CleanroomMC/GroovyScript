@@ -127,5 +127,4 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
         }
 
     }
-
 }

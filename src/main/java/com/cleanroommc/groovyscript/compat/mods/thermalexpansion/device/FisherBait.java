@@ -106,5 +106,4 @@ public class FisherBait extends VirtualizedRegistry<FisherBait.FisherRecipe> {
         }
 
     }
-
 }

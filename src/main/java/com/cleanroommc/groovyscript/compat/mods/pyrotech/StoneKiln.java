@@ -136,5 +136,4 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
         }
 
     }
-
 }

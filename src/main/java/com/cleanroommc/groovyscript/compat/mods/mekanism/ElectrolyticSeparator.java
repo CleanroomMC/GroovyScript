@@ -82,5 +82,4 @@ public class ElectrolyticSeparator extends VirtualizedMekanismRegistry<Separator
         }
 
     }
-
 }

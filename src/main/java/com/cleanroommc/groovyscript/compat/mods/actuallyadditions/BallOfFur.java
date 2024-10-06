@@ -76,5 +76,4 @@ public class BallOfFur extends StandardListRegistry<BallOfFurReturn> {
         }
 
     }
-
 }

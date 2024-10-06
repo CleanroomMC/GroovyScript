@@ -80,5 +80,4 @@ public class HeatFrameCooling extends StandardListRegistry<HeatFrameCoolingRecip
         }
 
     }
-
 }

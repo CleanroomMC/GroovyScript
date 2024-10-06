@@ -131,5 +131,4 @@ public class EnergyCore implements IScriptReloadable {
         replaceBlock(tier, BlockStates.of(blockStates), false);
         return this;
     }
-
 }

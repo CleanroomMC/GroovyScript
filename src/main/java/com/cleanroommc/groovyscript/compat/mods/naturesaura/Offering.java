@@ -149,5 +149,4 @@ public class Offering extends VirtualizedRegistry<OfferingRecipe> {
         }
 
     }
-
 }

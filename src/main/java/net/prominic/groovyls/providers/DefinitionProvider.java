@@ -65,5 +65,4 @@ public class DefinitionProvider extends DocProvider {
 
         return CompletableFuture.completedFuture(Either.forLeft(Collections.singletonList(location)));
     }
-
 }

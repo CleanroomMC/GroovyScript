@@ -91,5 +91,4 @@ public class RestorationChamber extends StandardListRegistry<CalculatorRecipe> {
         }
 
     }
-
 }

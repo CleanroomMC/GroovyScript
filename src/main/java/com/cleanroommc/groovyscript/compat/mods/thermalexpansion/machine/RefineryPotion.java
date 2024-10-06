@@ -141,5 +141,4 @@ public class RefineryPotion extends VirtualizedRegistry<RefineryRecipe> {
         }
 
     }
-
 }

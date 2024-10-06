@@ -90,5 +90,4 @@ public class AlloySmelter extends AbstractPraescriptumRegistry {
         }
 
     }
-
 }

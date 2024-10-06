@@ -33,5 +33,4 @@ public class InfoParserCreativeTab extends GenericInfoParser<CreativeTabs> {
         }
 
     }
-
 }

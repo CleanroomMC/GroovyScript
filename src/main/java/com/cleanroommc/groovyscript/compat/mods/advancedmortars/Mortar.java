@@ -210,5 +210,4 @@ public class Mortar extends VirtualizedRegistry<RecipeMortar> {
         }
 
     }
-
 }

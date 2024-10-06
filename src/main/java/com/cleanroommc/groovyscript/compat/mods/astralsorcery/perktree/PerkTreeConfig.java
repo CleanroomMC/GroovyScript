@@ -49,5 +49,4 @@ public class PerkTreeConfig extends VirtualizedRegistry<Closure<Long>> {
         ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).getLevelMap().clear();
         ((PerkLevelManagerAccessor) PerkLevelManager.INSTANCE).generateLevelMap();
     }
-
 }

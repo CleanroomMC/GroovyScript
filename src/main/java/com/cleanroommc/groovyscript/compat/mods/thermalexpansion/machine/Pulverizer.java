@@ -144,5 +144,4 @@ public class Pulverizer extends VirtualizedRegistry<PulverizerRecipe> {
         }
 
     }
-
 }

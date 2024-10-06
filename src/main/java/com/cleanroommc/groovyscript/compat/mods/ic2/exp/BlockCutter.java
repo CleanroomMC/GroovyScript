@@ -118,5 +118,4 @@ public class BlockCutter extends VirtualizedRegistry<MachineRecipe<IRecipeInput,
         }
         return list;
     }
-
 }

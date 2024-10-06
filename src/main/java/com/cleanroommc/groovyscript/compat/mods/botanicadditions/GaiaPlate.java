@@ -92,5 +92,4 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
         }
 
     }
-
 }

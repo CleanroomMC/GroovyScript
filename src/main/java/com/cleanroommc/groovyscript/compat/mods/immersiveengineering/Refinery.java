@@ -112,5 +112,4 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
         }
 
     }
-
 }

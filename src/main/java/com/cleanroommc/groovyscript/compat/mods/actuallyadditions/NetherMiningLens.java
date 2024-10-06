@@ -98,5 +98,4 @@ public class NetherMiningLens extends StandardListRegistry<WeightedOre> {
         }
 
     }
-
 }

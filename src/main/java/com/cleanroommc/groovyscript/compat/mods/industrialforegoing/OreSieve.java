@@ -67,5 +67,4 @@ public class OreSieve extends StandardListRegistry<OreFluidEntrySieve> {
             return false;
         });
     }
-
 }

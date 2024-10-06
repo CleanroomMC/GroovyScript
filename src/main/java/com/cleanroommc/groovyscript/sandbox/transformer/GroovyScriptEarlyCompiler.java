@@ -57,5 +57,4 @@ public class GroovyScriptEarlyCompiler extends CompilationCustomizer {
             return false;
         });
     }
-
 }

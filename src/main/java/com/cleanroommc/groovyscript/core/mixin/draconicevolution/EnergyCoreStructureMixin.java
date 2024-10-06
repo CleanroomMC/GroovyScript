@@ -21,5 +21,4 @@ public abstract class EnergyCoreStructureMixin {
             cir.setReturnValue(new BlockStateEnergyCoreStructure(core));
         }
     }
-
 }

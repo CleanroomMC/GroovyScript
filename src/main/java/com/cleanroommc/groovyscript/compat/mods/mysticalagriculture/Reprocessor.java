@@ -117,5 +117,4 @@ public class Reprocessor extends StandardListRegistry<ReprocessorRecipe> {
         }
 
     }
-
 }

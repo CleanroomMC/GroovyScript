@@ -154,5 +154,4 @@ public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
         }
 
     }
-
 }

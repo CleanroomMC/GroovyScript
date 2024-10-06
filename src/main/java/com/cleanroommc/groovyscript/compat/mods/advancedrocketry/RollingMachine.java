@@ -53,5 +53,4 @@ public class RollingMachine extends BaseRegistry {
         }
 
     }
-
 }

@@ -115,5 +115,4 @@ public class Lapidary extends VirtualizedRegistry<Lapidary.LapidaryRecipe> {
         }
 
     }
-
 }

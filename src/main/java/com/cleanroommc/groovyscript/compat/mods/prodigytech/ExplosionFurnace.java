@@ -101,5 +101,4 @@ public class ExplosionFurnace extends StandardListRegistry<ExplosionFurnaceManag
         }
 
     }
-
 }

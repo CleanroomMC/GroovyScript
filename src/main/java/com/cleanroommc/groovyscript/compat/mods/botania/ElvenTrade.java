@@ -119,5 +119,4 @@ public class ElvenTrade extends StandardListRegistry<RecipeElvenTrade> {
         }
 
     }
-
 }

@@ -155,5 +155,4 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
     public static boolean isRunningRecipe(EntityItem entityItem) {
         return runningRecipes.containsKey(entityItem) && entityItem.getEntityData().getInteger("burn_time") > 1;
     }
-
 }

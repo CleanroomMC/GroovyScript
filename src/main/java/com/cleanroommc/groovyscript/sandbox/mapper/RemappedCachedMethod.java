@@ -18,5 +18,4 @@ public class RemappedCachedMethod extends CachedMethod {
     public String getName() {
         return deobfName;
     }
-
 }

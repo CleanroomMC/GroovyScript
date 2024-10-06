@@ -80,5 +80,4 @@ public class EnrichmentChamber extends VirtualizedMekanismRegistry<EnrichmentRec
         }
 
     }
-
 }

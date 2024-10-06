@@ -118,5 +118,4 @@ public class Grindstone extends StandardListRegistry<GrindstoneRecipe> {
         }
 
     }
-
 }

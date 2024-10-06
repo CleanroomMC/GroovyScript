@@ -132,5 +132,4 @@ public class AnalysingChamber extends StandardListRegistry<CalculatorRecipe> {
         }
 
     }
-
 }

@@ -38,5 +38,4 @@ public class GroovyLootFunction extends LootFunction {
     public @NotNull ItemStack apply(@NotNull ItemStack stack, @NotNull Random rand, @NotNull LootContext context) {
         return ClosureHelper.call(stack, function, stack, rand, context);
     }
-
 }

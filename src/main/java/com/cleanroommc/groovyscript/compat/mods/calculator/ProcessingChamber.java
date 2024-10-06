@@ -91,5 +91,4 @@ public class ProcessingChamber extends StandardListRegistry<CalculatorRecipe> {
         }
 
     }
-
 }

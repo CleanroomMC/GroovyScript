@@ -71,5 +71,4 @@ public class RareEarthExtractor extends VirtualizedRegistry<IRareEarthExtractorR
         ClassicRecipes.earthExtractor.removeEntry(entry.getItem());
         addBackup(entry);
     }
-
 }

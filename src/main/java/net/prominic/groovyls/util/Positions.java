@@ -70,5 +70,4 @@ public class Positions {
         }
         return currentIndex + character;
     }
-
 }

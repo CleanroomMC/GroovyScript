@@ -213,5 +213,4 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
         }
 
     }
-
 }

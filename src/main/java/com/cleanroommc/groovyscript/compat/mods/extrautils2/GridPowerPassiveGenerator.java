@@ -121,5 +121,4 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
     public void setScaling(String generator, float... scaling) {
         setScaling(new ResourceLocation(generator), scaling);
     }
-
 }

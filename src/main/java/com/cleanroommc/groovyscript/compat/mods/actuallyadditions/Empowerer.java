@@ -212,5 +212,4 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
         }
 
     }
-
 }

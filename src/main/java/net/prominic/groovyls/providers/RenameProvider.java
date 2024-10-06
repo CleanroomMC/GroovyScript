@@ -214,5 +214,4 @@ public class RenameProvider extends DocProvider {
         textEdit.setNewText(newName);
         return textEdit;
     }
-
 }

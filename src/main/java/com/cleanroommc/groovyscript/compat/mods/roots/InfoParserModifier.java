@@ -40,5 +40,4 @@ public class InfoParserModifier extends GenericInfoParser<Modifier> {
         instance.add(info.getMessages(), modifier, info.isPrettyNbt());
         InfoParserTranslationKey.instance.add(info.getMessages(), modifier.getTranslationKey(), info.isPrettyNbt());
     }
-
 }

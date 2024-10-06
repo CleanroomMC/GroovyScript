@@ -140,5 +140,4 @@ public class LootPoolBuilder {
                         new LootPool(lootEntries.toArray(new LootEntry[0]), poolConditions.toArray(new LootCondition[0]), rolls, bonusRolls, name)
                 );
     }
-
 }

@@ -14,5 +14,4 @@ public interface CarpenterRecipeManagerAccessor {
     static Set<ICarpenterRecipe> getRecipes() {
         throw new AssertionError();
     }
-
 }

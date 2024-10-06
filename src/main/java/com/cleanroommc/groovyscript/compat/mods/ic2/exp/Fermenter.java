@@ -103,5 +103,4 @@ public class Fermenter extends VirtualizedRegistry<Pair<String, IFermenterRecipe
                 .post();
         return false;
     }
-
 }

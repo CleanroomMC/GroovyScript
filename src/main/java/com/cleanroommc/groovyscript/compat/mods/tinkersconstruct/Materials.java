@@ -79,5 +79,4 @@ public class Materials extends NamedRegistry {
     public SimpleObjectStream<ITrait> streamTraits() {
         return new SimpleObjectStream<>(TinkerRegistryAccessor.getTraits().values()).setRemover(this::removeTrait);
     }
-
 }

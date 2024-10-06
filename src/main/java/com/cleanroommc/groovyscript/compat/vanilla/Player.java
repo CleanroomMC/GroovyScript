@@ -110,5 +110,4 @@ public class Player extends NamedRegistry implements IScriptReloadable {
     @GroovyBlacklist
     public void afterScriptLoad() {
     }
-
 }

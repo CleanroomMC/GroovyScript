@@ -105,5 +105,4 @@ public class FabricationChamber extends StandardListRegistry<FabricationSonarRec
         }
 
     }
-
 }

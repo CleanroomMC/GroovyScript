@@ -111,5 +111,4 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         }
 
     }
-
 }

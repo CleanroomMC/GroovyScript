@@ -91,5 +91,4 @@ public class AtomicCalculator extends StandardListRegistry<CalculatorRecipe> {
         }
 
     }
-
 }

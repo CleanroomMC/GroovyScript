@@ -45,5 +45,4 @@ public class GasStackList extends ArrayList<GasStack> {
             }
         }
     }
-
 }

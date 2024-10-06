@@ -171,5 +171,4 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         }
 
     }
-
 }

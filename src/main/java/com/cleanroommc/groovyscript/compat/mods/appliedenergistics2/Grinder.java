@@ -143,5 +143,4 @@ public class Grinder extends VirtualizedRegistry<IGrinderRecipe> {
         }
 
     }
-
 }

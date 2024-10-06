@@ -75,5 +75,4 @@ public class GuiCreateWorldMixin extends GuiScreen {
             ci.cancel();
         }
     }
-
 }

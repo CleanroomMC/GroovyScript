@@ -95,5 +95,4 @@ public class Radiator extends StandardListRegistry<RadiatorRecipe> {
         }
 
     }
-
 }

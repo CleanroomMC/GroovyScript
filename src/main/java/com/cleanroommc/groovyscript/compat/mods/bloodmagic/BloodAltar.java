@@ -162,5 +162,4 @@ public class BloodAltar extends StandardListRegistry<RecipeBloodAltar> {
         }
 
     }
-
 }

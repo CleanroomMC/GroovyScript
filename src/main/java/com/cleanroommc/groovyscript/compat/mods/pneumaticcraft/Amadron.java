@@ -194,5 +194,4 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
         }
 
     }
-
 }

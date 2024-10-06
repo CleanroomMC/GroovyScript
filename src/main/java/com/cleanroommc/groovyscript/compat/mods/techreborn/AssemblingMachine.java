@@ -90,5 +90,4 @@ public class AssemblingMachine extends AbstractPraescriptumRegistry {
         }
 
     }
-
 }

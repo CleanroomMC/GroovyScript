@@ -13,5 +13,4 @@ public interface ExtruderRecipeAccessor {
     static ExtruderManager.ExtruderRecipe createExtruderRecipe(ItemStack output, FluidStack inputHot, FluidStack inputCold, int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

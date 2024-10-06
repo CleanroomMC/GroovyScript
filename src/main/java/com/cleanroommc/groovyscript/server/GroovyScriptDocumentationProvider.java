@@ -50,5 +50,4 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
     public @Nullable String getSortText(AnnotatedNode node, ASTContext context) {
         return node instanceof MethodNode methodNode && !methodNode.getDeclaringClass().getAnnotations(ClassHelper.makeCached(RegistryDescription.class)).isEmpty() && !methodNode.getAnnotations(ClassHelper.makeCached(MethodDescription.class)).isEmpty() ? "!!!" + methodNode.getName() : null;
     }
-
 }

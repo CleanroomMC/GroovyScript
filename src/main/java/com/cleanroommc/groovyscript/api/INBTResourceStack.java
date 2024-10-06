@@ -51,5 +51,4 @@ public interface INBTResourceStack extends IResourceStack {
     default INBTResourceStack withEmptyNbt() {
         return withNbt(new NBTTagCompound());
     }
-
 }

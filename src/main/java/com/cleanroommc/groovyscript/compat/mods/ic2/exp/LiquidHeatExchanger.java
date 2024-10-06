@@ -162,5 +162,4 @@ public class LiquidHeatExchanger extends VirtualizedRegistry<LiquidHeatExchanger
         }
 
     }
-
 }

@@ -163,5 +163,4 @@ public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe
         }
 
     }
-
 }

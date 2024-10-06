@@ -262,5 +262,4 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
         }
 
     }
-
 }

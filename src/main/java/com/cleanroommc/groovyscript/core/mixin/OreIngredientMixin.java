@@ -22,5 +22,4 @@ public class OreIngredientMixin {
     public String getOreDict() {
         return groovyScript$oreDict;
     }
-
 }

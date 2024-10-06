@@ -139,5 +139,4 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
         }
 
     }
-
 }

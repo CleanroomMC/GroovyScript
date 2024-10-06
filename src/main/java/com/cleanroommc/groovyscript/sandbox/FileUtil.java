@@ -248,5 +248,4 @@ public class FileUtil {
         }
         return needToChange ? builder.toString() : s;
     }
-
 }

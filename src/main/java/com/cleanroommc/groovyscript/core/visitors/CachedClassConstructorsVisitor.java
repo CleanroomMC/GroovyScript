@@ -37,5 +37,4 @@ public class CachedClassConstructorsVisitor extends ClassVisitor implements Opco
         }
 
     }
-
 }

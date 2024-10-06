@@ -127,5 +127,4 @@ public class GsHandEvent extends Event {
         this.tileEntity = infoParserPackage.getTileEntity();
         this.prettyNbt = infoParserPackage.isPrettyNbt();
     }
-
 }

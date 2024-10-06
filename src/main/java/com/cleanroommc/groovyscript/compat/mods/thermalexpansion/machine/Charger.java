@@ -133,5 +133,4 @@ public class Charger extends VirtualizedRegistry<ChargerRecipe> {
         }
 
     }
-
 }

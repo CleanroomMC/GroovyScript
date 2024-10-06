@@ -289,5 +289,4 @@ public abstract class GroovySandbox {
         }
         return clazz;
     }
-
 }

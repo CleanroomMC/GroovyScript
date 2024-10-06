@@ -62,5 +62,4 @@ public class ShapelessCraftingRecipe extends CraftingRecipe {
     public boolean canFit(int width, int height) {
         return width * height >= input.size();
     }
-
 }

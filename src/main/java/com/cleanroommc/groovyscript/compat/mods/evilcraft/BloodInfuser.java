@@ -142,5 +142,4 @@ public class BloodInfuser extends StandardListRegistry<IRecipe<IngredientFluidSt
         }
 
     }
-
 }

@@ -78,5 +78,4 @@ public class MoonlightForge extends StandardListRegistry<MoonlightForgeRecipe> {
         }
 
     }
-
 }

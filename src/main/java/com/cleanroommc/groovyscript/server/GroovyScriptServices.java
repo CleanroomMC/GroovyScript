@@ -33,5 +33,4 @@ public class GroovyScriptServices extends GroovyServices implements GroovyScript
         var provider = new TextureDecorationProvider(uri, new ASTContext(visitor, languageServerContext));
         return provider.provideTextureDecorations();
     }
-
 }

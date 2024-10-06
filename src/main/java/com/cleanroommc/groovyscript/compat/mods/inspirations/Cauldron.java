@@ -404,5 +404,4 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
         }
 
     }
-
 }

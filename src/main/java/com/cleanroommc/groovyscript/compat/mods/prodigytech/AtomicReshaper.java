@@ -198,5 +198,4 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
         }
 
     }
-
 }

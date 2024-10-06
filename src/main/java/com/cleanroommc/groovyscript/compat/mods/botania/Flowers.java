@@ -18,5 +18,4 @@ public class Flowers {
         BotaniaAPI.registerSubTileSignature(miniClazz, new BasicSignature(name + "Chibi"));
         BotaniaAPI.addSubTileToCreativeMenu(name);
     }
-
 }

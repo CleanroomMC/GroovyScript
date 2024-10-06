@@ -352,5 +352,4 @@ public class Canner extends VirtualizedRegistry<Canner.CanningRecipe> {
         CANNING_RECIPE,
         REPAIR
     }
-
 }

@@ -46,5 +46,4 @@ public class InfoParserAspect extends GenericInfoParser<AspectStack> {
 
         instance.add(info.getMessages(), target, info.isPrettyNbt());
     }
-
 }

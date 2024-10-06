@@ -136,5 +136,4 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
         }
 
     }
-
 }

@@ -137,5 +137,4 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         }
 
     }
-
 }

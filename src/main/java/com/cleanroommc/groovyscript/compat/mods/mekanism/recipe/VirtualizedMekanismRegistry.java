@@ -66,5 +66,4 @@ public abstract class VirtualizedMekanismRegistry<R extends MachineRecipe<?, ?, 
                 .error()
                 .post();
     }
-
 }

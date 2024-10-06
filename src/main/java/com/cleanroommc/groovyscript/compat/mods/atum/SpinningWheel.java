@@ -109,5 +109,4 @@ public class SpinningWheel extends ForgeRegistryWrapper<ISpinningWheelRecipe> {
         }
 
     }
-
 }

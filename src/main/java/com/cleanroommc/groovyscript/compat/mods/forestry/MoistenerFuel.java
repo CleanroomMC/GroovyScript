@@ -72,5 +72,4 @@ public class MoistenerFuel extends ForestryRegistry<forestry.api.fuels.Moistener
     public SimpleObjectStream<forestry.api.fuels.MoistenerFuel> streamFuels() {
         return new SimpleObjectStream<>(FuelManager.moistenerResource.values()).setRemover(this::remove);
     }
-
 }

@@ -69,5 +69,4 @@ public class SReloadScripts implements IPacket {
         GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
         player.sendMessage(new TextComponentString("Reloading JEI..."));
     }
-
 }

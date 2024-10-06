@@ -89,5 +89,4 @@ public class Combiner extends VirtualizedMekanismRegistry<CombinerRecipe> {
         }
 
     }
-
 }

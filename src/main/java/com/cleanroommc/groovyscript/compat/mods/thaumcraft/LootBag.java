@@ -134,5 +134,4 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
         }
 
     }
-
 }

@@ -91,5 +91,4 @@ public class WindRune extends StandardListRegistry<WindImbueRecipe> {
         }
 
     }
-
 }

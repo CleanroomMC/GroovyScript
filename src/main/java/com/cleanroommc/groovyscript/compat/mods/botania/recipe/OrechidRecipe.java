@@ -9,5 +9,4 @@ public class OrechidRecipe {
         this.weight = weight;
         this.output = output;
     }
-
 }

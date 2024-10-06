@@ -64,5 +64,4 @@ public class BlastFurnace extends StandardListRegistry<SimpleRecipe> {
         }
 
     }
-
 }

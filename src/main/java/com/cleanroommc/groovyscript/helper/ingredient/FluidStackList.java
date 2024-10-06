@@ -44,5 +44,4 @@ public class FluidStackList extends ArrayList<FluidStack> {
             }
         }
     }
-
 }

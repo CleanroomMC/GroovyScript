@@ -36,5 +36,4 @@ public class CustomClickAction {
         action.accept(parts[1]);
         return true;
     }
-
 }

@@ -90,5 +90,4 @@ public class BoilerFuel extends StandardListRegistry<BoilerRecipe.BoilerFuelReci
         }
 
     }
-
 }

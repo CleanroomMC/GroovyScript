@@ -106,5 +106,4 @@ public class ElectrolyticCrucibleBattery extends StandardListRegistry<Electrolyt
         }
 
     }
-
 }

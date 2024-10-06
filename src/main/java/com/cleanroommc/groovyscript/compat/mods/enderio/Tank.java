@@ -265,5 +265,4 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         }
 
     }
-
 }

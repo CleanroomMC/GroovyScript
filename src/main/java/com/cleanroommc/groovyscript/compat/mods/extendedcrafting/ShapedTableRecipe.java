@@ -42,5 +42,4 @@ public class ShapedTableRecipe extends TableRecipeShaped {
     public @NotNull NonNullList<ItemStack> getRemainingItems(@NotNull InventoryCrafting inv) {
         return this.groovyRecipe.getRemainingItems(inv);
     }
-
 }

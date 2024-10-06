@@ -186,5 +186,4 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         }
 
     }
-
 }

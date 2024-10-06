@@ -85,5 +85,4 @@ public class HealthProcessor extends StandardListRegistry<DefaultSonarRecipe.Val
         }
 
     }
-
 }

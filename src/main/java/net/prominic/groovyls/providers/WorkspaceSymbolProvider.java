@@ -70,5 +70,4 @@ public class WorkspaceSymbolProvider {
         }
         return CompletableFuture.completedFuture(symbols);
     }
-
 }

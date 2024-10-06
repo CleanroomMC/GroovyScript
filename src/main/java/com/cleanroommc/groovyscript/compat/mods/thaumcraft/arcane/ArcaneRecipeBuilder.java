@@ -167,5 +167,4 @@ public interface ArcaneRecipeBuilder {
         }
 
     }
-
 }

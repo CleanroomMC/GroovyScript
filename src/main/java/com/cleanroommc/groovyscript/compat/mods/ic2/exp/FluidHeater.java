@@ -81,5 +81,4 @@ public class FluidHeater extends VirtualizedRegistry<Pair<String, IFluidHeatMana
 
         return false;
     }
-
 }
