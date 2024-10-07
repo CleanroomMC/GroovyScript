@@ -118,5 +118,4 @@ public class CodeBlockBuilder {
     public String toString() {
         return String.join("\n", generate());
     }
-
 }

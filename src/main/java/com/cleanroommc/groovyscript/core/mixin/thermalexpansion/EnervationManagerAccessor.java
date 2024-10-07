@@ -13,5 +13,4 @@ public interface EnervationManagerAccessor {
     static TObjectIntHashMap<ComparableItemStack> getFuelMap() {
         throw new UnsupportedOperationException();
     }
-
 }

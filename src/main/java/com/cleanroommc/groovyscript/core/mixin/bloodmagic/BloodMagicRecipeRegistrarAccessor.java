@@ -24,5 +24,4 @@ public interface BloodMagicRecipeRegistrarAccessor {
 
     @Accessor
     Set<RecipeSacrificeCraft> getSacrificeCraftRecipes();
-
 }

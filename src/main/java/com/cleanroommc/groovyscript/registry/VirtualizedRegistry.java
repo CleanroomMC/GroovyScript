@@ -55,8 +55,7 @@ public abstract class VirtualizedRegistry<R> extends NamedRegistry implements IS
     @Override
     @GroovyBlacklist
     @ApiStatus.OverrideOnly
-    public void afterScriptLoad() {
-    }
+    public void afterScriptLoad() {}
 
     @GroovyBlacklist
     protected AbstractReloadableStorage<R> createRecipeStorage() {
@@ -104,5 +103,4 @@ public abstract class VirtualizedRegistry<R> extends NamedRegistry implements IS
     protected Collection<R> removeScripted() {
         return recipeStorage.removeScripted();
     }
-
 }

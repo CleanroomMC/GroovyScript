@@ -20,5 +20,4 @@ public abstract class RollingMachineRecipeWrapperMixin {
         if (baseRecipe instanceof ShapelessCraftingRecipe r) cir.setReturnValue(new RollingMachineRecipeWrapper(new ShapelessRecipeWrapper<>(jeiHelpers, r)));
         if (baseRecipe instanceof ShapedCraftingRecipe r) cir.setReturnValue(new RollingMachineRecipeWrapper(new ShapedRecipeWrapper(jeiHelpers, r)));
     }
-
 }

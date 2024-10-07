@@ -129,8 +129,8 @@ public class Predicates extends NamedRegistry {
             BlockStateContainer container = blockstate.getBlock().getBlockState();
 
             BlockStatePredicate predicate = properties.isEmpty()
-                                            ? new StatePredicate(blockstate)
-                                            : new PropertyPredicate(blockstate, properties.stream().map(container::getProperty).collect(Collectors.toList()));
+                    ? new StatePredicate(blockstate)
+                    : new PropertyPredicate(blockstate, properties.stream().map(container::getProperty).collect(Collectors.toList()));
 
             if (above) return new BlockStateAbove(predicate);
             if (below) return new BlockStateBelow(predicate);

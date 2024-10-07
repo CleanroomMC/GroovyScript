@@ -26,5 +26,4 @@ public interface GeneratorTypeAccessor {
     @Mutable
     @Accessor
     void setCaps(TreeMap<Float, Pair<Float, Float>> caps);
-
 }

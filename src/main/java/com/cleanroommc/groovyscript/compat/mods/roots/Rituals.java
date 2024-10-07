@@ -120,8 +120,7 @@ public class Rituals extends VirtualizedRegistry<RitualBase> {
             @com.cleanroommc.groovyscript.api.documentation.annotations.Property(comp = @Comp(not = "null"))
             private RitualBase ritual;
 
-            public RecipeBuilder() {
-            }
+            public RecipeBuilder() {}
 
             public RecipeBuilder(RitualBase ritual) {
                 this.ritual = ritual;

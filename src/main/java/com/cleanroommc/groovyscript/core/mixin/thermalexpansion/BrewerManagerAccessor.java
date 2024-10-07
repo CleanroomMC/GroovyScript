@@ -26,5 +26,4 @@ public interface BrewerManagerAccessor {
     static Set<String> getValidationFluids() {
         throw new AssertionError();
     }
-
 }

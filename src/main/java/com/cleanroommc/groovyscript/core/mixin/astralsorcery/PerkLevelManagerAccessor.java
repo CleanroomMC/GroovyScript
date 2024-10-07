@@ -11,13 +11,11 @@ import java.util.Map;
 public interface PerkLevelManagerAccessor {
 
     @Accessor("LEVEL_CAP")
-    static void setLevelCap(int cap) {
-    }
+    static void setLevelCap(int cap) {}
 
     @Accessor("totalExpLevelRequired")
     Map<Integer, Long> getLevelMap();
 
     @Invoker("ensureLevels")
     void generateLevelMap();
-
 }

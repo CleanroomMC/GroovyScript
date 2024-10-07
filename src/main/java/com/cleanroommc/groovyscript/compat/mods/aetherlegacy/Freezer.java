@@ -77,5 +77,4 @@ public class Freezer extends ForgeRegistryWrapper<AetherFreezable> {
             return freezable;
         }
     }
-
 }

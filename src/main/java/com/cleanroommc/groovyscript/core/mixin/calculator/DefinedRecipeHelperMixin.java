@@ -16,5 +16,4 @@ public abstract class DefinedRecipeHelperMixin extends RecipeHelperV2Mixin {
     public void buildRecipe(List<ISonarRecipeObject> recipeInputs, List<ISonarRecipeObject> recipeOutputs, List<?> additionals, boolean shapeless, CallbackInfoReturnable<CalculatorRecipe> cir) {
         cir.setReturnValue(new CalculatorRecipe(recipeInputs, recipeOutputs, ResearchRecipeType.NONE, shapeless));
     }
-
 }

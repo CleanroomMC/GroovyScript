@@ -89,5 +89,4 @@ public class PlateBendingMachine extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

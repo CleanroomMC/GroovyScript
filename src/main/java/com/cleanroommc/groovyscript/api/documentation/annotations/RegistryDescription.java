@@ -118,6 +118,7 @@ public @interface RegistryDescription {
      * - {@link Reloadability#DISABLED}: cannot be reloaded in-game, and requires a total minecraft restart to apply changes.<br>
      */
     enum Reloadability {
+
         /**
          * Can be reloaded in-game, with each reload reproducing the same game-state as would be produced by restarting minecraft
          */
@@ -138,7 +139,6 @@ public @interface RegistryDescription {
         public boolean hasFlaws() {
             return this == FLAWED;
         }
-
     }
 
     /**
@@ -146,6 +146,7 @@ public @interface RegistryDescription {
      * Currently, either specifically "recipes" or generically "entries"
      */
     enum Category {
+
         RECIPES("recipes"),
         ENTRIES("entries");
 
@@ -166,7 +167,5 @@ public @interface RegistryDescription {
         public String query() {
             return "groovyscript.wiki.query_" + category;
         }
-
     }
-
 }

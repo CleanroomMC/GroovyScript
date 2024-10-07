@@ -26,10 +26,11 @@ import java.util.stream.Collectors;
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,
         reloadability = RegistryDescription.Reloadability.FLAWED,
-        admonition = @Admonition(type = Admonition.Type.DANGER,
-                                 format = Admonition.Format.STANDARD,
-                                 hasTitle = true,
-                                 value = "groovyscript.wiki.mekanism.infusion.note0"),
+        admonition = @Admonition(
+                type = Admonition.Type.DANGER,
+                format = Admonition.Format.STANDARD,
+                hasTitle = true,
+                value = "groovyscript.wiki.mekanism.infusion.note0"),
         priority = 100
 )
 public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
@@ -225,7 +226,5 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
             ModSupport.MEKANISM.get().infusion.removeByType(type);
             return this;
         }
-
     }
-
 }

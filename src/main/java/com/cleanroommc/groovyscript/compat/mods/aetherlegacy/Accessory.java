@@ -90,5 +90,4 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
             return accessory;
         }
     }
-
 }

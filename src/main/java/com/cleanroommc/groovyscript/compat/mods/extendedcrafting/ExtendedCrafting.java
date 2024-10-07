@@ -8,5 +8,4 @@ public class ExtendedCrafting extends GroovyPropertyContainer {
     public final EnderCrafting enderCrafting = new EnderCrafting();
     public final CombinationCrafting combinationCrafting = new CombinationCrafting();
     public final CompressionCrafting compressionCrafting = new CompressionCrafting();
-
 }

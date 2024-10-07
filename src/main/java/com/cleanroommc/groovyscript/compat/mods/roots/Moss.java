@@ -55,7 +55,6 @@ public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
                 MossConfigAccessor.getMossyStates().put(blockIn.getStateFromMeta(in.getMetadata()), blockOut.getStateFromMeta(out.getMetadata()));
             }
         }
-
     }
 
     @MethodDescription(example = @Example("item('minecraft:stained_glass:3'), item('minecraft:stained_glass:4')"), type = MethodDescription.Type.ADDITION)

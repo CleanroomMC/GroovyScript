@@ -21,5 +21,4 @@ public interface AlloyRecipeManagerAccessor {
 
     @Invoker
     void invokeAddJEIIntegration(@NotNull IManyToOneRecipe recipe);
-
 }

@@ -78,6 +78,5 @@ public class InternalModContainer<T extends GroovyPropertyContainer> extends Gro
     }
 
     @Override
-    public void onCompatLoaded(GroovyContainer<?> container) {
-    }
+    public void onCompatLoaded(GroovyContainer<?> container) {}
 }

@@ -11,8 +11,7 @@ import java.util.Collection;
 
 public abstract class ForestryRegistry<T> extends VirtualizedRegistry<T> {
 
-    public ForestryRegistry() {
-    }
+    public ForestryRegistry() {}
 
     public ForestryRegistry(@Nullable Collection<String> aliases) {
         super(aliases);

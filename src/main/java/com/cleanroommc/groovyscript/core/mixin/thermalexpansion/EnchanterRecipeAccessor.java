@@ -12,5 +12,4 @@ public interface EnchanterRecipeAccessor {
     static EnchanterManager.EnchanterRecipe createEnchanterRecipe(ItemStack primaryInput, ItemStack secondaryInput, ItemStack output, int experience, int energy, EnchanterManager.Type type) {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -79,5 +79,4 @@ public class HeatFrameCooling extends StandardListRegistry<HeatFrameCoolingRecip
             return recipe;
         }
     }
-
 }

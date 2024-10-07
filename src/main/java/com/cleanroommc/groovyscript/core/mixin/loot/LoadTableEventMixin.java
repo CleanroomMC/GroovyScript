@@ -26,5 +26,4 @@ public abstract class LoadTableEventMixin {
         VanillaModule.loot.tables.putAll(this.registeredLootTables.asMap());
         MinecraftForge.EVENT_BUS.post(new LootTablesLoadedEvent());
     }
-
 }

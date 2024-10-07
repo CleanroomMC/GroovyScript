@@ -92,8 +92,7 @@ public class FisherBait extends VirtualizedRegistry<FisherBait.FisherRecipe> {
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (FisherRecipe) obj;
-            return Objects.equals(this.bait, that.bait) &&
-                   this.multiplier == that.multiplier;
+            return Objects.equals(this.bait, that.bait) && this.multiplier == that.multiplier;
         }
 
         @Override
@@ -103,10 +102,7 @@ public class FisherBait extends VirtualizedRegistry<FisherBait.FisherRecipe> {
 
         @Override
         public String toString() {
-            return "FisherRecipe[" +
-                   "bait=" + bait + ", " +
-                   "multiplier=" + multiplier + ']';
+            return "FisherRecipe[" + "bait=" + bait + ", " + "multiplier=" + multiplier + ']';
         }
     }
-
 }

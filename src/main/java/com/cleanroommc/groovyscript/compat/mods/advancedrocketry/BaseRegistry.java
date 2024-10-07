@@ -107,7 +107,9 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
             return output(output, 0.0f);
         }
 
-        @RecipeBuilderMethodDescription(field = {"output", "outputChances"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "outputChances"
+        })
         protected RecipeBuilder output(ItemStack output, float chance) {
             this.output.add(output);
             this.outputChances.add(chance);
@@ -194,5 +196,4 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
             return super.output(output, chance);
         }
     }
-
 }

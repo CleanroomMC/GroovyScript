@@ -37,5 +37,4 @@ public class InfoParserVillagerProfession extends GenericInfoParser<VillagerRegi
             instance.add(info.getMessages(), villager.getProfessionForge(), info.isPrettyNbt());
         }
     }
-
 }

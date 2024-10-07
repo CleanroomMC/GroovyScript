@@ -6,5 +6,4 @@ import net.minecraftforge.fml.common.eventhandler.IEventListener;
 public interface EventBusExtended {
 
     void register(Class<?> eventClass, EventPriority priority, IEventListener listener);
-
 }

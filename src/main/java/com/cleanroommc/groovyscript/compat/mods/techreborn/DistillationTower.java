@@ -90,5 +90,4 @@ public class DistillationTower extends AbstractGenericTechRebornRegistry {
             return recipe;
         }
     }
-
 }

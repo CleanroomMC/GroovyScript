@@ -24,5 +24,4 @@ public interface PerkTreeAccessor {
 
     @Accessor
     List<Tuple<AbstractPerk, AbstractPerk>> getConnections();
-
 }

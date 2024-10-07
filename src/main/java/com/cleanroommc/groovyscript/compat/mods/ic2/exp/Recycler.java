@@ -21,12 +21,12 @@ public class Recycler extends VirtualizedRegistry<IRecipeInput> {
     public void onReload() {
         removeScripted().forEach(recipe -> {
             if (type == 0) {
-                for (Iterator<IRecipeInput> iterator = Recipes.recyclerWhitelist.iterator(); iterator.hasNext(); ) {
+                for (Iterator<IRecipeInput> iterator = Recipes.recyclerWhitelist.iterator(); iterator.hasNext();) {
                     IRecipeInput input = iterator.next();
                     if (input == recipe) iterator.remove();
                 }
             } else {
-                for (Iterator<IRecipeInput> iterator = Recipes.recyclerBlacklist.iterator(); iterator.hasNext(); ) {
+                for (Iterator<IRecipeInput> iterator = Recipes.recyclerBlacklist.iterator(); iterator.hasNext();) {
                     IRecipeInput input = iterator.next();
                     if (input == recipe) iterator.remove();
                 }

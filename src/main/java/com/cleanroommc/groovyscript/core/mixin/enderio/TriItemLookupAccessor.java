@@ -11,5 +11,4 @@ public interface TriItemLookupAccessor<REC> {
 
     @Accessor
     ItemRecipeNode<REC, ItemRecipeNode<REC, ItemRecipeLeafNode<REC>>> getRoot();
-
 }

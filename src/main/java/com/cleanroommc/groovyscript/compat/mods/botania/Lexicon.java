@@ -76,7 +76,6 @@ public class Lexicon {
         public SimpleObjectStream<LexiconCategory> streamCategories() {
             return streamRecipes();
         }
-
     }
 
     @RegistryDescription(

@@ -28,5 +28,4 @@ public interface ConstellationRegistryAccessor {
     static List<IMinorConstellation> getMinorConstellations() {
         throw new UnsupportedOperationException();
     }
-
 }

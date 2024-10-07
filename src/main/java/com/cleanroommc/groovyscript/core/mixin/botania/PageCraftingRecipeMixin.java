@@ -68,12 +68,13 @@ public abstract class PageCraftingRecipeMixin extends PageRecipe {
             } else {
                 this.oreDictRecipe = recipe instanceof ShapedOreRecipe;
                 int width = oreDictRecipe
-                            ? ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, (ShapedOreRecipe) recipe, "width")
-                            : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeWidth() : ((ShapedRecipes) recipe).getWidth();
+                        ? ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, (ShapedOreRecipe) recipe, "width")
+                        : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeWidth()
+                        : ((ShapedRecipes) recipe).getWidth();
                 int height = oreDictRecipe
-                             ? ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, (ShapedOreRecipe) recipe, "height")
-                             : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeHeight()
-                                                                      : ((ShapedRecipes) recipe).getHeight();
+                        ? ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, (ShapedOreRecipe) recipe, "height")
+                        : recipe instanceof ShapedCraftingRecipe ? ((ShapedCraftingRecipe) recipe).getRecipeHeight()
+                        : ((ShapedRecipes) recipe).getHeight();
 
                 for (index = 0; index < height; ++index) {
                     for (x = 0; x < width; ++x) {

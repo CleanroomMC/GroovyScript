@@ -8,10 +8,11 @@ import zmaster587.advancedRocketry.tile.multiblock.machine.TileCentrifuge;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 @RegistryDescription(admonition = {
-    @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
-    @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
 })
 public class Centrifuge extends BaseRegistry {
+
     @RecipeBuilderDescription(
             example = @Example(".fluidInput(fluid('lava') * 500).output(item('minecraft:slime_ball'), 0.1f).output(item('minecraft:stone'), 0.9f).fluidOutput(fluid('enrichedlava') * 500).power(50).time(100).outputSize(1)"))
     public RecipeBuilder recipeBuilder() {

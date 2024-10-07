@@ -59,5 +59,4 @@ public class Calculator extends GroovyPropertyContainer {
         }
         return output;
     }
-
 }

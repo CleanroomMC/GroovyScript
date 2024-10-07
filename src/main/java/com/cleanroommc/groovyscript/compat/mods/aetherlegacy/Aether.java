@@ -9,5 +9,4 @@ public class Aether extends GroovyPropertyContainer {
     public final Freezer freezer = new Freezer();
     public final FreezerFuel freezerFuel = new FreezerFuel();
     public final Accessory accessory = new Accessory();
-
 }

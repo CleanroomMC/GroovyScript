@@ -63,5 +63,4 @@ public class InfoParserFluid extends GenericInfoParser<FluidStack> {
             }
         }
     }
-
 }

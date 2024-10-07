@@ -40,5 +40,4 @@ public interface PolicyRepositoryAccessor {
 
     @Accessor
     List<WootMobName> getExternalGenerateOnlyList();
-
 }

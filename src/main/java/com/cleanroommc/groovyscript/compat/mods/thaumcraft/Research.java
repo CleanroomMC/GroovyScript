@@ -234,8 +234,8 @@ public class Research extends VirtualizedRegistry<ResearchCategory> {
         @RecipeBuilderRegistrationMethod
         public ResearchCategory register() {
             ResearchCategory category = background2 == null
-                                        ? new ResearchCategory(key, researchKey, formula, icon, background)
-                                        : new ResearchCategory(key, researchKey, formula, icon, background, background2);
+                    ? new ResearchCategory(key, researchKey, formula, icon, background)
+                    : new ResearchCategory(key, researchKey, formula, icon, background, background2);
 
             ModSupport.THAUMCRAFT.get().research.addCategory(category);
             return category;

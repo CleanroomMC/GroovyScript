@@ -20,5 +20,4 @@ public interface PlasticMixerRegistryAccessor {
 
     @Accessor
     List<PlasticMixerRegistry.PlasticMixerRecipe> getRecipes();
-
 }

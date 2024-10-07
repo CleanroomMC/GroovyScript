@@ -71,7 +71,5 @@ public class Refinery extends StandardListRegistry<IRefineryRecipe> {
             ModSupport.MAGNETICRAFT.get().refinery.add(recipe);
             return recipe;
         }
-
     }
-
 }

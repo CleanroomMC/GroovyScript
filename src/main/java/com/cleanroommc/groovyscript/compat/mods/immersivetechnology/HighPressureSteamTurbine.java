@@ -47,7 +47,7 @@ public class HighPressureSteamTurbine extends StandardListRegistry<HighPressureS
         });
     }
 
-    @MethodDescription(example = @Example(value = "fluid('steam')",commented = true))
+    @MethodDescription(example = @Example(value = "fluid('steam')", commented = true))
     public void removeByOutput(IIngredient output) {
         getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {
@@ -94,5 +94,4 @@ public class HighPressureSteamTurbine extends StandardListRegistry<HighPressureS
             return recipe;
         }
     }
-
 }

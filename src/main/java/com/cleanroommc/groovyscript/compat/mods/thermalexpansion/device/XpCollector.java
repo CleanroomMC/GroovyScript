@@ -43,9 +43,11 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
 
     public boolean remove(ComparableItemStack comparableItemStack) {
         if (XpCollectorManagerAccessor.getCatalystMap().containsKey(comparableItemStack) && XpCollectorManagerAccessor.getCatalystFactorMap().containsKey(comparableItemStack)) {
-            addBackup(new XpCollectorRecipe(new ItemStack(comparableItemStack.item, comparableItemStack.metadata),
-                                            XpCollectorManagerAccessor.getCatalystMap().remove(comparableItemStack),
-                                            XpCollectorManagerAccessor.getCatalystFactorMap().remove(comparableItemStack)));
+            addBackup(
+                    new XpCollectorRecipe(
+                            new ItemStack(comparableItemStack.item, comparableItemStack.metadata),
+                            XpCollectorManagerAccessor.getCatalystMap().remove(comparableItemStack),
+                            XpCollectorManagerAccessor.getCatalystFactorMap().remove(comparableItemStack)));
             return true;
         }
         return false;
@@ -77,7 +79,10 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        XpCollectorManagerAccessor.getCatalystMap().keySet().stream().filter(XpCollectorManagerAccessor.getCatalystFactorMap()::containsKey)
+        XpCollectorManagerAccessor.getCatalystMap()
+                .keySet()
+                .stream()
+                .filter(XpCollectorManagerAccessor.getCatalystFactorMap()::containsKey)
                 .forEach(x -> addBackup(new XpCollectorRecipe(new ItemStack(x.item, x.metadata), XpCollectorManagerAccessor.getCatalystMap().get(x), XpCollectorManagerAccessor.getCatalystFactorMap().get(x))));
         XpCollectorManagerAccessor.getCatalystMap().clear();
         XpCollectorManagerAccessor.getCatalystFactorMap().clear();
@@ -117,9 +122,7 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (XpCollectorRecipe) obj;
-            return Objects.equals(this.catalyst, that.catalyst) &&
-                   this.xp == that.xp &&
-                   this.factor == that.factor;
+            return Objects.equals(this.catalyst, that.catalyst) && this.xp == that.xp && this.factor == that.factor;
         }
 
         @Override
@@ -129,11 +132,7 @@ public class XpCollector extends VirtualizedRegistry<XpCollector.XpCollectorReci
 
         @Override
         public String toString() {
-            return "XpCollectorRecipe[" +
-                   "catalyst=" + catalyst + ", " +
-                   "xp=" + xp + ", " +
-                   "factor=" + factor + ']';
+            return "XpCollectorRecipe[" + "catalyst=" + catalyst + ", " + "xp=" + xp + ", " + "factor=" + factor + ']';
         }
     }
-
 }

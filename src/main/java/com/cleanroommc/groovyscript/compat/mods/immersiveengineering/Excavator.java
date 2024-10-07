@@ -18,9 +18,10 @@ import java.util.stream.Collectors;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,
-        admonition = @Admonition(value = "groovyscript.wiki.immersiveengineering.excavator.note0",
-                                 type = Admonition.Type.WARNING,
-                                 format = Admonition.Format.STANDARD)
+        admonition = @Admonition(
+                value = "groovyscript.wiki.immersiveengineering.excavator.note0",
+                type = Admonition.Type.WARNING,
+                format = Admonition.Format.STANDARD)
 )
 public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.MineralMix, Integer>> {
 
@@ -64,7 +65,8 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
 
     @MethodDescription(example = @Example("'silt'"))
     public boolean removeByMineral(String key) {
-        List<ExcavatorHandler.MineralMix> entries = ExcavatorHandler.mineralList.keySet().stream()
+        List<ExcavatorHandler.MineralMix> entries = ExcavatorHandler.mineralList.keySet()
+                .stream()
                 .filter(r -> r.name.equalsIgnoreCase(key))
                 .collect(Collectors.toList());
         for (ExcavatorHandler.MineralMix recipe : entries) {
@@ -89,7 +91,8 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
                     .post();
             return;
         }
-        List<ExcavatorHandler.MineralMix> entries = ExcavatorHandler.mineralList.keySet().stream()
+        List<ExcavatorHandler.MineralMix> entries = ExcavatorHandler.mineralList.keySet()
+                .stream()
                 .filter(r -> Arrays.stream(ores).anyMatch(check -> Arrays.stream(r.ores).anyMatch(target -> target.matches(check))))
                 .collect(Collectors.toList());
         for (ExcavatorHandler.MineralMix recipe : entries) {
@@ -112,7 +115,8 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
                     .post();
             return;
         }
-        List<ExcavatorHandler.MineralMix> entries = ExcavatorHandler.mineralList.keySet().stream()
+        List<ExcavatorHandler.MineralMix> entries = ExcavatorHandler.mineralList.keySet()
+                .stream()
                 .filter(r -> Arrays.stream(ores).anyMatch(check -> Arrays.stream(r.ores).anyMatch(target -> target.matches(check.getOreDict()))))
                 .collect(Collectors.toList());
         for (ExcavatorHandler.MineralMix recipe : entries) {
@@ -174,14 +178,18 @@ public class Excavator extends VirtualizedRegistry<Pair<ExcavatorHandler.Mineral
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"ores", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "ores", "chances"
+        })
         public RecipeBuilder ore(String ore, float chance) {
             this.ores.add(ore);
             this.chances.add(chance);
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"ores", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "ores", "chances"
+        })
         public RecipeBuilder ore(OreDictIngredient ore, float chance) {
             this.ores.add(ore.getOreDict());
             this.chances.add(chance);

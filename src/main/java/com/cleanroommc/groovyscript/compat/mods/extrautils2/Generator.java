@@ -19,7 +19,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RegistryDescription
 public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>> {
@@ -244,7 +243,6 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
         public String toString() {
             return location;
         }
-
     }
 
     @Property(property = "input", comp = @Comp(gte = 0, lte = 2))
@@ -329,5 +327,4 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
             return recipe;
         }
     }
-
 }

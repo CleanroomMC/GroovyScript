@@ -170,6 +170,7 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
         public @Nullable BasicInfusionRecipe register() {
             if (!validate()) return null;
             BasicInfusionRecipe recipe = new BasicInfusionRecipe(output.get(0), AstralSorcery.toItemHandle(input.get(0))) {
+
                 @Override
                 public int craftingTickTime() {
                     return time;
@@ -182,7 +183,5 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
             ModSupport.ASTRAL_SORCERY.get().infusionAltar.add(recipe);
             return recipe;
         }
-
     }
-
 }

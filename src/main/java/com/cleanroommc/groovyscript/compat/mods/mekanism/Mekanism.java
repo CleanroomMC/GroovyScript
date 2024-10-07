@@ -90,5 +90,4 @@ public class Mekanism extends GroovyPropertyContainer {
         InfoParserRegistry.addInfoParser(InfoParserGas.instance);
         InfoParserRegistry.addInfoParser(InfoParserInfusion.instance);
     }
-
 }

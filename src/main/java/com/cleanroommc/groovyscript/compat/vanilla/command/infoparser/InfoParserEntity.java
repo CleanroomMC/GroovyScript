@@ -42,5 +42,4 @@ public class InfoParserEntity extends GenericInfoParser<Entity> {
             InfoParserTranslationKey.instance.add(info.getMessages(), rl.toString(), info.isPrettyNbt());
         }
     }
-
 }

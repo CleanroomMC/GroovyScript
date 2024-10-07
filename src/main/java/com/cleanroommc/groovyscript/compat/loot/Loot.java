@@ -43,5 +43,4 @@ public class Loot extends NamedRegistry implements IScriptReloadable {
             }
         }
     }
-
 }

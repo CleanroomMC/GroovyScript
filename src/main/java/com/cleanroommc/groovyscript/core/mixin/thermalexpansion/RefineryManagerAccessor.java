@@ -29,5 +29,4 @@ public interface RefineryManagerAccessor {
     static Set<String> getFossilFluids() {
         throw new UnsupportedOperationException();
     }
-
 }

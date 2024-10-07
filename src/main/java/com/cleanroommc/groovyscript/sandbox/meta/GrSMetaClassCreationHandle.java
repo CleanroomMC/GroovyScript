@@ -13,8 +13,7 @@ public class GrSMetaClassCreationHandle extends MetaClassRegistry.MetaClassCreat
 
     public static final GrSMetaClassCreationHandle INSTANCE = new GrSMetaClassCreationHandle();
 
-    private GrSMetaClassCreationHandle() {
-    }
+    private GrSMetaClassCreationHandle() {}
 
     @Override
     protected MetaClass createNormalMetaClass(Class theClass, MetaClassRegistry registry) {

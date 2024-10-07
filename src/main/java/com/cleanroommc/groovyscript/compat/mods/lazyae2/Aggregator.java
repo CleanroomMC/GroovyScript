@@ -82,5 +82,4 @@ public class Aggregator extends StandardListRegistry<AggRecipe> {
             return recipe;
         }
     }
-
 }

@@ -61,7 +61,7 @@ public class OreWasher extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
                     .post();
             return;
         }
-        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.oreWashing.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.oreWashing.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = iterator.next();
 
             if (recipe.getOutput().size() == outputs.length) {
@@ -88,7 +88,7 @@ public class OreWasher extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
                     .post();
             return;
         }
-        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.oreWashing.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.oreWashing.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> rec = iterator.next();
             if (rec.getInput().matches(input)) {
                 iterator.remove();
@@ -98,7 +98,7 @@ public class OreWasher extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
     }
 
     public void removeAll() {
-        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.oreWashing.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.oreWashing.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> rec = iterator.next();
             iterator.remove();
             addBackup(rec);
@@ -106,7 +106,7 @@ public class OreWasher extends VirtualizedRegistry<MachineRecipe<IRecipeInput, C
     }
 
     private boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe, boolean backup) {
-        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.oreWashing.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.oreWashing.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> rec = iterator.next();
             if (rec.getInput().matches(recipe.getInput().getInputs().get(0))) {
                 iterator.remove();

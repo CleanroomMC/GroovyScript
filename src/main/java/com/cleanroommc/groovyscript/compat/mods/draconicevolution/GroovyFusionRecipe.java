@@ -127,9 +127,7 @@ public class GroovyFusionRecipe implements IFusionRecipe {
     }
 
     @Override
-    public void onCraftingTick(IFusionCraftingInventory iFusionCraftingInventory, World world, BlockPos blockPos) {
-
-    }
+    public void onCraftingTick(IFusionCraftingInventory iFusionCraftingInventory, World world, BlockPos blockPos) {}
 
     @Override
     public String canCraft(IFusionCraftingInventory inventory, World world, BlockPos blockPos) {

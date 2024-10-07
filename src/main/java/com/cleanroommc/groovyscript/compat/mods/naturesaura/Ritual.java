@@ -55,7 +55,7 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         return true;
     }
 
-    @MethodDescription( example = @Example("item('naturesaura:infused_stone')"))
+    @MethodDescription(example = @Example("item('naturesaura:infused_stone')"))
     public boolean removeByInput(IIngredient input) {
         return NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet().removeIf(r -> {
             for (var ingredient : r.getValue().ingredients) {
@@ -83,7 +83,7 @@ public class Ritual extends VirtualizedRegistry<TreeRitualRecipe> {
         });
     }
 
-    @MethodDescription( example = @Example("item('naturesaura:eye')"))
+    @MethodDescription(example = @Example("item('naturesaura:eye')"))
     public boolean removeByOutput(IIngredient output) {
         return NaturesAuraAPI.TREE_RITUAL_RECIPES.entrySet().removeIf(r -> {
             if (output.test(r.getValue().result)) {

@@ -12,5 +12,4 @@ public interface FactorizerRecipeAccessor {
     static FactorizerManager.FactorizerRecipe createFactorizerRecipe(ItemStack input, ItemStack output) {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -13,5 +13,4 @@ public interface CrucibleRecipeAccessor {
     static CrucibleManager.CrucibleRecipe createCrucibleRecipe(ItemStack input, FluidStack output, int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

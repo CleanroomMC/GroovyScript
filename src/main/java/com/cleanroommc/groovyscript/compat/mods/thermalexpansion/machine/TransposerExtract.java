@@ -43,13 +43,15 @@ public class TransposerExtract extends VirtualizedRegistry<TransposerRecipe> {
     @GroovyBlacklist
     public void afterScriptLoad() {
         TransposerManagerAccessor.getValidationSet().clear();
-        TransposerManagerAccessor.getValidationSet().addAll(
-                TransposerManagerAccessor.getRecipeMapExtract().values().stream().map(TransposerManager.TransposerRecipe::getInput).map(TransposerManager::convertInput).collect(Collectors.toList())
-        );
+        TransposerManagerAccessor.getValidationSet()
+                .addAll(
+                        TransposerManagerAccessor.getRecipeMapExtract().values().stream().map(TransposerManager.TransposerRecipe::getInput).map(TransposerManager::convertInput).collect(Collectors.toList())
+                );
         TransposerManagerAccessor.getValidationSet().clear();
-        TransposerManagerAccessor.getValidationSet().addAll(
-                TransposerManagerAccessor.getRecipeMapFill().values().stream().map(TransposerManager.TransposerRecipe::getInput).map(TransposerManager::convertInput).collect(Collectors.toList())
-        );
+        TransposerManagerAccessor.getValidationSet()
+                .addAll(
+                        TransposerManagerAccessor.getRecipeMapFill().values().stream().map(TransposerManager.TransposerRecipe::getInput).map(TransposerManager::convertInput).collect(Collectors.toList())
+                );
     }
 
     public void add(TransposerRecipe recipe) {

@@ -1,10 +1,8 @@
 package com.cleanroommc.groovyscript.compat.mods.forestry;
 
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.core.mixin.forestry.CarpenterRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;

@@ -91,5 +91,4 @@ public class Energizer extends StandardListRegistry<EnergizeRecipe> {
             return recipe;
         }
     }
-
 }

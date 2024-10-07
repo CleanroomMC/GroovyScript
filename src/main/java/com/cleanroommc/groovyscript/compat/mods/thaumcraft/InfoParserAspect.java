@@ -33,17 +33,17 @@ public class InfoParserAspect extends GenericInfoParser<AspectStack> {
     public void parse(InfoParserPackage info) {
         if (info.getEntity() == null && info.getStack().isEmpty()) return;
         AspectList list = info.getStack().isEmpty()
-                          ? AspectHelper.getEntityAspects(info.getEntity())
-                          : AspectHelper.getObjectAspects(info.getStack());
+                ? AspectHelper.getEntityAspects(info.getEntity())
+                : AspectHelper.getObjectAspects(info.getStack());
 
         if (list == null) return;
 
         // convert it into groovyscript AspectStack, so we can easily represent quantity
-        List<AspectStack> target = list.aspects.entrySet().stream()
+        List<AspectStack> target = list.aspects.entrySet()
+                .stream()
                 .map(x -> new AspectStack(x.getKey(), x.getValue()))
                 .collect(Collectors.toList());
 
         instance.add(info.getMessages(), target, info.isPrettyNbt());
     }
-
 }

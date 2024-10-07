@@ -105,5 +105,4 @@ public class ElectrolyticCrucibleBattery extends StandardListRegistry<Electrolyt
             return recipe;
         }
     }
-
 }

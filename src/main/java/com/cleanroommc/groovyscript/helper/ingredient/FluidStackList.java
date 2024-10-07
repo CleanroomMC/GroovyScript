@@ -7,8 +7,7 @@ import java.util.Collection;
 
 public class FluidStackList extends ArrayList<FluidStack> {
 
-    public FluidStackList() {
-    }
+    public FluidStackList() {}
 
     public FluidStackList(Collection<FluidStack> collection) {
         super(collection);

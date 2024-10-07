@@ -75,5 +75,4 @@ public class TableCrafting extends StandardListRegistry<ITieredRecipe> {
             return false;
         });
     }
-
 }

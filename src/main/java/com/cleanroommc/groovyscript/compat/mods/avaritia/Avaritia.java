@@ -6,5 +6,4 @@ public class Avaritia extends GroovyPropertyContainer {
 
     public final ExtremeCrafting extremeCrafting = new ExtremeCrafting();
     public final Compressor compressor = new Compressor();
-
 }

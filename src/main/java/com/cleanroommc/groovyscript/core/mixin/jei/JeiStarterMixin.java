@@ -27,5 +27,4 @@ public abstract class JeiStarterMixin {
     private static void grs$onSendRuntime(CallbackInfo ci) {
         JeiPlugin.afterRuntimeAvailable();
     }
-
 }

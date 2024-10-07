@@ -15,10 +15,11 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription(
-        admonition = @Admonition(value = "groovyscript.wiki.mekanism.smelting.note0",
-                                 type = Admonition.Type.DANGER,
-                                 format = Admonition.Format.STANDARD,
-                                 hasTitle = true))
+        admonition = @Admonition(
+                value = "groovyscript.wiki.mekanism.smelting.note0",
+                type = Admonition.Type.DANGER,
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class Smelting extends VirtualizedMekanismRegistry<SmeltingRecipe> {
 
     public Smelting() {

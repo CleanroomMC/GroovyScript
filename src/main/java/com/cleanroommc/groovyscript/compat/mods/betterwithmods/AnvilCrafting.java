@@ -64,5 +64,4 @@ public class AnvilCrafting extends StandardListRegistry<IRecipe> {
             return false;
         });
     }
-
 }

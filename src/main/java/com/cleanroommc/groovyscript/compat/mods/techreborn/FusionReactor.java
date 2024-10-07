@@ -135,5 +135,4 @@ public class FusionReactor extends VirtualizedRegistry<FusionReactorRecipe> {
             return recipe;
         }
     }
-
 }

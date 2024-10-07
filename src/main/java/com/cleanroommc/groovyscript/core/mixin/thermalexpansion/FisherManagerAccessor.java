@@ -36,5 +36,4 @@ public interface FisherManagerAccessor {
     static TObjectIntHashMap<ComparableItemStack> getBaitMap() {
         throw new UnsupportedOperationException();
     }
-
 }

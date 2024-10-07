@@ -64,5 +64,4 @@ public class VitePress implements IFormat {
     public boolean usesFocusInCodeBlocks() {
         return true;
     }
-
 }

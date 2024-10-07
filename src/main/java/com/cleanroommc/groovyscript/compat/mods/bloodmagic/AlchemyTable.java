@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.mods.bloodmagic;
 
-import WayofTime.bloodmagic.altar.AltarTier;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.api.impl.recipe.RecipeAlchemyTable;
 import com.cleanroommc.groovyscript.api.GroovyLog;
@@ -20,10 +19,11 @@ import java.util.Collection;
 import java.util.Collections;
 
 @RegistryDescription(
-        admonition = @Admonition(type = Admonition.Type.DANGER,
-                                 format = Admonition.Format.STANDARD,
-                                 hasTitle = true,
-                                 value = "groovyscript.wiki.bloodmagic.alchemy_table.note0")
+        admonition = @Admonition(
+                type = Admonition.Type.DANGER,
+                format = Admonition.Format.STANDARD,
+                hasTitle = true,
+                value = "groovyscript.wiki.bloodmagic.alchemy_table.note0")
 )
 public class AlchemyTable extends StandardListRegistry<RecipeAlchemyTable> {
 

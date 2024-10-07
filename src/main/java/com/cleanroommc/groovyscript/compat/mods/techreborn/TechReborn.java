@@ -30,5 +30,4 @@ public class TechReborn extends GroovyPropertyContainer {
     public final ThermalGenerator thermalGenerator = new ThermalGenerator();
     public final VacuumFreezer vacuumFreezer = new VacuumFreezer();
     public final WireMill wireMill = new WireMill();
-
 }

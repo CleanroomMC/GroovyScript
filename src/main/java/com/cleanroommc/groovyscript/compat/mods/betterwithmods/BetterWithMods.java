@@ -14,5 +14,4 @@ public class BetterWithMods extends GroovyPropertyContainer {
     public final Heat heat = new Heat();
     public final Hopper hopper = new Hopper();
     public final HopperFilters hopperFilters = new HopperFilters();
-
 }

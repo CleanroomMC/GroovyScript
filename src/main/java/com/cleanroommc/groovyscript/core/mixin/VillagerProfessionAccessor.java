@@ -11,5 +11,4 @@ public interface VillagerProfessionAccessor {
 
     @Accessor
     List<VillagerRegistry.VillagerCareer> getCareers();
-
 }

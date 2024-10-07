@@ -64,10 +64,7 @@ public class GroovyNodeToStringUtils {
     }
 
     public static String constructorToString(ConstructorNode constructorNode, ASTContext astContext) {
-        String builder = constructorNode.getDeclaringClass().getName() +
-                "(" +
-                parametersToString(constructorNode.getParameters(), astContext) +
-                ")";
+        String builder = constructorNode.getDeclaringClass().getName() + "(" + parametersToString(constructorNode.getParameters(), astContext) + ")";
         return builder;
     }
 

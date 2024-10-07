@@ -30,7 +30,9 @@ public class Forestry extends GroovyPropertyContainer {
         String[] parts = mainArg.split(":");
         if (parts.length < 2) {
             if (args.length > 0 && args[0] instanceof String s) {
-                parts = new String[]{parts[0], s};
+                parts = new String[]{
+                        parts[0], s
+                };
             } else {
                 Result.error("Can't find bee species for '{}'", mainArg);
             }

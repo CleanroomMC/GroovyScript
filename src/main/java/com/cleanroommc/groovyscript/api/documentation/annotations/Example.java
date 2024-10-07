@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
  * </ul>
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ /* No targets allowed */})
+@Target({}) // No targets allowed
 public @interface Example {
 
     /**
@@ -92,5 +92,4 @@ public @interface Example {
      * @return the example priority (relative to other examples for the same method or Recipe Builder)
      */
     int priority() default 1000;
-
 }

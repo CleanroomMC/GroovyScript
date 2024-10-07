@@ -84,7 +84,9 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
             this.maxLevel = maxLevel;
         }
 
-        public String registry() {return registry;}
+        public String registry() {
+            return registry;
+        }
 
         public Enchantment enchantment() {
             return enchantment;
@@ -99,9 +101,7 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (ZorraRecipeData) obj;
-            return Objects.equals(this.registry, that.registry) &&
-                   Objects.equals(this.enchantment, that.enchantment) &&
-                   this.maxLevel == that.maxLevel;
+            return Objects.equals(this.registry, that.registry) && Objects.equals(this.enchantment, that.enchantment) && this.maxLevel == that.maxLevel;
         }
 
         @Override
@@ -111,10 +111,7 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
 
         @Override
         public String toString() {
-            return "ZorraRecipeData[" +
-                   "registry=" + registry + ", " +
-                   "enchantment=" + enchantment + ", " +
-                   "maxLevel=" + maxLevel + ']';
+            return "ZorraRecipeData[" + "registry=" + registry + ", " + "enchantment=" + enchantment + ", " + "maxLevel=" + maxLevel + ']';
         }
     }
 }

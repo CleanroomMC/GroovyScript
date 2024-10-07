@@ -8,5 +8,4 @@ public class IntegratedDynamics extends GroovyPropertyContainer {
     public final MechanicalDryingBasin mechanicalDryingBasin = new MechanicalDryingBasin();
     public final Squeezer squeezer = new Squeezer();
     public final MechanicalSqueezer mechanicalSqueezer = new MechanicalSqueezer();
-
 }

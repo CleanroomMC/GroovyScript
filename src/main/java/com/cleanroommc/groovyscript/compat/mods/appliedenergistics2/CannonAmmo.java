@@ -30,9 +30,10 @@ public class CannonAmmo extends VirtualizedRegistry<Pair<ItemStack, Double>> {
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:clay'), 10000"))
     public void add(ItemStack item, double value) {
         if (IngredientHelper.overMaxSize(item, 1)) {
-            GroovyLog.msg("Error adding Cannon Ammo").error()
-                     .add("Item must have stack size of 1, got {}", item.getCount())
-                     .post();
+            GroovyLog.msg("Error adding Cannon Ammo")
+                    .error()
+                    .add("Item must have stack size of 1, got {}", item.getCount())
+                    .post();
             return;
         }
         addScripted(Pair.of(item, value));
@@ -50,5 +51,4 @@ public class CannonAmmo extends VirtualizedRegistry<Pair<ItemStack, Double>> {
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().forEach((item, value) -> addBackup(Pair.of(item, value)));
         ((MatterCannonAmmoRegistryAccessor) AEApi.instance().registries().matterCannon()).getDamageModifiers().clear();
     }
-
 }

@@ -22,7 +22,7 @@ public class MobConfig extends VirtualizedRegistry<Pair<String, Integer>> {
         restoreFromBackup().forEach(pair -> ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap().put(pair.getKey(), pair.getValue()));
         removeScripted().forEach(pair -> {
             if (pair.getKey().contains(":")) ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap().remove(pair.getKey());
-            else ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMap().put(EnumConfigKey.get(pair.getKey()), pair.getValue());
+            else((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMap().put(EnumConfigKey.get(pair.getKey()), pair.getValue());
         });
     }
 
@@ -84,7 +84,9 @@ public class MobConfig extends VirtualizedRegistry<Pair<String, Integer>> {
 
     @MethodDescription(description = "groovyscript.wiki.woot.mob_config.removeByEntity", example = @Example("'minecraft:wither'"))
     public void remove(WootMobName name) {
-        for (Map.Entry<String, Integer> entry : ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap().entrySet().stream()
+        for (Map.Entry<String, Integer> entry : ((WootConfigurationManagerAccessor) Woot.wootConfiguration).getIntegerMobMap()
+                .entrySet()
+                .stream()
                 .filter(x -> x.getKey().startsWith(name.toString()))
                 .collect(Collectors.toList())) {
             addBackup(Pair.of(entry.getKey(), entry.getValue()));

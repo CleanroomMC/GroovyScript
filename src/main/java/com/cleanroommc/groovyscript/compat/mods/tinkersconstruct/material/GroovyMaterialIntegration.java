@@ -11,8 +11,7 @@ public class GroovyMaterialIntegration extends MaterialIntegration {
     }
 
     @Override
-    public void preInit() {
-    }
+    public void preInit() {}
 
     @Override
     public void integrate() {

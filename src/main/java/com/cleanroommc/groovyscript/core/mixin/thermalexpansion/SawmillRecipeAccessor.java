@@ -12,5 +12,4 @@ public interface SawmillRecipeAccessor {
     static SawmillManager.SawmillRecipe createSawmillRecipe(ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance, int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

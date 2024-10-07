@@ -203,21 +203,28 @@ public class GroovyASTUtils {
 
     public static List<FieldNode> getFieldsForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr, ASTContext context) {
         boolean statics = expr instanceof ClassExpression;
-        return collectFields(classNode, new ArrayList<>(),
-                             node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
+        return collectFields(
+                classNode,
+                new ArrayList<>(),
+                node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
     }
 
-    public static List<PropertyNode> getPropertiesForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr,
+    public static List<PropertyNode> getPropertiesForLeftSideOfPropertyExpression(ClassNode classNode,
+                                                                                  Expression expr,
                                                                                   ASTContext context) {
         boolean statics = expr instanceof ClassExpression;
-        return collectProperties(classNode, new ArrayList<>(),
-                                 node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
+        return collectProperties(
+                classNode,
+                new ArrayList<>(),
+                node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
     }
 
     public static List<MethodNode> getMethodsForLeftSideOfPropertyExpression(ClassNode classNode, Expression expr, ASTContext context) {
         boolean statics = expr instanceof ClassExpression;
-        return collectMethods(classNode, new ArrayList<>(),
-                              node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
+        return collectMethods(
+                classNode,
+                new ArrayList<>(),
+                node -> statics == node.isStatic() && (node.getModifiers() & HIDDEN_MARKER) == 0);
     }
 
     public static List<FieldNode> collectFields(ClassNode classNode, List<FieldNode> nodes, Predicate<FieldNode> test) {
@@ -329,9 +336,9 @@ public class GroovyASTUtils {
             List<MethodNode> mn = new ArrayList<>();
             if (methodCallExpr.isImplicitThis()) {
                 Object o = context.getLanguageServerContext().getSandbox().getBindings().get(node.getMethodAsString());
-                if (o instanceof ObjectMapper<?> goh) {
+                if (o instanceof ObjectMapper<?>goh) {
                     mn.addAll(goh.getMethodNodes());
-                } else if (o instanceof Closure<?> closure) {
+                } else if (o instanceof Closure<?>closure) {
                     mn.add(methodNodeOfClosure(node.getMethodAsString(), closure));
                 }
             }
@@ -345,8 +352,11 @@ public class GroovyASTUtils {
             ClassNode constructorType = constructorCallExpr.getType();
             if (constructorType != null) {
                 fillClassNode(constructorType);
-                return constructorType.getDeclaredConstructors().stream().map(constructor -> (MethodNode) constructor).collect(
-                        Collectors.toList());
+                return constructorType.getDeclaredConstructors()
+                        .stream()
+                        .map(constructor -> (MethodNode) constructor)
+                        .collect(
+                                Collectors.toList());
             }
         } else if (node instanceof StaticMethodCallExpression staticMethodCallExpression) {
             var ownerType = staticMethodCallExpression.getOwnerType();
@@ -453,11 +463,17 @@ public class GroovyASTUtils {
     }
 
     public static MethodNode methodNodeOfClosure(String name, Closure<?> closure) {
-        Class<?> declarer = closure.getThisObject() == null ? (closure.getOwner() == null ? Object.class : closure.getOwner().getClass()) :
-                            closure.getThisObject().getClass();
-        MethodNode method = new MethodNode(name, Modifier.PUBLIC, ClassHelper.OBJECT_TYPE,
-                                           ArrayUtils.map(closure.getParameterTypes(), c -> new Parameter(ClassHelper.makeCached(c), ""),
-                                                          new Parameter[closure.getParameterTypes().length]), null, null);
+        Class<?> declarer = closure.getThisObject() == null ? (closure.getOwner() == null ? Object.class : closure.getOwner().getClass()) : closure.getThisObject().getClass();
+        MethodNode method = new MethodNode(
+                name,
+                Modifier.PUBLIC,
+                ClassHelper.OBJECT_TYPE,
+                ArrayUtils.map(
+                        closure.getParameterTypes(),
+                        c -> new Parameter(ClassHelper.makeCached(c), ""),
+                        new Parameter[closure.getParameterTypes().length]),
+                null,
+                null);
         method.setDeclaringClass(ClassHelper.makeCached(declarer));
         return method;
     }
@@ -487,8 +503,10 @@ public class GroovyASTUtils {
                 if (mm.isPrivate()) continue;
                 int m = mm.getModifiers();
                 if (mm instanceof Hidden hidden && hidden.isHidden()) m |= HIDDEN_MARKER;
-                Parameter[] params = ArrayUtils.map(mm.getNativeParameterTypes(), c -> new Parameter(ClassHelper.makeCached(c), ""),
-                                                    new Parameter[mm.getNativeParameterTypes().length]);
+                Parameter[] params = ArrayUtils.map(
+                        mm.getNativeParameterTypes(),
+                        c -> new Parameter(ClassHelper.makeCached(c), ""),
+                        new Parameter[mm.getNativeParameterTypes().length]);
                 MethodNode node = new MethodNode(mm.getName(), m, ClassHelper.makeCached(mm.getReturnType()), params, null, null);
                 node.setDeclaringClass(classNode);
                 if (mm instanceof IDocumented documented && documented.getDocumentation() != null) {

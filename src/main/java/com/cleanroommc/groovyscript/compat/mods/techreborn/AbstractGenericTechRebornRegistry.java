@@ -36,5 +36,4 @@ public abstract class AbstractGenericTechRebornRegistry extends StandardListRegi
             return false;
         });
     }
-
 }

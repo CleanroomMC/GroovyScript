@@ -96,10 +96,7 @@ public class Transmutation extends VirtualizedRegistry<TransmutationRecipe> {
             Collection<IProperty<?>> incoming = output.getPropertyKeys();
             Collection<IProperty<?>> current = state.get().getPropertyKeys();
 
-            if (state.get().getBlock() == output.getBlock() &&
-                output.getPropertyKeys().stream().allMatch(prop -> incoming.contains(prop) &&
-                                                                   current.contains(prop) &&
-                                                                   state.get().getValue(prop).equals(output.getValue(prop)))
+            if (state.get().getBlock() == output.getBlock() && output.getPropertyKeys().stream().allMatch(prop -> incoming.contains(prop) && current.contains(prop) && state.get().getValue(prop).equals(output.getValue(prop)))
             ) {
                 addBackup(x.getValue());
                 return true;

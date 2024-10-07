@@ -64,15 +64,20 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     @Shadow
     @Final
     private RegistryManager stage;
-    @Unique private Set<VirtualizedForgeRegistryEntry<V>> groovyScript$backups;
-    @Unique private Set<V> groovyScript$scripted;
-    @Unique private Supplier<V> groovyScript$dummySupplier;
+    @Unique
+    private Set<VirtualizedForgeRegistryEntry<V>> groovyScript$backups;
+    @Unique
+    private Set<V> groovyScript$scripted;
+    @Unique
+    private Supplier<V> groovyScript$dummySupplier;
     @Unique
     @Final
     private final Set<ResourceLocation> groovyScript$dummies = new ObjectOpenHashSet<>();
 
-    @Unique private IReloadableForgeRegistry<V> groovyScript$vanilla;
-    @Unique private IReloadableForgeRegistry<V> groovyScript$frozen;
+    @Unique
+    private IReloadableForgeRegistry<V> groovyScript$vanilla;
+    @Unique
+    private IReloadableForgeRegistry<V> groovyScript$frozen;
 
     @Override
     public V groovyScript$registerEntry(V registryEntry) {
@@ -152,8 +157,15 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     @Unique
     public V groovyScript$putDummy(V entry, ResourceLocation rl, Integer id, Object owner, DummyContext context) {
         if (entry == null || rl == null || id == null) {
-            GroovyLog.get().errorMC("Error putting dummy in forge registry for {} during {} at stage {}. Are null: entry-{}, name-{}, id-{}",
-                                    superType.getSimpleName(), context.name().toLowerCase(Locale.ROOT), stage.getName(), entry == null, rl == null, id == null);
+            GroovyLog.get()
+                    .errorMC(
+                            "Error putting dummy in forge registry for {} during {} at stage {}. Are null: entry-{}, name-{}, id-{}",
+                            superType.getSimpleName(),
+                            context.name().toLowerCase(Locale.ROOT),
+                            stage.getName(),
+                            entry == null,
+                            rl == null,
+                            id == null);
             return null;
         }
         V dummy = groovyScript$getDummy(rl);
@@ -180,8 +192,12 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         if (dummy != null) {
             Integer id = this.ids.inverse().remove(dummy);
             if (id == null) {
-                GroovyLog.get().errorMC("No id found while removing a dummy with name '{}' from {} registry at stage {}.",
-                                        rl, superType.getSimpleName(), stage.getName());
+                GroovyLog.get()
+                        .errorMC(
+                                "No id found while removing a dummy with name '{}' from {} registry at stage {}.",
+                                rl,
+                                superType.getSimpleName(),
+                                stage.getName());
             } else {
                 this.availabilityMap.clear(id);
                 id0 = id;
@@ -227,4 +243,3 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
         }
     }
 }
-

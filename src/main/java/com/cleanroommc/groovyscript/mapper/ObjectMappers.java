@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.cleanroommc.groovyscript.mapper.ObjectMapperManager.SPLITTER;
 import static com.cleanroommc.groovyscript.mapper.ObjectMapperManager.WILDCARD;
@@ -150,7 +149,7 @@ public class ObjectMappers {
 
     @SuppressWarnings("all")
     private static Result<IBlockState> parseBlockStates(IBlockState defaultState, Iterator<String> iterable) {
-        for (Iterator<String> it = iterable; it.hasNext(); ) {
+        for (Iterator<String> it = iterable; it.hasNext();) {
             String state = it.next();
             String[] prop = state.split(EQUALS, 2);
             IProperty property = defaultState.getBlock().getBlockState().getProperty(prop[0]);

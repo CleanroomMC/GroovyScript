@@ -87,7 +87,5 @@ public class Thermopile extends StandardListRegistry<IThermopileRecipe> {
             ModSupport.MAGNETICRAFT.get().thermopile.add(recipe);
             return recipe;
         }
-
     }
-
 }

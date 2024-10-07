@@ -32,5 +32,4 @@ public class CrystalItemStackExpansion {
     public static ItemStack setTrait(ItemStack crystal, IConstellation constellation) {
         return CrystalHelper.setTrait(crystal, constellation);
     }
-
 }

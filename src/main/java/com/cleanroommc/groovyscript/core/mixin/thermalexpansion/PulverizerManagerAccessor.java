@@ -14,5 +14,4 @@ public interface PulverizerManagerAccessor {
     static Map<ComparableItemStackValidated, PulverizerManager.PulverizerRecipe> getRecipeMap() {
         throw new AssertionError();
     }
-
 }

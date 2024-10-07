@@ -90,5 +90,4 @@ public class RecipeInput implements IRecipeInput {
     public int getStackSize() {
         return ing.getAmount();
     }
-
 }

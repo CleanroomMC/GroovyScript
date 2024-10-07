@@ -10,5 +10,4 @@ public class ExtraUtils2 extends GroovyPropertyContainer {
     public final Furnace furnace = new Furnace();
     public final GridPowerPassiveGenerator gridPowerPassiveGenerator = new GridPowerPassiveGenerator();
     public final Generator generator = new Generator();
-
 }

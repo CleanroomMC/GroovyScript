@@ -62,7 +62,5 @@ public class Smoker extends StandardListRegistry<SimpleRecipe> {
             ModSupport.FUTURE_MC.get().smoker.add(recipe);
             return recipe;
         }
-
     }
-
 }

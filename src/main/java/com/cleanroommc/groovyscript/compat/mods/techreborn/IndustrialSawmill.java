@@ -103,5 +103,4 @@ public class IndustrialSawmill extends AbstractGenericTechRebornRegistry {
             return recipe;
         }
     }
-
 }

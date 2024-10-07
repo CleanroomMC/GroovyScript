@@ -47,7 +47,7 @@ public class Radiator extends StandardListRegistry<RadiatorRecipe> {
         });
     }
 
-    @MethodDescription(example = @Example(value = "fluid('distwater')",commented = true))
+    @MethodDescription(example = @Example(value = "fluid('distwater')", commented = true))
     public void removeByOutput(IIngredient output) {
         getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {
@@ -94,5 +94,4 @@ public class Radiator extends StandardListRegistry<RadiatorRecipe> {
             return recipe;
         }
     }
-
 }

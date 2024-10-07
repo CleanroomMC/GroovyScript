@@ -13,5 +13,4 @@ public interface PlasticMixerRecipeAccessor {
     static PlasticMixerRegistry.PlasticMixerRecipe createPlasticMixerRecipe(FluidStack fluidStack, ItemStack itemStack, int temperature, boolean allowMelting, boolean allowSolidifying, boolean useDye, int meta) {
         throw new UnsupportedOperationException();
     }
-
 }

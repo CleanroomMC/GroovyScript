@@ -89,7 +89,9 @@ public class Compressor extends VirtualizedRegistry<ICompressorRecipe> {
         private int inputCount = 300;
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"input", "inputCount"})
+        @RecipeBuilderMethodDescription(field = {
+                "input", "inputCount"
+        })
         public AbstractRecipeBuilder<ICompressorRecipe> input(IIngredient ingredient) {
             if (ingredient == null) return this;
             if (ingredient.getAmount() > 1) {

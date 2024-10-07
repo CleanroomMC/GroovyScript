@@ -16,5 +16,4 @@ public class ImmersiveTechnology extends GroovyPropertyContainer {
     public final Radiator radiator = new Radiator();
     public final SolarTower solarTower = new SolarTower();
     public final SteamTurbine steamTurbine = new SteamTurbine();
-
 }

@@ -80,5 +80,4 @@ public class CrystalHelper {
             GroovyLog.msg("Trait constellation must be Minor (Faint)").error().post();
         return crystal;
     }
-
 }

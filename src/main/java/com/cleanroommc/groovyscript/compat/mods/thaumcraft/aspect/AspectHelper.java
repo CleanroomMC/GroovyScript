@@ -51,12 +51,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     public void addScripted(Object target, AspectStack aspect) {
         AtomicBoolean found = new AtomicBoolean(false);
         getScriptedRecipes().forEach(scriptedAspect -> {
-            if (target instanceof EntityEntry && scriptedAspect.entity != null
-                && ((EntityEntry) target).getName().equals(scriptedAspect.entity.getName())) {
+            if (target instanceof EntityEntry && scriptedAspect.entity != null && ((EntityEntry) target).getName().equals(scriptedAspect.entity.getName())) {
                 found.set(true);
                 scriptedAspect.addAspect(aspect);
-            } else if (target instanceof ItemStack && scriptedAspect.item != null
-                       && ((ItemStack) target).isItemEqual(scriptedAspect.item)) {
+            } else if (target instanceof ItemStack && scriptedAspect.item != null && ((ItemStack) target).isItemEqual(scriptedAspect.item)) {
                 found.set(true);
                 scriptedAspect.addAspect(aspect);
             }
@@ -76,12 +74,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     public void addBackup(Object target, AspectStack aspect) {
         AtomicBoolean found = new AtomicBoolean(false);
         getBackupRecipes().forEach(backupAspect -> {
-            if (target instanceof EntityEntry && backupAspect.entity != null
-                && ((EntityEntry) target).getName().equals(backupAspect.entity.getName())) {
+            if (target instanceof EntityEntry && backupAspect.entity != null && ((EntityEntry) target).getName().equals(backupAspect.entity.getName())) {
                 found.set(true);
                 backupAspect.addAspect(aspect);
-            } else if (target instanceof ItemStack && backupAspect.item != null
-                       && ((ItemStack) target).isItemEqual(backupAspect.item)) {
+            } else if (target instanceof ItemStack && backupAspect.item != null && ((ItemStack) target).isItemEqual(backupAspect.item)) {
                 found.set(true);
                 backupAspect.addAspect(aspect);
             }

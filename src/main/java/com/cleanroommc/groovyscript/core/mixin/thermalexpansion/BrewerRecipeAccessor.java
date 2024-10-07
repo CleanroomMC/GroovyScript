@@ -13,5 +13,4 @@ public interface BrewerRecipeAccessor {
     static BrewerManager.BrewerRecipe createBrewerRecipe(ItemStack input, FluidStack inputFluid, FluidStack outputFluid, int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

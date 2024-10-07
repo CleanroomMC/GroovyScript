@@ -13,5 +13,4 @@ public interface ItemRecipeNodeAccessor<REC, CHL extends IRecipeNode<?, ?, ?>> {
 
     @Accessor
     Int2ObjectOpenHashMap<NNPair<NNList<REC>, CHL>> getMap();
-
 }

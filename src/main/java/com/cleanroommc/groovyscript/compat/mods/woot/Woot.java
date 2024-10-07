@@ -9,5 +9,4 @@ public class Woot extends GroovyPropertyContainer {
     public final Spawning spawning = new Spawning();
     public final Policy policy = new Policy();
     public final MobConfig mobConfig = new MobConfig();
-
 }

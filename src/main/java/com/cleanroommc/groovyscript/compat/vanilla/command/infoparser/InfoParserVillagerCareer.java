@@ -39,5 +39,4 @@ public class InfoParserVillagerCareer extends GenericInfoParser<VillagerRegistry
             InfoParserTranslationKey.instance.add(info.getMessages(), "entity.Villager." + career.getName(), info.isPrettyNbt());
         }
     }
-
 }

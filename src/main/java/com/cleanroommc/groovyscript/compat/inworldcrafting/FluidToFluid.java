@@ -125,8 +125,13 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
 
         @Override
         public @Nullable Recipe register() {
-            Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(),
-                                       this.startCondition, this.afterRecipe, this.fluidOutput.get(0).getFluid());
+            Recipe recipe = new Recipe(
+                    this.fluidInput.get(0).getFluid(),
+                    this.input.toArray(new IIngredient[0]),
+                    this.chances.toFloatArray(),
+                    this.startCondition,
+                    this.afterRecipe,
+                    this.fluidOutput.get(0).getFluid());
             VanillaModule.inWorldCrafting.fluidToFluid.add(recipe);
             return recipe;
         }

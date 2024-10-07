@@ -139,8 +139,13 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
 
         @Override
         public @Nullable FluidToBlock.Recipe register() {
-            Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(),
-                                       this.startCondition, this.afterRecipe, this.outputBlock);
+            Recipe recipe = new Recipe(
+                    this.fluidInput.get(0).getFluid(),
+                    this.input.toArray(new IIngredient[0]),
+                    this.chances.toFloatArray(),
+                    this.startCondition,
+                    this.afterRecipe,
+                    this.outputBlock);
             VanillaModule.inWorldCrafting.fluidToBlock.add(recipe);
             return recipe;
         }

@@ -104,5 +104,4 @@ public class IndustrialGrinder extends AbstractGenericTechRebornRegistry {
             return recipe;
         }
     }
-
 }

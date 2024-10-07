@@ -6,17 +6,17 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CampfireRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneOvenRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.pyrotech.oven.note0",
-                                               type = Admonition.Type.WARNING,
-                                               format = Admonition.Format.STANDARD,
-                                               hasTitle = true))
+@RegistryDescription(
+        admonition = @Admonition(
+                value = "groovyscript.wiki.pyrotech.oven.note0",
+                type = Admonition.Type.WARNING,
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
 
     public StoneOven() {

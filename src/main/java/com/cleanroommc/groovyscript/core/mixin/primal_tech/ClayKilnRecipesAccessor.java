@@ -20,5 +20,4 @@ public interface ClayKilnRecipesAccessor {
     static ClayKilnRecipes createClayKilnRecipes(ItemStack output, ItemStack input, int itemCookTime) {
         throw new UnsupportedOperationException();
     }
-
 }

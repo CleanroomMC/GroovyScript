@@ -48,5 +48,4 @@ public class BasicLinkGenerator implements ILinkGenerator {
     public String convert(String location) {
         return domain() + path() + trimmedLocation(location) + extension();
     }
-
 }

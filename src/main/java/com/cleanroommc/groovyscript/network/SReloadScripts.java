@@ -17,8 +17,7 @@ public class SReloadScripts implements IPacket {
     private boolean changePackmode;
     private boolean reloadJei;
 
-    public SReloadScripts() {
-    }
+    public SReloadScripts() {}
 
     public SReloadScripts(String packmode, boolean changePackmode, boolean reloadJei) {
         this.packmode = packmode;

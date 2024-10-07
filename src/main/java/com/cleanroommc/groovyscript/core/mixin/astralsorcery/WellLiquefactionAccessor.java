@@ -14,5 +14,4 @@ public interface WellLiquefactionAccessor {
     static Map<ItemStack, WellLiquefaction.LiquefactionEntry> getRegisteredLiquefactions() {
         throw new UnsupportedOperationException();
     }
-
 }

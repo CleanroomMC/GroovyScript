@@ -19,9 +19,10 @@ import java.util.Map;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,
-        admonition = @Admonition(value = "groovyscript.wiki.immersivepetroleum.reservoir.note0",
-                                 type = Admonition.Type.WARNING,
-                                 format = Admonition.Format.STANDARD)
+        admonition = @Admonition(
+                value = "groovyscript.wiki.immersivepetroleum.reservoir.note0",
+                type = Admonition.Type.WARNING,
+                format = Admonition.Format.STANDARD)
 )
 public class Reservoir extends VirtualizedRegistry<Pair<PumpjackHandler.ReservoirType, Integer>> {
 

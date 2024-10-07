@@ -18,5 +18,4 @@ public interface NumismaticManagerAccessor {
     static TObjectIntHashMap<ComparableItemStack> getGemFuelMap() {
         throw new UnsupportedOperationException();
     }
-
 }

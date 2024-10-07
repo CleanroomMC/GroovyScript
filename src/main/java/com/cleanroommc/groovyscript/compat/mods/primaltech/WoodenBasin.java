@@ -47,15 +47,16 @@ public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
                 .register();
     }
 
-    @MethodDescription(example = {@Example("fluid('lava')"), @Example(value = "item('minecraft:cobblestone')", commented = true)})
+    @MethodDescription(example = {
+            @Example("fluid('lava')"), @Example(value = "item('minecraft:cobblestone')", commented = true)
+    })
     public boolean removeByInput(IIngredient input) {
         return getRecipes().removeIf(recipe -> {
-            if (input.test(recipe.getFluidStack()) ||
-                Arrays.stream(recipe.getInputs()).anyMatch(x -> {
-                    if (x instanceof ItemStack is) return input.test(is);
-                    if (x instanceof List<?> list) return list.stream().map(i -> (ItemStack) i).anyMatch(input);
-                    return false;
-                })) {
+            if (input.test(recipe.getFluidStack()) || Arrays.stream(recipe.getInputs()).anyMatch(x -> {
+                if (x instanceof ItemStack is) return input.test(is);
+                if (x instanceof List<?>list) return list.stream().map(i -> (ItemStack) i).anyMatch(input);
+                return false;
+            })) {
                 addBackup(recipe);
                 return true;
             }
@@ -96,7 +97,9 @@ public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
             if (!validate()) return null;
             WoodenBasinRecipes recipe = null;
             List<List<Object>> cartesian = Lists.cartesianProduct(
-                    input.stream().map(x -> x instanceof OreDictIngredient ore
+                    input.stream()
+                            .map(
+                                    x -> x instanceof OreDictIngredient ore
                                             ? Collections.singletonList(ore.getOreDict())
                                             : Arrays.asList(x.toMcIngredient().getMatchingStacks()))
                             .collect(Collectors.toList()));

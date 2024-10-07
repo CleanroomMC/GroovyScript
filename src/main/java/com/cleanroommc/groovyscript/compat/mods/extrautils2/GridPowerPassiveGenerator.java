@@ -23,6 +23,10 @@ import java.util.Map;
 @RegistryDescription
 public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPassiveGenerator.GeneratorType, IWorldPowerMultiplier>> {
 
+    private static final Class<?>[] CLOSURE_CLASSES = {
+            TilePassiveGenerator.class, World.class
+    };
+
     public final Map<ResourceLocation, Float> basePowerMap = new Object2FloatOpenHashMap<>();
     public final Map<ResourceLocation, Closure<Float>> powerLevelMap = new Object2ObjectOpenHashMap<>();
     private final Map<ResourceLocation, float[]> scalingMap = new Object2ObjectArrayMap<>();
@@ -70,8 +74,9 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
         setPowerMultiplier(new ResourceLocation(generator), worldPowerMultiplier);
     }
 
-    @MethodDescription(type = MethodDescription.Type.VALUE,
-                       example = @Example(value = "resource('generators:solar'), { TilePassiveGenerator generator, World world -> 100f }", imports = "com.rwtema.extrautils2.tile.TilePassiveGenerator"))
+    @MethodDescription(
+            type = MethodDescription.Type.VALUE,
+            example = @Example(value = "resource('generators:solar'), { TilePassiveGenerator generator, World world -> 100f }", imports = "com.rwtema.extrautils2.tile.TilePassiveGenerator"))
     public void setPowerLevel(ResourceLocation generator, Closure<Float> powerLevel) {
         if (powerLevel == null) {
             GroovyLog.msg("Extra Utilities 2 Grid Power Passive Generator powerLevel closure must be defined")
@@ -79,7 +84,7 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
                     .post();
             return;
         }
-        if (!Arrays.equals(powerLevel.getParameterTypes(), new Class[]{TilePassiveGenerator.class, World.class})) {
+        if (!Arrays.equals(powerLevel.getParameterTypes(), CLOSURE_CLASSES)) {
             GroovyLog.msg("Extra Utilities 2 Grid Power Passive Generator powerLevel closure should be a closure with exactly two parameters:")
                     .add("com.rwtema.extrautils2.tile.TilePassiveGenerator generator, net.minecraft.world.World world in that order.")
                     .add("but had {}, {} instead", (Object[]) powerLevel.getParameterTypes())
@@ -116,5 +121,4 @@ public class GridPowerPassiveGenerator extends VirtualizedRegistry<Pair<BlockPas
     public void setScaling(String generator, float... scaling) {
         setScaling(new ResourceLocation(generator), scaling);
     }
-
 }

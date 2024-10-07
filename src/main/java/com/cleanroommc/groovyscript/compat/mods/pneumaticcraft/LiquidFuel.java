@@ -95,5 +95,4 @@ public class LiquidFuel extends VirtualizedRegistry<Pair<String, Integer>> {
             return Pair.of(fluidInput.get(0), pressure);
         }
     }
-
 }

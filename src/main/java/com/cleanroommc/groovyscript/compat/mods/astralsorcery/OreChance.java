@@ -115,5 +115,4 @@ public class OreChance extends VirtualizedRegistry<OreEntry> {
         REGISTRY.getEntries().forEach(this::addBackup);
         REGISTRY.getEntries().clear();
     }
-
 }

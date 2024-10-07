@@ -142,8 +142,7 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
         if (states == null)
             return;
 
-        if (states.isWildcard() ||
-            states.equals(coreBlock()))
+        if (states.isWildcard() || states.equals(coreBlock()))
             return;
 
         //region Render Build Guide

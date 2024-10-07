@@ -63,8 +63,9 @@ public class Fermenter extends ForestryRegistry<IFermenterRecipe> {
 
     public boolean removeByCatalyst(IIngredient input) {
         if (FermenterRecipeManagerAccessor.getRecipes().removeIf(recipe -> {
-            boolean found = input instanceof OreDictIngredient ? recipe.getResourceOreName().equals(((OreDictIngredient) input).getOreDict())
-                                                               : recipe.getResource().isItemEqual(input.getMatchingStacks()[0]);
+            boolean found = input instanceof OreDictIngredient
+                    ? recipe.getResourceOreName().equals(((OreDictIngredient) input).getOreDict())
+                    : recipe.getResource().isItemEqual(input.getMatchingStacks()[0]);
             if (found) addBackup(recipe);
             return found;
         })) return true;

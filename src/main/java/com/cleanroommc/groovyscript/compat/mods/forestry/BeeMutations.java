@@ -39,7 +39,10 @@ public class BeeMutations extends ForestryRegistry<IBeeMutation> {
         return ForestryAPI.moduleManager.isModuleEnabled("forestry", ForestryModuleUids.APICULTURE);
     }
 
-    public IBeeMutation add(AlleleBeeSpecies output, AlleleBeeSpecies a, AlleleBeeSpecies b, double chance,
+    public IBeeMutation add(AlleleBeeSpecies output,
+                            AlleleBeeSpecies a,
+                            AlleleBeeSpecies b,
+                            double chance,
                             @Nullable Function<IBeeMutationBuilder, IMutationBuilder> requirement) {
         BeeMutation mutation = new BeeMutation(a, b, Objects.requireNonNull(BeeManager.beeRoot).getTemplate(output), (int) Math.round(100 * chance));
         if (requirement != null) mutation = (BeeMutation) requirement.apply(mutation);

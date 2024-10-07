@@ -144,5 +144,4 @@ public class Kiln extends StandardListRegistry<KilnRecipe> {
             return recipe;
         }
     }
-
 }

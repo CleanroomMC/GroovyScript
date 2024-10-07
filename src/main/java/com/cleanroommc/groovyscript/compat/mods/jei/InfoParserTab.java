@@ -48,5 +48,4 @@ public class InfoParserTab extends GenericInfoParser<IRecipeCategory> {
 
         instance.add(info.getMessages(), list, info.isPrettyNbt());
     }
-
 }

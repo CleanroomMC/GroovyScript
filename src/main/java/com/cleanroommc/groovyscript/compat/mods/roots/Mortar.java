@@ -156,49 +156,63 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"red1", "red2"})
+        @RecipeBuilderMethodDescription(field = {
+                "red1", "red2"
+        })
         public RecipeBuilder red(float red1, float red2) {
             this.red1 = red1;
             this.red2 = red2;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"red1", "red2"})
+        @RecipeBuilderMethodDescription(field = {
+                "red1", "red2"
+        })
         public RecipeBuilder red(float red) {
             this.red1 = red;
             this.red2 = red;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"green1", "green2"})
+        @RecipeBuilderMethodDescription(field = {
+                "green1", "green2"
+        })
         public RecipeBuilder green(float green1, float green2) {
             this.green1 = green1;
             this.green2 = green2;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"green1", "green2"})
+        @RecipeBuilderMethodDescription(field = {
+                "green1", "green2"
+        })
         public RecipeBuilder green(float green) {
             this.green1 = green;
             this.green2 = green;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"blue1", "blue2"})
+        @RecipeBuilderMethodDescription(field = {
+                "blue1", "blue2"
+        })
         public RecipeBuilder blue(float blue1, float blue2) {
             this.blue1 = blue1;
             this.blue2 = blue2;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"blue1", "blue2"})
+        @RecipeBuilderMethodDescription(field = {
+                "blue1", "blue2"
+        })
         public RecipeBuilder blue(float blue) {
             this.blue1 = blue;
             this.blue2 = blue;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"red1", "green1", "blue1", "red2", "green2", "blue2"})
+        @RecipeBuilderMethodDescription(field = {
+                "red1", "green1", "blue1", "red2", "green2", "blue2"
+        })
         public RecipeBuilder color(float red1, float green1, float blue1, float red2, float green2, float blue2) {
             this.red1 = red1;
             this.red2 = red2;
@@ -209,7 +223,9 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"red1", "green1", "blue1", "red2", "green2", "blue2"})
+        @RecipeBuilderMethodDescription(field = {
+                "red1", "green1", "blue1", "red2", "green2", "blue2"
+        })
         public RecipeBuilder color(float red, float green, float blue) {
             this.red1 = red;
             this.red2 = red;

@@ -16,5 +16,4 @@ public interface LiquidInteractionAccessor {
 
     @Accessor("action")
     LiquidInteraction.FluidInteractionAction getFluidInteractionAction();
-
 }

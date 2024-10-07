@@ -14,5 +14,4 @@ public class IndustrialForegoing extends GroovyPropertyContainer {
     public final ProteinReactor proteinReactor = new ProteinReactor();
     public final SludgeRefiner sludgeRefiner = new SludgeRefiner();
     public final Straw straw = new Straw();
-
 }

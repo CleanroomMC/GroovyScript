@@ -12,5 +12,4 @@ public interface ResearchNodeAccessor {
 
     @Accessor("renderPosZ")
     void setZ(int z);
-
 }

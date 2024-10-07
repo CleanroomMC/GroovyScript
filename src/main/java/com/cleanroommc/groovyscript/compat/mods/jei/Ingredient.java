@@ -21,8 +21,9 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.*;
 
-@RegistryDescription(category = RegistryDescription.Category.ENTRIES,
-                     admonition = @Admonition("groovyscript.wiki.jei.ingredient.note0"))
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        admonition = @Admonition("groovyscript.wiki.jei.ingredient.note0"))
 public class Ingredient extends VirtualizedRegistry<Void> {
 
     private final Map<IIngredientType<?>, List<Object>> hiddenIngredients = new Object2ObjectOpenHashMap<>();
@@ -55,7 +56,6 @@ public class Ingredient extends VirtualizedRegistry<Void> {
             //noinspection unchecked,rawtypes
             ingredientRegistry.addIngredientsAtRuntime(entry.getKey(), ingredientRegistry.getIngredientHelper(entry.getKey()).expandSubtypes((List) entry.getValue()));
         }
-
     }
 
     @Override
@@ -253,5 +253,4 @@ public class Ingredient extends VirtualizedRegistry<Void> {
     public void yeet(Iterable<IIngredient> ingredients) {
         removeAndHide(ingredients);
     }
-
 }

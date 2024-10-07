@@ -15,8 +15,9 @@ public interface CentrifugeRecipeAccessor {
     @Invoker("<init>")
     static CentrifugeManager.CentrifugeRecipe createCentrifugeRecipe(ItemStack input,
                                                                      @Nullable List<ItemStack> output,
-                                                                     @Nullable List<Integer> chance, @Nullable FluidStack fluid, int energy) {
+                                                                     @Nullable List<Integer> chance,
+                                                                     @Nullable FluidStack fluid,
+                                                                     int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

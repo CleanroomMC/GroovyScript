@@ -77,7 +77,9 @@ public class Distillation extends StandardListRegistry<DistillationRecipe> {
         @Property(comp = @Comp(gte = 0))
         private int energy;
 
-        @RecipeBuilderMethodDescription(field = {"output", "chance"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "chance"
+        })
         public RecipeBuilder output(ItemStack output, float chance) {
             this.output.add(output);
             this.chance.add(chance);
@@ -85,7 +87,9 @@ public class Distillation extends StandardListRegistry<DistillationRecipe> {
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"output", "chance"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "chance"
+        })
         public RecipeBuilder output(ItemStack output) {
             return this.output(output, 1);
         }
@@ -126,5 +130,4 @@ public class Distillation extends StandardListRegistry<DistillationRecipe> {
             return recipe;
         }
     }
-
 }

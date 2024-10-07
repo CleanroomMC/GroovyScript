@@ -89,5 +89,4 @@ public class ChemicalReactor extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

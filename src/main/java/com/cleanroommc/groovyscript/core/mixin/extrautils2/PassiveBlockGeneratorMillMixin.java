@@ -38,5 +38,4 @@ public class PassiveBlockGeneratorMillMixin {
             cir.setReturnValue(ClosureHelper.call(0.0f, value, generator, world));
         }
     }
-
 }

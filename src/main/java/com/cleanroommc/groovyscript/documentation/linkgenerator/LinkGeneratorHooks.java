@@ -25,5 +25,4 @@ public class LinkGeneratorHooks {
     public static String convert(String mode, Class<?> clazz) {
         return REGISTRY.getOrDefault(mode, DEFAULT).convert(clazz.getProtectionDomain().getCodeSource().getLocation().getPath());
     }
-
 }

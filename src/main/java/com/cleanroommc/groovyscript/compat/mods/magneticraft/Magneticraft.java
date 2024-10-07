@@ -13,5 +13,4 @@ public class Magneticraft extends GroovyPropertyContainer {
     public final Sieve sieve = new Sieve();
     public final SluiceBox sluiceBox = new SluiceBox();
     public final Thermopile thermopile = new Thermopile();
-
 }

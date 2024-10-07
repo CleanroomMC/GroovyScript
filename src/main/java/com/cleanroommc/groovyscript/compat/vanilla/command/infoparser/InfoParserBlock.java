@@ -30,5 +30,4 @@ public class InfoParserBlock extends GenericInfoParser<Block> {
         instance.add(info.getMessages(), info.getBlock(), info.isPrettyNbt());
         InfoParserTranslationKey.instance.add(info.getMessages(), info.getBlock().getTranslationKey(), info.isPrettyNbt());
     }
-
 }

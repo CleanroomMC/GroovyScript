@@ -35,5 +35,4 @@ public class InfoParserTunnel extends GenericInfoParser<TunnelType> {
         if (tunnelType == null) return;
         instance.add(info.getMessages(), tunnelType, info.isPrettyNbt());
     }
-
 }

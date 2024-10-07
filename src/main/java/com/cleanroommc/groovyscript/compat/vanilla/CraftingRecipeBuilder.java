@@ -27,7 +27,8 @@ public abstract class CraftingRecipeBuilder {
         @RecipeBuilderRegistrationMethod
         public IRecipe register() {
             validateName();
-            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shaped Crafting recipe '{}'", this.name).error()
+            GroovyLog.Msg msg = GroovyLog.msg("Error adding Minecraft Shaped Crafting recipe '{}'", this.name)
+                    .error()
                     .add((keyBasedMatrix == null || keyBasedMatrix.length == 0) && (ingredientMatrix == null || ingredientMatrix.isEmpty()), () -> "No matrix was defined")
                     .add(keyBasedMatrix != null && ingredientMatrix != null, () -> "A key based matrix AND a ingredient based matrix was defined. This is not allowed!")
                     .add(IngredientHelper.isEmpty(this.output), () -> "Output must not be empty");

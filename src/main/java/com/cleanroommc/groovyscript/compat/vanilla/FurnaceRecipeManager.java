@@ -12,6 +12,7 @@ import java.util.Objects;
 public class FurnaceRecipeManager {
 
     public static final ObjectOpenCustomHashSet<ItemStack> inputMap = new ObjectOpenCustomHashSet<>(new Hash.Strategy<>() {
+
         @Override
         public int hashCode(ItemStack o) {
             return Objects.hash(o.getItem(), o.getMetadata());

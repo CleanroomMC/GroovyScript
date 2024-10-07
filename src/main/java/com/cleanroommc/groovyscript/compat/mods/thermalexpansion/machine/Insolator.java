@@ -58,12 +58,14 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
     @ApiStatus.Internal
     public void afterScriptLoad() {
         InsolatorManagerAccessor.getValidationSet().clear();
-        InsolatorManagerAccessor.getValidationSet().addAll(
-                InsolatorManagerAccessor.getRecipeMap().values().stream().map(InsolatorRecipe::getPrimaryInput).map(InsolatorManager::convertInput).collect(Collectors.toList())
-        );
-        InsolatorManagerAccessor.getValidationSet().addAll(
-                InsolatorManagerAccessor.getRecipeMap().values().stream().map(InsolatorRecipe::getSecondaryInput).map(InsolatorManager::convertInput).collect(Collectors.toList())
-        );
+        InsolatorManagerAccessor.getValidationSet()
+                .addAll(
+                        InsolatorManagerAccessor.getRecipeMap().values().stream().map(InsolatorRecipe::getPrimaryInput).map(InsolatorManager::convertInput).collect(Collectors.toList())
+                );
+        InsolatorManagerAccessor.getValidationSet()
+                .addAll(
+                        InsolatorManagerAccessor.getRecipeMap().values().stream().map(InsolatorRecipe::getSecondaryInput).map(InsolatorManager::convertInput).collect(Collectors.toList())
+                );
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -215,7 +217,6 @@ public class Insolator extends VirtualizedRegistry<InsolatorRecipe> {
                     ModSupport.THERMAL_EXPANSION.get().insolator.add(recipe1);
                     if (recipe == null) recipe = recipe1;
                 }
-
             }
             return recipe;
         }

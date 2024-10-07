@@ -12,5 +12,4 @@ public interface ConstellationBaseAccessor {
 
     @Accessor
     List<ItemHandle> getSignatureItems();
-
 }

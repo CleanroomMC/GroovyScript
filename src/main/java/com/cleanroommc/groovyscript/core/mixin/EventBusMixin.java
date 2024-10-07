@@ -35,5 +35,4 @@ public class EventBusMixin implements EventBusExtended {
             e.printStackTrace();
         }
     }
-
 }

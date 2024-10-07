@@ -9,8 +9,7 @@ import java.util.Set;
 public class DisabledConfigGui implements IModGuiFactory {
 
     @Override
-    public void initialize(Minecraft minecraftInstance) {
-    }
+    public void initialize(Minecraft minecraftInstance) {}
 
     @Override
     public boolean hasConfigGui() {

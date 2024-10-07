@@ -6,5 +6,4 @@ public class TinkersComplement extends GroovyPropertyContainer {
 
     public final Melter melter = new Melter();
     public final HighOven highOven = new HighOven();
-
 }

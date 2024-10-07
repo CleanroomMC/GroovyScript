@@ -6,5 +6,4 @@ public class ProjectE extends GroovyPropertyContainer {
 
     public final EntityRandomizer entityRandomizer = new EntityRandomizer();
     public final Transmutation transmutation = new Transmutation();
-
 }

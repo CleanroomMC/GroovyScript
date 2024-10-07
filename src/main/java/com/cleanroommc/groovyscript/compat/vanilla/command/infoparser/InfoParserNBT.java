@@ -81,5 +81,4 @@ public class InfoParserNBT extends GenericInfoParser<NBTTagCompound> {
             instance.add(info.getMessages(), info.getStack().serializeNBT(), info.isPrettyNbt());
         }
     }
-
 }

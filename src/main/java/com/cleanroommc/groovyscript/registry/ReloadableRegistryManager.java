@@ -77,7 +77,8 @@ public class ReloadableRegistryManager {
     public static void onReload() {
         GroovyScript.reloadRunConfig(false);
         VanillaModule.INSTANCE.onReload();
-        ModSupport.getAllContainers().stream()
+        ModSupport.getAllContainers()
+                .stream()
                 .filter(GroovyContainer::isLoaded)
                 .map(GroovyContainer::get)
                 .map(GroovyPropertyContainer::getRegistries)
@@ -91,7 +92,8 @@ public class ReloadableRegistryManager {
 
     @ApiStatus.Internal
     public static void afterScriptRun() {
-        ModSupport.getAllContainers().stream()
+        ModSupport.getAllContainers()
+                .stream()
                 .filter(GroovyContainer::isLoaded)
                 .map(GroovyContainer::get)
                 .map(GroovyPropertyContainer::getRegistries)
@@ -169,7 +171,8 @@ public class ReloadableRegistryManager {
             try {
                 //noinspection JavaReflectionMemberAccess
                 IngredientFilter.class.getDeclaredMethod("block").invoke(filter);
-            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {}
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+            }
         }
     }
 
@@ -182,5 +185,4 @@ public class ReloadableRegistryManager {
     private static void unfreezeForgeRegistries() {
         ((ForgeRegistry<IRecipe>) ForgeRegistries.RECIPES).unfreeze();
     }
-
 }

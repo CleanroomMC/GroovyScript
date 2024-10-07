@@ -14,5 +14,4 @@ public interface SawmillManagerAccessor {
     static Map<ComparableItemStackValidatedNBT, SawmillManager.SawmillRecipe> getRecipeMap() {
         throw new UnsupportedOperationException();
     }
-
 }

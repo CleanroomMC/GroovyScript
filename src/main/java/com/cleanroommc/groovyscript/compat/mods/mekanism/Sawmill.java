@@ -99,8 +99,8 @@ public class Sawmill extends VirtualizedMekanismRegistry<SawmillRecipe> {
         public @Nullable SawmillRecipe register() {
             if (!validate()) return null;
             ChanceOutput chanceOutput = IngredientHelper.isEmpty(extra)
-                                        ? new ChanceOutput(output.get(0))
-                                        : new ChanceOutput(output.get(0), extra, chance);
+                    ? new ChanceOutput(output.get(0))
+                    : new ChanceOutput(output.get(0), extra, chance);
             SawmillRecipe recipe = null;
             for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
                 SawmillRecipe r = new SawmillRecipe(new ItemStackInput(itemStack), chanceOutput);

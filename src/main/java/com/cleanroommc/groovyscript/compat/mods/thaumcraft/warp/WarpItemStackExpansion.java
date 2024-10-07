@@ -12,5 +12,4 @@ public class WarpItemStackExpansion {
     public static void clearWarp(ItemStack itemStack) {
         ModSupport.THAUMCRAFT.get().warp.removeWarp(itemStack);
     }
-
 }

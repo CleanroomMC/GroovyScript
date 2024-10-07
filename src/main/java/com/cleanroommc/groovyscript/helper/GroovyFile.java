@@ -719,11 +719,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @throws FileNotFoundException    if the given directory does not exist
      * @throws IllegalArgumentException if the provided File object does not represent a directory
      */
-    public void eachFile(final FileType fileType, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
-            throws FileNotFoundException, IllegalArgumentException {
+    public void eachFile(final FileType fileType, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachFile(this.internal, fileType, wrapped);
     }
 
@@ -737,11 +738,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @see java.io.File#listFiles()
      * @see ResourceGroovyMethods#eachFile(java.io.File, groovy.io.FileType, groovy.lang.Closure)
      */
-    public void eachFile(@ClosureParams(value = SimpleType.class, options = "java.io.File")
-                         final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
+    public void eachFile(@ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachFile(this.internal, wrapped);
     }
 
@@ -756,10 +758,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @see ResourceGroovyMethods#eachFile(java.io.File, groovy.io.FileType, groovy.lang.Closure)
      */
     public void eachDir(
-            @ClosureParams(value = SimpleType.class, options = "java.io.File") Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
+                        @ClosureParams(value = SimpleType.class, options = "java.io.File") Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachDir(this.internal, wrapped);
     }
 
@@ -775,11 +779,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @throws FileNotFoundException    if the given directory does not exist
      * @throws IllegalArgumentException if the provided File object does not represent a directory
      */
-    public void eachFileRecurse(final FileType fileType, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
-            throws FileNotFoundException, IllegalArgumentException {
+    public void eachFileRecurse(final FileType fileType, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachFileRecurse(this.internal, fileType, wrapped);
     }
 
@@ -840,23 +845,13 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @see groovy.io.FileVisitResult
      * @see groovy.io.FileType
      */
-    public void traverse(@NamedParam(value = "type", type = FileType.class)
-                         @NamedParam(value = "preDir", type = Closure.class)
-                         @NamedParam(value = "preRoot", type = Boolean.class)
-                         @NamedParam(value = "postDir", type = Closure.class)
-                         @NamedParam(value = "postRoot", type = Boolean.class)
-                         @NamedParam(value = "visitRoot", type = Boolean.class)
-                         @NamedParam(value = "maxDepth", type = Integer.class)
-                         @NamedParam(value = "filter")
-                         @NamedParam(value = "nameFilter")
-                         @NamedParam(value = "excludeFilter")
-                         @NamedParam(value = "excludeNameFilter")
-                         @NamedParam(value = "sort", type = Closure.class) final Map<String, ?> options,
-                         @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
-            throws FileNotFoundException, IllegalArgumentException {
+    public void traverse(@NamedParam(value = "type", type = FileType.class) @NamedParam(value = "preDir", type = Closure.class) @NamedParam(value = "preRoot", type = Boolean.class) @NamedParam(value = "postDir", type = Closure.class) @NamedParam(value = "postRoot", type = Boolean.class) @NamedParam(value = "visitRoot", type = Boolean.class) @NamedParam(value = "maxDepth", type = Integer.class) @NamedParam(value = "filter") @NamedParam(value = "nameFilter") @NamedParam(value = "excludeFilter") @NamedParam(value = "excludeNameFilter") @NamedParam(value = "sort", type = Closure.class) final Map<String, ?> options,
+                         @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.traverse(this.internal, options, wrapped);
     }
 
@@ -871,11 +866,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @throws IllegalArgumentException if the provided File object does not represent a directory
      * @see ResourceGroovyMethods#traverse(java.io.File, java.util.Map, groovy.lang.Closure)
      */
-    public void traverse(@ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
-            throws FileNotFoundException, IllegalArgumentException {
+    public void traverse(@ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.traverse(this.internal, wrapped);
     }
 
@@ -890,19 +886,7 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @throws IllegalArgumentException if the provided File object does not represent a directory or illegal filter combinations are supplied
      * @see ResourceGroovyMethods#traverse(java.io.File, java.util.Map, groovy.lang.Closure)
      */
-    public void traverse(@NamedParam(value = "type", type = FileType.class)
-                         @NamedParam(value = "preDir", type = Closure.class)
-                         @NamedParam(value = "preRoot", type = Boolean.class)
-                         @NamedParam(value = "postDir", type = Closure.class)
-                         @NamedParam(value = "postRoot", type = Boolean.class)
-                         @NamedParam(value = "visitRoot", type = Boolean.class)
-                         @NamedParam(value = "maxDepth", type = Integer.class)
-                         @NamedParam(value = "filter")
-                         @NamedParam(value = "nameFilter")
-                         @NamedParam(value = "excludeFilter")
-                         @NamedParam(value = "excludeNameFilter")
-                         @NamedParam(value = "sort", type = Closure.class) final Map<String, ?> options)
-            throws FileNotFoundException, IllegalArgumentException {
+    public void traverse(@NamedParam(value = "type", type = FileType.class) @NamedParam(value = "preDir", type = Closure.class) @NamedParam(value = "preRoot", type = Boolean.class) @NamedParam(value = "postDir", type = Closure.class) @NamedParam(value = "postRoot", type = Boolean.class) @NamedParam(value = "visitRoot", type = Boolean.class) @NamedParam(value = "maxDepth", type = Integer.class) @NamedParam(value = "filter") @NamedParam(value = "nameFilter") @NamedParam(value = "excludeFilter") @NamedParam(value = "excludeNameFilter") @NamedParam(value = "sort", type = Closure.class) final Map<String, ?> options) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
         ResourceGroovyMethods.traverse(this.internal, options);
     }
@@ -919,10 +903,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @see ResourceGroovyMethods#eachFileRecurse(java.io.File, groovy.io.FileType, groovy.lang.Closure)
      */
     public void eachFileRecurse(
-            @ClosureParams(value = SimpleType.class, options = "java.io.File") Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
+                                @ClosureParams(value = SimpleType.class, options = "java.io.File") Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachFileRecurse(this.internal, wrapped);
     }
 
@@ -938,11 +924,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @see ResourceGroovyMethods#eachFileRecurse(java.io.File, groovy.io.FileType, groovy.lang.Closure)
      */
     public void eachDirRecurse(
-            @ClosureParams(value = SimpleType.class, options = "java.io.File")
-            final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
+                               @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachDirRecurse(this.internal, wrapped);
     }
 
@@ -972,12 +959,14 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @throws FileNotFoundException    if the given directory does not exist
      * @throws IllegalArgumentException if the provided File object does not represent a directory
      */
-    public void eachFileMatch(final FileType fileType, final Object nameFilter,
-                              @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
-            throws FileNotFoundException, IllegalArgumentException {
+    public void eachFileMatch(final FileType fileType,
+                              final Object nameFilter,
+                              @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachFileMatch(this.internal, fileType, nameFilter, wrapped);
     }
 
@@ -993,11 +982,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @throws IllegalArgumentException if the provided File object does not represent a directory
      * @see ResourceGroovyMethods#eachFileMatch(java.io.File, groovy.io.FileType, java.lang.Object, groovy.lang.Closure)
      */
-    public void eachFileMatch(final Object nameFilter, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure)
-            throws FileNotFoundException, IllegalArgumentException {
+    public void eachFileMatch(final Object nameFilter, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachFileMatch(this.internal, nameFilter, wrapped);
     }
 
@@ -1013,11 +1003,12 @@ public final class GroovyFile implements Comparable<GroovyFile> {
      * @throws IllegalArgumentException if the provided File object does not represent a directory
      * @see ResourceGroovyMethods#eachFileMatch(java.io.File, groovy.io.FileType, java.lang.Object, groovy.lang.Closure)
      */
-    public void eachDirMatch(final Object nameFilter, @ClosureParams(value = SimpleType.class, options = "java.io.File")
-    final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
+    public void eachDirMatch(final Object nameFilter, @ClosureParams(value = SimpleType.class, options = "java.io.File") final Closure<?> closure) throws FileNotFoundException, IllegalArgumentException {
         checkAccessible();
-        Closure<?> wrapped = new LambdaClosure<>(closure.getOwner(), closure.getThisObject(),
-                                                 args -> closure.call(new GroovyFile((File) args[0])));
+        Closure<?> wrapped = new LambdaClosure<>(
+                closure.getOwner(),
+                closure.getThisObject(),
+                args -> closure.call(new GroovyFile((File) args[0])));
         ResourceGroovyMethods.eachDirMatch(this.internal, nameFilter, wrapped);
     }
 

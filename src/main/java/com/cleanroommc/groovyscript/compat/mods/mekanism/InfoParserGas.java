@@ -39,5 +39,4 @@ public class InfoParserGas extends GenericInfoParser<GasStack> {
             InfoParserTranslationKey.instance.add(info.getMessages(), stack.getGas().getTranslationKey(), info.isPrettyNbt());
         }
     }
-
 }

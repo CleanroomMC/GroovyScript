@@ -37,7 +37,9 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
         return recipe;
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {@Example("ore('oreEmerald'), 1350"), @Example("ore('blockGold'), 1800")})
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {
+            @Example("ore('oreEmerald'), 1350"), @Example("ore('blockGold'), 1800")
+    })
     public OrechidRecipe add(OreDictIngredient output, int weight) {
         return add(output.getOreDict(), weight);
     }
@@ -73,7 +75,9 @@ public class Orechid extends VirtualizedRegistry<OrechidRecipe> {
         return false;
     }
 
-    @MethodDescription(example = {@Example(value = "ore('oreEmerald')", commented = true), @Example(value = "ore('oreQuartz')", commented = true)})
+    @MethodDescription(example = {
+            @Example(value = "ore('oreEmerald')", commented = true), @Example(value = "ore('oreQuartz')", commented = true)
+    })
     public boolean removeByOutput(OreDictIngredient output) {
         return removeByOutput(output.getOreDict());
     }

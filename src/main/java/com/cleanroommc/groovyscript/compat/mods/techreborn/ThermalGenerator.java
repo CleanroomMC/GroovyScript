@@ -79,5 +79,4 @@ public class ThermalGenerator extends AbstractGeneratorRegistry {
             return recipe;
         }
     }
-
 }

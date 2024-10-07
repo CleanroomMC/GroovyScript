@@ -45,8 +45,7 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
     public boolean removeByInput(IIngredient input) {
         return getRecipes().removeIf(r -> {
             for (Object ingredient : r.getInputs()) {
-                if ((ingredient instanceof String s && (input instanceof OreDictIngredient ore && ore.getOreDict().equals(s) || OreDictionary.getOres(s, false).stream().anyMatch(input))) ||
-                    (ingredient instanceof ItemStack is && input.test(is))) {
+                if ((ingredient instanceof String s && (input instanceof OreDictIngredient ore && ore.getOreDict().equals(s) || OreDictionary.getOres(s, false).stream().anyMatch(input))) || (ingredient instanceof ItemStack is && input.test(is))) {
                     addBackup(r);
                     return true;
                 }
@@ -92,5 +91,4 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
             return recipe;
         }
     }
-
 }

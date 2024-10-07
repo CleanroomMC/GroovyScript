@@ -39,5 +39,4 @@ public class InfoParserBrew extends GenericInfoParser<vazkii.botania.api.brew.Br
         instance.add(info.getMessages(), brew, info.isPrettyNbt());
         InfoParserTranslationKey.instance.add(info.getMessages(), brew.getUnlocalizedName(), info.isPrettyNbt());
     }
-
 }

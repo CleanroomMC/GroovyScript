@@ -12,5 +12,4 @@ public interface CompressionManagerAccessor {
     static Object2IntOpenHashMap<String> getFuelMap() {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -85,5 +85,4 @@ public class PressureChamber extends StandardListRegistry<IPressureChamberRecipe
             return recipe;
         }
     }
-
 }

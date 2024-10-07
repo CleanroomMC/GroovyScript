@@ -21,5 +21,4 @@ public interface PrecipitatorManagerAccessor {
     static List<ItemStack> getOutputList() {
         throw new UnsupportedOperationException();
     }
-
 }

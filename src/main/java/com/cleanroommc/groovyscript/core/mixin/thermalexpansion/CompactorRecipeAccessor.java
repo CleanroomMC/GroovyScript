@@ -12,5 +12,4 @@ public interface CompactorRecipeAccessor {
     static CompactorManager.CompactorRecipe createCompactorRecipe(ItemStack input, ItemStack output, int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

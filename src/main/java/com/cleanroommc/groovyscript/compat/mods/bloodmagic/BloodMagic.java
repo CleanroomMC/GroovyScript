@@ -11,5 +11,4 @@ public class BloodMagic extends GroovyPropertyContainer {
     public final Tranquility tranquility = new Tranquility();
     public final Sacrificial sacrificial = new Sacrificial();
     public final Meteor meteor = new Meteor();
-
 }

@@ -41,5 +41,4 @@ public class InfoParserPotionEffect extends GenericInfoParser<PotionEffect> {
         if (list.isEmpty()) return;
         instance.add(info.getMessages(), list, info.isPrettyNbt());
     }
-
 }

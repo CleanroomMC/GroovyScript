@@ -17,5 +17,4 @@ public class ItemMixin {
     private void prioritzeGSRarities(ItemStack stack, CallbackInfoReturnable<IRarity> cir) {
         cir.setReturnValue(VanillaModule.rarity.check(stack));
     }
-
 }

@@ -103,5 +103,4 @@ public class MeltingCrucible extends StandardListRegistry<MeltingCrucibleRecipe>
             return recipe;
         }
     }
-
 }

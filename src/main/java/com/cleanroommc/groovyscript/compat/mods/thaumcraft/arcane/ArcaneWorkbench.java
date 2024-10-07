@@ -50,7 +50,8 @@ public class ArcaneWorkbench extends NamedRegistry {
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        List<IArcaneRecipe> recipes = ForgeRegistries.RECIPES.getValuesCollection().stream()
+        List<IArcaneRecipe> recipes = ForgeRegistries.RECIPES.getValuesCollection()
+                .stream()
                 .filter(recipe -> recipe instanceof IArcaneRecipe)
                 .map(recipe -> (IArcaneRecipe) recipe)
                 .collect(Collectors.toList());
@@ -60,4 +61,3 @@ public class ArcaneWorkbench extends NamedRegistry {
         }
     }
 }
-

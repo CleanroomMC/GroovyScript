@@ -72,7 +72,7 @@ public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottle
                     .post();
             return;
         }
-        for (Iterator<? extends MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> iterator = Recipes.cannerBottle.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> iterator = Recipes.cannerBottle.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack> rec = iterator.next();
             if (ItemStack.areItemStacksEqual(rec.getOutput(), output)) {
                 iterator.remove();
@@ -89,7 +89,7 @@ public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottle
                 .postIfNotEmpty()) {
             return;
         }
-        for (Iterator<? extends MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> iterator = Recipes.cannerBottle.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> iterator = Recipes.cannerBottle.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack> rec = iterator.next();
             if (rec.getInput().container.matches(input) && rec.getInput().fill.matches(input1)) {
                 iterator.remove();
@@ -99,7 +99,7 @@ public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottle
     }
 
     public void removeAll() {
-        for (Iterator<? extends MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> iterator = Recipes.cannerBottle.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> iterator = Recipes.cannerBottle.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack> rec = iterator.next();
             iterator.remove();
             addBackup(rec);
@@ -107,7 +107,7 @@ public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottle
     }
 
     private boolean remove(MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack> recipe, boolean backup) {
-        for (Iterator<? extends MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> iterator = Recipes.cannerBottle.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> iterator = Recipes.cannerBottle.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack> rec = iterator.next();
             if (recipe.getInput().matches(rec.getInput().container.getInputs().get(0), rec.getInput().fill.getInputs().get(0))) {
                 iterator.remove();

@@ -59,5 +59,4 @@ public abstract class StandardListRegistry<R> extends VirtualizedRegistry<R> {
     public SimpleObjectStream<R> streamRecipes() {
         return new SimpleObjectStream<>(getRecipes()).setRemover(this::remove);
     }
-
 }

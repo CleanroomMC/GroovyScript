@@ -18,5 +18,4 @@ public interface XpCollectorManagerAccessor {
     static TObjectIntHashMap<ComparableItemStack> getCatalystFactorMap() {
         throw new UnsupportedOperationException();
     }
-
 }

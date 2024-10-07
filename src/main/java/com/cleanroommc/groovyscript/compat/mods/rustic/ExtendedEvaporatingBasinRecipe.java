@@ -17,5 +17,4 @@ public class ExtendedEvaporatingBasinRecipe extends EvaporatingBasinRecipe {
     public int getTime() {
         return time;
     }
-
 }

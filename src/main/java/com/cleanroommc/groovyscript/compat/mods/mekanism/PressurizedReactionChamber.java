@@ -36,7 +36,8 @@ public class PressurizedReactionChamber extends VirtualizedMekanismRegistry<Pres
 
     @MethodDescription(example = @Example("ore('logWood'), fluid('water'), gas('oxygen')"))
     public boolean removeByInput(IIngredient inputSolid, FluidStack inputFluid, GasStack inputGas) {
-        if (GroovyLog.msg("Error removing Mekanism Pressurized Reaction Chamber recipe").error()
+        if (GroovyLog.msg("Error removing Mekanism Pressurized Reaction Chamber recipe")
+                .error()
                 .add(IngredientHelper.isEmpty(inputSolid), () -> "item input must not be empty")
                 .add(IngredientHelper.isEmpty(inputFluid), () -> "fluid input must not be empty")
                 .add(Mekanism.isEmpty(inputGas), () -> "input gas must not be empty")

@@ -95,5 +95,4 @@ public class BlastFurnaceFuel extends StandardListRegistry<BlastFurnaceRecipe.Bl
             return recipe;
         }
     }
-
 }

@@ -25,8 +25,7 @@ public class GroovyCodeFactory {
     public static final String MC_CLASS = "net.minecraft.";
     public static final boolean spongeForgeLoaded = Loader.isModLoaded("spongeforge");
 
-    private GroovyCodeFactory() {
-    }
+    private GroovyCodeFactory() {}
 
     public static boolean shouldRemap(CachedClass cachedClass) {
         return !spongeForgeLoaded && !FMLLaunchHandler.isDeobfuscatedEnvironment() && cachedClass.getName().startsWith(MC_CLASS);
@@ -36,10 +35,10 @@ public class GroovyCodeFactory {
         return () -> {
             final boolean remap = shouldRemap(cachedClass);
             return Arrays.stream(cachedClass.getTheClass().getDeclaredFields())
-                         .filter(f -> ReflectionUtils.checkCanSetAccessible(f, CachedClass.class))
-                         .filter(GroovySecurityManager.INSTANCE::isValid)
-                         .map(f -> makeField(cachedClass, f, remap))
-                         .toArray(CachedField[]::new);
+                    .filter(f -> ReflectionUtils.checkCanSetAccessible(f, CachedClass.class))
+                    .filter(GroovySecurityManager.INSTANCE::isValid)
+                    .map(f -> makeField(cachedClass, f, remap))
+                    .toArray(CachedField[]::new);
         };
     }
 
@@ -55,11 +54,11 @@ public class GroovyCodeFactory {
 
     public static PrivilegedAction<CachedConstructor[]> makeConstructorsHook(CachedClass cachedClass) {
         return () -> Arrays.stream(cachedClass.getTheClass().getDeclaredConstructors())
-                           .filter(c -> !c.isSynthetic()) // GROOVY-9245: exclude inner class ctors
-                           .filter(c -> ReflectionUtils.checkCanSetAccessible(c, CachedClass.class))
-                           .filter(c -> !c.isAnnotationPresent(GroovyBlacklist.class))
-                           .map(c -> new CachedConstructor(cachedClass, c))
-                           .toArray(CachedConstructor[]::new);
+                .filter(c -> !c.isSynthetic()) // GROOVY-9245: exclude inner class ctors
+                .filter(c -> ReflectionUtils.checkCanSetAccessible(c, CachedClass.class))
+                .filter(c -> !c.isAnnotationPresent(GroovyBlacklist.class))
+                .map(c -> new CachedConstructor(cachedClass, c))
+                .toArray(CachedConstructor[]::new);
     }
 
     public static PrivilegedAction<CachedMethod[]> makeMethodsHook(CachedClass cachedClass) {
@@ -67,12 +66,12 @@ public class GroovyCodeFactory {
             try {
                 final boolean remap = shouldRemap(cachedClass);
                 return Arrays.stream(cachedClass.getTheClass().getDeclaredMethods())
-                             .filter(m -> m.getName().indexOf('+') < 0) // no synthetic JDK 5+ methods
-                             .filter(m -> ReflectionUtils.checkCanSetAccessible(m, CachedClass.class))
-                             .filter(GroovySecurityManager.INSTANCE::isValid)
-                             .map(m -> makeMethod(cachedClass, m, remap))
-                             .distinct()
-                             .toArray(CachedMethod[]::new);
+                        .filter(m -> m.getName().indexOf('+') < 0) // no synthetic JDK 5+ methods
+                        .filter(m -> ReflectionUtils.checkCanSetAccessible(m, CachedClass.class))
+                        .filter(GroovySecurityManager.INSTANCE::isValid)
+                        .map(m -> makeMethod(cachedClass, m, remap))
+                        .distinct()
+                        .toArray(CachedMethod[]::new);
             } catch (LinkageError e) {
                 return CachedMethod.EMPTY_ARRAY;
             }
@@ -110,8 +109,13 @@ public class GroovyCodeFactory {
      * Copies a method node with a new name
      */
     private static MethodNode copyRemappedMethodNode(String name, MethodNode original) {
-        MethodNode copy = new MethodNode(name, original.getModifiers(), original.getReturnType(), original.getParameters(),
-                                         original.getExceptions(), original.getCode());
+        MethodNode copy = new MethodNode(
+                name,
+                original.getModifiers(),
+                original.getReturnType(),
+                original.getParameters(),
+                original.getExceptions(),
+                original.getCode());
         copy.setAnnotationDefault(original.hasDefaultValue());
         copy.setColumnNumber(original.getColumnNumber());
         copy.setDeclaringClass(original.getDeclaringClass());

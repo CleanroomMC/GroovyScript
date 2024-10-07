@@ -79,7 +79,5 @@ public class OilHeater extends StandardListRegistry<IOilHeaterRecipe> {
             ModSupport.MAGNETICRAFT.get().oilHeater.add(recipe);
             return recipe;
         }
-
     }
-
 }

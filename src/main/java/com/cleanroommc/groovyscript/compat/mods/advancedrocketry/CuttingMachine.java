@@ -9,6 +9,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
 @RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
 public class CuttingMachine extends BaseRegistry {
+
     @RecipeBuilderDescription(
             example = @Example(".input(item('minecraft:blaze_rod')).output(item('minecraft:blaze_powder') * 4).power(50).time(100)"))
     public RecipeBuilder recipeBuilder() {
@@ -33,8 +34,10 @@ public class CuttingMachine extends BaseRegistry {
     }
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 4))
-    @Property(property = "output", comp = @Comp(gte = 1, lte = 4),
-              value = "groovyscript.wiki.advancedrocketry.output.value")
+    @Property(
+            property = "output",
+            comp = @Comp(gte = 1, lte = 4),
+            value = "groovyscript.wiki.advancedrocketry.output.value")
     public static class RecipeBuilder extends BaseRegistry.MultiblockRecipeBuilder {
 
         @Override

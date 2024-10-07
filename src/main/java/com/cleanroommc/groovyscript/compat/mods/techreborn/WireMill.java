@@ -89,5 +89,4 @@ public class WireMill extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

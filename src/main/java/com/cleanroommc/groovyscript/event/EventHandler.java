@@ -114,8 +114,7 @@ public class EventHandler {
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void onClientChatEvent(ClientChatEvent event) {
-        if (event.getOriginalMessage().startsWith(CustomClickAction.PREFIX) &&
-            CustomClickAction.runActionHook(event.getOriginalMessage().substring(CustomClickAction.PREFIX.length()))) {
+        if (event.getOriginalMessage().startsWith(CustomClickAction.PREFIX) && CustomClickAction.runActionHook(event.getOriginalMessage().substring(CustomClickAction.PREFIX.length()))) {
             event.setCanceled(true);
         }
     }
@@ -172,24 +171,19 @@ public class EventHandler {
             List<String> warnings = new ArrayList<>();
             if (!FMLLaunchHandler.isDeobfuscatedEnvironment()) {
                 if (!Loader.isModLoaded("universaltweaks")) {
-                    warnings.add("UniversalTweaks is not loaded! It fixes a recipe book bug by removing it.\n" +
-                                 "Consider adding UniversalTweaks to your mods and make sure to enable recipe book removal in the config");
+                    warnings.add("UniversalTweaks is not loaded! It fixes a recipe book bug by removing it.\n" + "Consider adding UniversalTweaks to your mods and make sure to enable recipe book removal in the config");
                 } else if (isUTRecipeBookEnabled()) {
-                    warnings.add("UniversalTweaks is loaded, but the recipe book is still enabled. This will cause issue with Groovyscript!\n" +
-                                 "Please set 'Remove Recipe Book' to true in the misc category!");
+                    warnings.add("UniversalTweaks is loaded, but the recipe book is still enabled. This will cause issue with Groovyscript!\n" + "Please set 'Remove Recipe Book' to true in the misc category!");
                 }
                 if (Loader.isModLoaded("inworldcrafting")) {
-                    warnings.add("InWorldCrafting mod was detected. InWorldCrafting is obsolete since GroovyScript implements its functionality on its own.\n" +
-                                 "Consider using GroovyScript and removing InWorldCrafting.");
+                    warnings.add("InWorldCrafting mod was detected. InWorldCrafting is obsolete since GroovyScript implements its functionality on its own.\n" + "Consider using GroovyScript and removing InWorldCrafting.");
                 }
             }
             if ((GroovyScript.getRunConfig().getPackmodeConfigState() & 1) != 0) {
-                warnings.add("Integration with the packmode mod is enabled, but the packmode mod is not installed.\n" +
-                             "Please disable integration or install the mod.");
+                warnings.add("Integration with the packmode mod is enabled, but the packmode mod is not installed.\n" + "Please disable integration or install the mod.");
             }
             if ((GroovyScript.getRunConfig().getPackmodeConfigState() & 2) != 0) {
-                warnings.add("Integration with the packmode mod is enabled, but packmodes are also configured in GroovyScript.\n" +
-                             "You should use the packmode mod to configure packmodes if integration is enabled.");
+                warnings.add("Integration with the packmode mod is enabled, but packmodes are also configured in GroovyScript.\n" + "You should use the packmode mod to configure packmodes if integration is enabled.");
             }
             if (!warnings.isEmpty()) {
                 event.setGui(new WarningScreen(warnings));

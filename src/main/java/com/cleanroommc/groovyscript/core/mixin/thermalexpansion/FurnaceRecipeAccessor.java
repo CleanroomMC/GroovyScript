@@ -17,5 +17,4 @@ public interface FurnaceRecipeAccessor {
     static FurnaceManager.FurnaceRecipe createFurnaceRecipe(ItemStack input, ItemStack output, int energy, int creosote) {
         throw new UnsupportedOperationException();
     }
-
 }

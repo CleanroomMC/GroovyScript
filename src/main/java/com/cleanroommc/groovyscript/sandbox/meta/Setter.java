@@ -15,11 +15,15 @@ public class Setter<T, S> extends MetaMethod implements Hidden {
     private final BiConsumer<S, T> setter;
 
     public Setter(String name, Class<T> paramType, Class<S> owner, BiConsumer<S, T> setter) {
-        super(new Class[]{paramType});
+        super(new Class[]{
+                paramType
+        });
         this.name = name;
         this.owner = owner;
         this.setter = setter;
-        setParametersTypes(new CachedClass[]{ReflectionCache.getCachedClass(paramType)});
+        setParametersTypes(new CachedClass[]{
+                ReflectionCache.getCachedClass(paramType)
+        });
     }
 
     @Override

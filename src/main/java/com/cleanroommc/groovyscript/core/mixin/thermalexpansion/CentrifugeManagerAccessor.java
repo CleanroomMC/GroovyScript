@@ -19,5 +19,4 @@ public interface CentrifugeManagerAccessor {
     static Map<ComparableItemStackValidatedNBT, CentrifugeManager.CentrifugeRecipe> getRecipeMapMobs() {
         throw new UnsupportedOperationException();
     }
-
 }

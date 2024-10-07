@@ -13,8 +13,7 @@ import java.io.File;
 public class GroovyHelper {
 
     @GroovyBlacklist
-    private GroovyHelper() {
-    }
+    private GroovyHelper() {}
 
     public static boolean isLoaded(String mod) {
         return Loader.isModLoaded(mod);

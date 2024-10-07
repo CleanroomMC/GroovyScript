@@ -10,5 +10,4 @@ public interface ModRegistryAccessor {
 
     @Accessor
     ListMultiMap<String, Object> getRecipeCatalysts();
-
 }

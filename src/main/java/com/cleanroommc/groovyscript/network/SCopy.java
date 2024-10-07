@@ -13,8 +13,7 @@ public class SCopy implements IPacket {
         this.text = text;
     }
 
-    public SCopy() {
-    }
+    public SCopy() {}
 
     @Override
     public void encode(PacketBuffer buf) {

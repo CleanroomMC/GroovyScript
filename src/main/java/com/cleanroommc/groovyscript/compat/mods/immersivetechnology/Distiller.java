@@ -48,7 +48,9 @@ public class Distiller extends StandardListRegistry<DistillerRecipe> {
         });
     }
 
-    @MethodDescription(example = {@Example("fluid('distwater')"), @Example(value = "item('immersivetech:material')", commented = true)})
+    @MethodDescription(example = {
+            @Example("fluid('distwater')"), @Example(value = "item('immersivetech:material')", commented = true)
+    })
     public void removeByOutput(IIngredient output) {
         getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidOutputs()) {
@@ -120,5 +122,4 @@ public class Distiller extends StandardListRegistry<DistillerRecipe> {
             return recipe;
         }
     }
-
 }

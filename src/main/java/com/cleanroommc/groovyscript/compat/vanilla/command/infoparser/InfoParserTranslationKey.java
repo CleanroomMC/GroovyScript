@@ -27,5 +27,4 @@ public class InfoParserTranslationKey extends GenericInfoParser<String> {
     public void parse(InfoParserPackage info) {
         // translation isn't used via the registry (what parse does) but is instead directly called by individual InfoParsers
     }
-
 }

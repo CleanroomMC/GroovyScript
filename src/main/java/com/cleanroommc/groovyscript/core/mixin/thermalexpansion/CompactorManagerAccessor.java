@@ -29,5 +29,4 @@ public interface CompactorManagerAccessor {
     static Map<ComparableItemStackValidatedNBT, CompactorManager.CompactorRecipe> getRecipeMapGear() {
         throw new UnsupportedOperationException();
     }
-
 }

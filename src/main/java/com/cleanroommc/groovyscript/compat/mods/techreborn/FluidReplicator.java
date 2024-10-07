@@ -108,5 +108,4 @@ public class FluidReplicator extends VirtualizedRegistry<FluidReplicatorRecipe> 
             return recipe;
         }
     }
-
 }

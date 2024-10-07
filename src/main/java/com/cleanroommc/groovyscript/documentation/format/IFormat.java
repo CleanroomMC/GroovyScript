@@ -63,5 +63,4 @@ public interface IFormat {
      * @return if the format uses focus in codeblocks. Focus being true also means that annotations are disabled
      */
     boolean usesFocusInCodeBlocks();
-
 }

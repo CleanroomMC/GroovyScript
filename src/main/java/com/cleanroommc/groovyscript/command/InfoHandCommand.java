@@ -28,5 +28,4 @@ public class InfoHandCommand extends BaseInfoCommand {
             info.setBlockState(itemBlock.getBlock().getStateFromMeta(info.getStack().getMetadata()));
         }
     }
-
 }

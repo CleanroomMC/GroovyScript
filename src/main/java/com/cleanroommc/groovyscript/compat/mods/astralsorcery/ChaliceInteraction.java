@@ -43,8 +43,7 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
     @MethodDescription
     public void removeByInput(Fluid fluid1, Fluid fluid2) {
         getRecipes().removeIf(rec -> {
-            if ((rec.getComponent1().getFluid().equals(fluid1) && rec.getComponent2().getFluid().equals(fluid2)) ||
-                (rec.getComponent1().getFluid().equals(fluid2) && rec.getComponent2().getFluid().equals(fluid1))) {
+            if ((rec.getComponent1().getFluid().equals(fluid1) && rec.getComponent2().getFluid().equals(fluid2)) || (rec.getComponent1().getFluid().equals(fluid2) && rec.getComponent2().getFluid().equals(fluid1))) {
                 addBackup(rec);
                 return true;
             }
@@ -93,48 +92,64 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
         @Property(comp = @Comp(gt = 0))
         private final IntArrayList probabilities = new IntArrayList();
 
-        @RecipeBuilderMethodDescription(field = {"output", "probabilities"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "probabilities"
+        })
         public RecipeBuilder result(ItemStack item, int weight) {
             this.output.add(item);
             this.probabilities.add(weight);
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"output", "probabilities"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "probabilities"
+        })
         public RecipeBuilder result(ItemStack item) {
             return this.result(item, 1);
         }
 
-        @RecipeBuilderMethodDescription(field = {"output", "probabilities"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "probabilities"
+        })
         public RecipeBuilder output(ItemStack item, int weight) {
             return this.result(item, weight);
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"output", "probabilities"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "probabilities"
+        })
         public RecipeBuilder output(ItemStack item) {
             return this.result(item, 1);
         }
 
-        @RecipeBuilderMethodDescription(field = {"fluidInput", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "fluidInput", "chances"
+        })
         public RecipeBuilder component(FluidStack fluid, float chance) {
             this.fluidInput.add(fluid);
             this.chances.add(chance);
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"fluidInput", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "fluidInput", "chances"
+        })
         public RecipeBuilder component(FluidStack fluid) {
             return this.component(fluid, 1.0F);
         }
 
-        @RecipeBuilderMethodDescription(field = {"fluidInput", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "fluidInput", "chances"
+        })
         public RecipeBuilder fluidInput(FluidStack fluid, float chance) {
             return this.component(fluid, chance);
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"fluidInput", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "fluidInput", "chances"
+        })
         public RecipeBuilder fluidInput(FluidStack fluid) {
             return this.component(fluid, 1.0F);
         }

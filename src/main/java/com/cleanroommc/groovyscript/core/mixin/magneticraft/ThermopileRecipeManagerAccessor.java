@@ -14,5 +14,4 @@ public interface ThermopileRecipeManagerAccessor {
     static List<IThermopileRecipe> getRecipeList() {
         throw new UnsupportedOperationException();
     }
-
 }

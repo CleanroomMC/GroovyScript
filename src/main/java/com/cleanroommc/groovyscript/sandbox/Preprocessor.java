@@ -150,8 +150,9 @@ public class Preprocessor {
     private static boolean checkPackmode(File file, String[] modes) {
         for (String mode : modes) {
             if (!Packmode.isValidPackmode(mode)) {
-                List<String> valid = GroovyScript.getRunConfig().isIntegratePackmodeMod() ? PackModeAPI.getInstance().getPackModes()
-                                                                                          : GroovyScript.getRunConfig().getPackmodeList();
+                List<String> valid = GroovyScript.getRunConfig().isIntegratePackmodeMod()
+                        ? PackModeAPI.getInstance().getPackModes()
+                        : GroovyScript.getRunConfig().getPackmodeList();
                 GroovyLog.get().error("The packmode '{}' specified in file '{}' does not exist. Valid values are {}", mode, file.getName(), valid);
             } else if (Packmode.getPackmode().equals(Alias.autoConvertTo(mode, CaseFormat.LOWER_UNDERSCORE))) {
                 return true;

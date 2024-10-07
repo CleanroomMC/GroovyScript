@@ -59,12 +59,14 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
     @ApiStatus.Internal
     public void afterScriptLoad() {
         EnchanterManagerAccessor.getValidationSet().clear();
-        EnchanterManagerAccessor.getValidationSet().addAll(
-                EnchanterManagerAccessor.getRecipeMap().values().stream().map(EnchanterRecipe::getPrimaryInput).map(EnchanterManager::convertInput).collect(Collectors.toList())
-        );
-        EnchanterManagerAccessor.getValidationSet().addAll(
-                EnchanterManagerAccessor.getRecipeMap().values().stream().map(EnchanterRecipe::getSecondaryInput).map(EnchanterManager::convertInput).collect(Collectors.toList())
-        );
+        EnchanterManagerAccessor.getValidationSet()
+                .addAll(
+                        EnchanterManagerAccessor.getRecipeMap().values().stream().map(EnchanterRecipe::getPrimaryInput).map(EnchanterManager::convertInput).collect(Collectors.toList())
+                );
+        EnchanterManagerAccessor.getValidationSet()
+                .addAll(
+                        EnchanterManagerAccessor.getRecipeMap().values().stream().map(EnchanterRecipe::getSecondaryInput).map(EnchanterManager::convertInput).collect(Collectors.toList())
+                );
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:clay')"))

@@ -29,5 +29,4 @@ public class InfoParserBlockState extends GenericInfoParser<IBlockState> {
         if (info.getBlockState() == null) return;
         instance.add(info.getMessages(), info.getBlockState(), info.isPrettyNbt());
     }
-
 }

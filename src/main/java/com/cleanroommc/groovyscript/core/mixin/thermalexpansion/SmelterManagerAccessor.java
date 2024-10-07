@@ -26,5 +26,4 @@ public interface SmelterManagerAccessor {
     static Set<ComparableItemStackValidatedNBT> getLockSet() {
         throw new UnsupportedOperationException();
     }
-
 }

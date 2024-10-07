@@ -77,7 +77,9 @@ public class Centrifuge extends VirtualizedRegistry<CentrifugeRecipe> {
         });
     }
 
-    @MethodDescription(example = {@Example("fluid('redstone')"), @Example("item('minecraft:redstone')")})
+    @MethodDescription(example = {
+            @Example("fluid('redstone')"), @Example("item('minecraft:redstone')")
+    })
     public boolean removeByOutput(IIngredient output) {
         return CentrifugeManagerAccessor.getRecipeMap().values().removeIf(r -> {
             if (output.test(r.getFluid()) || r.getOutput().stream().anyMatch(output)) {

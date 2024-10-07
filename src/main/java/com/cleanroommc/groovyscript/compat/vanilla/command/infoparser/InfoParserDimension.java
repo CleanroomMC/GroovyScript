@@ -29,5 +29,4 @@ public class InfoParserDimension extends GenericInfoParser<DimensionType> {
         if (info.getEntity() == null) return;
         instance.add(info.getMessages(), info.getEntity().world.provider.getDimensionType(), info.isPrettyNbt());
     }
-
 }

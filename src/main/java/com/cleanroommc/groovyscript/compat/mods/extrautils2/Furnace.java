@@ -15,10 +15,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @RegistryDescription(
-        admonition = @Admonition(type = Admonition.Type.WARNING,
-                                 format = Admonition.Format.STANDARD,
-                                 hasTitle = true,
-                                 value = "groovyscript.wiki.extrautils2.furnace.removeWarning")
+        admonition = @Admonition(
+                type = Admonition.Type.WARNING,
+                format = Admonition.Format.STANDARD,
+                hasTitle = true,
+                value = "groovyscript.wiki.extrautils2.furnace.removeWarning")
 )
 public class Furnace extends VirtualizedRegistry<IMachineRecipe> {
 

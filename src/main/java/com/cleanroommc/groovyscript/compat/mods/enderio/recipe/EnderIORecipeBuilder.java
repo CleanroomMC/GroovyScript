@@ -7,7 +7,7 @@ import crazypants.enderio.base.recipe.RecipeLevel;
 
 public abstract class EnderIORecipeBuilder<T> extends AbstractRecipeBuilder<T> {
 
-    @Property(value = "groovyscript.wiki.enderio.level.value", needsOverride = true,defaultValue = "RecipeLevel.IGNORE", hierarchy = 20)
+    @Property(value = "groovyscript.wiki.enderio.level.value", needsOverride = true, defaultValue = "RecipeLevel.IGNORE", hierarchy = 20)
     protected RecipeLevel level = RecipeLevel.IGNORE;
     @Property(value = "groovyscript.wiki.enderio.energy.value", needsOverride = true, hierarchy = 20)
     protected int energy;

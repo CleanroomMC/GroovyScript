@@ -117,8 +117,7 @@ public class TapperTree extends VirtualizedRegistry<TapperTree.TapperTreeEntry> 
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (TapperTreeEntry) obj;
-            return Objects.equals(this.log, that.log) &&
-                   Objects.equals(this.leaf, that.leaf);
+            return Objects.equals(this.log, that.log) && Objects.equals(this.leaf, that.leaf);
         }
 
         @Override
@@ -128,10 +127,7 @@ public class TapperTree extends VirtualizedRegistry<TapperTree.TapperTreeEntry> 
 
         @Override
         public String toString() {
-            return "TapperTreeEntry[" +
-                   "log=" + log + ", " +
-                   "leaf=" + leaf + ']';
+            return "TapperTreeEntry[" + "log=" + log + ", " + "leaf=" + leaf + ']';
         }
     }
-
 }

@@ -70,7 +70,9 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<DiffuserRecipe> streamRecipes() {
-        List<DiffuserRecipe> list = DiffuserManagerAccessor.getReagentAmpMap().keySet().stream()
+        List<DiffuserRecipe> list = DiffuserManagerAccessor.getReagentAmpMap()
+                .keySet()
+                .stream()
                 .filter(DiffuserManagerAccessor.getReagentDurMap()::containsKey)
                 .map(DiffuserRecipe::new)
                 .collect(Collectors.toList());
@@ -79,7 +81,9 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        DiffuserManagerAccessor.getReagentAmpMap().keySet().stream()
+        DiffuserManagerAccessor.getReagentAmpMap()
+                .keySet()
+                .stream()
                 .filter(DiffuserManagerAccessor.getReagentDurMap()::containsKey)
                 .map(DiffuserRecipe::new)
                 .forEach(this::addBackup);
@@ -121,9 +125,7 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (DiffuserRecipe) obj;
-            return Objects.equals(this.stack, that.stack) &&
-                   this.amplifier == that.amplifier &&
-                   this.duration == that.duration;
+            return Objects.equals(this.stack, that.stack) && this.amplifier == that.amplifier && this.duration == that.duration;
         }
 
         @Override
@@ -133,11 +135,7 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
 
         @Override
         public String toString() {
-            return "DiffuserRecipe[" +
-                   "stack=" + stack + ", " +
-                   "amplifier=" + amplifier + ", " +
-                   "duration=" + duration + ']';
+            return "DiffuserRecipe[" + "stack=" + stack + ", " + "amplifier=" + amplifier + ", " + "duration=" + duration + ']';
         }
     }
-
 }

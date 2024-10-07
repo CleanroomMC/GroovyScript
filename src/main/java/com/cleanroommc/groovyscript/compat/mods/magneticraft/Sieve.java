@@ -57,7 +57,9 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "chances"
+        })
         public RecipeBuilder output(ItemStack item, float chance) {
             this.output.add(item);
             this.chances.add(chance);
@@ -65,7 +67,9 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"output", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "output", "chances"
+        })
         public RecipeBuilder output(ItemStack item) {
             return output(item, 1.0f);
         }
@@ -106,7 +110,5 @@ public class Sieve extends StandardListRegistry<ISieveRecipe> {
             }
             return recipe;
         }
-
     }
-
 }

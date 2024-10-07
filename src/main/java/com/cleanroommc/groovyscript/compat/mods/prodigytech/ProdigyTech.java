@@ -14,5 +14,4 @@ public class ProdigyTech extends GroovyPropertyContainer {
     public final SimpleRecipeHandlerSecondaryOutput sawmill = new SimpleRecipeHandlerSecondaryOutput.HeatSawmill();
     public final Solderer solderer = new Solderer();
     public final ZorraAltar zorraAltar = new ZorraAltar();
-
 }

@@ -19,8 +19,9 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         super(ModuleTechBasic.Registries.BARREL_RECIPE);
     }
 
-    @RecipeBuilderDescription(example = @Example(
-            ".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:emerald')).fluidInput(fluid('water') * 1000).fluidOutput(fluid('amongium') * 1000).duration(1000).name('diamond_emerald_and_water_to_amongium')")
+    @RecipeBuilderDescription(
+            example = @Example(
+                ".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:emerald')).fluidInput(fluid('water') * 1000).fluidOutput(fluid('amongium') * 1000).duration(1000).name('diamond_emerald_and_water_to_amongium')")
     )
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

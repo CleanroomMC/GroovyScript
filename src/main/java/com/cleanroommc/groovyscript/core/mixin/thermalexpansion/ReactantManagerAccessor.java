@@ -36,5 +36,4 @@ public interface ReactantManagerAccessor {
     static Set<String> getValidFluidsElemental() {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -19,5 +19,4 @@ public interface WorldHelperAccessor {
     static List<Class<? extends EntityLiving>> getMobs() {
         throw new UnsupportedOperationException();
     }
-
 }

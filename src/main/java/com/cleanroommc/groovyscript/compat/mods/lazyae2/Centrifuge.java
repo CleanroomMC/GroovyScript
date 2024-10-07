@@ -81,5 +81,4 @@ public class Centrifuge extends StandardListRegistry<PurifyRecipe> {
             return recipe;
         }
     }
-
 }

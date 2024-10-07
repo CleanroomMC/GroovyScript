@@ -15,8 +15,9 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Objects;
 
-@RegistryDescription(category = RegistryDescription.Category.ENTRIES,
-                     admonition = @Admonition(value = "groovyscript.wiki.thermalexpansion.coolant.note0", type = Admonition.Type.WARNING))
+@RegistryDescription(
+        category = RegistryDescription.Category.ENTRIES,
+        admonition = @Admonition(value = "groovyscript.wiki.thermalexpansion.coolant.note0", type = Admonition.Type.WARNING))
 public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
 
     @Override
@@ -80,7 +81,10 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
-        CoolantManagerAccessor.getCoolantMap().keySet().stream().filter(CoolantManagerAccessor.getCoolantFactorMap()::containsKey)
+        CoolantManagerAccessor.getCoolantMap()
+                .keySet()
+                .stream()
+                .filter(CoolantManagerAccessor.getCoolantFactorMap()::containsKey)
                 .forEach(x -> addBackup(new CoolantRecipe(x, CoolantManagerAccessor.getCoolantMap().getInt(x), CoolantManagerAccessor.getCoolantFactorMap().getInt(x))));
         CoolantManagerAccessor.getCoolantMap().clear();
         CoolantManagerAccessor.getCoolantFactorMap().clear();
@@ -116,9 +120,7 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (CoolantRecipe) obj;
-            return Objects.equals(this.fluid, that.fluid) &&
-                   this.rf == that.rf &&
-                   this.factor == that.factor;
+            return Objects.equals(this.fluid, that.fluid) && this.rf == that.rf && this.factor == that.factor;
         }
 
         @Override
@@ -128,11 +130,7 @@ public class Coolant extends VirtualizedRegistry<Coolant.CoolantRecipe> {
 
         @Override
         public String toString() {
-            return "CoolantRecipe[" +
-                   "fluid=" + fluid + ", " +
-                   "rf=" + rf + ", " +
-                   "factor=" + factor + ']';
+            return "CoolantRecipe[" + "fluid=" + fluid + ", " + "rf=" + rf + ", " + "factor=" + factor + ']';
         }
     }
-
 }

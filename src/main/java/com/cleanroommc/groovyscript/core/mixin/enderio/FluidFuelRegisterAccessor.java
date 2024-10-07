@@ -16,5 +16,4 @@ public interface FluidFuelRegisterAccessor {
 
     @Accessor
     Map<String, IFluidFuel> getFuels();
-
 }

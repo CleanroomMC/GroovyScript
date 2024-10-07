@@ -20,5 +20,4 @@ public interface WaterSawRecipesAccessor {
     static WaterSawRecipes createWaterSawRecipes(ItemStack output, ItemStack input, int choppingTime) {
         throw new UnsupportedOperationException();
     }
-
 }

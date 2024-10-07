@@ -87,5 +87,4 @@ export class TextureDecorationFeature extends TextDocumentLanguageFeature<boolea
 
         return [registerTextureDecorationProvider(this._client.protocol2CodeConverter.asDocumentSelector(selector), provider), provider];
     }
-
 }

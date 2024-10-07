@@ -50,5 +50,4 @@ public @interface RecipeBuilderDescription {
      * @return the method priority (relative to other recipe builder priorities in the same class)
      */
     int priority() default 1000;
-
 }
