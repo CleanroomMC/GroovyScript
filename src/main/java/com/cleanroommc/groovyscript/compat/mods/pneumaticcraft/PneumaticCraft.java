@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.compat.mods.pneumaticcraft;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
-import com.cleanroommc.groovyscript.compat.mods.ModPropertyContainer;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import me.desht.pneumaticcraft.api.recipe.ItemIngredient;

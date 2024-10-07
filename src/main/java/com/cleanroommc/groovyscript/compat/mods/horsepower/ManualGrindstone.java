@@ -49,7 +49,7 @@ public class ManualGrindstone extends StandardListRegistry<GrindstoneRecipe> {
     @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.add_to_list", priority = 500)
     public boolean add(GrindstoneRecipe recipe) {
         HPRecipes.instance().addGrindstoneRecipe(recipe, true);
-        return recipe != null && addScripted(recipe);
+        return recipe != null && doAddScripted(recipe);
     }
 
     @MethodDescription(description = "groovyscript.wiki.horsepower.manual_grindstone.add0", type = MethodDescription.Type.ADDITION)
@@ -73,12 +73,12 @@ public class ManualGrindstone extends StandardListRegistry<GrindstoneRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:double_plant:4')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(entry -> input.test(entry.getInput()) && addBackup(entry));
+        return getRecipes().removeIf(entry -> input.test(entry.getInput()) && doAddBackup(entry));
     }
 
     @MethodDescription(example = @Example("item('minecraft:sugar')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(entry -> (output.test(entry.getOutput()) || output.test(entry.getSecondary())) && addBackup(entry));
+        return getRecipes().removeIf(entry -> (output.test(entry.getOutput()) || output.test(entry.getSecondary())) && doAddBackup(entry));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

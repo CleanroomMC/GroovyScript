@@ -4,13 +4,17 @@ This is the official VSC extension for the Minecraft 1.12.2 mod [GroovyScript](h
 It allows VSC to connect to a running minecraft instance with a groovy folder and provide various tools for writing
 scripts like auto-completion and hover info.
 
+## Versions
+- 1.0.2 requires between GroovyScript 1.0.0 and 1.2.0
+- 1.2.0 requires at least GroovyScript 1.2.0
+
 ## Getting Started
 First you need to start the language server. Then you can connect VSC.
 ### Starting the language Server
 There are two ways to do that.
-1. Adding `-Dgroovyscript.run_ls=true` to the JVM arguments in your preferred launcher and start Minecraft with GroovyScript.
-   You will be able to connect VSC as soon as GroovyScript start running `preInit` scripts.
-2. By starting Minecraft and GroovyScript and running `/grs runLS` command. Obviously you need to load into a world for that.
+1. (Automatic) Adding `-Dgroovyscript.run_ls=true` to the JVM arguments in your preferred launcher and start Minecraft with GroovyScript.
+   You will be able to connect VSC as soon as GroovyScript is in its `init` load stage.
+2. (Manually) By starting Minecraft and GroovyScript and running `/grs runLS` command. Obviously you need to load into a world for that.
 
 You can check if the server started by checking for a `Starting Language server` message in the groovy log.
 

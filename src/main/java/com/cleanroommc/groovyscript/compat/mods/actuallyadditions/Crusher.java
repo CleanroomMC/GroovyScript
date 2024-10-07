@@ -77,6 +77,11 @@ public class Crusher extends StandardListRegistry<CrusherRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Actually Additions Crusher recipe";
         }

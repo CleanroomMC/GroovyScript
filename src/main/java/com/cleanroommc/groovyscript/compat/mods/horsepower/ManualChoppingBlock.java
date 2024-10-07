@@ -48,7 +48,7 @@ public class ManualChoppingBlock extends StandardListRegistry<ChoppingBlockRecip
     @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.add_to_list", priority = 500)
     public boolean add(ChoppingBlockRecipe recipe) {
         HPRecipes.instance().addChoppingRecipe(recipe, true);
-        return recipe != null && addScripted(recipe);
+        return recipe != null && doAddScripted(recipe);
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -62,12 +62,12 @@ public class ManualChoppingBlock extends StandardListRegistry<ChoppingBlockRecip
 
     @MethodDescription(example = @Example("item('minecraft:log:3')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(entry -> input.test(entry.getInput()) && addBackup(entry));
+        return getRecipes().removeIf(entry -> input.test(entry.getInput()) && doAddBackup(entry));
     }
 
     @MethodDescription(example = @Example("item('minecraft:planks:4')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(entry -> output.test(entry.getOutput()) && addBackup(entry));
+        return getRecipes().removeIf(entry -> output.test(entry.getOutput()) && doAddBackup(entry));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

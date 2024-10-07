@@ -48,7 +48,7 @@ public class Press extends StandardListRegistry<PressRecipe> {
     @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.add_to_list", priority = 500)
     public boolean add(PressRecipe recipe) {
         HPRecipes.instance().addPressRecipe(recipe);
-        return recipe != null && addScripted(recipe);
+        return recipe != null && doAddScripted(recipe);
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -69,7 +69,7 @@ public class Press extends StandardListRegistry<PressRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:wheat_seeds')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(entry -> input.test(entry.getInput()) && addBackup(entry));
+        return getRecipes().removeIf(entry -> input.test(entry.getInput()) && doAddBackup(entry));
     }
 
     @MethodDescription(example = {
@@ -77,7 +77,7 @@ public class Press extends StandardListRegistry<PressRecipe> {
             @Example("fluid('water')")
     })
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(entry -> (output.test(entry.getOutput()) || output.test(entry.getOutputFluid())) && addBackup(entry));
+        return getRecipes().removeIf(entry -> (output.test(entry.getOutput()) || output.test(entry.getOutputFluid())) && doAddBackup(entry));
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

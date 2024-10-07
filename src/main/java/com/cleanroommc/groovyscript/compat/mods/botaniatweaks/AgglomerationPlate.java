@@ -39,7 +39,7 @@ public class AgglomerationPlate extends StandardListRegistry<AgglomerationRecipe
 
     @MethodDescription(example = @Example("item('botania:manaresource:4')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> output.test(r.getRecipeOutputCopy()) && addBackup(r));
+        return getRecipes().removeIf(r -> output.test(r.getRecipeOutputCopy()) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example(value = "item('botania:manaresource:2')", commented = true))
@@ -47,12 +47,12 @@ public class AgglomerationPlate extends StandardListRegistry<AgglomerationRecipe
         return getRecipes().removeIf(r -> {
             for (var stack : r.getRecipeStacks()) {
                 if (input.test(stack)) {
-                    return addBackup(r);
+                    return doAddBackup(r);
                 }
             }
             for (var string : r.getRecipeOreKeys()) {
                 if (input instanceof OreDictIngredient ore && ore.getOreDict().equals(string)) {
-                    return addBackup(r);
+                    return doAddBackup(r);
                 }
             }
             return false;
@@ -61,17 +61,17 @@ public class AgglomerationPlate extends StandardListRegistry<AgglomerationRecipe
 
     @MethodDescription(example = @Example(value = "blockstate('botania:livingrock')", commented = true))
     public boolean removeByCenter(IBlockState center) {
-        return getRecipes().removeIf(x -> x.multiblockCenter == center && addBackup(x));
+        return getRecipes().removeIf(x -> x.multiblockCenter == center && doAddBackup(x));
     }
 
     @MethodDescription(example = @Example(value = "blockstate('minecraft:lapis_block')", commented = true))
     public boolean removeByEdge(IBlockState edge) {
-        return getRecipes().removeIf(x -> x.multiblockEdge == edge && addBackup(x));
+        return getRecipes().removeIf(x -> x.multiblockEdge == edge && doAddBackup(x));
     }
 
     @MethodDescription(example = @Example(value = "blockstate('botania:livingrock')", commented = true))
     public boolean removeByCorner(IBlockState corner) {
-        return getRecipes().removeIf(x -> x.multiblockCorner == corner && addBackup(x));
+        return getRecipes().removeIf(x -> x.multiblockCorner == corner && doAddBackup(x));
     }
 
     @Property(property = "input", comp = @Comp(gte = 1))

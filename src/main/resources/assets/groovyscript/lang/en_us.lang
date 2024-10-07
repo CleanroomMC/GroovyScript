@@ -126,6 +126,7 @@ groovyscript.wiki.and=and
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.title=Atomic Reconstructor
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.description=The Atomic Reconstructor is a block which uses energy to convert a block or item in front of it into other items.
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.energyUse.value=Sets the amount of power consumed by the recipe
+groovyscript.wiki.actuallyadditions.atomic_reconstructor.type.value=Sets the type of Lens used for the recipe
 
 groovyscript.wiki.actuallyadditions.ball_of_fur.title=Ball of Fur
 groovyscript.wiki.actuallyadditions.ball_of_fur.description=A weighted itemstack output for using a Ball of Fur, dropped by a cat.
@@ -397,6 +398,7 @@ groovyscript.wiki.astralsorcery.light_transmutation.cost.value=Sets the amount o
 groovyscript.wiki.astralsorcery.light_transmutation.constellation.value=Sets the required Constellation the starlight must be collected from. Must be either a Major or Weak Constellation
 groovyscript.wiki.astralsorcery.light_transmutation.inStack.value=Sets the item representing the input Block or IBlockState in JEI
 groovyscript.wiki.astralsorcery.light_transmutation.outStack.value=Sets the item representing the output IBlockState in JEI
+groovyscript.wiki.astralsorcery.light_transmutation.setStarmetalReplacementState=Sets the IBlockState that Starmetal Ore is converted into when placed beneath a Celestial Crystal Cluster. Useful when the Light Transmutation recipe converting Iron Ore into Starmetal Ore has changed.
 
 groovyscript.wiki.astralsorcery.lightwell.title=Lightwell
 groovyscript.wiki.astralsorcery.lightwell.description=Converts an input item into fluid, with a chance at breaking every time fluid is produced. The amount of fluid produced per interval can be increased via starlight.
@@ -595,6 +597,7 @@ groovyscript.wiki.bloodmagic.sacrificial.value.value=Sets how much Life Essence 
 
 groovyscript.wiki.bloodmagic.tartaric_forge.title=Tartaric Forge
 groovyscript.wiki.bloodmagic.tartaric_forge.description=Converts up to 4 input items into an output itemstack, requiring a Tartaric gem with a minimum amount of souls, and consuming some.
+groovyscript.wiki.bloodmagic.tartaric_forge.note=Tartaric Forge can properly execute recipes that only have 1 input, but they're bugged in JEI. If a recipe only has 1 input, it will be duplicated in the bottom-right slot. This bug is purely visual, and the recipe still works as intended.
 groovyscript.wiki.bloodmagic.tartaric_forge.add=Adds recipes in the format `input`, `output`, `minimumSouls`, `soulDrain`
 groovyscript.wiki.bloodmagic.tartaric_forge.minimumSouls.value=Sets how much Demonic Will is required in the Tartaric Gem to start the craft
 groovyscript.wiki.bloodmagic.tartaric_forge.soulDrain.value=Sets how much Demonic Will is drained from the Tartaric Gem when the craft is completed
@@ -892,6 +895,7 @@ groovyscript.wiki.enderio.fluid_fuel.remove=Removes recipes matching the target 
 
 groovyscript.wiki.enderio.sag_mill.title=Sag Mill
 groovyscript.wiki.enderio.sag_mill.description=Convert an input itemstack into up to 4 output itemstacks with chances, using energy. Output can be boosted by Grinding Balls based on set bonusType. Can be set to require at least SIMPLE, NORMAL, or ENHANCED tiers, or to IGNORE the tier. SIMPLE and IGNORE are effectively the same.
+groovyscript.wiki.enderio.sag_mill.note=EnderIO executes recipes using both its input and its grinding ball slot as inputs, which means it can consume grinding balls as input. This means an item that can be used as an input should not be able to also be used as a grinding ball.
 groovyscript.wiki.enderio.sag_mill.chances.value=Sets the chance the given output of each output slot
 groovyscript.wiki.enderio.sag_mill.bonusType.value=Sets the type of bonus a Grinding Ball can apply
 
@@ -1075,6 +1079,25 @@ groovyscript.wiki.extrautils2.resonator.energy.value=Sets the total Grid Power r
 groovyscript.wiki.extrautils2.resonator.ownerTag.value=Sets if the output itemstack should gain an NBT tag attaching the player who placed the Resonator to the itemstack. Notably used for Red Coal, to determine the bonus burn time from Grid Power
 groovyscript.wiki.extrautils2.resonator.requirementText.value=Sets the text in JEI displaying an additional requirement for the recipe to run
 groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 parameters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
+
+
+# Future MC
+groovyscript.wiki.futuremc.blast_furnace.title=Blast Furnace
+groovyscript.wiki.futuremc.blast_furnace.description=Converts an input itemstack into an output itemstack at the cost of burnable fuel.
+
+groovyscript.wiki.futuremc.campfire.title=Campfire
+groovyscript.wiki.futuremc.campfire.description=Converts an input itemstack into an output itemstack when placed on the Campfire.
+groovyscript.wiki.futuremc.campfire.duration.value=Sets the time in ticks the takes to process
+
+groovyscript.wiki.futuremc.smithing.title=Smithing
+groovyscript.wiki.futuremc.smithing.description=Converts two input itemstacks into an output output itemstack in the Smithing Table.
+groovyscript.wiki.futuremc.smithing.note0=Crafting with stackable items may require picking up and placing an input to allow crafting the recipe again.
+
+groovyscript.wiki.futuremc.smoker.title=Smoker
+groovyscript.wiki.futuremc.smoker.description=Converts an input itemstack into an output itemstack at the cost of burnable fuel.
+
+groovyscript.wiki.futuremc.stonecutter.title=Stoenecutter
+groovyscript.wiki.futuremc.stonecutter.description=Converts an input itemstack into an output itemstack via selecting the desired output from the Stonecutter GUI.
 
 
 # Horse Power
@@ -1442,6 +1465,54 @@ groovyscript.wiki.threng.etcher.title=ME Circuit Etching
 groovyscript.wiki.threng.etcher.description=Converts up to 3 input itemstacks from specific slots into an output itemstack.
 groovyscript.wiki.threng.etcher.top.value=Sets the top slot of the recipe
 groovyscript.wiki.threng.etcher.bottom.value=Sets the bottom slot of the recipe
+
+
+# Magneticraft
+groovyscript.wiki.magneticraft.crushing_table.title=Crushing Table
+groovyscript.wiki.magneticraft.crushing_table.description=Converts an input itemstack into an output itemstack when placed on top of the Crushing Table and interacted with by a Hammer which has
+
+groovyscript.wiki.magneticraft.gasification_unit.title=Gasification Unit
+groovyscript.wiki.magneticraft.gasification_unit.description=Converts an input itemstack into either an output itemstack, an output fluidstack, or both in a Gasification Unit block.
+groovyscript.wiki.magneticraft.gasification_unit.duration.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.gasification_unit.minTemperature.value=Sets the minimum temperature required to process the recipe
+
+groovyscript.wiki.magneticraft.grinder.title=Grinder
+groovyscript.wiki.magneticraft.grinder.description=Converts an input itemstack into an output itemstack with a chance at a second itemstack in a Grinder Multiblock.
+groovyscript.wiki.magneticraft.grinder.ticks.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.grinder.chance.value=Sets the chance the output itemstack will be created
+
+groovyscript.wiki.magneticraft.hydraulic_press.title=Hydraulic Press
+groovyscript.wiki.magneticraft.hydraulic_press.description=Converts an input itemstack into an output itemstack when set to a given mode in a Hydraulic Press Multiblock.
+groovyscript.wiki.magneticraft.hydraulic_press.mode.value=Sets the mode the Hydraulic Press need to be set on
+groovyscript.wiki.magneticraft.hydraulic_press.ticks.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.hydraulic_press.removeByMode=Removes all entries with the given mode
+
+groovyscript.wiki.magneticraft.oil_heater.title=Oil Heater
+groovyscript.wiki.magneticraft.oil_heater.description=Converts an input fluidstack into an output fluidstack in a Oil Heater Multiblock.
+groovyscript.wiki.magneticraft.oil_heater.duration.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.oil_heater.minTemperature.value=Sets the minimum temperature required to process the recipe
+
+groovyscript.wiki.magneticraft.refinery.title=Refinery
+groovyscript.wiki.magneticraft.refinery.description=Converts an input fluidstack into up to three output fluidstacks in a Refinery Multiblock.
+groovyscript.wiki.magneticraft.refinery.duration.value=Sets the time in ticks the recipe takes to process
+
+groovyscript.wiki.magneticraft.sieve.title=Sieve
+groovyscript.wiki.magneticraft.sieve.description=Converts an input itemstack into up to three output itemstacks, each with a separate chance in a Sieve Multiblock.
+groovyscript.wiki.magneticraft.sieve.duration.value=Sets the time in ticks the recipe takes to process
+groovyscript.wiki.magneticraft.sieve.chances.value=Sets the chance of the corresponding output itemstack to be created
+groovyscript.wiki.magneticraft.sieve.chances.required=must have the same number of elements as there are outputs
+
+groovyscript.wiki.magneticraft.sluice_box.title=Sluice Box
+groovyscript.wiki.magneticraft.sluice_box.description=Converts an input itemstack into any number of output itemstacks each with a given chance. Consumes a bucket of water per batch, and can be crafted 10 at a time in a Sluice Box.
+groovyscript.wiki.magneticraft.sluice_box.chances.value=Sets the chance of the corresponding output itemstack to be created
+groovyscript.wiki.magneticraft.sluice_box.chances.required=must have the same number of elements as there are outputs
+
+groovyscript.wiki.magneticraft.thermopile.title=Thermopile
+groovyscript.wiki.magneticraft.thermopile.description=The Thermopile generates energy from temperature differences modified by the thermal resistances of the block. This lets you generate energy when placed on either side of a Thermopile.
+groovyscript.wiki.magneticraft.thermopile.state.value=Sets the IBlockState being used
+groovyscript.wiki.magneticraft.thermopile.temperature.value=Sets the temperature of the block
+groovyscript.wiki.magneticraft.thermopile.conductivity.value=Sets the thermal resistance of the block
+
 
 
 # Mekanism
