@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.vanilla.command.infoparser;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParser;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.command.TextCopyable;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -63,14 +64,14 @@ public abstract class GenericInfoParser<T> implements InfoParser {
     }
 
     /**
-     * The formatted header of the parser. Uses the {@link #headerStyle}, with hover text from {@link #hoverTitle()}.
+     * The formatted header of the parser. Uses the {@link StyleConstant#TITLE_STYLE}, with hover text from {@link #hoverTitle()}.
      *
      * @param plural if the name should be in {@link #plural()} or singular {@link #name()} form.
      * @return the header for the parser
      */
     public ITextComponent header(boolean plural) {
         String name = plural ? plural() : name();
-        Style style = headerStyle.createShallowCopy().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverTitle()));
+        Style style = StyleConstant.TITLE_STYLE.createShallowCopy().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverTitle()));
         return new TextComponentString(name + ":").setStyle(style);
     }
 

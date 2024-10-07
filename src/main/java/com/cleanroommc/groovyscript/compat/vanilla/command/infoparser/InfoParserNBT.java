@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.compat.vanilla.command.infoparser;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +34,7 @@ public class InfoParserNBT extends GenericInfoParser<NBTTagCompound> {
     }
 
     private String trimText() {
-        return TextFormatting.RED + "(trimmed)";
+        return StyleConstant.ERROR + "(trimmed)";
     }
 
     /**

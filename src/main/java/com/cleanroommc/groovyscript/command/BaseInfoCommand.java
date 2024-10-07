@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.command;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
 import com.cleanroommc.groovyscript.event.GsHandEvent;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.google.common.base.Predicates;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -109,9 +110,9 @@ public abstract class BaseInfoCommand extends CommandBase {
     protected void print(EntityPlayer player, List<ITextComponent> messages, List<String> argList) {
         if (messages.isEmpty()) {
             if (argList.isEmpty()) {
-                player.sendMessage(new TextComponentString(String.format("Couldn't find %s!", targetDescription())).setStyle(new Style().setColor(TextFormatting.RED)));
+                player.sendMessage(new TextComponentString(String.format("Couldn't find %s!", targetDescription())).setStyle(StyleConstant.ERROR_STYLE));
             } else {
-                player.sendMessage(new TextComponentString(String.format("Couldn't find %s matching the given arguments!", targetDescription())).setStyle(new Style().setColor(TextFormatting.RED)));
+                player.sendMessage(new TextComponentString(String.format("Couldn't find %s matching the given arguments!", targetDescription())).setStyle(StyleConstant.ERROR_STYLE));
                 player.sendMessage(new TextComponentString("The following arguments were provided: " + String.join(", ", argList)));
             }
         } else {

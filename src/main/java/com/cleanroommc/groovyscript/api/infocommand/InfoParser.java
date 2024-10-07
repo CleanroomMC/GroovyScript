@@ -7,7 +7,9 @@ public interface InfoParser {
 
     /**
      * The style for any parser header - bold and light purple.
+     * @deprecated use {@link com.cleanroommc.groovyscript.helper.StyleConstant#TITLE_STYLE}
      */
+    @Deprecated
     Style headerStyle = new Style().setColor(TextFormatting.WHITE).setBold(true);
 
     /**

@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
 import com.cleanroommc.groovyscript.documentation.Documentation;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
 import com.cleanroommc.groovyscript.network.SReloadScripts;
 import com.cleanroommc.groovyscript.network.StartLanguageServerPacket;
@@ -70,12 +71,10 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new InfoLookingCommand());
         addSubcommand(new InfoSelfCommand());
 
+
         addSubcommand(new SimpleCommand("wiki", (server, sender, args) -> sender.sendMessage(
-                new TextComponentString("GroovyScript wiki").setStyle(new Style().setColor(TextFormatting.GOLD).setHoverEvent(
-                        new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                       new TextComponentString("Click to open wiki in browser"))).setClickEvent(
-                        new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cleanroommc.com/groovy-script/")))), "doc", "docs",
-                                        "documentation"));
+                getTextForUrl("GroovyScript wiki", "Click to open wiki in browser", new TextComponentString("https://cleanroommc.com/groovy-script/"))),
+                                        "doc", "docs", "documentation"));
 
         addSubcommand(new SimpleCommand("generateWiki", (server, sender, args) -> {
             Documentation.generateWiki();
@@ -104,9 +103,9 @@ public class GSCommand extends CommandTreeBase {
 
         addSubcommand(new SimpleCommand("deleteScriptCache", (server, sender, args) -> {
             if (GroovyScript.getSandbox().deleteScriptCache()) {
-                sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Deleted groovy script cache"));
+                sender.sendMessage(new TextComponentString("Deleted groovy script cache").setStyle(StyleConstant.SUCCESS_STYLE));
             } else {
-                sender.sendMessage(new TextComponentString(TextFormatting.RED + "An error occurred while deleting groovy script cache"));
+                sender.sendMessage(new TextComponentString("An error occurred while deleting groovy script cache").setStyle(StyleConstant.ERROR_STYLE));
             }
         }));
 
@@ -118,7 +117,7 @@ public class GSCommand extends CommandTreeBase {
 
         addSubcommand(new SimpleCommand("cleanLog", (server, sender, args) -> {
             GroovyLogImpl.LOG.cleanLog();
-            sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Cleaned Groovy log"));
+            sender.sendMessage(new TextComponentString("Cleaned Groovy log").setStyle(StyleConstant.SUCCESS_STYLE));
         }));
 
         if (ModSupport.MEKANISM.isLoaded()) {
@@ -153,9 +152,17 @@ public class GSCommand extends CommandTreeBase {
     }
 
     public static ITextComponent getTextForFile(String name, String path, ITextComponent hoverText) {
-        return new TextComponentString(TextFormatting.UNDERLINE + (TextFormatting.GOLD + name))
-                .setStyle(new Style()
-                                  .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, path))
+        return getTextForClickEvent(name, new ClickEvent(ClickEvent.Action.OPEN_FILE, path), hoverText);
+    }
+
+    public static ITextComponent getTextForUrl(String name, String url, ITextComponent hoverText) {
+        return getTextForClickEvent(name, new ClickEvent(ClickEvent.Action.OPEN_URL, url), hoverText);
+    }
+
+    public static ITextComponent getTextForClickEvent(String name, ClickEvent clickEvent, ITextComponent hoverText) {
+        return new TextComponentString(name)
+                .setStyle(new Style().setColor(TextFormatting.GOLD).setUnderlined(true)
+                                  .setClickEvent(clickEvent)
                                   .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
     }
 
