@@ -1,10 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.forestry;
 
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IResourceStack;
 import com.cleanroommc.groovyscript.core.mixin.forestry.CarpenterRecipeManagerAccessor;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import forestry.api.recipes.ICarpenterRecipe;
@@ -16,10 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
 
@@ -200,6 +200,10 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
             validateFluids(msg, 0, 1, 0, 0);
             validateItems(msg, 0, 0, 1, 1);
             validatePattern(msg, pattern, keys);
+            for (IIngredient ingredient : keys.values()) {
+                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Grid input {} must have a stack size of 1", ingredient);
+            }
+            msg.add(IngredientHelper.overMaxSize(box, 1), "Box must have a stack size of 1, got {}", box.getAmount());
         }
 
         @Override

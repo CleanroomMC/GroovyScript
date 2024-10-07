@@ -34,12 +34,12 @@ public class Anvil extends StandardListRegistry<AnvilRecipe> {
 
     @MethodDescription(example = @Example("item('randomthings:obsidianskull')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> (input.test(r.getFirst()) || input.test(r.getSecond())) && addBackup(r));
+        return getRecipes().removeIf(r -> (input.test(r.getFirst()) || input.test(r.getSecond())) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('randomthings:lavawader')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> output.test(r.getOutput()) && addBackup(r));
+        return getRecipes().removeIf(r -> output.test(r.getOutput()) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 2))

@@ -37,12 +37,12 @@ public class Imbuing extends StandardListRegistry<ImbuingRecipe> {
             @Example("item('minecraft:cobblestone')"), @Example("item('minecraft:coal')")
     })
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> (input.test(r.toImbue()) || r.getIngredients().stream().anyMatch(input)) && addBackup(r));
+        return getRecipes().removeIf(r -> (input.test(r.toImbue()) || r.getIngredients().stream().anyMatch(input)) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('randomthings:imbue:3')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> output.test(r.getResult()) && addBackup(r));
+        return getRecipes().removeIf(r -> output.test(r.getResult()) && doAddBackup(r));
     }
 
     @Property(property = "input", comp = @Comp(eq = 3, unique = "groovyscript.wiki.randomthings.imbuing.input.required"))

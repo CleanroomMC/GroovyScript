@@ -122,6 +122,11 @@ public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, advanced ? 3 : 2, 1, 1);
             msg.add(msg.hasSubMessages(), "advanced requires a maximum of 3 inputs, while basic requires a maximum of 2 inputs");

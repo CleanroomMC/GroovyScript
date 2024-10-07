@@ -72,6 +72,11 @@ public class ConductorMast extends StandardListRegistry<DefaultSonarRecipe.Value
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Calculator Conductor Mast Recipe";
         }

@@ -85,15 +85,10 @@ public class RunConfig {
     private boolean warnedAboutInvalidPackId;
     private int packmodeConfigState;
 
-    public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
+    public static final String[] GROOVY_SUFFIXES = SandboxData.GROOVY_SUFFIXES;
 
     public static boolean isGroovyFile(String path) {
-        for (String suffix : GROOVY_SUFFIXES) {
-            if (path.endsWith(suffix)) {
-                return true;
-            }
-        }
-        return false;
+        return SandboxData.isGroovyFile(path);
     }
 
     public RunConfig(JsonObject json) {
@@ -301,44 +296,13 @@ public class RunConfig {
         if (this.classes.containsKey(loader)) {
             paths.addAll(this.classes.get(loader));
         }
-        return getSortedFilesOf(root, paths);
+        return SandboxData.getSortedFilesOf(root, paths);
     }
 
     public Collection<File> getSortedFiles(File root, String loader) {
         List<String> paths = loaderPaths.get(loader);
         if (paths == null || paths.isEmpty()) return Collections.emptyList();
-        return getSortedFilesOf(root, paths);
-    }
-
-    private Collection<File> getSortedFilesOf(File root, Collection<String> paths) {
-        Object2IntLinkedOpenHashMap<File> files = new Object2IntLinkedOpenHashMap<>();
-        String separator = getSeparator();
-
-        for (String path : paths) {
-            File rootFile = new File(root, path);
-            if (!rootFile.exists()) {
-                continue;
-            }
-            int pathSize = path.split(separator).length;
-            try (Stream<Path> stream = Files.walk(rootFile.toPath(), isDebug() ? new FileVisitOption[] { FileVisitOption.FOLLOW_LINKS } : new FileVisitOption[0])) {
-                stream.filter(path1 -> isGroovyFile(path1.toString()))
-                        .map(Path::toFile)
-                        //.filter(Preprocessor::validatePreprocessors)
-                        .sorted(Comparator.comparing(File::getPath))
-                        .forEach(file -> {
-                            if (files.containsKey(file)) {
-                                if (pathSize > files.getInt(file)) {
-                                    files.put(file, pathSize);
-                                }
-                            } else {
-                                files.put(file, pathSize);
-                            }
-                        });
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return new ArrayList<>(files.keySet());
+        return SandboxData.getSortedFilesOf(root, paths);
     }
 
     private static String sanitizePath(String path) {

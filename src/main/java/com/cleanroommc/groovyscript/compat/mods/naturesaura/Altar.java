@@ -146,6 +146,12 @@ public class Altar extends VirtualizedRegistry<AltarRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            // More than 1 item cannot be placed
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
             validateItems(msg, 1, 1, 1, 1);

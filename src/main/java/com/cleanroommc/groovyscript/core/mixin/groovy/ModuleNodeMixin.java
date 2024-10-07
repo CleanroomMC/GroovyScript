@@ -32,10 +32,10 @@ public abstract class ModuleNodeMixin {
             // can happen with traits
             return;
         }
-        int i = rel.lastIndexOf(File.separatorChar);
+        int i = rel.lastIndexOf('/');
         if (i >= 0) {
             // inject correct package declaration into script
-            String packageName = rel.substring(0, i).replace(File.separatorChar, '.') + '.';
+            String packageName = rel.substring(0, i).replace('/', '.') + '.';
             this.packageNode = new PackageNode(packageName);
         }
     }

@@ -56,7 +56,7 @@ public enum GroovyEventManager {
             GroovyLog.get().error("Event listeners' only parameter should be the Event class you are trying to listen to.");
             return;
         }
-        listen(eventPriority, eventBusType, (Class<? extends Event>) eventClass, eventListener);
+        listen(eventPriority, eventBusType, (Class<? extends Event>) eventClass, eventListener::call);
     }
 
     public void listen(Class<? extends Event> eventClass, Closure<?> eventListener) {

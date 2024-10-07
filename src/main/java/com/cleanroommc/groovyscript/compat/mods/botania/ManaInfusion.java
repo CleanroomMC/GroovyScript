@@ -113,6 +113,11 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Botania Mana Infusion recipe";
         }
