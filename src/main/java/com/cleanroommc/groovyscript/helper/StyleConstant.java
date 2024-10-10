@@ -19,31 +19,31 @@ public class StyleConstant {
 
     /**
      * Used for the digits of numbers:
-     * {@code 0xFF00FF}, {@code 5.0}f
+     * <b>0xFF00FF</b>, <b>5.0</b>f, <b>347</b>
      */
     public static final TextFormatting NUMBER = TextFormatting.YELLOW;
 
     /**
      * Used for text within strings:
-     * '{@code hello}', "{@code world}"
+     * '<b>hello</b>', "<b>world</b>"
      */
-    public static final TextFormatting STRING = TextFormatting.AQUA;
+    public static final TextFormatting STRING = TextFormatting.GREEN;
 
     /**
      * Used for the object mapper name:
-     * {@code item}('minecraft:clay'), {@code fluid}('water')
+     * <b>item</b>('minecraft:clay'), <b>fluid</b>('water')
      */
-    public static final TextFormatting MAPPER = TextFormatting.DARK_GREEN;
+    public static final TextFormatting MAPPER = TextFormatting.AQUA;
 
     /**
      * Used for creating a new object:
-     * {@code new} Object()
+     * <b>new</b> Object(), <b>key</b>=value
      */
     public static final TextFormatting NEW = TextFormatting.LIGHT_PURPLE;
 
     /**
      * Used for class types, casts, and declarations:
-     * {@code (byte)}, new {@code Object}(), 1.5{@code F}
+     * <b>(byte)</b>, new <b>Object</b>(), 1.5<b>F</b>
      */
     public static final TextFormatting CLASS = TextFormatting.GOLD;
 
