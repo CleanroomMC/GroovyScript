@@ -56,8 +56,8 @@ public class JeiPlugin implements IModPlugin {
     public static Comparator<IRecipeCategory<?>> getCategoryComparator() {
         var order = ModSupport.JEI.get().category.getOrder();
         return Comparator.comparingInt(category -> {
-            var uid = category.getUid();
-            return order.contains(uid) ? order.indexOf(uid) : Integer.MAX_VALUE;
+            var index = order.indexOf(category.getUid());
+            return index >= 0 ? index : Integer.MAX_VALUE;
         });
     }
 
