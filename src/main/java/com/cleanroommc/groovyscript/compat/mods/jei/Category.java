@@ -18,8 +18,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-@RegistryDescription(category = RegistryDescription.Category.ENTRIES,
-                     admonition = @Admonition("groovyscript.wiki.jei.category.note0"))
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES, admonition = {
+        @Admonition("groovyscript.wiki.jei.category.note0"),
+        @Admonition(value = "groovyscript.wiki.jei.category.note1", type = Admonition.Type.TIP)
+})
 public class Category extends VirtualizedRegistry<String> {
 
     private boolean hideAllCategories;

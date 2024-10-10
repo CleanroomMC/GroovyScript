@@ -16,7 +16,7 @@ mods.jei.catalyst.add('minecraft.smelting', item('minecraft:clay') * 8, item('mi
 
 // Categories:
 // Modify the Categories visible in JEI, each of which contain recipes and are associated with specific blocks, typically
-// machines.
+// machines. Can also set the order of Categories.
 
 mods.jei.category.hideCategory('minecraft.fuel')
 // mods.jei.category.hideAll()

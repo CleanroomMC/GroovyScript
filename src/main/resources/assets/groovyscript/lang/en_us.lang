@@ -1393,6 +1393,7 @@ groovyscript.wiki.jei.catalyst.removeByType=Removes all catalyst items from the 
 groovyscript.wiki.jei.category.title=Categories
 groovyscript.wiki.jei.category.description=Modify the Categories visible in JEI, each of which contain recipes and are associated with specific blocks, typically machines. Can also set the order of Categories.
 groovyscript.wiki.jei.category.note0=Hidden Categories will still take up load time, and recipes contained within can still be processed. This only prevents seeing Categories.
+groovyscript.wiki.jei.category.note1=Use the command `/gs jeiCategories` to log the UIDs of all JEI Categories to the `groovy.log` file!
 groovyscript.wiki.jei.category.annotation=Note that `classes.GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
 groovyscript.wiki.jei.category.id.value=Sets the ID of the Category, which must be unique among all other Categories
 groovyscript.wiki.jei.category.wrapper.value=Sets the `IRecipeWrapper`s used by the Category to generate entries
