@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.core.mixin.jei.ModRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class InfoParserTab extends GenericInfoParser<IRecipeCategory> {
         List<String> allowed = ((ModRegistryAccessor) JeiPlugin.modRegistry).getRecipeCatalysts()
                 .entrySet()
                 .stream()
-                .filter(entry -> entry.getValue().stream().anyMatch(x -> x instanceof ItemStack stack && ItemStack.areItemStacksEqual(stack, info.getStack())))
+                .filter(entry -> entry.getValue().stream().anyMatch(x -> x instanceof ItemStack stack && OreDictionary.itemMatches(stack, info.getStack(), false)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         List<IRecipeCategory> list = JeiPlugin.recipeRegistry.getRecipeCategories(allowed);
