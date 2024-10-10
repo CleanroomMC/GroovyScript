@@ -29,6 +29,8 @@ mods.jei.category.hideCategory('minecraft.fuel')
     .register()*/
 
 
+mods.jei.category.setOrder('minecraft.crafting', 'jei.information', 'minecraft.smelting', 'groovyscript:burning', 'groovyscript:explosion', 'groovyscript:fluid_recipe', 'groovyscript:piston_push', 'minecraft.anvil')
+
 // Description Category:
 // Modify the description of the input items, where the description is a unique JEI tab containing text.
 

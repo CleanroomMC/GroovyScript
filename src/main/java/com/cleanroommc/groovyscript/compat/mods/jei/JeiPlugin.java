@@ -23,6 +23,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Comparator;
+
 @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
 @GroovyBlacklist
 @JEIPlugin
@@ -45,6 +47,18 @@ public class JeiPlugin implements IModPlugin {
         ModSupport.JEI.get().ingredient.applyChanges(modRegistry.getIngredientRegistry());
         ModSupport.JEI.get().category.applyChanges(jeiRuntime.getRecipeRegistry());
         ModSupport.JEI.get().description.applyRemovals(jeiRuntime.getRecipeRegistry());
+    }
+
+    /**
+     * We want to only return the index of the category if it exists, otherwise we want it placed at the end of the list.
+     * If this wasn't the case, any categories not in the list (such as new ones) would be disruptive to the user experience.
+     */
+    public static Comparator<IRecipeCategory<?>> getCategoryComparator() {
+        var order = ModSupport.JEI.get().category.getOrder();
+        return Comparator.comparingInt(category -> {
+            var uid = category.getUid();
+            return order.contains(uid) ? order.indexOf(uid) : Integer.MAX_VALUE;
+        });
     }
 
     public static boolean isLoaded() {
