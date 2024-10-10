@@ -279,7 +279,6 @@ public class GroovyScript {
                 if (running) {
                     String s = packmode ? "changes packmode" : "reloaded scripts";
                     sender.sendMessage(new TextComponentString("Successfully " + s).setStyle(StyleConstant.SUCCESS_STYLE).appendSibling(new TextComponentString(" in " + time + "ms")));
-                    sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully " + s + TextFormatting.WHITE + " in " + time + "ms"));
                 } else {
                     sender.sendMessage(new TextComponentString("No syntax errors found :)").setStyle(StyleConstant.SUCCESS_STYLE));
                 }

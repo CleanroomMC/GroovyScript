@@ -1,16 +1,17 @@
 package com.cleanroommc.groovyscript.api.infocommand;
 
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
 
 public interface InfoParser {
 
     /**
      * The style for any parser header - bold and light purple.
+     *
      * @deprecated use {@link com.cleanroommc.groovyscript.helper.StyleConstant#TITLE_STYLE}
      */
     @Deprecated
-    Style headerStyle = new Style().setColor(TextFormatting.WHITE).setBold(true);
+    Style headerStyle = StyleConstant.TITLE_STYLE;
 
     /**
      * Priority of the parser for determining the order they are logged in chat,
