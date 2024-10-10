@@ -109,7 +109,7 @@ public class NbtHelper {
         if (colored) builder.append(StyleConstant.NUMBER);
         builder.append(nbt.getLong());
         if (colored) builder.append(StyleConstant.CLASS);
-        builder.append("L");
+        builder.append("l");
         return builder.toString();
     }
 
@@ -118,7 +118,7 @@ public class NbtHelper {
         if (colored) builder.append(StyleConstant.NUMBER);
         builder.append(nbt.getFloat());
         if (colored) builder.append(StyleConstant.CLASS);
-        builder.append("F");
+        builder.append("f");
         return builder.toString();
     }
 
@@ -127,7 +127,7 @@ public class NbtHelper {
         if (colored) builder.append(StyleConstant.NUMBER);
         builder.append(nbt.getDouble());
         if (colored) builder.append(StyleConstant.CLASS);
-        builder.append("D");
+        builder.append("d");
         return builder.toString();
     }
 
