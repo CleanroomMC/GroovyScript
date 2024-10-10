@@ -9,6 +9,6 @@
     "JeiProxyAccessor",
     "JeiStarterMixin",
     "ModRegistryAccessor",
-    "RecipeRegistryMixin"
+    "ModRegistryMixin"
   ]
 }

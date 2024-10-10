@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(value = ModRegistry.class, remap = false)
-public abstract class RecipeRegistryMixin {
+public abstract class ModRegistryMixin {
 
     @Shadow
     @Final
