@@ -155,8 +155,12 @@ public class NbtHelper {
 
     public static String toGroovyCode(NBTTagString nbt, boolean colored) {
         StringBuilder builder = new StringBuilder();
+        if (colored) builder.append(StyleConstant.BASE);
+        builder.append("'");
         if (colored) builder.append(StyleConstant.STRING);
-        builder.append('\'').append(nbt.getString()).append('\'');
+        builder.append(nbt.getString());
+        if (colored) builder.append(StyleConstant.BASE);
+        builder.append("'");
         return builder.toString();
     }
 
