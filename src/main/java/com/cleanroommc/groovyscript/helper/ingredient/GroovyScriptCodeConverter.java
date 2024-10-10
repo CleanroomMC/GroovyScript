@@ -210,11 +210,11 @@ public class GroovyScriptCodeConverter {
                 IProperty property = entry.getKey();
                 if (colored) builder.append(StyleConstant.BASE);
                 builder.append(", ").append("'");
-                if (colored) builder.append(StyleConstant.NUMBER);
+                if (colored) builder.append(StyleConstant.NEW);
                 builder.append(property.getName());
                 if (colored) builder.append(StyleConstant.BASE);
                 builder.append("=");
-                if (colored) builder.append(StyleConstant.NUMBER);
+                if (colored) builder.append(StyleConstant.CLASS);
                 builder.append(property.getName(entry.getValue()));
                 if (colored) builder.append(StyleConstant.BASE);
                 builder.append("'");
