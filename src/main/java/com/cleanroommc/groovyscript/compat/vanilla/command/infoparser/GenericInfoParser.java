@@ -117,7 +117,7 @@ public abstract class GenericInfoParser<T> implements InfoParser {
      * @return the text that is copied when clicking on the message
      */
     public String copyText(@NotNull T entry, boolean prettyNbt) {
-        return text(entry, false, prettyNbt);
+        return text(entry, true, prettyNbt);
     }
 
     /**

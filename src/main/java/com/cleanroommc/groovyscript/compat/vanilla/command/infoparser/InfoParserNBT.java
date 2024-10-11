@@ -57,7 +57,7 @@ public class InfoParserNBT extends GenericInfoParser<NBTTagCompound> {
 
     @Override
     public String copyText(@NotNull NBTTagCompound entry, boolean prettyNbt) {
-        return NbtHelper.toGroovyCode(entry, prettyNbt, false);
+        return NbtHelper.toGroovyCode(entry, prettyNbt, true);
     }
 
     @Override

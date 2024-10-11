@@ -16,9 +16,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.server.command.CommandTreeBase;
@@ -161,7 +159,7 @@ public class GSCommand extends CommandTreeBase {
 
     public static ITextComponent getTextForClickEvent(String name, ClickEvent clickEvent, ITextComponent hoverText) {
         return new TextComponentString(name)
-                .setStyle(new Style().setColor(TextFormatting.GOLD).setUnderlined(true)
+                .setStyle(StyleConstant.getEmphasisStyle().setUnderlined(true)
                                   .setClickEvent(clickEvent)
                                   .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverText)));
     }

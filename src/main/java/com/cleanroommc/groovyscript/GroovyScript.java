@@ -181,9 +181,10 @@ public class GroovyScript {
     public void onPostInit(FMLPostInitializationEvent event) {
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
-                                                                .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
-                                                                .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
+            var message = new TextComponentTranslation("groovyscript.command.copy.copied_start").setStyle(StyleConstant.getEmphasisStyle())
+                    .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.RESET)))
+                    .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end").setStyle(StyleConstant.getEmphasisStyle()));
+            Minecraft.getMinecraft().player.sendMessage(message);
         });
     }
 

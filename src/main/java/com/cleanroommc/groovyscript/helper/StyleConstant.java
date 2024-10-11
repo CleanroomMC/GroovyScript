@@ -70,6 +70,13 @@ public class StyleConstant {
         return new Style().setColor(TextFormatting.WHITE).setBold(true);
     }
 
+    /**
+     * Used to distinguish text from surrounding text.
+     * Often used for borders or for critical information.
+     */
+    public static Style getEmphasisStyle() {
+        return new Style().setColor(TextFormatting.GOLD);
+    }
 
     /**
      * Used for the text of a state where the other outcome could be a warning or an error,
