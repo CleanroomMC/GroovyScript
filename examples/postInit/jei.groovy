@@ -21,12 +21,12 @@ mods.jei.catalyst.add('minecraft.smelting', item('minecraft:clay') * 8, item('mi
 mods.jei.category.hideCategory('minecraft.fuel')
 // mods.jei.category.hideAll()
 
-/*mods.jei.category.categoryBuilder()
-    .id(classes.GenericRecipeCategory.UID) // Note that `classes.GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
-    .category(guiHelper -> new classes.GenericRecipeCategory(guiHelper))
-    .catalyst(item('minecraft:clay'))
-    .wrapper(classes.GenericRecipeCategory.getRecipeWrappers())
-    .register()*/
+//mods.jei.category.categoryBuilder()
+//    .id(classes.GenericRecipeCategory.UID) // Note that `classes.GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
+//    .category(guiHelper -> new classes.GenericRecipeCategory(guiHelper))
+//    .catalyst(item('minecraft:clay'))
+//    .wrapper(classes.GenericRecipeCategory.getRecipeWrappers())
+//    .register()
 
 
 // Description Category:

@@ -53,13 +53,14 @@ mods.iceandfire.ice_forge.recipeBuilder()
 // mods.iceandfire.lightning_forge.removeByOutput(item('iceandfire:dragonsteel_lightning_ingot'))
 // mods.iceandfire.lightning_forge.removeAll()
 
-/*mods.iceandfire.lightning_forge.recipeBuilder()
-    .input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'))
-    .output(item('minecraft:clay'))
-    .register()*/
+//mods.iceandfire.lightning_forge.recipeBuilder()
+//    .input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'))
+//    .output(item('minecraft:clay'))
+//    .register()
 
-/*mods.iceandfire.lightning_forge.recipeBuilder()
-    .input(item('minecraft:diamond'), item('minecraft:gold_ingot'))
-    .output(item('minecraft:clay'))
-    .register()*/
+//mods.iceandfire.lightning_forge.recipeBuilder()
+//    .input(item('minecraft:diamond'), item('minecraft:gold_ingot'))
+//    .output(item('minecraft:clay'))
+//    .register()
+
 
