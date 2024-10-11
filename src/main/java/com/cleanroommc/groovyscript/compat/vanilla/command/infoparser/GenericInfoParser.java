@@ -64,14 +64,14 @@ public abstract class GenericInfoParser<T> implements InfoParser {
     }
 
     /**
-     * The formatted header of the parser. Uses the {@link StyleConstant#TITLE_STYLE}, with hover text from {@link #hoverTitle()}.
+     * The formatted header of the parser. Uses the {@link StyleConstant#getTitleStyle()}, with hover text from {@link #hoverTitle()}.
      *
      * @param plural if the name should be in {@link #plural()} or singular {@link #name()} form.
      * @return the header for the parser
      */
     public ITextComponent header(boolean plural) {
         String name = plural ? plural() : name();
-        Style style = StyleConstant.TITLE_STYLE.createShallowCopy().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverTitle()));
+        Style style = StyleConstant.getTitleStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverTitle()));
         return new TextComponentString(name + ":").setStyle(style);
     }
 

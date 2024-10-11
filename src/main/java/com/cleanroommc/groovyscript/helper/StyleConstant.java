@@ -66,22 +66,31 @@ public class StyleConstant {
     /**
      * Used for titles to make them emphasised and keep them distinct from the surrounding text
      */
-    public static final Style TITLE_STYLE = new Style().setColor(TextFormatting.WHITE).setBold(true);
+    public static Style getTitleStyle() {
+        return new Style().setColor(TextFormatting.WHITE).setBold(true);
+    }
+
 
     /**
      * Used for the text of a state where the other outcome could be a warning or an error,
      * but this evaluation was not, and works as expected.
      */
-    public static final Style SUCCESS_STYLE = new Style().setColor(SUCCESS);
+    public static Style getSuccessStyle() {
+        return new Style().setColor(SUCCESS);
+    }
 
     /**
      * Used for the text of warnings
      */
-    public static final Style WARNING_STYLE = new Style().setColor(WARNING);
+    public static Style getWarningStyle() {
+        return new Style().setColor(WARNING);
+    }
 
     /**
      * Used for the text of errors
      */
-    public static final Style ERROR_STYLE = new Style().setColor(ERROR);
+    public static Style getErrorStyle() {
+        return new Style().setColor(ERROR);
+    }
 
 }

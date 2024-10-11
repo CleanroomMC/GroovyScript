@@ -8,10 +8,10 @@ public interface InfoParser {
     /**
      * The style for any parser header - bold and light purple.
      *
-     * @deprecated use {@link com.cleanroommc.groovyscript.helper.StyleConstant#TITLE_STYLE}
+     * @deprecated use {@link com.cleanroommc.groovyscript.helper.StyleConstant#getTitleStyle()}
      */
     @Deprecated
-    Style headerStyle = StyleConstant.TITLE_STYLE;
+    Style headerStyle = StyleConstant.getTitleStyle();
 
     /**
      * Priority of the parser for determining the order they are logged in chat,

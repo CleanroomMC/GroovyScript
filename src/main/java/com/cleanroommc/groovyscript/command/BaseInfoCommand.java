@@ -110,14 +110,14 @@ public abstract class BaseInfoCommand extends CommandBase {
     protected void print(EntityPlayer player, List<ITextComponent> messages, List<String> argList) {
         if (messages.isEmpty()) {
             if (argList.isEmpty()) {
-                player.sendMessage(new TextComponentString(String.format("Couldn't find %s!", targetDescription())).setStyle(StyleConstant.ERROR_STYLE));
+                player.sendMessage(new TextComponentString(String.format("Couldn't find %s!", targetDescription())).setStyle(StyleConstant.getErrorStyle()));
             } else {
-                player.sendMessage(new TextComponentString(String.format("Couldn't find %s matching the given arguments!", targetDescription())).setStyle(StyleConstant.ERROR_STYLE));
+                player.sendMessage(new TextComponentString(String.format("Couldn't find %s matching the given arguments!", targetDescription())).setStyle(StyleConstant.getErrorStyle()));
                 player.sendMessage(new TextComponentString("The following arguments were provided: " + String.join(", ", argList)));
             }
         } else {
             // have a horizontal bar to improve readability when running multiple consecutive info commands
-            player.sendMessage(new TextComponentString("================================").setStyle(new Style().setColor(TextFormatting.GOLD)));
+            player.sendMessage(new TextComponentString("================================").setStyle(StyleConstant.getEmphasisStyle()));
             messages.forEach(player::sendMessage);
         }
     }

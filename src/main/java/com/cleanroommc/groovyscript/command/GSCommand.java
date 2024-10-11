@@ -103,9 +103,9 @@ public class GSCommand extends CommandTreeBase {
 
         addSubcommand(new SimpleCommand("deleteScriptCache", (server, sender, args) -> {
             if (GroovyScript.getSandbox().deleteScriptCache()) {
-                sender.sendMessage(new TextComponentString("Deleted groovy script cache").setStyle(StyleConstant.SUCCESS_STYLE));
+                sender.sendMessage(new TextComponentString("Deleted groovy script cache").setStyle(StyleConstant.getSuccessStyle()));
             } else {
-                sender.sendMessage(new TextComponentString("An error occurred while deleting groovy script cache").setStyle(StyleConstant.ERROR_STYLE));
+                sender.sendMessage(new TextComponentString("An error occurred while deleting groovy script cache").setStyle(StyleConstant.getErrorStyle()));
             }
         }));
 
@@ -117,7 +117,7 @@ public class GSCommand extends CommandTreeBase {
 
         addSubcommand(new SimpleCommand("cleanLog", (server, sender, args) -> {
             GroovyLogImpl.LOG.cleanLog();
-            sender.sendMessage(new TextComponentString("Cleaned Groovy log").setStyle(StyleConstant.SUCCESS_STYLE));
+            sender.sendMessage(new TextComponentString("Cleaned Groovy log").setStyle(StyleConstant.getSuccessStyle()));
         }));
 
         if (ModSupport.MEKANISM.isLoaded()) {

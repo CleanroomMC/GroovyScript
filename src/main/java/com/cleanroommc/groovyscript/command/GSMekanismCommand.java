@@ -39,7 +39,7 @@ public class GSMekanismCommand extends CommandTreeBase {
     @Override
     public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String @NotNull [] args) throws CommandException {
         if (!ModSupport.MEKANISM.isLoaded()) {
-            sender.sendMessage(new TextComponentString("Mekanism is not loaded!").setStyle(StyleConstant.ERROR_STYLE));
+            sender.sendMessage(new TextComponentString("Mekanism is not loaded!").setStyle(StyleConstant.getErrorStyle()));
             return;
         }
         super.execute(server, sender, args);

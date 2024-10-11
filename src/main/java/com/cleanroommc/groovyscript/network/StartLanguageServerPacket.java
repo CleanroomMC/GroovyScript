@@ -18,9 +18,9 @@ public class StartLanguageServerPacket implements IPacket {
     @Override
     public IPacket executeClient(NetHandlerPlayClient handler) {
         if (GroovyScript.runLanguageServer()) {
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Starting language server").setStyle(StyleConstant.SUCCESS_STYLE));
+            Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Starting language server").setStyle(StyleConstant.getSuccessStyle()));
         } else {
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Language server is already running").setStyle(StyleConstant.WARNING_STYLE));
+            Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Language server is already running").setStyle(StyleConstant.getWarningStyle()));
         }
         return null;
     }

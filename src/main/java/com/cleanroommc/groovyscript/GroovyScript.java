@@ -278,21 +278,21 @@ public class GroovyScript {
             if (!onlyLogFails) {
                 if (running) {
                     String s = packmode ? "changes packmode" : "reloaded scripts";
-                    sender.sendMessage(new TextComponentString("Successfully " + s).setStyle(StyleConstant.SUCCESS_STYLE).appendSibling(new TextComponentString(" in " + time + "ms")));
+                    sender.sendMessage(new TextComponentString("Successfully " + s).setStyle(StyleConstant.getSuccessStyle()).appendSibling(new TextComponentString(" in " + time + "ms")));
                 } else {
-                    sender.sendMessage(new TextComponentString("No syntax errors found :)").setStyle(StyleConstant.SUCCESS_STYLE));
+                    sender.sendMessage(new TextComponentString("No syntax errors found :)").setStyle(StyleConstant.getSuccessStyle()));
                 }
             }
         } else {
             String executing = running ? "running" : "checking";
-            sender.sendMessage(new TextComponentString("Found " + errors.size() + " errors while " + executing + " scripts").setStyle(StyleConstant.ERROR_STYLE));
+            sender.sendMessage(new TextComponentString("Found " + errors.size() + " errors while " + executing + " scripts").setStyle(StyleConstant.getErrorStyle()));
             int n = errors.size();
             if (errors.size() >= 10) {
-                sender.sendMessage(new TextComponentString("Displaying the first 7 errors:").setStyle(StyleConstant.TITLE_STYLE));
+                sender.sendMessage(new TextComponentString("Displaying the first 7 errors:").setStyle(StyleConstant.getTitleStyle()));
                 n = 7;
             }
             for (int i = 0; i < n; i++) {
-                sender.sendMessage(new TextComponentString(errors.get(i)).setStyle(StyleConstant.ERROR_STYLE));
+                sender.sendMessage(new TextComponentString(errors.get(i)).setStyle(StyleConstant.getErrorStyle()));
             }
             GSCommand.postLogFiles(sender);
         }
