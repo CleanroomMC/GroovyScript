@@ -24,14 +24,14 @@ public class GSMekanismCommand extends CommandTreeBase {
             sender.sendMessage(new TextComponentString("Mekanism gases:"));
             for (Gas gas : GasRegistry.getRegisteredGasses()) {
                 String copyText = Mekanism.asGroovyCode(gas, true);
-                sender.sendMessage(TextCopyable.string(copyText, " - " + gas.getName()).build());
+                sender.sendMessage(TextCopyable.string(copyText, " - " + copyText).build());
             }
         }, "gases"));
         addSubcommand(new SimpleCommand("infusionTypes", (server, sender, args) -> {
             sender.sendMessage(new TextComponentString("Mekanism infusion types:"));
             for (InfuseType infuseType : InfuseRegistry.getInfuseMap().values()) {
-                String copyText = "'" + infuseType.name + "'";
-                sender.sendMessage(TextCopyable.string(copyText, " - " + infuseType.name).build());
+                String copyText = Mekanism.asGroovyCode(infuseType, true);
+                sender.sendMessage(TextCopyable.string(copyText, " - " + copyText).build());
             }
         }));
     }
