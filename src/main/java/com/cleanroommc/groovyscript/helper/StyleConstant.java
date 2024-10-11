@@ -30,10 +30,10 @@ public class StyleConstant {
     public static final TextFormatting STRING = TextFormatting.GREEN;
 
     /**
-     * Used for the object mapper name:
-     * <b>item</b>('minecraft:clay'), <b>fluid</b>('water')
+     * Used for method names, most commonly the object mapper name:
+     * <b>call</b>(), <b>item</b>('minecraft:clay'), <b>fluid</b>('water')
      */
-    public static final TextFormatting MAPPER = TextFormatting.AQUA;
+    public static final TextFormatting METHOD = TextFormatting.AQUA;
 
     /**
      * Used for creating a new object:

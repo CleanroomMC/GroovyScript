@@ -46,7 +46,7 @@ public class GroovyScriptCodeConverter {
 
     public static String formatGenericHandler(String handler, String target, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(StyleConstant.MAPPER);
+        if (colored) builder.append(StyleConstant.METHOD);
         builder.append(handler);
         if (colored) builder.append(StyleConstant.BASE);
         builder.append("('");
@@ -58,12 +58,11 @@ public class GroovyScriptCodeConverter {
     }
 
     public static String formatMultiple(int amount, boolean colored) {
+        if (amount <= 1) return "";
         StringBuilder builder = new StringBuilder();
-        if (amount > 1) {
-            if (colored) builder.append(StyleConstant.BASE);
-            builder.append(" * ");
-            builder.append(formatNumber(amount, colored));
-        }
+        if (colored) builder.append(StyleConstant.BASE);
+        builder.append(" * ");
+        builder.append(formatNumber(amount, colored));
         return builder.toString();
     }
 
@@ -93,7 +92,12 @@ public class GroovyScriptCodeConverter {
     public static String formatNBTTag(NBTTagCompound tag, boolean colored, boolean prettyNbt) {
         StringBuilder builder = new StringBuilder();
         if (tag != null) {
-            builder.append(".withNbt(");
+            if (colored) builder.append(StyleConstant.BASE);
+            builder.append(".");
+            if (colored) builder.append(StyleConstant.METHOD);
+            builder.append("withNbt");
+            if (colored) builder.append(StyleConstant.BASE);
+            builder.append("(");
             builder.append(NbtHelper.toGroovyCode(tag, prettyNbt, colored));
             if (colored) builder.append(StyleConstant.BASE);
             builder.append(")");
@@ -103,7 +107,7 @@ public class GroovyScriptCodeConverter {
 
     private static String getSingleItemStack(ItemStack itemStack, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(StyleConstant.MAPPER);
+        if (colored) builder.append(StyleConstant.METHOD);
         builder.append("item");
         if (colored) builder.append(StyleConstant.BASE);
         builder.append("('");
@@ -197,7 +201,7 @@ public class GroovyScriptCodeConverter {
     @SuppressWarnings("all")
     public static String asGroovyCode(IBlockState state, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        if (colored) builder.append(StyleConstant.MAPPER);
+        if (colored) builder.append(StyleConstant.METHOD);
         builder.append("blockstate");
         if (colored) builder.append(StyleConstant.BASE);
         builder.append("('");
