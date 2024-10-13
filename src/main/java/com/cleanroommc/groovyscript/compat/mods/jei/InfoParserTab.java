@@ -30,7 +30,7 @@ public class InfoParserTab extends GenericInfoParser<IRecipeCategory> {
 
     @Override
     public String text(@NotNull IRecipeCategory entry, boolean colored, boolean prettyNbt) {
-        return colored ? StyleConstant.STRING + entry.getUid() : entry.getUid();
+        return StyleConstant.STRING + entry.getUid();
     }
 
     @Override
