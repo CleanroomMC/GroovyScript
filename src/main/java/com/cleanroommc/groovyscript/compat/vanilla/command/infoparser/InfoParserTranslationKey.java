@@ -20,7 +20,7 @@ public class InfoParserTranslationKey extends GenericInfoParser<String> {
 
     @Override
     public String text(@NotNull String entry, boolean colored, boolean prettyNbt) {
-        return StyleConstant.STRING + entry;
+        return colored ? StyleConstant.STRING + entry : entry;
     }
 
     @Override

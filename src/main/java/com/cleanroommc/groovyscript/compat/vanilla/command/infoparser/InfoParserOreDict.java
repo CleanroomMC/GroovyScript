@@ -30,7 +30,7 @@ public class InfoParserOreDict extends GenericInfoParser<String> {
 
     @Override
     public String text(@NotNull String entry, boolean colored, boolean prettyNbt) {
-        return GroovyScriptCodeConverter.asGroovyCode(entry, true);
+        return GroovyScriptCodeConverter.asGroovyCode(entry, colored);
     }
 
     @Override
