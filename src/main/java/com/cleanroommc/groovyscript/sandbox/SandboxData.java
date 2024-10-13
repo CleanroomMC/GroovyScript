@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -143,7 +144,7 @@ public class SandboxData {
             if (!rootFile.exists()) {
                 continue;
             }
-            int pathSize = path.split(separator).length;
+            int pathSize = StringUtils.countMatches(path, separator);
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
                 stream.filter(path1 -> isGroovyFile(path1.toString())).map(Path::toFile)
                       //.filter(Preprocessor::validatePreprocessors)
