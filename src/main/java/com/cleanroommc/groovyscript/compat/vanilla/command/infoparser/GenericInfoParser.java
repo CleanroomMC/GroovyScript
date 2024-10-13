@@ -96,7 +96,7 @@ public abstract class GenericInfoParser<T> implements InfoParser {
 
     /**
      * The text that will display in chat.
-     * The primary difference from {@link #copyText} is containing formatting codes.
+     * This may be different from {@link #copyText} for instances in which too much text would be added to chat.
      * Typically valid GroovyScript code.
      *
      * @param entry     the entry to be parsed
@@ -109,7 +109,7 @@ public abstract class GenericInfoParser<T> implements InfoParser {
 
     /**
      * The text that will be copied when the entry is clicked on.
-     * The primary difference from {@link #msg} is lacking formatting codes.
+     * This may be different from {@link #msg} when it would be trimmed due to being too long.
      * Typically valid GroovyScript code.
      *
      * @param entry     the entry to be parsed
