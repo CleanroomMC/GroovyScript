@@ -86,10 +86,12 @@ public abstract class CompilationUnitFactoryBase implements ICompilationUnitFact
 
     protected void addOpenFileToCompilationUnit(URI uri, String contents, GroovyLSCompilationUnit compilationUnit) {
         Path filePath = Paths.get(uri);
-        SourceUnit sourceUnit = new SourceUnit(filePath.toString(),
-                                               new StringReaderSourceWithURI(contents, uri, compilationUnit.getConfiguration()),
-                                               compilationUnit.getConfiguration(), compilationUnit.getClassLoader(),
-                                               compilationUnit.getErrorCollector());
+        SourceUnit sourceUnit = new SourceUnit(
+                filePath.toString(),
+                new StringReaderSourceWithURI(contents, uri, compilationUnit.getConfiguration()),
+                compilationUnit.getConfiguration(),
+                compilationUnit.getClassLoader(),
+                compilationUnit.getErrorCollector());
         compilationUnit.addSource(sourceUnit);
     }
 }

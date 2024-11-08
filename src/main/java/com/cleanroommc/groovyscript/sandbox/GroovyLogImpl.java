@@ -292,14 +292,7 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     private String formatLine(String level, String msg) {
-        return timeFormat.format(new Date()) +
-                (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") +
-                level +
-                "]" +
-                " [" +
-                getSource() +
-                "]: " +
-                msg;
+        return timeFormat.format(new Date()) + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") + level + "]" + " [" + getSource() + "]: " + msg;
     }
 
     private String getSource() {
@@ -336,7 +329,8 @@ public class GroovyLogImpl implements GroovyLog {
         private final List<String> messages = new ArrayList<>();
         private Level level = Level.INFO;
         private boolean logToMcLog;
-        @Nullable private Throwable throwable;
+        @Nullable
+        private Throwable throwable;
 
         private MsgImpl(String msg, Object... data) {
             this.mainMsg = GroovyLog.format(msg, data);
@@ -358,7 +352,7 @@ public class GroovyLogImpl implements GroovyLog {
             if (condition) {
                 if (args != null && args.length > 0) {
                     for (int i = 0; i < args.length; i++) {
-                        if (args[i] instanceof Supplier<?> s) {
+                        if (args[i] instanceof Supplier<?>s) {
                             args[i] = s.get();
                         }
                     }

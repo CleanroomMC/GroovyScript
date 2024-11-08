@@ -117,7 +117,9 @@ public class Resonator extends StandardListRegistry<IResonatorRecipe> {
                         .post();
                 return this;
             }
-            if (!Arrays.equals(shouldProgress.getParameterTypes(), new Class[]{TileEntity.class, int.class, ItemStack.class})) {
+            if (!Arrays.equals(shouldProgress.getParameterTypes(), new Class[]{
+                    TileEntity.class, int.class, ItemStack.class
+            })) {
                 GroovyLog.msg("Extra Utilities 2 Resonator shouldProgress closure should be a closure with exactly three parameters:")
                         .add("net.minecraft.tileentity.TileEntity resonator, int frequency, net.minecraft.item.ItemStack input in that order.")
                         .add("but had {}, {}, {} instead", (Object[]) shouldProgress.getParameterTypes())
@@ -129,7 +131,9 @@ public class Resonator extends StandardListRegistry<IResonatorRecipe> {
         }
 
         @SuppressWarnings("unchecked")
-        @RecipeBuilderMethodDescription(field = {"requirementText", "shouldProgress"})
+        @RecipeBuilderMethodDescription(field = {
+                "requirementText", "shouldProgress"
+        })
         public RecipeBuilder rainbow() {
             this.requirementText = Lang.translate("[Requires an active Rainbow Generator]");
 
@@ -171,6 +175,7 @@ public class Resonator extends StandardListRegistry<IResonatorRecipe> {
         public IResonatorRecipe register() {
             if (!validate()) return null;
             IResonatorRecipe recipe = new ResonatorRecipe(input.get(0).getMatchingStacks()[0], output.get(0), energy, ownerTag) {
+
                 @Override
                 public String getRequirementText() {
                     return requirementText == null ? "" : requirementText;

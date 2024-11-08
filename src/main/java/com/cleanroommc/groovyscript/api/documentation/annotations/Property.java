@@ -45,7 +45,9 @@ import java.lang.reflect.Field;
  */
 @Repeatable(Property.Properties.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.TYPE})
+@Target({
+        ElementType.FIELD, ElementType.TYPE
+})
 public @interface Property {
 
     /**
@@ -226,7 +228,5 @@ public @interface Property {
     @interface Properties {
 
         Property[] value();
-
     }
-
 }

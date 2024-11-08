@@ -88,7 +88,5 @@ public class BoilerFuel extends StandardListRegistry<BoilerRecipe.BoilerFuelReci
             ModSupport.IMMERSIVE_TECHNOLOGY.get().boilerFuel.add(recipe);
             return recipe;
         }
-
     }
-
 }

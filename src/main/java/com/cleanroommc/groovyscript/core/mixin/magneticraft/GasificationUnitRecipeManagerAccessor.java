@@ -14,5 +14,4 @@ public interface GasificationUnitRecipeManagerAccessor {
     static List<IGasificationUnitRecipe> getRecipes() {
         throw new UnsupportedOperationException();
     }
-
 }

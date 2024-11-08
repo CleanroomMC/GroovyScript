@@ -79,5 +79,4 @@ public class PlasmaGenerator extends AbstractGeneratorRegistry {
             return recipe;
         }
     }
-
 }

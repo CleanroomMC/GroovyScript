@@ -15,5 +15,4 @@ public class AdvancedRocketry extends GroovyPropertyContainer {
     public final PrecisionLaserEtcher laserEtcher = new PrecisionLaserEtcher();
     public final RollingMachine rolling = new RollingMachine();
     public final SmallPlatePresser platePress = new SmallPlatePresser();
-
 }

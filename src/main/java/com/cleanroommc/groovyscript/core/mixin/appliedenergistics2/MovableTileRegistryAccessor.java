@@ -17,5 +17,4 @@ public interface MovableTileRegistryAccessor {
 
     @Accessor("Valid")
     HashMap<Class<? extends TileEntity>, IMovableHandler> getValid();
-
 }

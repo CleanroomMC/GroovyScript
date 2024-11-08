@@ -79,8 +79,10 @@ class CompiledScript extends CompiledClass {
     }
 
     public static CompiledScript fromJson(JsonObject json, String scriptRoot, String cacheRoot) {
-        CompiledScript cs = new CompiledScript(json.get("path").getAsString(), JsonHelper.getString(json, null, "name"),
-                                               json.get("lm").getAsLong());
+        CompiledScript cs = new CompiledScript(
+                json.get("path").getAsString(),
+                JsonHelper.getString(json, null, "name"),
+                json.get("lm").getAsLong());
         if (new File(scriptRoot, cs.path).exists()) {
             if (json.has("inner")) {
                 for (JsonElement element : json.getAsJsonArray("inner")) {
@@ -110,15 +112,16 @@ class CompiledScript extends CompiledClass {
 
     public boolean checkPreprocessors(File basePath) {
         return this.preprocessors == null || this.preprocessors.isEmpty() || Preprocessor.validatePreprocessor(
-                new File(basePath, this.path), this.preprocessors);
+                new File(basePath, this.path),
+                this.preprocessors);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("name", name)
-                                        .append("path", path)
-                                        .append("innerClasses", innerClasses)
-                                        .append("lastEdited", lastEdited)
-                                        .toString();
+                .append("path", path)
+                .append("innerClasses", innerClasses)
+                .append("lastEdited", lastEdited)
+                .toString();
     }
 }

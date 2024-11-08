@@ -14,5 +14,4 @@ public interface HydraulicPressRecipeManagerAccessor {
     static List<IHydraulicPressRecipe> getRecipes() {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -164,7 +164,8 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
             for (String error : errors) {
                 msg.add(error);
             }
-            String missingKeys = shape.stream().flatMap(l -> l.stream().flatMap(g -> Arrays.stream(g.split("")).map(q -> q.charAt(0))))
+            String missingKeys = shape.stream()
+                    .flatMap(l -> l.stream().flatMap(g -> Arrays.stream(g.split("")).map(q -> q.charAt(0))))
                     .distinct()
                     .filter(x -> !(keyMap.containsKey(x) || x == ' ' || x == '_'))
                     .map(String::valueOf)
@@ -188,8 +189,12 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
                     ticks
             );
 
-            String[][][] target = shape.stream().map(l -> l.stream().map(g -> g.replace(" ", "_").split(""))
-                    .toArray(String[][]::new)).toArray(String[][][]::new);
+            String[][][] target = shape.stream()
+                    .map(
+                            l -> l.stream()
+                                    .map(g -> g.replace(" ", "_").split(""))
+                                    .toArray(String[][]::new))
+                    .toArray(String[][][]::new);
 
             recipe.setPositionMap(target);
 
@@ -234,9 +239,6 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
             public ItemStack getReference() {
                 return reference;
             }
-
         }
-
     }
-
 }

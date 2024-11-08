@@ -68,8 +68,8 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<MixerRecipe> recipes = getRecipes().stream().filter(r -> r.itemInputs.length == itemInputs.length &&
-                                                                                Arrays.stream(itemInputs).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
+        List<MixerRecipe> recipes = getRecipes().stream()
+                .filter(r -> r.itemInputs.length == itemInputs.length && Arrays.stream(itemInputs).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
                 .collect(Collectors.toList());
         for (MixerRecipe recipe : recipes) {
             remove(recipe);
@@ -91,9 +91,8 @@ public class Mixer extends StandardListRegistry<MixerRecipe> {
                 .postIfNotEmpty()) {
             return;
         }
-        List<MixerRecipe> recipes = getRecipes().stream().filter(r -> fluidInput.isFluidEqual(r.fluidInput) &&
-                                                                                r.itemInputs.length == itemInput.length &&
-                                                                                Arrays.stream(itemInput).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
+        List<MixerRecipe> recipes = getRecipes().stream()
+                .filter(r -> fluidInput.isFluidEqual(r.fluidInput) && r.itemInputs.length == itemInput.length && Arrays.stream(itemInput).anyMatch(check -> Arrays.stream(r.itemInputs).anyMatch(target -> ImmersiveEngineering.areIngredientsEquals(target, check))))
                 .collect(Collectors.toList());
         for (MixerRecipe recipe : recipes) {
             remove(recipe);

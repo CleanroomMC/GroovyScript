@@ -22,10 +22,9 @@ public class Catalyst extends VirtualizedRegistry<Pair<String, ItemStack>> {
     @GroovyBlacklist
     public void applyChanges(IModRegistry modRegistry) {
         for (var backupRecipe : getBackupRecipes()) {
-            ((ModRegistryAccessor) modRegistry).getRecipeCatalysts().get(backupRecipe.getKey())
-                    .removeIf(x -> backupRecipe.getValue() == null ||
-                                   x instanceof ItemStack &&
-                                   ItemStack.areItemStacksEqual((ItemStack) x, backupRecipe.getValue()));
+            ((ModRegistryAccessor) modRegistry).getRecipeCatalysts()
+                    .get(backupRecipe.getKey())
+                    .removeIf(x -> backupRecipe.getValue() == null || x instanceof ItemStack && ItemStack.areItemStacksEqual((ItemStack) x, backupRecipe.getValue()));
         }
         for (var scriptedRecipe : getScriptedRecipes()) {
             modRegistry.addRecipeCatalyst(scriptedRecipe.getValue(), scriptedRecipe.getKey());
@@ -72,5 +71,4 @@ public class Catalyst extends VirtualizedRegistry<Pair<String, ItemStack>> {
     public void removeByType(String category) {
         addBackup(Pair.of(category, null));
     }
-
 }

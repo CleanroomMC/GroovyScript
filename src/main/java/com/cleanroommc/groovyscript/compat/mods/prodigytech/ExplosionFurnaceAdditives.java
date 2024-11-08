@@ -36,7 +36,8 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example("item('minecraft:cobblestone'), 50"), type = MethodDescription.Type.ADDITION)
     public void addExplosive(IIngredient explosive, int power) {
         if (IngredientHelper.overMaxSize(explosive, 1)) {
-            GroovyLog.msg("Error adding Explosion Furnace Explosive").error()
+            GroovyLog.msg("Error adding Explosion Furnace Explosive")
+                    .error()
                     .add("Expected input stack size of 1")
                     .post();
             return;
@@ -67,7 +68,8 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
     @MethodDescription(example = @Example("item('minecraft:stone'), 50"), type = MethodDescription.Type.ADDITION)
     public void addDampener(IIngredient dampener, int power) {
         if (IngredientHelper.overMaxSize(dampener, 1)) {
-            GroovyLog.msg("Error adding Explosion Furnace Dampener").error()
+            GroovyLog.msg("Error adding Explosion Furnace Dampener")
+                    .error()
                     .add("Expected input stack size of 1")
                     .post();
             return;
@@ -91,8 +93,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAllDampeners() {
-        ExplosionFurnaceManager.DAMPENERS.getAllContent().forEach(r ->
-                                                                          addBackup(new EFAdditiveDampener(new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
+        ExplosionFurnaceManager.DAMPENERS.getAllContent().forEach(r -> addBackup(new EFAdditiveDampener(new ItemsIngredient(r.getMatchingStacks()), r.getDampening())));
         ExplosionFurnaceManager.removeAllDampeners();
     }
 
@@ -149,8 +150,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (EFAdditiveExplosive) obj;
-            return Objects.equals(this.input, that.input) &&
-                   this.value == that.value;
+            return Objects.equals(this.input, that.input) && this.value == that.value;
         }
 
         @Override
@@ -160,9 +160,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
         @Override
         public String toString() {
-            return "EFAdditiveExplosive[" +
-                   "input=" + input + ", " +
-                   "value=" + value + ']';
+            return "EFAdditiveExplosive[" + "input=" + input + ", " + "value=" + value + ']';
         }
     }
 
@@ -212,8 +210,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (EFAdditiveDampener) obj;
-            return Objects.equals(this.input, that.input) &&
-                   this.value == that.value;
+            return Objects.equals(this.input, that.input) && this.value == that.value;
         }
 
         @Override
@@ -223,9 +220,7 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
         @Override
         public String toString() {
-            return "EFAdditiveDampener[" +
-                   "input=" + input + ", " +
-                   "value=" + value + ']';
+            return "EFAdditiveDampener[" + "input=" + input + ", " + "value=" + value + ']';
         }
     }
 }

@@ -78,5 +78,4 @@ public class Enchanter extends ForgeRegistryWrapper<AetherEnchantment> {
             return enchantment;
         }
     }
-
 }

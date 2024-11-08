@@ -24,7 +24,9 @@ import java.util.stream.Stream;
  */
 public class SandboxData {
 
-    public static final String[] GROOVY_SUFFIXES = {".groovy", ".gvy", ".gy", ".gsh"};
+    public static final String[] GROOVY_SUFFIXES = {
+            ".groovy", ".gvy", ".gy", ".gsh"
+    };
     private static File minecraftHome;
     private static File scriptPath;
     private static File runConfigFile;
@@ -63,7 +65,9 @@ public class SandboxData {
         resourcesFile = new File(scriptPath, "assets");
         try {
             rootUrl = scriptPath.toURI().toURL();
-            rootUrls = new URL[]{rootUrl};
+            rootUrls = new URL[]{
+                    rootUrl
+            };
         } catch (MalformedURLException e) {
             throw new IllegalStateException("Failed to create URL from script path " + scriptPath);
         }
@@ -148,18 +152,20 @@ public class SandboxData {
             // otherwise, we want to use the specificity based on the number of file separators.
             int pathSize = StringUtils.countMatches(path, separator);
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
-                stream.filter(path1 -> isGroovyFile(path1.toString())).map(Path::toFile)
-                      //.filter(Preprocessor::validatePreprocessors)
-                      .sorted(Comparator.comparing(File::getPath)).forEach(file -> {
-                          if (files.containsKey(file)) {
-                              // if the file already exists, push the priority down if we are more specific than the already existing entry
-                              if (pathSize > files.getInt(file)) {
-                                  files.putAndMoveToLast(file, pathSize);
-                              }
-                          } else {
-                              files.put(file, pathSize);
-                          }
-                      });
+                stream.filter(path1 -> isGroovyFile(path1.toString()))
+                        .map(Path::toFile)
+                        //.filter(Preprocessor::validatePreprocessors)
+                        .sorted(Comparator.comparing(File::getPath))
+                        .forEach(file -> {
+                            if (files.containsKey(file)) {
+                                // if the file already exists, push the priority down if we are more specific than the already existing entry
+                                if (pathSize > files.getInt(file)) {
+                                    files.putAndMoveToLast(file, pathSize);
+                                }
+                            } else {
+                                files.put(file, pathSize);
+                            }
+                        });
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

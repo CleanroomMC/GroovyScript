@@ -51,5 +51,4 @@ public class OreFermenter extends StandardListRegistry<OreFluidEntryFermenter> {
             return false;
         });
     }
-
 }

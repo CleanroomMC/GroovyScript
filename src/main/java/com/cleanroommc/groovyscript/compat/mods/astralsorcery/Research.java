@@ -284,7 +284,6 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
             this.connections.forEach(researchNode::addSourceConnectionFrom);
             ModSupport.ASTRAL_SORCERY.get().research.addNode(category, researchNode);
         }
-
     }
 
     public static class JournalPageBuilder {
@@ -338,7 +337,5 @@ public class Research extends VirtualizedRegistry<ResearchNode> {
         public IJournalPage emptyPage() {
             return new JournalPageEmpty();
         }
-
     }
-
 }

@@ -19,5 +19,4 @@ public class PyroTech extends GroovyPropertyContainer {
     public static final Anvil anvil = new Anvil();
     public static final SoakingPot soakingPot = new SoakingPot();
     public static final TanningRack tanningRack = new TanningRack();
-
 }

@@ -106,8 +106,7 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
                 List<String> suggestions = conflicts.stream()
                         .map(goh -> goh.getMod() == null ? goh.getName() : "mods." + goh.getMod().getModId() + "." + goh.getName())
                         .collect(Collectors.toList());
-                String msg = GroovyLog.format("Can't infer ObjectMapper from name {}, since one is added by {} mods. " +
-                                              "Please choose one of the following: {}", mce.getMethodAsString(), conflicts.size(), suggestions);
+                String msg = GroovyLog.format("Can't infer ObjectMapper from name {}, since one is added by {} mods. " + "Please choose one of the following: {}", mce.getMethodAsString(), conflicts.size(), suggestions);
                 source.addError(new SyntaxException(msg, mce));
             }
         }

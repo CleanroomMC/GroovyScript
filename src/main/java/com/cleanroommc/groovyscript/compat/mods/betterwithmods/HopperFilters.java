@@ -138,5 +138,4 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
             return recipe;
         }
     }
-
 }

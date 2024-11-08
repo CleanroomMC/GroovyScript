@@ -150,6 +150,7 @@ public class ExpansionHelper {
                     metaMethod = new NewInstanceMetaMethod(method);
                 else
                     metaMethod = new NewInstanceMetaMethod(method) {
+
                         @Override
                         public CachedClass getDeclaringClass() {
                             return ReflectionCache.getCachedClass(self.getTheClass());
@@ -173,13 +174,21 @@ public class ExpansionHelper {
         mixinProperty(self, name, type, s -> obj, null, hidden);
     }
 
-    public static <T, S> void mixinProperty(Class<S> self, String name, Class<T> type,
-                                            @Nullable Supplier<T> getter, @Nullable Consumer<T> setter, boolean hidden) {
+    public static <T, S> void mixinProperty(Class<S> self,
+                                            String name,
+                                            Class<T> type,
+                                            @Nullable Supplier<T> getter,
+                                            @Nullable Consumer<T> setter,
+                                            boolean hidden) {
         mixinProperty(self, name, type, getter != null ? s -> getter.get() : null, setter != null ? (s, t) -> setter.accept(t) : null, hidden);
     }
 
-    public static <T, S> void mixinProperty(Class<S> self, String name, Class<T> type,
-                                            @Nullable Function<S, T> getter, @Nullable BiConsumer<S, T> setter, boolean hidden) {
+    public static <T, S> void mixinProperty(Class<S> self,
+                                            String name,
+                                            Class<T> type,
+                                            @Nullable Function<S, T> getter,
+                                            @Nullable BiConsumer<S, T> setter,
+                                            boolean hidden) {
         if (getter == null && setter == null) return;
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Name for property must not be empty!");
@@ -187,10 +196,10 @@ public class ExpansionHelper {
         String upperName = name;
         if (!Character.isDigit(name.charAt(0))) upperName = BeanUtils.capitalize(name);
         if (getter == null) {
-            getter = so -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is writable, but not readable!");};
+            getter = so -> { throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is writable, but not readable!"); };
         }
         if (setter == null) {
-            setter = (so, t) -> {throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is readable, but not writable!");};
+            setter = (so, t) -> { throw new GroovyRuntimeException("Property '" + name + "' in " + self.getName() + " is readable, but not writable!"); };
         }
 
         MetaMethod g = new Getter<>("get" + upperName, type, self, getter);
@@ -202,18 +211,14 @@ public class ExpansionHelper {
 
     private static boolean isValid(CachedMethod method) {
         final int mod = method.getModifiers();
-        return Modifier.isPublic(mod) && !Modifier.isAbstract(mod) && !method.isSynthetic() &&
-               method.getAnnotation(Internal.class) == null &&
-               method.getAnnotation(GroovyBlacklist.class) == null;
+        return Modifier.isPublic(mod) && !Modifier.isAbstract(mod) && !method.isSynthetic() && method.getAnnotation(Internal.class) == null && method.getAnnotation(GroovyBlacklist.class) == null;
     }
 
     private static boolean isValid(CachedField cachedField) {
         if (cachedField == null) return true;
         final int mod = cachedField.getModifiers();
         Field field = cachedField.getCachedField();
-        return Modifier.isPublic(mod) && !field.isSynthetic() &&
-               !field.isAnnotationPresent(Internal.class) &&
-               !field.isAnnotationPresent(GroovyBlacklist.class);
+        return Modifier.isPublic(mod) && !field.isSynthetic() && !field.isAnnotationPresent(Internal.class) && !field.isAnnotationPresent(GroovyBlacklist.class);
     }
 
     /**

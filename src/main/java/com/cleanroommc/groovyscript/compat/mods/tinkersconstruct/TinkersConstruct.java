@@ -37,8 +37,9 @@ public class TinkersConstruct extends GroovyPropertyContainer {
                 .register();
         container.objectMapperBuilder("armorTrait", ITrait.class)
                 .parser(IObjectParser.wrapStringGetter(s -> TinkerRegistryAccessor.getTraits().get(s + "_armor")))
-                .completerOfNamed(TinkerRegistryAccessor.getTraits()::keySet,
-                                  v -> v.endsWith("_armor") ? v.substring(0, v.length() - 6) : null) // only suggest armor traits
+                .completerOfNamed(
+                        TinkerRegistryAccessor.getTraits()::keySet,
+                        v -> v.endsWith("_armor") ? v.substring(0, v.length() - 6) : null) // only suggest armor traits
                 .docOfType("armor trait")
                 .register();
     }

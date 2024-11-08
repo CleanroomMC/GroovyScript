@@ -22,5 +22,4 @@ public interface CustomDropAccessor {
 
     @Accessor
     HashMap<EnumEnchantKey, Integer> getSizeMap();
-
 }

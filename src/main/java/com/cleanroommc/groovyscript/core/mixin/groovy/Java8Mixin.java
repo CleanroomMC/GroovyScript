@@ -2,8 +2,8 @@ package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
-import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.*;
+import org.codehaus.groovy.ast.Parameter;
 import org.codehaus.groovy.ast.expr.ConstantExpression;
 import org.codehaus.groovy.ast.stmt.ReturnStatement;
 import org.codehaus.groovy.vmplugin.v8.Java8;

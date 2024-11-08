@@ -26,5 +26,4 @@ public interface EnchanterManagerAccessor {
     static Set<ComparableItemStackValidatedNBT> getLockSet() {
         throw new UnsupportedOperationException();
     }
-
 }

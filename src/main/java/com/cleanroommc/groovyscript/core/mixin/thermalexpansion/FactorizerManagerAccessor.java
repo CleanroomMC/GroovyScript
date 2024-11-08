@@ -19,5 +19,4 @@ public interface FactorizerManagerAccessor {
     static Map<ComparableItemStackValidated, FactorizerManager.FactorizerRecipe> getRecipeMapReverse() {
         throw new UnsupportedOperationException();
     }
-
 }

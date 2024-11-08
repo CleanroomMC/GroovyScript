@@ -219,9 +219,7 @@ public class GroovyFluid extends Fluid {
             FluidRegistry.registerFluid(fluid);
             FluidRegistry.addBucketForFluid(fluid);
             if (this.createBlock) {
-                BlockFluidBase block = this.finiteFluidBlock ?
-                                       new BlockFluidFinite(fluid, this.material) :
-                                       new BlockFluidClassic(fluid, this.material);
+                BlockFluidBase block = this.finiteFluidBlock ? new BlockFluidFinite(fluid, this.material) : new BlockFluidClassic(fluid, this.material);
                 block.setRegistryName(new ResourceLocation(mod, this.name));
                 fluidBlocks.add(block);
             }

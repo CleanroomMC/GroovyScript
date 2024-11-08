@@ -76,5 +76,4 @@ public class EnderCrafting extends StandardListRegistry<IRecipe> {
             return false;
         });
     }
-
 }

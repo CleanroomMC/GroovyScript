@@ -50,5 +50,4 @@ public abstract class NamedRegistry implements INamed {
     public List<String> getAliases() {
         return aliases;
     }
-
 }

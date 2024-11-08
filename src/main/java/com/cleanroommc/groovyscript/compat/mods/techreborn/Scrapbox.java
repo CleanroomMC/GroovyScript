@@ -71,5 +71,4 @@ public class Scrapbox extends AbstractGenericTechRebornRegistry {
             return recipe;
         }
     }
-
 }

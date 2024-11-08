@@ -11,5 +11,4 @@ public interface FluidRarityRegistryAccessor {
 
     @Accessor
     List<FluidRarityRegistry.FluidRarityEntry> getRarityList();
-
 }

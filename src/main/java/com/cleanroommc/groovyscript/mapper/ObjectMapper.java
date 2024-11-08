@@ -142,13 +142,18 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         if (methodNodes == null) {
             this.methodNodes = new ArrayList<>();
             for (Class<?>[] paramType : this.paramTypes) {
-                Parameter[] params = ArrayUtils.map(paramType, c -> new Parameter(ClassHelper.makeCached(c), ""),
-                                                    new Parameter[paramType.length]);
-                MethodNode node = new MethodNode(this.name, Modifier.PUBLIC | Modifier.FINAL,
-                                                 ClassHelper.makeCached(this.returnType), params, null, null);
-                node.setDeclaringClass(this.mod != null ?
-                                       ClassHelper.makeCached(this.mod.get().getClass()) :
-                                       ClassHelper.makeCached(ObjectMapperManager.class));
+                Parameter[] params = ArrayUtils.map(
+                        paramType,
+                        c -> new Parameter(ClassHelper.makeCached(c), ""),
+                        new Parameter[paramType.length]);
+                MethodNode node = new MethodNode(
+                        this.name,
+                        Modifier.PUBLIC | Modifier.FINAL,
+                        ClassHelper.makeCached(this.returnType),
+                        params,
+                        null,
+                        null);
+                node.setDeclaringClass(this.mod != null ? ClassHelper.makeCached(this.mod.get().getClass()) : ClassHelper.makeCached(ObjectMapperManager.class));
                 node.setNodeMetaData(GroovydocHolder.DOC_COMMENT, new Groovydoc(this.documentation, node));
                 this.methodNodes.add(node);
             }
@@ -356,11 +361,21 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
                 throw new IllegalArgumentException("Tried to register ObjectMapper for mod " + this.mod + ", but it's not loaded");
             Objects.requireNonNull(this.handler, () -> "The ObjectMapper function must no be null");
             Objects.requireNonNull(this.returnType, () -> "The ObjectMapper return type must not be null");
-            if (this.paramTypes.isEmpty()) this.paramTypes.add(new Class[]{String.class});
+            if (this.paramTypes.isEmpty()) this.paramTypes.add(new Class[]{
+                    String.class
+            });
             if (this.defaultValue == null) this.defaultValue = () -> null;
             this.documentation = IDocumented.toJavaDoc(this.documentation);
-            ObjectMapper<T> goh = new ObjectMapper<>(this.name, this.mod, this.handler, this.defaultValue,
-                                                     this.returnType, this.paramTypes, this.completer, this.documentation, this.textureBinder);
+            ObjectMapper<T> goh = new ObjectMapper<>(
+                    this.name,
+                    this.mod,
+                    this.handler,
+                    this.defaultValue,
+                    this.returnType,
+                    this.paramTypes,
+                    this.completer,
+                    this.documentation,
+                    this.textureBinder);
             ObjectMapperManager.registerObjectMapper(this.mod, goh);
         }
     }
