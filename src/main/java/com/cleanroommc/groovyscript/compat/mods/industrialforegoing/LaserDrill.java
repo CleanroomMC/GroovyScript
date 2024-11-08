@@ -256,5 +256,4 @@ public class LaserDrill extends VirtualizedRegistry<Pair<LaserDrillEntry.LaserDr
             return recipe;
         }
     }
-
 }

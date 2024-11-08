@@ -80,8 +80,7 @@ public class GroovyLanguageServer<T extends GroovyServices> implements LanguageS
     }
 
     @Override
-    public void exit() {
-    }
+    public void exit() {}
 
     @Override
     public TextDocumentService getTextDocumentService() {
@@ -94,9 +93,7 @@ public class GroovyLanguageServer<T extends GroovyServices> implements LanguageS
     }
 
     @Override
-    public void setTrace(SetTraceParams params) {
-
-    }
+    public void setTrace(SetTraceParams params) {}
 
     @Override
     public void connect(LanguageClient client) {

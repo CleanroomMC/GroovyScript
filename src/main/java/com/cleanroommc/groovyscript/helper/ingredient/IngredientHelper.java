@@ -281,5 +281,4 @@ public class IngredientHelper {
     public static String asGroovyCode(IBlockState state, boolean colored) {
         return GroovyScriptCodeConverter.asGroovyCode(state, colored);
     }
-
 }

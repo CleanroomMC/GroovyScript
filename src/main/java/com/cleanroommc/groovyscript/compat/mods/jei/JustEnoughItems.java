@@ -15,5 +15,4 @@ public class JustEnoughItems extends GroovyPropertyContainer {
     public void initialize(GroovyContainer<?> owner) {
         InfoParserRegistry.addInfoParser(InfoParserTab.instance);
     }
-
 }

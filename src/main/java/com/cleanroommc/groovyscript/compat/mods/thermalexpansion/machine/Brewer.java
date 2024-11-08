@@ -51,13 +51,15 @@ public class Brewer extends VirtualizedRegistry<BrewerRecipe> {
     @GroovyBlacklist
     public void afterScriptLoad() {
         BrewerManagerAccessor.getValidationSet().clear();
-        BrewerManagerAccessor.getValidationSet().addAll(
-                BrewerManagerAccessor.getRecipeMap().values().stream().map(BrewerRecipe::getInput).map(BrewerManager::convertInput).collect(Collectors.toList())
-        );
+        BrewerManagerAccessor.getValidationSet()
+                .addAll(
+                        BrewerManagerAccessor.getRecipeMap().values().stream().map(BrewerRecipe::getInput).map(BrewerManager::convertInput).collect(Collectors.toList())
+                );
         BrewerManagerAccessor.getValidationFluids().clear();
-        BrewerManagerAccessor.getValidationFluids().addAll(
-                BrewerManagerAccessor.getRecipeMap().values().stream().map(BrewerRecipe::getInputFluid).map(FluidStack::getFluid).map(Fluid::getName).collect(Collectors.toList())
-        );
+        BrewerManagerAccessor.getValidationFluids()
+                .addAll(
+                        BrewerManagerAccessor.getRecipeMap().values().stream().map(BrewerRecipe::getInputFluid).map(FluidStack::getFluid).map(Fluid::getName).collect(Collectors.toList())
+                );
     }
 
     private List<Integer> hash(BrewerRecipe recipe) {

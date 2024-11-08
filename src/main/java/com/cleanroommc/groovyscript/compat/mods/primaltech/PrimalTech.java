@@ -8,5 +8,4 @@ public class PrimalTech extends GroovyPropertyContainer {
     public final StoneAnvil stoneAnvil = new StoneAnvil();
     public final WaterSaw waterSaw = new WaterSaw();
     public final WoodenBasin woodenBasin = new WoodenBasin();
-
 }

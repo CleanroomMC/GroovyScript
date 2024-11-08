@@ -84,5 +84,4 @@ public class Refinery extends StandardListRegistry<RefineryRecipe> {
             return recipe;
         }
     }
-
 }

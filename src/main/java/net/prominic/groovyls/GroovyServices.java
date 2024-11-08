@@ -124,8 +124,11 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     @Override
     public void didChangeWatchedFiles(DidChangeWatchedFilesParams params) {
-        Set<URI> urisWithChanges = params.getChanges().stream().map(fileEvent -> FileUtil.fixUri(fileEvent.getUri())).collect(
-                Collectors.toSet());
+        Set<URI> urisWithChanges = params.getChanges()
+                .stream()
+                .map(fileEvent -> FileUtil.fixUri(fileEvent.getUri()))
+                .collect(
+                        Collectors.toSet());
 
         for (URI uri : urisWithChanges) {
             var unit = compilationUnitFactory.create(workspaceRoot, uri);
@@ -201,8 +204,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
             } else {
                 changeEvent = new TextDocumentContentChangeEvent(new Range(position, position), "a");
             }
-            DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(versionedTextDocument,
-                                                                                          Collections.singletonList(changeEvent));
+            DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(
+                    versionedTextDocument,
+                    Collections.singletonList(changeEvent));
             // if the offset node is null, there is probably a syntax error.
             // a completion request is usually triggered by the . character, and
             // if there is no property name after the dot, it will cause a syntax
@@ -222,8 +226,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
             if (originalSource != null) {
                 VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(textDocument.getUri(), 1);
                 TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(null, originalSource);
-                DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(versionedTextDocument,
-                                                                                              Collections.singletonList(changeEvent));
+                DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(
+                        versionedTextDocument,
+                        Collections.singletonList(changeEvent));
                 didChange(didChangeParams);
             }
         }
@@ -257,8 +262,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
             originalSource = languageServerContext.getFileContentsTracker().getContents(uri);
             VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(textDocument.getUri(), 1);
             TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(new Range(position, position), ")");
-            DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(versionedTextDocument,
-                                                                                          Collections.singletonList(changeEvent));
+            DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(
+                    versionedTextDocument,
+                    Collections.singletonList(changeEvent));
             // if the offset node is null, there is probably a syntax error.
             // a signature help request is usually triggered by the ( character,
             // and if there is no matching ), it will cause a syntax error.
@@ -277,8 +283,9 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
             if (originalSource != null) {
                 VersionedTextDocumentIdentifier versionedTextDocument = new VersionedTextDocumentIdentifier(textDocument.getUri(), 1);
                 TextDocumentContentChangeEvent changeEvent = new TextDocumentContentChangeEvent(null, originalSource);
-                DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(versionedTextDocument,
-                                                                                              Collections.singletonList(changeEvent));
+                DidChangeTextDocumentParams didChangeParams = new DidChangeTextDocumentParams(
+                        versionedTextDocument,
+                        Collections.singletonList(changeEvent));
                 didChange(didChangeParams);
             }
         }
@@ -319,7 +326,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
     @Override
     public CompletableFuture<Either<List<? extends SymbolInformation>, List<? extends WorkspaceSymbol>>> symbol(
-            WorkspaceSymbolParams params) {
+                                                                                                                WorkspaceSymbolParams params) {
         var unit = compilationUnitFactory.create(workspaceRoot, null);
 
         var visitor = compileAndVisitAST(unit, null);
@@ -335,8 +342,10 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
 
         var visitor = compileAndVisitAST(unit, uri);
 
-        RenameProvider provider = new RenameProvider(uri, new ASTContext(visitor, languageServerContext),
-                                                     languageServerContext.getFileContentsTracker());
+        RenameProvider provider = new RenameProvider(
+                uri,
+                new ASTContext(visitor, languageServerContext),
+                languageServerContext.getFileContentsTracker());
         return provider.provideRename(params);
     }
 
@@ -373,9 +382,14 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
                     diagnostic.setMessage(cause.getOriginalMessage());
                     diagnostic.setSeverity(DiagnosticSeverity.Error); // TODO source location
                     URI uri = Paths.get(cause.getSourceLocator()).toUri();
-                    diagnosticsByFile.computeIfAbsent(uri, (key) -> new PublishDiagnosticsParams(key.toString(),
-                                                                                                 new ArrayList<>())).getDiagnostics().add(
-                            diagnostic);
+                    diagnosticsByFile.computeIfAbsent(
+                            uri,
+                            (key) -> new PublishDiagnosticsParams(
+                                    key.toString(),
+                                    new ArrayList<>()))
+                            .getDiagnostics()
+                            .add(
+                                    diagnostic);
                 }
             }
         }

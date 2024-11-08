@@ -61,7 +61,9 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
         removeSources(unit, changedUris);
 
         // add open classes
-        languageServerContext.getFileContentsTracker().getOpenURIs().stream()
+        languageServerContext.getFileContentsTracker()
+                .getOpenURIs()
+                .stream()
                 .filter(uri -> {
                     Path openPath = Paths.get(uri);
                     return openPath.normalize().startsWith(workspaceRoot.normalize());
@@ -95,7 +97,9 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
     }
 
     protected Stream<Path> getAllClasses() {
-        return LoadStage.getLoadStages().stream().map(LoadStage::getName)
+        return LoadStage.getLoadStages()
+                .stream()
+                .map(LoadStage::getName)
                 .flatMap(loader -> GroovyScript.getRunConfig().getClassFiles(this.root, loader).stream())
                 .map(File::toPath)
                 .map(path -> GroovyScript.getScriptFile().toPath().resolve(path));

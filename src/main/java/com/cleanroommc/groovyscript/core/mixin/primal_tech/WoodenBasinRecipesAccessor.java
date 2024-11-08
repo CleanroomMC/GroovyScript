@@ -21,5 +21,4 @@ public interface WoodenBasinRecipesAccessor {
     static WoodenBasinRecipes createWoodenBasinRecipes(ItemStack output, FluidStack fluidIn, Object... input) {
         throw new UnsupportedOperationException();
     }
-
 }

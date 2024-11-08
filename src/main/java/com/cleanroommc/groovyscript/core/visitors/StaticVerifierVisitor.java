@@ -90,7 +90,9 @@ public class StaticVerifierVisitor extends ClassVisitor implements Opcodes {
             Label label8 = new Label();
             mv.visitJumpInsn(IFNE, label8);
             mv.visitLabel(label7);
-            mv.visitFrame(Opcodes.F_APPEND, 1, new Object[]{"org/codehaus/groovy/ast/FieldNode"}, 0, null);
+            mv.visitFrame(Opcodes.F_APPEND, 1, new Object[]{
+                    "org/codehaus/groovy/ast/FieldNode"
+            }, 0, null);
             mv.visitMethodInsn(INVOKESTATIC, "com/cleanroommc/groovyscript/GroovyScript", "getSandbox", "()Lcom/cleanroommc/groovyscript/sandbox/GroovyScriptSandbox;", false);
             mv.visitMethodInsn(INVOKEVIRTUAL, "com/cleanroommc/groovyscript/sandbox/GroovyScriptSandbox", "getBindings", "()Ljava/util/Map;", false);
             mv.visitVarInsn(ALOAD, 1);

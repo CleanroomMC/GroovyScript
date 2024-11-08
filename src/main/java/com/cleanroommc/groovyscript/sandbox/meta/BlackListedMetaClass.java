@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.meta;
 
 import com.cleanroommc.groovyscript.sandbox.RunConfig;
-
 import com.cleanroommc.groovyscript.sandbox.security.SandboxSecurityException;
 import groovy.lang.*;
 import org.codehaus.groovy.ast.ClassNode;
@@ -64,8 +63,7 @@ public class BlackListedMetaClass implements MetaClass {
     }
 
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     @Override
     public List<MetaProperty> getProperties() {
@@ -198,7 +196,6 @@ public class BlackListedMetaClass implements MetaClass {
                     throw new GroovyRuntimeException("Exception thrown parsing: " + groovyFile + ". Reason: " + e, e);
                 }
             }
-
         }
         return classNode;
     }

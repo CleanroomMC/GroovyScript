@@ -14,5 +14,4 @@ public interface ConstellationMapEffectRegistryAccessor {
     static Map<IConstellation, ConstellationMapEffectRegistry.MapEffect> getEffectRegistry() {
         return null;
     }
-
 }

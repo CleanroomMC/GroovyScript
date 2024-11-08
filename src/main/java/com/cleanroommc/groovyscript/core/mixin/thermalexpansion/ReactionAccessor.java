@@ -13,5 +13,4 @@ public interface ReactionAccessor {
     static ReactantManager.Reaction createReaction(ItemStack reactant, Fluid fluid, int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

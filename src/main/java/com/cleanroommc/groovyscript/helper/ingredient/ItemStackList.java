@@ -10,8 +10,7 @@ import java.util.Collection;
  */
 public class ItemStackList extends ArrayList<ItemStack> {
 
-    public ItemStackList() {
-    }
+    public ItemStackList() {}
 
     public ItemStackList(Collection<ItemStack> collection) {
         super(collection);

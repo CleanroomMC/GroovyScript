@@ -25,5 +25,4 @@ public interface FurnaceManagerAccessor {
     static Set<ComparableItemStackValidated> getFoodSet() {
         throw new UnsupportedOperationException();
     }
-
 }

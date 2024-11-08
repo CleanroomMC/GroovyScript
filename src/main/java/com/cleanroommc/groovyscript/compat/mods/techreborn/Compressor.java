@@ -89,5 +89,4 @@ public class Compressor extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

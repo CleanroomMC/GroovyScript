@@ -89,5 +89,4 @@ public class AssemblingMachine extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

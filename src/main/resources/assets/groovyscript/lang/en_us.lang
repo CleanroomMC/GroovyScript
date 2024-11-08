@@ -1100,6 +1100,38 @@ groovyscript.wiki.futuremc.stonecutter.title=Stoenecutter
 groovyscript.wiki.futuremc.stonecutter.description=Converts an input itemstack into an output itemstack via selecting the desired output from the Stonecutter GUI.
 
 
+# Horse Power
+groovyscript.wiki.horsepower.chopping_block.title=Horse Chopping Block
+groovyscript.wiki.horsepower.chopping_block.description=Converts an itemstack input into an itemstack output, with the chance of an additional output after a configurable amount of processing has been done. Depending on if the config option `Separate Chopping Recipes` is true, this may affect both Horse and Hand Chopping Blocks. Only the Horse Chopping Block can produce secondary outputs.
+groovyscript.wiki.horsepower.chopping_block.add0=Adds recipes in the format `input`, `output`, `time`
+groovyscript.wiki.horsepower.chopping_block.add1=Adds recipes in the format `input`, `output`, `secondary`, `chance`, `time`
+groovyscript.wiki.horsepower.chopping_block.time.value=Sets the time in laps the horse has to take to complete the recipe
+groovyscript.wiki.horsepower.chopping_block.chance.value=Sets the chance that the secondary output will be created if the secondary output exists
+
+groovyscript.wiki.horsepower.grindstone.title=Horse Grindstone
+groovyscript.wiki.horsepower.grindstone.description=Converts an itemstack input into an itemstack output, with the chance of an additional output after a configurable amount of processing has been done. Depending on if the config option `Separate Grindstone Recipes` is true, this may affect both Horse and Hand Grindstones.
+groovyscript.wiki.horsepower.grindstone.add0=Adds recipes in the format `input`, `output`, `time`
+groovyscript.wiki.horsepower.grindstone.add1=Adds recipes in the format `input`, `output`, `secondary`, `chance`, `time`
+groovyscript.wiki.horsepower.grindstone.time.value=Sets the time in laps the horse has to take to complete the recipe
+groovyscript.wiki.horsepower.grindstone.chance.value=Sets the chance that the secondary output will be created if the secondary output exists
+
+groovyscript.wiki.horsepower.manual_chopping_block.title=Manual Chopping Block
+groovyscript.wiki.horsepower.manual_chopping_block.description=Converts an itemstack input into an itemstack output after a configurable amount of processing has been done. Depending on if the config option `Separate Chopping Recipes` is true, this may affect both Horse and Hand Chopping Blocks.
+groovyscript.wiki.horsepower.manual_chopping_block.add=Adds recipes in the format `input`, `output`, `time`
+groovyscript.wiki.horsepower.manual_chopping_block.time.value=Sets the amount of chops the player has to make to complete the recipe
+
+groovyscript.wiki.horsepower.manual_grindstone.title=Manual Grindstone
+groovyscript.wiki.horsepower.manual_grindstone.description=Converts an itemstack input into an itemstack output, with the chance of an additional output after a configurable amount of processing has been done. Depending on if the config option `Separate Grindstone Recipes` is true, this may affect both Horse and Hand Grindstones.
+groovyscript.wiki.horsepower.manual_grindstone.add0=Adds recipes in the format `input`, `output`, `time`
+groovyscript.wiki.horsepower.manual_grindstone.add1=Adds recipes in the format `input`, `output`, `secondary`, `chance`, `time`
+groovyscript.wiki.horsepower.manual_grindstone.time.value=Sets the amount of chops the player has to make to complete the recipe
+groovyscript.wiki.horsepower.manual_grindstone.chance.value=Sets the chance that the secondary output will be created if the secondary output exists
+
+groovyscript.wiki.horsepower.press.title=Horse Press
+groovyscript.wiki.horsepower.press.description=Converts an itemstack into another itemstack or a fluidstack by a horse running laps
+groovyscript.wiki.horsepower.press.add=Adds recipes in the format `input`, `output`
+
+
 # Immersive Engineering
 groovyscript.wiki.immersiveengineering.alloy_kiln.title=Alloy Kiln
 groovyscript.wiki.immersiveengineering.alloy_kiln.description=Converts two input itemstacks into an output itemstack, consuming fuel (based on burn time).
@@ -1869,6 +1901,20 @@ groovyscript.wiki.projecte.transmutation.description=Converts an input blockstat
 groovyscript.wiki.projecte.transmutation.input.value=Sets the input blockstate
 groovyscript.wiki.projecte.transmutation.output.value=Sets the normal output blockstate
 groovyscript.wiki.projecte.transmutation.altOutput.value=Sets the shift output blockstate
+
+
+# Random Things
+groovyscript.wiki.randomthings.anvil.title=Anvil Crafting
+groovyscript.wiki.randomthings.anvil.description=Converts two itemstacks into an itemstack in the Vanilla Anvil.
+groovyscript.wiki.randomthings.anvil.note0=Internally this uses a more restricted version of `AnvilUpdateEvent`, so consider using an event listener for that instead.
+groovyscript.wiki.randomthings.anvil.note1=Consumes the entire stack in the Anvil, regardless of the amount actually required. To avoid issues, consider only using unstackable items.
+groovyscript.wiki.randomthings.anvil.note2=When crafting any recipe done via this, if the output of the Anvil was picked up via clicking it, it will not be craftable again until restarting the game. Can be fixed with a mixin from Universal Tweaks.
+groovyscript.wiki.randomthings.anvil.cost.value=Sets the cost of the recipe in levels consumed
+
+groovyscript.wiki.randomthings.imbuing.title=Imbuing Station
+groovyscript.wiki.randomthings.imbuing.description=Converts four itemstacks into an itemstack in the Random Things Imbuing Station.
+groovyscript.wiki.randomthings.imbuing.mainInput.value=Sets the center IIngredient
+groovyscript.wiki.randomthings.imbuing.input.required=each input item used must be unique
 
 
 # Roots

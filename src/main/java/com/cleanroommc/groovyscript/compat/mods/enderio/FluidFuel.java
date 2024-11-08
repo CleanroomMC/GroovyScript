@@ -107,5 +107,4 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
         });
         ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getFuels().clear();
     }
-
 }

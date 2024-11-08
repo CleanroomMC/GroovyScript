@@ -29,5 +29,4 @@ public abstract class ModRegistryMixin {
     private void grs$sortRecipeCategories(CallbackInfoReturnable<RecipeRegistry> ci) {
         recipeCategories.sort(JeiPlugin.getCategoryComparator());
     }
-
 }

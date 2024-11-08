@@ -177,5 +177,4 @@ public class InfoParserPackage {
     public void parse(boolean enabled) {
         InfoParserRegistry.getInfoParsers().forEach(x -> x.parse(this, enabled));
     }
-
 }

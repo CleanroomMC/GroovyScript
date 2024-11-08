@@ -90,5 +90,4 @@ public class IndustrialElectrolyzer extends AbstractGenericTechRebornRegistry {
             return recipe;
         }
     }
-
 }

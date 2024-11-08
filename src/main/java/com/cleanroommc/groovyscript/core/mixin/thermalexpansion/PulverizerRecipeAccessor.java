@@ -12,5 +12,4 @@ public interface PulverizerRecipeAccessor {
     static PulverizerManager.PulverizerRecipe createPulverizerRecipe(ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance, int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

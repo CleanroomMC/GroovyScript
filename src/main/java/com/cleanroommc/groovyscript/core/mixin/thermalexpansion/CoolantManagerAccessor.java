@@ -17,5 +17,4 @@ public interface CoolantManagerAccessor {
     static Object2IntOpenHashMap<String> getCoolantFactorMap() {
         throw new UnsupportedOperationException();
     }
-
 }

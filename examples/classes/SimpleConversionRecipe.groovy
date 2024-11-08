@@ -13,5 +13,4 @@ class SimpleConversionRecipe {
         this.input = input
         this.output = output
     }
-
 }

@@ -34,5 +34,4 @@ public @interface RecipeBuilderMethodDescription {
      * @return the method priority
      */
     int priority() default 1000;
-
 }

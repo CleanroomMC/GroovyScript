@@ -25,7 +25,7 @@ import java.util.EnumSet;
  * @see Property#comp()
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ /* No targets allowed */})
+@Target({}) // No targets allowed
 public @interface Comp {
 
     /**
@@ -147,6 +147,7 @@ public @interface Comp {
      * </table>
      */
     enum Type {
+
         GT(">", "groovyscript.wiki.greater_than"),
         GTE(">=", "groovyscript.wiki.greater_than_or_equal_to"),
         EQ("==", "groovyscript.wiki.equal_to"),
@@ -191,7 +192,5 @@ public @interface Comp {
         public String getKey() {
             return key;
         }
-
     }
-
 }

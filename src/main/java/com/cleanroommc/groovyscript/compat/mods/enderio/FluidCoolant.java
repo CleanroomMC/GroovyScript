@@ -112,5 +112,4 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
         });
         ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getCoolants().clear();
     }
-
 }

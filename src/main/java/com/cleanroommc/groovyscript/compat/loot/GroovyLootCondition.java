@@ -12,11 +12,15 @@ import java.util.Random;
 
 public class GroovyLootCondition implements LootCondition {
 
+    private static final Class<?>[] CLOSURE_CLASSES = {
+            Random.class, LootContext.class
+    };
+
     public final Closure<Object> condition;
 
     public GroovyLootCondition(Closure<Object> condition) {
         this.condition = condition;
-        if (!Arrays.equals(condition.getParameterTypes(), new Class[]{Random.class, LootContext.class})) {
+        if (!Arrays.equals(condition.getParameterTypes(), CLOSURE_CLASSES)) {
             GroovyLog.msg("Warning: LootCondition closures must take the following parameters (java.util.Random, net.minecraft.world.storage.loot.LootContext)")
                     .debug()
                     .post();
@@ -27,5 +31,4 @@ public class GroovyLootCondition implements LootCondition {
     public boolean testCondition(@NotNull Random rand, @NotNull LootContext context) {
         return ClosureHelper.call(true, condition, rand, context);
     }
-
 }

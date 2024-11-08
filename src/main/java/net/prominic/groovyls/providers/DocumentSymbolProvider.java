@@ -40,7 +40,7 @@ public class DocumentSymbolProvider extends DocProvider {
     }
 
     public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> provideDocumentSymbolsFuture(
-            TextDocumentIdentifier textDocument) {
+                                                                                                           TextDocumentIdentifier textDocument) {
         return future(provideDocumentSymbols(textDocument));
     }
 

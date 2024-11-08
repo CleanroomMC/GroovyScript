@@ -44,5 +44,4 @@ public class SludgeRefiner extends StandardListRegistry<SludgeEntry> {
             return false;
         });
     }
-
 }

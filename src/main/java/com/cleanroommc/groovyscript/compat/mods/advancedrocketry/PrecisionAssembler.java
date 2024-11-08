@@ -61,5 +61,4 @@ public class PrecisionAssembler extends BaseRegistry {
             msg.add(time < 1, "Time must be 1 or greater, got {}", time);
         }
     }
-
 }

@@ -58,7 +58,6 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     }
 
     public boolean remove(CrucibleRecipe recipe) {
-
         Iterator<IThaumcraftRecipe> recipeIterator = ThaumcraftApi.getCraftingRecipes().values().iterator();
 
         Object r;

@@ -24,5 +24,4 @@ public class InfoLookingCommand extends BaseInfoCommand {
             info.copyFromPos(getBlockLookingAt(player));
         }
     }
-
 }

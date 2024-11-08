@@ -17,5 +17,4 @@ public class LazyAE2 extends GroovyPropertyContainer {
     public static IDisplayableMatcher<ItemStack> matchesIIngredient(IIngredient ingredient) {
         return IDisplayableMatcher.ofMany(() -> Arrays.asList(ingredient.getMatchingStacks()), ingredient);
     }
-
 }

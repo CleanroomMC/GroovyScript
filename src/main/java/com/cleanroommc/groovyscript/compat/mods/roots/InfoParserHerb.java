@@ -34,5 +34,4 @@ public class InfoParserHerb extends GenericInfoParser<Herb> {
             instance.add(info.getMessages(), herb, info.isPrettyNbt());
         }
     }
-
 }

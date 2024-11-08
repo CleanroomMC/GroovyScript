@@ -96,5 +96,4 @@ public class Rarity extends NamedRegistry {
             return name;
         }
     }
-
 }

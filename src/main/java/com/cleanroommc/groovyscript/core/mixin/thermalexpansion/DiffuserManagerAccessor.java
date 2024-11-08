@@ -18,5 +18,4 @@ public interface DiffuserManagerAccessor {
     static TObjectIntHashMap<ComparableItemStack> getReagentDurMap() {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -64,7 +64,5 @@ public class Smithing extends StandardListRegistry<SmithingRecipe> {
             ModSupport.FUTURE_MC.get().smithing.add(recipe);
             return recipe;
         }
-
     }
-
 }

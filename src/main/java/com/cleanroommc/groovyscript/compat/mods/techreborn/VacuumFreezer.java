@@ -78,5 +78,4 @@ public class VacuumFreezer extends AbstractGenericTechRebornRegistry {
             return recipe;
         }
     }
-
 }
