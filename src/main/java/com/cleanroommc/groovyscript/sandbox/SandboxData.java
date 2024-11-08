@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -147,7 +148,9 @@ public class SandboxData {
             if (!rootFile.exists()) {
                 continue;
             }
-            int pathSize = path.split(separator).length;
+            // if we are looking at a specific file, we don't want that to be overridden.
+            // otherwise, we want to use the specificity based on the number of file separators.
+            int pathSize = StringUtils.countMatches(path, separator);
             try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
@@ -155,8 +158,9 @@ public class SandboxData {
                         .sorted(Comparator.comparing(File::getPath))
                         .forEach(file -> {
                             if (files.containsKey(file)) {
+                                // if the file already exists, push the priority down if we are more specific than the already existing entry
                                 if (pathSize > files.getInt(file)) {
-                                    files.put(file, pathSize);
+                                    files.putAndMoveToLast(file, pathSize);
                                 }
                             } else {
                                 files.put(file, pathSize);
