@@ -45,6 +45,8 @@ public class Registry {
         List<String> imports = new ArrayList<>();
 
         for (Method method : registryClass.getMethods()) {
+            // skip bridge methods as they are overridden by a child method.
+            if (method.isBridge()) continue;
             if (method.isAnnotationPresent(GroovyBlacklist.class)) continue;
             if (method.isAnnotationPresent(RecipeBuilderDescription.class)) {
                 recipeBuilderMethods.add(method);
