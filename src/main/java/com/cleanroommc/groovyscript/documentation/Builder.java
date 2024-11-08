@@ -330,7 +330,9 @@ public class Builder {
     private String createBuilder(Example example, boolean canBeCommented) {
         StringBuilder out = new StringBuilder();
 
-        if (canBeCommented && example.commented()) out.append("/*");
+        var prependComment = canBeCommented && example.commented();
+
+        if (prependComment) out.append("//");
 
         if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
 
@@ -342,11 +344,9 @@ public class Builder {
 
         if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName()));
 
-        if (canBeCommented && example.commented()) out.append("*/");
+        var exampleMethod = prependComment ? out.toString().replace("\n", "\n//") : out.toString();
 
-        out.append("\n");
-
-        return out.toString();
+        return exampleMethod + "\n";
     }
 
     private static class FieldDocumentation implements Comparable<FieldDocumentation> {

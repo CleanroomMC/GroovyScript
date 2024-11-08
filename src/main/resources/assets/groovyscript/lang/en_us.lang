@@ -1132,6 +1132,18 @@ groovyscript.wiki.horsepower.press.description=Converts an itemstack into anothe
 groovyscript.wiki.horsepower.press.add=Adds recipes in the format `input`, `output`
 
 
+# Ice And Fire
+groovyscript.wiki.iceandfire.fire_forge.title=Fire Dragonforge
+groovyscript.wiki.iceandfire.fire_forge.description=Converts two input itemstacks into an output itemstack in a multiblock Dragonforge Fire Multiblock while there is a stage 3+ Fire Dragon nearby.
+
+groovyscript.wiki.iceandfire.ice_forge.title=Ice Dragonforge
+groovyscript.wiki.iceandfire.ice_forge.description=Converts two input itemstacks into an output itemstack in a multiblock Dragonforge Ice Multiblock while there is a stage 3+ Ice Dragon nearby.
+
+groovyscript.wiki.iceandfire.lightning_forge.title=Lightning Dragonforge
+groovyscript.wiki.iceandfire.lightning_forge.description=Converts two input itemstacks into an output itemstack in a multiblock Dragonforge Lightning Multiblock while there is a stage 3+ Lightning Dragon nearby.
+groovyscript.wiki.iceandfire.lightning_forge.note=Requires [Ice And Fire: RotN edition](https://www.curseforge.com/minecraft/mc-mods/ice-and-fire-rotn-edition) to be installed to be enabled
+
+
 # Immersive Engineering
 groovyscript.wiki.immersiveengineering.alloy_kiln.title=Alloy Kiln
 groovyscript.wiki.immersiveengineering.alloy_kiln.description=Converts two input itemstacks into an output itemstack, consuming fuel (based on burn time).

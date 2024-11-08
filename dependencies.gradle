@@ -72,12 +72,10 @@ final def mod_dependencies = [
         'forestry-59751:2918418'                              : [project.debug_forestry],
         'future-mc-310059:5626387'                            : [project.debug_future_mc],
         'horse-power-270466:2705433'                          : [project.debug_horse_power],
+        'llibrary-243298:2504999'                             : [project.debug_ice_and_fire_old, project.debug_ice_and_fire_rotn],
         'immersive_engineering-231951:2974106'                : [project.debug_immersive_engineering, project.debug_immersive_petroleum, project.debug_immersive_technology],
         'immersive-petroleum-268250:3382321'                  : [project.debug_immersive_petroleum],
         'mct-immersive-technology-359407:5108047'             : [project.debug_immersive_technology],
-        // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either. Check FluidGenerator compat to confirm
-        'industrialcraft_experimental-242638:3838713'         : [project.debug_industrial_craft_2_experimental],
-        'industrialcraft_classic-242942:3093607'              : [project.debug_industrial_craft_2_classic],
         'tesla-core-lib-254602:3438487'                       : [project.debug_industrial_foregoing],
         'industrialforegoing-266515:2745321'                  : [project.debug_industrial_foregoing],
         'inspirations-284007:2843007'                         : [project.debug_inspirations],
@@ -154,6 +152,25 @@ dependencies {
         runtimeOnly 'com.enderio:endercore:0.5.78'
         runtimeOnly 'crazypants:enderio:5.3.72'
     }
+
+    // WARNING: rotn must be placed before normal, otherwise you will not be able to properly detect sources for the LightningForge
+    compileOnly rfg.deobf('curse.maven:ice-and-fire-rotn-edition-457668:5738729')
+    compileOnly rfg.deobf('curse.maven:iceandfire-264231:2939529')
+    if (project.debug_ice_and_fire_rotn.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:ice-and-fire-rotn-edition-457668:5738729')
+    } else if (project.debug_ice_and_fire_old.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:iceandfire-264231:2939529')
+    }
+
+    // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either. Check FluidGenerator compat to confirm
+    compileOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
+    compileOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
+    if (project.debug_industrial_craft_2_experimental.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
+    } else if (project.debug_industrial_craft_2_classic.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
+    }
+
 
     if (project.debug_forestry.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
