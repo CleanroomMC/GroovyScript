@@ -14,6 +14,7 @@ import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.network.CReload;
@@ -181,10 +182,10 @@ public class GroovyScript {
     public void onPostInit(FMLPostInitializationEvent event) {
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
-            Minecraft.getMinecraft().player.sendMessage(
-                    new TextComponentTranslation("groovyscript.command.copy.copied_start")
-                            .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
-                            .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
+            var message = new TextComponentTranslation("groovyscript.command.copy.copied_start").setStyle(StyleConstant.getEmphasisStyle())
+                    .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.RESET)))
+                    .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end").setStyle(StyleConstant.getEmphasisStyle()));
+            Minecraft.getMinecraft().player.sendMessage(message);
         });
     }
 
@@ -279,21 +280,21 @@ public class GroovyScript {
             if (!onlyLogFails) {
                 if (running) {
                     String s = packmode ? "changes packmode" : "reloaded scripts";
-                    sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "Successfully " + s + TextFormatting.WHITE + " in " + time + "ms"));
+                    sender.sendMessage(new TextComponentString("Successfully " + s).setStyle(StyleConstant.getSuccessStyle()).appendSibling(new TextComponentString(" in " + time + "ms")));
                 } else {
-                    sender.sendMessage(new TextComponentString(TextFormatting.GREEN + "No syntax errors found :)"));
+                    sender.sendMessage(new TextComponentString("No syntax errors found :)").setStyle(StyleConstant.getSuccessStyle()));
                 }
             }
         } else {
             String executing = running ? "running" : "checking";
-            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Found " + errors.size() + " errors while " + executing + " scripts"));
+            sender.sendMessage(new TextComponentString("Found " + errors.size() + " errors while " + executing + " scripts").setStyle(StyleConstant.getErrorStyle()));
             int n = errors.size();
             if (errors.size() >= 10) {
-                sender.sendMessage(new TextComponentString("Displaying the first 7 errors:"));
+                sender.sendMessage(new TextComponentString("Displaying the first 7 errors:").setStyle(StyleConstant.getTitleStyle()));
                 n = 7;
             }
             for (int i = 0; i < n; i++) {
-                sender.sendMessage(new TextComponentString(TextFormatting.RED + errors.get(i)));
+                sender.sendMessage(new TextComponentString(errors.get(i)).setStyle(StyleConstant.getErrorStyle()));
             }
             GSCommand.postLogFiles(sender);
         }

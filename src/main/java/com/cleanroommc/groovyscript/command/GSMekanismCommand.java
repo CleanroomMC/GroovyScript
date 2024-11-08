@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasRegistry;
 import mekanism.api.infuse.InfuseRegistry;
@@ -10,7 +11,6 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.server.command.CommandTreeBase;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,14 +24,14 @@ public class GSMekanismCommand extends CommandTreeBase {
             sender.sendMessage(new TextComponentString("Mekanism gases:"));
             for (Gas gas : GasRegistry.getRegisteredGasses()) {
                 String copyText = Mekanism.asGroovyCode(gas, true);
-                sender.sendMessage(TextCopyable.string(copyText, " - " + gas.getName()).build());
+                sender.sendMessage(TextCopyable.string(copyText, " - " + copyText).build());
             }
         }, "gases"));
         addSubcommand(new SimpleCommand("infusionTypes", (server, sender, args) -> {
             sender.sendMessage(new TextComponentString("Mekanism infusion types:"));
             for (InfuseType infuseType : InfuseRegistry.getInfuseMap().values()) {
-                String copyText = "'" + infuseType.name + "'";
-                sender.sendMessage(TextCopyable.string(copyText, " - " + infuseType.name).build());
+                String copyText = Mekanism.asGroovyCode(infuseType, true);
+                sender.sendMessage(TextCopyable.string(copyText, " - " + copyText).build());
             }
         }));
     }
@@ -39,7 +39,7 @@ public class GSMekanismCommand extends CommandTreeBase {
     @Override
     public void execute(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String @NotNull [] args) throws CommandException {
         if (!ModSupport.MEKANISM.isLoaded()) {
-            sender.sendMessage(new TextComponentString(TextFormatting.RED + "Mekanism is not loaded!"));
+            sender.sendMessage(new TextComponentString("Mekanism is not loaded!").setStyle(StyleConstant.getErrorStyle()));
             return;
         }
         super.execute(server, sender, args);

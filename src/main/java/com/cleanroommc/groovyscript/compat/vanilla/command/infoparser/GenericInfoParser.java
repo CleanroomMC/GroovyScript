@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.vanilla.command.infoparser;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParser;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.command.TextCopyable;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
@@ -63,14 +64,14 @@ public abstract class GenericInfoParser<T> implements InfoParser {
     }
 
     /**
-     * The formatted header of the parser. Uses the {@link #headerStyle}, with hover text from {@link #hoverTitle()}.
+     * The formatted header of the parser. Uses the {@link StyleConstant#getTitleStyle()}, with hover text from {@link #hoverTitle()}.
      *
      * @param plural if the name should be in {@link #plural()} or singular {@link #name()} form.
      * @return the header for the parser
      */
     public ITextComponent header(boolean plural) {
         String name = plural ? plural() : name();
-        Style style = headerStyle.createShallowCopy().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverTitle()));
+        Style style = StyleConstant.getTitleStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverTitle()));
         return new TextComponentString(name + ":").setStyle(style);
     }
 
@@ -95,7 +96,7 @@ public abstract class GenericInfoParser<T> implements InfoParser {
 
     /**
      * The text that will display in chat.
-     * The primary difference from {@link #copyText} is containing formatting codes.
+     * This may be different from {@link #copyText} for instances in which too much text would be added to chat.
      * Typically valid GroovyScript code.
      *
      * @param entry     the entry to be parsed
@@ -108,7 +109,7 @@ public abstract class GenericInfoParser<T> implements InfoParser {
 
     /**
      * The text that will be copied when the entry is clicked on.
-     * The primary difference from {@link #msg} is lacking formatting codes.
+     * This may be different from {@link #msg} when it would be trimmed due to being too long.
      * Typically valid GroovyScript code.
      *
      * @param entry     the entry to be parsed
@@ -116,7 +117,7 @@ public abstract class GenericInfoParser<T> implements InfoParser {
      * @return the text that is copied when clicking on the message
      */
     public String copyText(@NotNull T entry, boolean prettyNbt) {
-        return text(entry, false, prettyNbt);
+        return text(entry, true, prettyNbt);
     }
 
     /**

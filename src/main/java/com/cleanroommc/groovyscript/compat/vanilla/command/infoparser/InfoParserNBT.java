@@ -1,17 +1,20 @@
 package com.cleanroommc.groovyscript.compat.vanilla.command.infoparser;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class InfoParserNBT extends GenericInfoParser<NBTTagCompound> {
 
     public static final InfoParserNBT instance = new InfoParserNBT();
+
+    private static final int MAXIMUM_LENGTH_BEFORE_TRIM = 300;
+    private static final int MAXIMUM_LINES_BEFORE_TRIM = 8;
 
     @Override
     public int priority() {
@@ -34,7 +37,12 @@ public class InfoParserNBT extends GenericInfoParser<NBTTagCompound> {
     }
 
     private String trimText() {
-        return TextFormatting.RED + "(trimmed)";
+        return StyleConstant.ERROR + "(trimmed)";
+    }
+
+    @Override
+    public String text(@NotNull NBTTagCompound entry, boolean colored, boolean prettyNbt) {
+        return NbtHelper.toGroovyCode(entry, prettyNbt, colored);
     }
 
     /**
@@ -45,19 +53,14 @@ public class InfoParserNBT extends GenericInfoParser<NBTTagCompound> {
      * if the cut happens just after a section sign it would break the formatting of {@link #trimText}.
      */
     @Override
-    public String text(@NotNull NBTTagCompound entry, boolean colored, boolean prettyNbt) {
-        String msg = NbtHelper.toGroovyCode(entry, prettyNbt, true);
-        if (msg.length() > 300) {
-            int endIndex = StringUtils.indexOf(msg, " ", 300);
-            return endIndex == -1 ? msg : msg.substring(0, StringUtils.indexOf(msg, " ", 300)) + trimText();
+    public String msg(@NotNull NBTTagCompound entry, boolean prettyNbt) {
+        String msg = text(entry, true, prettyNbt);
+        if (msg.length() > MAXIMUM_LENGTH_BEFORE_TRIM) {
+            int endIndex = StringUtils.indexOf(msg, " ", MAXIMUM_LENGTH_BEFORE_TRIM);
+            return endIndex == -1 ? msg : msg.substring(0, StringUtils.indexOf(msg, " ", MAXIMUM_LENGTH_BEFORE_TRIM)) + trimText();
         }
-        int trimLocation = StringUtils.ordinalIndexOf(msg, "\n", 8);
+        int trimLocation = StringUtils.ordinalIndexOf(msg, "\n", MAXIMUM_LINES_BEFORE_TRIM);
         return trimLocation == -1 ? msg : msg.substring(0, trimLocation) + "\n" + trimText();
-    }
-
-    @Override
-    public String copyText(@NotNull NBTTagCompound entry, boolean prettyNbt) {
-        return NbtHelper.toGroovyCode(entry, prettyNbt, false);
     }
 
     @Override

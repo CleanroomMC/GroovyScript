@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.compat.vanilla.command.infoparser;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
-import net.minecraft.util.text.TextFormatting;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import org.jetbrains.annotations.NotNull;
 
 public class InfoParserTranslationKey extends GenericInfoParser<String> {
@@ -20,7 +20,7 @@ public class InfoParserTranslationKey extends GenericInfoParser<String> {
 
     @Override
     public String text(@NotNull String entry, boolean colored, boolean prettyNbt) {
-        return colored ? TextFormatting.YELLOW + entry : entry;
+        return colored ? StyleConstant.STRING + entry : entry;
     }
 
     @Override

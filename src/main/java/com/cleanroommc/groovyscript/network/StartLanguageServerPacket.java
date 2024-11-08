@@ -1,11 +1,11 @@
 package com.cleanroommc.groovyscript.network;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 
 public class StartLanguageServerPacket implements IPacket {
 
@@ -18,9 +18,9 @@ public class StartLanguageServerPacket implements IPacket {
     @Override
     public IPacket executeClient(NetHandlerPlayClient handler) {
         if (GroovyScript.runLanguageServer()) {
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.GREEN + "Starting language server"));
+            Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Starting language server").setStyle(StyleConstant.getSuccessStyle()));
         } else {
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "Language server is already running"));
+            Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Language server is already running").setStyle(StyleConstant.getWarningStyle()));
         }
         return null;
     }
