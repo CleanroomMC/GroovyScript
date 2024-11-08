@@ -153,10 +153,9 @@ public class ModSupport {
                 if (!externalPluginClasses.contains(clazz)) {
                     registerContainer((GroovyPlugin) clazz.newInstance());
                 }
-            } catch (ClassNotFoundException | InstantiationException e) {
-                GroovyScript.LOGGER.error("Could not initialize Groovy Plugin '{}'", data.getClassName());
             } catch (Throwable e) {
-                throw new RuntimeException(e);
+                GroovyScript.LOGGER.error("Could not initialize Groovy Plugin class '{}'", data.getClassName());
+                GroovyScript.LOGGER.catching(e);
             }
         }
     }
