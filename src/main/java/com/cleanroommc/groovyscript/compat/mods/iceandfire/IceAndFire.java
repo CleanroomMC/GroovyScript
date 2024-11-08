@@ -14,12 +14,9 @@ public class IceAndFire extends GroovyPropertyContainer {
     }
 
     public static boolean isRotN() {
-        for (var container : Loader.instance().getActiveModList()) {
-            if ("iceandfire".equals(container.getModId())) {
-                // Name should be "Ice And Fire: RotN Edition"
-                return container.getName().contains("RotN");
-            }
-        }
-        return false;
+        var entry = Loader.instance().getIndexedModList().get("iceandfire");
+        if (entry == null) return false;
+        // Name should be "Ice And Fire: RotN Edition"
+        return entry.getName().contains("RotN");
     }
 }
