@@ -97,5 +97,4 @@ public @interface MethodDescription {
          */
         VALUE
     }
-
 }

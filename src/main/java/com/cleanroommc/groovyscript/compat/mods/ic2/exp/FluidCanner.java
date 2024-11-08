@@ -73,7 +73,7 @@ public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrich
                     .post();
             return;
         }
-        for (Iterator<? extends MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> iterator = Recipes.cannerEnrich.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> iterator = Recipes.cannerEnrich.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> rec = iterator.next();
             if (rec.getOutput().isFluidEqual(output) && rec.getOutput().amount == output.amount) {
                 iterator.remove();
@@ -90,7 +90,7 @@ public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrich
                 .postIfNotEmpty()) {
             return;
         }
-        for (Iterator<? extends MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> iterator = Recipes.cannerEnrich.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> iterator = Recipes.cannerEnrich.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> rec = iterator.next();
             if (rec.getInput().fluid.getFluid() == input.getFluid() && rec.getInput().additive.matches(input1)) {
                 iterator.remove();
@@ -100,7 +100,7 @@ public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrich
     }
 
     public void removeAll() {
-        for (Iterator<? extends MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> iterator = Recipes.cannerEnrich.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> iterator = Recipes.cannerEnrich.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> rec = iterator.next();
             iterator.remove();
             addBackup(rec);
@@ -108,7 +108,7 @@ public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrich
     }
 
     private boolean remove(MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> recipe, boolean backup) {
-        for (Iterator<? extends MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> iterator = Recipes.cannerEnrich.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> iterator = Recipes.cannerEnrich.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> rec = iterator.next();
             if (recipe.getInput().matches(rec.getInput().fluid, rec.getInput().additive.getInputs().get(0))) {
                 iterator.remove();

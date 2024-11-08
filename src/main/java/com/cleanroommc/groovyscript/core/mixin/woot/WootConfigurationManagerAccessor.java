@@ -26,5 +26,4 @@ public interface WootConfigurationManagerAccessor {
 
     @Invoker
     String callMakeKey(WootMobName wootMobName, EnumConfigKey configKey);
-
 }

@@ -49,13 +49,15 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
     @ApiStatus.Internal
     public void afterScriptLoad() {
         ExtruderManagerAccessor.getOutputListIgneous().clear();
-        ExtruderManagerAccessor.getOutputListIgneous().addAll(
-                ExtruderManagerAccessor.getRecipeMapIgneous().values().stream().map(ExtruderRecipe::getOutput).collect(Collectors.toList())
-        );
+        ExtruderManagerAccessor.getOutputListIgneous()
+                .addAll(
+                        ExtruderManagerAccessor.getRecipeMapIgneous().values().stream().map(ExtruderRecipe::getOutput).collect(Collectors.toList())
+                );
         ExtruderManagerAccessor.getOutputListSedimentary().clear();
-        ExtruderManagerAccessor.getOutputListSedimentary().addAll(
-                ExtruderManagerAccessor.getRecipeMapSedimentary().values().stream().map(ExtruderRecipe::getOutput).collect(Collectors.toList())
-        );
+        ExtruderManagerAccessor.getOutputListSedimentary()
+                .addAll(
+                        ExtruderManagerAccessor.getRecipeMapSedimentary().values().stream().map(ExtruderRecipe::getOutput).collect(Collectors.toList())
+                );
     }
 
     private Map<ItemWrapper, ExtruderManager.ExtruderRecipe> map(boolean isSedimentary) {

@@ -6,5 +6,4 @@ public class Inspirations extends GroovyPropertyContainer {
 
     public final Cauldron cauldron = new Cauldron();
     public final AnvilSmashing anvilSmashing = new AnvilSmashing();
-
 }

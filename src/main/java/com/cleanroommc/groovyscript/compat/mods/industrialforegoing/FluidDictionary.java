@@ -71,5 +71,4 @@ public class FluidDictionary extends StandardListRegistry<FluidDictionaryEntry> 
     public boolean removeByOutput(FluidStack fluid) {
         return removeByOutput(fluid.getFluid().getName());
     }
-
 }

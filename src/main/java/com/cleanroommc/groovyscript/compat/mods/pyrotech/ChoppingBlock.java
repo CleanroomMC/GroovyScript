@@ -66,7 +66,9 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         @Property
         private final IntList quantities = new IntArrayList();
 
-        @RecipeBuilderMethodDescription(field = {"chops", "quantities"})
+        @RecipeBuilderMethodDescription(field = {
+                "chops", "quantities"
+        })
         public RecipeBuilder chops(int chops, int quantities) {
             this.chops.add(chops);
             this.quantities.add(quantities);

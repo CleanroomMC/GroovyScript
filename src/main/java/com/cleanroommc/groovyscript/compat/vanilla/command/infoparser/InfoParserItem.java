@@ -52,5 +52,4 @@ public class InfoParserItem extends GenericInfoParser<ItemStack> {
         instance.add(info.getMessages(), info.getStack(), info.isPrettyNbt());
         InfoParserTranslationKey.instance.add(info.getMessages(), info.getStack().getTranslationKey(), info.isPrettyNbt());
     }
-
 }

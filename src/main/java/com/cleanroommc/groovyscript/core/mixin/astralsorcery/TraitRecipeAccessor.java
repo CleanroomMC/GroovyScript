@@ -16,5 +16,4 @@ public interface TraitRecipeAccessor {
 
     @Accessor("matchTraitStacks")
     Map<TraitRecipe.TraitRecipeSlot, ItemHandle> getTraitStackMap();
-
 }

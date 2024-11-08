@@ -22,5 +22,4 @@ public interface OreTypesAccessor {
 
     @Invoker("appendOreEntry")
     void add(OreEntry entry);
-
 }

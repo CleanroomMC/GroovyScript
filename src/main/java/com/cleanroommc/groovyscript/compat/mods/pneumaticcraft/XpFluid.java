@@ -105,5 +105,4 @@ public class XpFluid extends VirtualizedRegistry<Pair<Fluid, Integer>> {
             return Pair.of(fluidInput.get(0), ratio);
         }
     }
-
 }

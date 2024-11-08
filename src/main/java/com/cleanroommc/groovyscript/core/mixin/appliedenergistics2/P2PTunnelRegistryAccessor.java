@@ -20,5 +20,4 @@ public interface P2PTunnelRegistryAccessor {
 
     @Accessor
     Map<Capability<?>, TunnelType> getCapTunnels();
-
 }

@@ -62,13 +62,16 @@ public class Exporter {
     public static void generateWiki(File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
-        List<INamed> registries = mod.get().getRegistries().stream()
+        List<INamed> registries = mod.get()
+                .getRegistries()
+                .stream()
                 .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
                 .distinct()
-                .sorted((left, right) -> ComparisonChain.start()
-                        .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
-                        .compare(left.getName(), right.getName())
-                        .result())
+                .sorted(
+                        (left, right) -> ComparisonChain.start()
+                                .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
+                                .compare(left.getName(), right.getName())
+                                .result())
                 .collect(Collectors.toList());
 
         if (registries.isEmpty()) return;
@@ -90,18 +93,30 @@ public class Exporter {
         //  maybe also add commands?
 
         StringBuilder index = new StringBuilder()
-                .append("---").append("\n")
-                .append(Documentation.DEFAULT_FORMAT.removeTableOfContentsText()).append("\n") // Removes the table of contents from the sidebar of indexes.
-                .append("---").append("\n\n\n")
-                .append("# ").append(mod).append("\n\n")
-                .append("## ").append(I18n.format("groovyscript.wiki.categories")).append("\n\n")
-                .append(I18n.format("groovyscript.wiki.subcategories_count", registries.size())).append("\n\n");
+                .append("---")
+                .append("\n")
+                .append(Documentation.DEFAULT_FORMAT.removeTableOfContentsText())
+                .append("\n") // Removes the table of contents from the sidebar of indexes.
+                .append("---")
+                .append("\n\n\n")
+                .append("# ")
+                .append(mod)
+                .append("\n\n")
+                .append("## ")
+                .append(I18n.format("groovyscript.wiki.categories"))
+                .append("\n\n")
+                .append(I18n.format("groovyscript.wiki.subcategories_count", registries.size()))
+                .append("\n\n");
 
         StringBuilder navigation = new StringBuilder()
-                .append("---").append("\n")
-                .append("search:").append("\n")
-                .append("  exclude: true").append("\n") // Removes navigation files from the search index
-                .append("---").append("\n\n\n")
+                .append("---")
+                .append("\n")
+                .append("search:")
+                .append("\n")
+                .append("  exclude: true")
+                .append("\n") // Removes navigation files from the search index
+                .append("---")
+                .append("\n\n\n")
                 .append(String.format("* [%s](./%s)\n", mod, INDEX_FILE_NAME));
 
         fileLinks.forEach(line -> {
@@ -133,18 +148,25 @@ public class Exporter {
         List<String> imports = new ArrayList<>();
 
         // Preprocessor to only run script if the mod is loaded
-        header.append("\n").append("// Auto generated groovyscript example file").append("\n")
-                .append("// MODS_LOADED: ").append(mod.getModId()).append("\n");
+        header.append("\n")
+                .append("// Auto generated groovyscript example file")
+                .append("\n")
+                .append("// MODS_LOADED: ")
+                .append(mod.getModId())
+                .append("\n");
 
         // Iterate through every registry of the mod once, in alphabetical order.
-        List<INamed> registries = mod.get().getRegistries().stream()
+        List<INamed> registries = mod.get()
+                .getRegistries()
+                .stream()
                 .distinct()
                 .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
                 .filter(x -> x.getClass().getAnnotation(RegistryDescription.class).location().equals(target))
-                .sorted((left, right) -> ComparisonChain.start()
-                        .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
-                        .compare(left.getName(), right.getName())
-                        .result())
+                .sorted(
+                        (left, right) -> ComparisonChain.start()
+                                .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
+                                .compare(left.getName(), right.getName())
+                                .result())
                 .collect(Collectors.toList());
 
         if (registries.isEmpty()) return;
@@ -160,7 +182,9 @@ public class Exporter {
         imports.stream().distinct().sorted().forEach(i -> header.append("import ").append(i).append("\n"));
 
         // Print that the script was loaded at the end of the header, after any imports have been added.
-        header.append("\n").append(String.format(PRINT_MOD_DETECTED, mod.getModId())).append("\n\n")
+        header.append("\n")
+                .append(String.format(PRINT_MOD_DETECTED, mod.getModId()))
+                .append("\n\n")
                 .append(body);
 
         try {

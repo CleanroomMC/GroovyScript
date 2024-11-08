@@ -20,5 +20,4 @@ public class InfoSelfCommand extends BaseInfoCommand {
     void gatherInfo(InfoParserPackage info, EntityPlayer player) {
         info.setEntity(player);
     }
-
 }

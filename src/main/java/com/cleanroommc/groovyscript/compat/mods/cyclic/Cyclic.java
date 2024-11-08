@@ -9,5 +9,4 @@ public class Cyclic extends GroovyPropertyContainer {
     public final Melter melter = new Melter();
     public final Packager packager = new Packager();
     public final Solidifier solidifier = new Solidifier();
-
 }

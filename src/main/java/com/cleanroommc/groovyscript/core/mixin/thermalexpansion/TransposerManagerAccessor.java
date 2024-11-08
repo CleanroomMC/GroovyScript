@@ -32,5 +32,4 @@ public interface TransposerManagerAccessor {
     static Set<ComparableItemStackValidatedNBT> getValidationSet() {
         throw new UnsupportedOperationException();
     }
-
 }

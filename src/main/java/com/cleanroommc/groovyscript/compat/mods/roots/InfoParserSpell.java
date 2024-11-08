@@ -42,5 +42,4 @@ public class InfoParserSpell extends GenericInfoParser<SpellBase> {
         instance.add(info.getMessages(), spell, info.isPrettyNbt());
         InfoParserTranslationKey.instance.add(info.getMessages(), spell.getTranslationKey(), info.isPrettyNbt());
     }
-
 }

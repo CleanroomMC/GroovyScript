@@ -45,6 +45,8 @@ public class Registry {
         List<String> imports = new ArrayList<>();
 
         for (Method method : registryClass.getMethods()) {
+            // skip bridge methods as they are overridden by a child method.
+            if (method.isBridge()) continue;
             if (method.isAnnotationPresent(GroovyBlacklist.class)) continue;
             if (method.isAnnotationPresent(RecipeBuilderDescription.class)) {
                 recipeBuilderMethods.add(method);
@@ -72,7 +74,7 @@ public class Registry {
     private static Map<String, String> generateTypes(Class<?> registryClass) {
         var types = new HashMap<String, String>();
         if (registryClass.getGenericSuperclass() instanceof ParameterizedType parameterizedType) {
-            if (parameterizedType.getRawType() instanceof Class<?> typeClass) {
+            if (parameterizedType.getRawType() instanceof Class<?>typeClass) {
                 var parameters = typeClass.getTypeParameters();
                 var args = parameterizedType.getActualTypeArguments();
                 for (int i = 0; i < parameters.length && i < args.length; i++) {
@@ -84,38 +86,41 @@ public class Registry {
     }
 
     private static List<Method> sortGrSRecipeBuilderDescriptionMethods(List<Method> methods) {
-        methods.sort((left, right) -> ComparisonChain.start()
-                .compareFalseFirst(left.isAnnotationPresent(RecipeBuilderDescription.class), right.isAnnotationPresent(RecipeBuilderDescription.class))
-                .compare(left.getAnnotation(RecipeBuilderDescription.class).priority(), right.getAnnotation(RecipeBuilderDescription.class).priority())
-                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                .compare(Exporter.simpleSignature(left), Exporter.simpleSignature(right), String::compareToIgnoreCase)
-                .result());
+        methods.sort(
+                (left, right) -> ComparisonChain.start()
+                        .compareFalseFirst(left.isAnnotationPresent(RecipeBuilderDescription.class), right.isAnnotationPresent(RecipeBuilderDescription.class))
+                        .compare(left.getAnnotation(RecipeBuilderDescription.class).priority(), right.getAnnotation(RecipeBuilderDescription.class).priority())
+                        .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
+                        .compare(Exporter.simpleSignature(left), Exporter.simpleSignature(right), String::compareToIgnoreCase)
+                        .result());
         return methods;
     }
 
     private static List<Method> sortGrSMethodDescriptionMethods(List<Method> methods) {
-        methods.sort((left, right) -> ComparisonChain.start()
-                .compareFalseFirst(left.isAnnotationPresent(MethodDescription.class), right.isAnnotationPresent(MethodDescription.class))
-                .compare(left.getAnnotation(MethodDescription.class).priority(), right.getAnnotation(MethodDescription.class).priority())
-                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                .compare(Exporter.simpleSignature(left), Exporter.simpleSignature(right), String::compareToIgnoreCase)
-                .result());
+        methods.sort(
+                (left, right) -> ComparisonChain.start()
+                        .compareFalseFirst(left.isAnnotationPresent(MethodDescription.class), right.isAnnotationPresent(MethodDescription.class))
+                        .compare(left.getAnnotation(MethodDescription.class).priority(), right.getAnnotation(MethodDescription.class).priority())
+                        .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
+                        .compare(Exporter.simpleSignature(left), Exporter.simpleSignature(right), String::compareToIgnoreCase)
+                        .result());
         return methods;
     }
 
     private static List<Example> getExamples(Method method) {
         return method.isAnnotationPresent(MethodDescription.class)
-               ? new ArrayList<>(Arrays.asList(method.getAnnotation(MethodDescription.class).example()))
-               : new ArrayList<>();
+                ? new ArrayList<>(Arrays.asList(method.getAnnotation(MethodDescription.class).example()))
+                : new ArrayList<>();
     }
 
     private static List<Example> sortExamples(List<Example> examples) {
-        examples.sort((left, right) -> ComparisonChain.start()
-                .compare(left.priority(), right.priority())
-                .compareFalseFirst(left.commented(), right.commented())
-                .compare(left.value().length(), right.value().length())
-                .compare(left.value(), right.value())
-                .result());
+        examples.sort(
+                (left, right) -> ComparisonChain.start()
+                        .compare(left.priority(), right.priority())
+                        .compareFalseFirst(left.commented(), right.commented())
+                        .compare(left.value().length(), right.value().length())
+                        .compare(left.value(), right.value())
+                        .result());
         return examples;
     }
 
@@ -132,8 +137,9 @@ public class Registry {
     }
 
     public String getDescription() {
-        return Documentation.ensurePeriod(Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
-                .replace("\"", "\\\""));
+        return Documentation.ensurePeriod(
+                Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
+                        .replace("\"", "\\\""));
     }
 
     public String exampleBlock() {
@@ -181,22 +187,24 @@ public class Registry {
         out.append(getDescription()).append("\n\n");
 
         if (!description.isFullyDocumented()) {
-            out.append(new AdmonitionBuilder()
-                               .type(Admonition.Type.WARNING)
-                               .note(I18n.format("groovyscript.wiki.not_fully_documented"))
-                               .generate());
+            out.append(
+                    new AdmonitionBuilder()
+                            .type(Admonition.Type.WARNING)
+                            .note(I18n.format("groovyscript.wiki.not_fully_documented"))
+                            .generate());
             out.append("\n\n");
         }
 
         Admonition[] admonition = description.admonition();
         for (Admonition note : admonition) {
-            out.append(new AdmonitionBuilder()
-                               .type(note.type())
-                               .title(note.title())
-                               .hasTitle(note.hasTitle())
-                               .format(note.format())
-                               .note(Documentation.ensurePeriod(Documentation.translate(note.value())))
-                               .generate());
+            out.append(
+                    new AdmonitionBuilder()
+                            .type(note.type())
+                            .title(note.title())
+                            .hasTitle(note.hasTitle())
+                            .format(note.format())
+                            .note(Documentation.ensurePeriod(Documentation.translate(note.value())))
+                            .generate());
             out.append("\n\n");
         }
         return out.toString();
@@ -206,41 +214,48 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n").append(I18n.format("groovyscript.wiki.import_instructions")).append("\n\n");
 
-        List<String> packages = mod.getAliases().stream()
+        List<String> packages = mod.getAliases()
+                .stream()
                 .flatMap(modID -> registry.getAliases().stream().map(alias -> String.format("mods.%s.%s", modID, alias)))
                 .collect(Collectors.toList());
 
         int target = packages.indexOf(reference);
         packages.set(target, reference + "/*()!*/");
 
-        out.append(new CodeBlockBuilder()
-                           .line(packages)
-                           .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
-                           // Highlighting and focusing are based on the line count, and is 1-indexed
-                           .highlight(String.valueOf(1 + target))
-                           .focus(1 + target)
-                           .toString());
+        out.append(
+                new CodeBlockBuilder()
+                        .line(packages)
+                        .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
+                        // Highlighting and focusing are based on the line count, and is 1-indexed
+                        .highlight(String.valueOf(1 + target))
+                        .focus(1 + target)
+                        .toString());
         return out.toString();
     }
 
     private String recipeBuilder() {
         StringBuilder out = new StringBuilder();
 
-        out.append("### ").append(I18n.format("groovyscript.wiki.recipe_builder")).append("\n\n")
-                .append(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle())).append("\n\n")
-                .append(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder())).append("\n\n");
+        out.append("### ")
+                .append(I18n.format("groovyscript.wiki.recipe_builder"))
+                .append("\n\n")
+                .append(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle()))
+                .append("\n\n")
+                .append(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder()))
+                .append("\n\n");
 
         for (int i = 0; i < recipeBuilderMethods.size(); i++) {
             Builder builder = new Builder(recipeBuilderMethods.get(i), reference, baseTranslationKey);
-            out.append(new AdmonitionBuilder()
-                               .type(Admonition.Type.ABSTRACT)
-                               .hasTitle(true)
-                               .title(methodExample(recipeBuilderMethods.get(i)))
-                               .note(builder.documentMethods().split("\n"))
-                               .note("\n")
-                               .note(builder.builderAdmonition().split("\n"))
-                               .note("\n")
-                               .generate());
+            out.append(
+                    new AdmonitionBuilder()
+                            .type(Admonition.Type.ABSTRACT)
+                            .hasTitle(true)
+                            .title(methodExample(recipeBuilderMethods.get(i)))
+                            .note(builder.documentMethods().split("\n"))
+                            .note("\n")
+                            .note(builder.builderAdmonition().split("\n"))
+                            .note("\n")
+                            .generate());
             if (i < recipeBuilderMethods.size() - 1) out.append("\n\n");
         }
         return out.toString();
@@ -297,13 +312,15 @@ public class Registry {
         }
 
         if (!exampleLines.isEmpty() && !preventExamples) {
-            out.append(new AdmonitionBuilder()
-                               .type(Admonition.Type.EXAMPLE)
-                               .note(new CodeBlockBuilder()
-                                             .line(exampleLines)
-                                             .annotation(annotations)
-                                             .generate())
-                               .generate());
+            out.append(
+                    new AdmonitionBuilder()
+                            .type(Admonition.Type.EXAMPLE)
+                            .note(
+                                    new CodeBlockBuilder()
+                                            .line(exampleLines)
+                                            .annotation(annotations)
+                                            .generate())
+                            .generate());
             out.append("\n");
         }
 
@@ -317,15 +334,16 @@ public class Registry {
         // If `desc` isn't defined, check the `registryDefault` key. If it exists, use it.
         // Then, check the `globalDefault` key. If it exists use it. Otherwise, we want to still use the `registryDefault` for logging a missing key.
         String lang = desc.isEmpty()
-                      ? I18n.hasKey(registryDefault) || !I18n.hasKey(globalDefault) ? registryDefault : globalDefault
-                      : desc;
+                ? I18n.hasKey(registryDefault) || !I18n.hasKey(globalDefault) ? registryDefault : globalDefault
+                : desc;
 
-        return String.format("- %s:\n\n%s",
-                             Documentation.translate(lang),
-                             new CodeBlockBuilder()
-                                     .line(methodExample(method, Exporter.simpleSignature(method, types)))
-                                     .indentation(1)
-                                     .toString());
+        return String.format(
+                "- %s:\n\n%s",
+                Documentation.translate(lang),
+                new CodeBlockBuilder()
+                        .line(methodExample(method, Exporter.simpleSignature(method, types)))
+                        .indentation(1)
+                        .toString());
     }
 
     private String methodExample(Method method, String example) {
@@ -349,5 +367,4 @@ public class Registry {
         }
         return out.toString();
     }
-
 }

@@ -175,16 +175,13 @@ public abstract class GroovySandbox {
     }
 
     @ApiStatus.OverrideOnly
-    protected void postInitBindings(Binding binding) {
-    }
+    protected void postInitBindings(Binding binding) {}
 
     @ApiStatus.OverrideOnly
-    protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
-    }
+    protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {}
 
     @ApiStatus.OverrideOnly
-    protected void preRun() {
-    }
+    protected void preRun() {}
 
     @ApiStatus.OverrideOnly
     protected boolean shouldRunFile(File file) {
@@ -192,8 +189,7 @@ public abstract class GroovySandbox {
     }
 
     @ApiStatus.OverrideOnly
-    protected void postRun() {
-    }
+    protected void postRun() {}
 
     public abstract Collection<File> getClassFiles();
 

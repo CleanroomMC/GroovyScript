@@ -55,7 +55,8 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
     @MethodDescription(example = @Example("item('minecraft:gold_nugget')"))
     public boolean removeByInput(IIngredient input) {
         return GCTRecipeList.instance.getRecipes().values().removeIf(recipe -> {
-            boolean found = recipe.getIngredients().stream()
+            boolean found = recipe.getIngredients()
+                    .stream()
                     .map(IngredientStack::getIngredient)
                     .map(Ingredient::getMatchingStacks)
                     .flatMap(Arrays::stream)
@@ -122,5 +123,4 @@ public class GemCuttingTable extends VirtualizedRegistry<IGCTRecipe> {
             return recipe;
         }
     }
-
 }

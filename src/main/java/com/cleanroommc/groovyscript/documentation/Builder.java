@@ -21,11 +21,14 @@ import java.util.stream.Stream;
 
 public class Builder {
 
-    private static final Char2CharMap commaSeparatedParts = new Char2CharArrayMap() {{
-        put(']', '[');
-        put('\'', '\'');
-        defaultReturnValue(Character.MIN_VALUE);
-    }};
+    private static final Char2CharMap commaSeparatedParts = new Char2CharArrayMap() {
+
+        {
+            put(']', '[');
+            put('\'', '\'');
+            defaultReturnValue(Character.MIN_VALUE);
+        }
+    };
 
     private final String reference;
     private final Method builderMethod;
@@ -57,16 +60,16 @@ public class Builder {
         List<Field> allFields = getAllFields(builderClass);
         for (Field field : allFields) {
             List<Property> annotations = Stream.of(
-                            // Attached to the builder method's requirements field, an uncommon location for specific overrides
-                            Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
-                            // Attached to the class or any parent classes, to create/override requirements set in the parent
-                            getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
-                            // Attached to the field, the typical place for property information to be created
-                            Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
-                                if (r.property().isEmpty() || r.property().equals(field.getName())) return true;
-                                GroovyLog.get().warn("Property Annotation had element property '{}' set to a value that wasn't empty or equal to field '{}' in class '{}'.", r.property(), field, builderClass);
-                                return false;
-                            }))
+                    // Attached to the builder method's requirements field, an uncommon location for specific overrides
+                    Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
+                    // Attached to the class or any parent classes, to create/override requirements set in the parent
+                    getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
+                    // Attached to the field, the typical place for property information to be created
+                    Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
+                        if (r.property().isEmpty() || r.property().equals(field.getName())) return true;
+                        GroovyLog.get().warn("Property Annotation had element property '{}' set to a value that wasn't empty or equal to field '{}' in class '{}'.", r.property(), field, builderClass);
+                        return false;
+                    }))
                     .flatMap(x -> x)
                     .sorted((left, right) -> ComparisonChain.start().compare(left.hierarchy(), right.hierarchy()).result())
                     .collect(Collectors.toList());
@@ -92,11 +95,13 @@ public class Builder {
             }
         }
 
-        fieldToModifyingMethods.forEach((key, value) -> value.sort((left, right) -> ComparisonChain.start()
-                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
-                .compare(left.getMethod().getName().length(), right.getMethod().getName().length())
-                .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
-                .result()));
+        fieldToModifyingMethods.forEach(
+                (key, value) -> value.sort(
+                        (left, right) -> ComparisonChain.start()
+                                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
+                                .compare(left.getMethod().getName().length(), right.getMethod().getName().length())
+                                .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
+                                .result()));
 
         return fieldToModifyingMethods;
     }
@@ -104,18 +109,20 @@ public class Builder {
     private static List<Method> gatherRegistrationMethods(Class<?> builderClass) {
         return Arrays.stream(builderClass.getMethods())
                 .filter(x -> x.isAnnotationPresent(RecipeBuilderRegistrationMethod.class))
-                .sorted((left, right) -> ComparisonChain.start()
-                        .compare(left.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy(), right.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy())
-                        // Specifically de-prioritize Object classes
-                        .compareFalseFirst(left.getReturnType() == Object.class, right.getReturnType() == Object.class)
-                        .result())
+                .sorted(
+                        (left, right) -> ComparisonChain.start()
+                                .compare(left.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy(), right.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy())
+                                // Specifically de-prioritize Object classes
+                                .compareFalseFirst(left.getReturnType() == Object.class, right.getReturnType() == Object.class)
+                                .result())
                 // Ensure only the first method with a given name is used
                 .filter(distinctByKey(Method::getName))
-                .sorted((left, right) -> ComparisonChain.start()
-                        .compare(left.getAnnotation(RecipeBuilderRegistrationMethod.class).priority(), right.getAnnotation(RecipeBuilderRegistrationMethod.class).priority())
-                        .compare(left.getName().length(), right.getName().length())
-                        .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                        .result())
+                .sorted(
+                        (left, right) -> ComparisonChain.start()
+                                .compare(left.getAnnotation(RecipeBuilderRegistrationMethod.class).priority(), right.getAnnotation(RecipeBuilderRegistrationMethod.class).priority())
+                                .compare(left.getName().length(), right.getName().length())
+                                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
+                                .result())
                 .collect(Collectors.toList());
     }
 
@@ -275,7 +282,8 @@ public class Builder {
 
     public StringBuilder documentFields() {
         StringBuilder out = new StringBuilder();
-        fields.values().stream()
+        fields.values()
+                .stream()
                 .sorted()
                 .filter(FieldDocumentation::isUsed)
                 .forEach(fieldDocumentation -> {
@@ -304,14 +312,16 @@ public class Builder {
                     if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
                         GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), reference);
                     } else {
-                        out.append(new CodeBlockBuilder()
-                                           .line(recipeBuilderMethods.stream()
-                                                         .sorted()
-                                                         .map(RecipeBuilderMethod::shortMethodSignature)
-                                                         .distinct()
-                                                         .collect(Collectors.toList()))
-                                           .indentation(1)
-                                           .toString());
+                        out.append(
+                                new CodeBlockBuilder()
+                                        .line(
+                                                recipeBuilderMethods.stream()
+                                                        .sorted()
+                                                        .map(RecipeBuilderMethod::shortMethodSignature)
+                                                        .distinct()
+                                                        .collect(Collectors.toList()))
+                                        .indentation(1)
+                                        .toString());
                     }
                 });
         return out;
@@ -413,7 +423,9 @@ public class Builder {
             return true; //annotations.stream().anyMatch(x -> x.comp().types().length != 0 || x.valid().length != 0);
         }
 
-        @SuppressWarnings({"deprecation", "SimplifyOptionalCallChains"})
+        @SuppressWarnings({
+                "deprecation", "SimplifyOptionalCallChains"
+        })
         public String getComparison() {
             Optional<Comp[]> comparison = annotations.stream().map(Property::valid).filter(valid -> valid.length != 0).findFirst();
             if (!comparison.isPresent()) {
@@ -469,7 +481,6 @@ public class Builder {
                     .compare(this.getField().getName(), comp.getField().getName(), String::compareToIgnoreCase)
                     .result();
         }
-
     }
 
 
@@ -514,5 +525,4 @@ public class Builder {
                     .result();
         }
     }
-
 }

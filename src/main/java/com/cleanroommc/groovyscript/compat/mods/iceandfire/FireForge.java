@@ -28,7 +28,9 @@ public class FireForge extends StandardListRegistry<DragonForgeRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(example = {@Example("item('minecraft:iron_ingot')"), @Example(value = "item('iceandfire:fire_dragon_blood')", commented = true)})
+    @MethodDescription(example = {
+            @Example("item('minecraft:iron_ingot')"), @Example(value = "item('iceandfire:fire_dragon_blood')", commented = true)
+    })
     public boolean removeByInput(IIngredient input) {
         return getRecipes().removeIf(r -> (input.test(r.getInput()) || input.test(r.getBlood())) && doAddBackup(r));
     }

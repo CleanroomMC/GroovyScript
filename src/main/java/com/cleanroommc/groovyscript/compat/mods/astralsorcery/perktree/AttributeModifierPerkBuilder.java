@@ -119,5 +119,4 @@ public class AttributeModifierPerkBuilder {
             return this;
         }
     }
-
 }

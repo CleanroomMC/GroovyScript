@@ -72,7 +72,7 @@ public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput
                     .post();
             return;
         }
-        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.blastfurnace.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.blastfurnace.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe = iterator.next();
 
             if (recipe.getOutput().size() == outputs.length) {
@@ -99,7 +99,7 @@ public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput
                     .post();
             return;
         }
-        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.blastfurnace.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.blastfurnace.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> rec = iterator.next();
             if (rec.getInput().matches(input)) {
                 iterator.remove();
@@ -109,7 +109,7 @@ public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput
     }
 
     public void removeAll() {
-        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.blastfurnace.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.blastfurnace.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> rec = iterator.next();
             iterator.remove();
             addBackup(rec);
@@ -117,7 +117,7 @@ public class BlastFurnace extends VirtualizedRegistry<MachineRecipe<IRecipeInput
     }
 
     private boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe, boolean backup) {
-        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.blastfurnace.getRecipes().iterator(); iterator.hasNext(); ) {
+        for (Iterator<? extends MachineRecipe<IRecipeInput, Collection<ItemStack>>> iterator = Recipes.blastfurnace.getRecipes().iterator(); iterator.hasNext();) {
             MachineRecipe<IRecipeInput, Collection<ItemStack>> rec = iterator.next();
             if (rec.getInput().matches(recipe.getInput().getInputs().get(0))) {
                 iterator.remove();

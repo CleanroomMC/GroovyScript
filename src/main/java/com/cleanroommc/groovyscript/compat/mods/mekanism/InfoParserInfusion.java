@@ -34,5 +34,4 @@ public class InfoParserInfusion extends GenericInfoParser<InfuseObject> {
         instance.add(info.getMessages(), obj, info.isPrettyNbt());
         InfoParserTranslationKey.instance.add(info.getMessages(), obj.type.unlocalizedName, info.isPrettyNbt());
     }
-
 }

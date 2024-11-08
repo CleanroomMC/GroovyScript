@@ -18,5 +18,4 @@ public abstract class TileCelestialCrystalsMixin {
         if (replacementState == null) return original.call(instance);
         return replacementState;
     }
-
 }

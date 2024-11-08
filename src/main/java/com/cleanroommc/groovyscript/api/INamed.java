@@ -18,5 +18,4 @@ public interface INamed {
     default boolean isEnabled() {
         return true;
     }
-
 }

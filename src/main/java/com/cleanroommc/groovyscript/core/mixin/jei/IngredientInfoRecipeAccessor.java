@@ -15,5 +15,4 @@ public interface IngredientInfoRecipeAccessor<T> {
 
     @Accessor
     IIngredientType<T> getIngredientType();
-
 }

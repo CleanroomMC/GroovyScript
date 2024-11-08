@@ -34,5 +34,4 @@ public interface TapperManagerAccessor {
     static TObjectIntHashMap<ComparableItemStack> getFertilizerMap() {
         throw new UnsupportedOperationException();
     }
-
 }

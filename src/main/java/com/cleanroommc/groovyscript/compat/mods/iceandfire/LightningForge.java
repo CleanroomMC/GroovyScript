@@ -29,7 +29,9 @@ public class LightningForge extends StandardListRegistry<DragonForgeRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(example = {@Example(value = "item('minecraft:iron_ingot')", commented = true), @Example(value = "item('iceandfire:lightning_dragon_blood')", commented = true)})
+    @MethodDescription(example = {
+            @Example(value = "item('minecraft:iron_ingot')", commented = true), @Example(value = "item('iceandfire:lightning_dragon_blood')", commented = true)
+    })
     public boolean removeByInput(IIngredient input) {
         return getRecipes().removeIf(r -> (input.test(r.getInput()) || input.test(r.getBlood())) && doAddBackup(r));
     }

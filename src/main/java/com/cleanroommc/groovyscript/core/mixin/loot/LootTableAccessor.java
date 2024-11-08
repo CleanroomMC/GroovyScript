@@ -12,5 +12,4 @@ public interface LootTableAccessor {
 
     @Accessor("pools")
     List<LootPool> getPools();
-
 }

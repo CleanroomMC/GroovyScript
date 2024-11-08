@@ -22,6 +22,7 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
     @GroovyBlacklist
     protected AbstractReloadableStorage<SmelteryFuelRecipe> createRecipeStorage() {
         return new AbstractReloadableStorage<>() {
+
             @Override
             @GroovyBlacklist
             protected boolean compareRecipe(SmelteryFuelRecipe recipe, SmelteryFuelRecipe recipe2) {
@@ -86,5 +87,4 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
     public SimpleObjectStream<SmelteryFuelRecipe> streamRecipes() {
         return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
     }
-
 }

@@ -118,17 +118,14 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
     private void removeInternal(Collection<IManyToOneRecipe> recipes) {
         AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
         @SuppressWarnings("unchecked")
-        Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>> map =
-                ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>)
-                        ((TriItemLookupAccessor<IManyToOneRecipe>) accessor.getLookup()).getRoot()).getMap();
+        Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>> map = ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>) ((TriItemLookupAccessor<IManyToOneRecipe>) accessor.getLookup()).getRoot()).getMap();
         for (NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>> pair : map.values()) {
             Iterator<IManyToOneRecipe> listIter = pair.left.iterator();
             while (listIter.hasNext()) {
                 if (recipes.contains(listIter.next())) {
                     listIter.remove();
                     @SuppressWarnings("unchecked")
-                    Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeLeafNode<IManyToOneRecipe>>> nestedMap =
-                            ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>) pair.right).getMap();
+                    Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeLeafNode<IManyToOneRecipe>>> nestedMap = ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>) pair.right).getMap();
                     for (NNPair<NNList<IManyToOneRecipe>, ItemRecipeLeafNode<IManyToOneRecipe>> nestedPair : nestedMap.values()) {
                         Iterator<IManyToOneRecipe> nestedListIter = nestedPair.left.iterator();
                         while (nestedListIter.hasNext()) {
@@ -149,9 +146,12 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<IManyToOneRecipe> streamRecipes() {
-        List<IManyToOneRecipe> list = MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ALLOYSMELTER).values().stream()
+        List<IManyToOneRecipe> list = MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ALLOYSMELTER)
+                .values()
+                .stream()
                 .filter(r -> r instanceof IManyToOneRecipe)
-                .map(r -> (IManyToOneRecipe) r).collect(Collectors.toList());
+                .map(r -> (IManyToOneRecipe) r)
+                .collect(Collectors.toList());
         return new SimpleObjectStream<>(list)
                 .setRemover(this::remove);
     }
@@ -160,9 +160,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
     public void removeAll() {
         AlloyRecipeManagerAccessor accessor = (AlloyRecipeManagerAccessor) AlloyRecipeManager.getInstance();
         @SuppressWarnings("unchecked")
-        Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>> map =
-                ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>)
-                        ((TriItemLookupAccessor<IManyToOneRecipe>) accessor.getLookup()).getRoot()).getMap();
+        Int2ObjectOpenHashMap<NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>> map = ((ItemRecipeNodeAccessor<IManyToOneRecipe, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>>) ((TriItemLookupAccessor<IManyToOneRecipe>) accessor.getLookup()).getRoot()).getMap();
         for (NNPair<NNList<IManyToOneRecipe>, ItemRecipeNode<IManyToOneRecipe, ItemRecipeLeafNode<IManyToOneRecipe>>> pair : map.values()) {
             Iterator<IManyToOneRecipe> listIter = pair.left.iterator();
             while (listIter.hasNext()) {
@@ -209,5 +207,4 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
             return null;
         }
     }
-
 }

@@ -18,5 +18,4 @@ public class AlloyRecipeManagerMixin {
             ModSupport.ENDER_IO.get().alloySmelter.addScripted(recipe);
         }
     }
-
 }

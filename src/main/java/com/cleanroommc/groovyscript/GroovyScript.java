@@ -69,11 +69,12 @@ import java.util.List;
 import java.util.Random;
 
 @GroovyBlacklist
-@Mod(modid = GroovyScript.ID,
-     name = GroovyScript.NAME,
-     version = GroovyScript.VERSION,
-     dependencies = "after:mixinbooter@[8.0,);",
-     guiFactory = "com.cleanroommc.groovyscript.DisabledConfigGui")
+@Mod(
+        modid = GroovyScript.ID,
+        name = GroovyScript.NAME,
+        version = GroovyScript.VERSION,
+        dependencies = "after:mixinbooter@[8.0,);",
+        guiFactory = "com.cleanroommc.groovyscript.DisabledConfigGui")
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 
@@ -180,9 +181,10 @@ public class GroovyScript {
     public void onPostInit(FMLPostInitializationEvent event) {
         CustomClickAction.registerAction("copy", value -> {
             GuiScreen.setClipboardString(value);
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("groovyscript.command.copy.copied_start")
-                                                                .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
-                                                                .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
+            Minecraft.getMinecraft().player.sendMessage(
+                    new TextComponentTranslation("groovyscript.command.copy.copied_start")
+                            .appendSibling(new TextComponentString(value).setStyle(new Style().setColor(TextFormatting.GOLD)))
+                            .appendSibling(new TextComponentTranslation("groovyscript.command.copy.copied_end")));
         });
     }
 

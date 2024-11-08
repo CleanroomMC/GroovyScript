@@ -37,9 +37,7 @@ public abstract class TileEnergyStorageCoreMixin {
         var helper = ((BlockStateEnergyCoreStructure) tile.coreStructure).getHelper();
         if (!(tile.coreValid.value = tile.coreStructure.checkTier(tile.tier.value))) {
             BlockPos pos = helper.invalidBlock;
-            tile.invalidMessage.value = "Error At: x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() +
-                                        " Expected: " + helper.expectedBlockState.getBlock().getRegistryName() + ":" +
-                                        helper.expectedBlockState.getBlock().getMetaFromState(helper.expectedBlockState);
+            tile.invalidMessage.value = "Error At: x:" + pos.getX() + ", y:" + pos.getY() + ", z:" + pos.getZ() + " Expected: " + helper.expectedBlockState.getBlock().getRegistryName() + ":" + helper.expectedBlockState.getBlock().getMetaFromState(helper.expectedBlockState);
             valid = false;
         }
 

@@ -35,5 +35,4 @@ public abstract class AbstractGeneratorRegistry extends StandardListRegistry<Fue
             return false;
         });
     }
-
 }
