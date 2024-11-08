@@ -44,8 +44,7 @@ public class GroovyScriptCompiler extends CompilationCustomizer {
             if (annotatedNode.getClassNode().getName().equals(SIDE_ONLY_CLASS)) {
                 Expression expr = annotatedNode.getMember("value");
                 if (expr instanceof PropertyExpression prop) {
-                    if (prop.getObjectExpression() instanceof ClassExpression &&
-                        prop.getObjectExpression().getType().getName().equals(SIDE_CLASS)) {
+                    if (prop.getObjectExpression() instanceof ClassExpression && prop.getObjectExpression().getType().getName().equals(SIDE_CLASS)) {
                         String elementSide = prop.getPropertyAsString();
                         return elementSide != null && !elementSide.equals(AsmDecompileHelper.SIDE);
                     }

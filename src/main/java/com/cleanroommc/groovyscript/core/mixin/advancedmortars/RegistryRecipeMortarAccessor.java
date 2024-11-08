@@ -14,5 +14,4 @@ public interface RegistryRecipeMortarAccessor {
 
     @Accessor
     EnumMap<EnumMortarType, List<RecipeMortar>> getRecipeMap();
-
 }

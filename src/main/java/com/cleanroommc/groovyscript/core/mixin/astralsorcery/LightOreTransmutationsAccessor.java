@@ -13,5 +13,4 @@ public interface LightOreTransmutationsAccessor {
     static Collection<LightOreTransmutations.Transmutation> getRegisteredTransmutations() {
         return null;
     }
-
 }

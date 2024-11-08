@@ -9,5 +9,4 @@ public class FutureMC extends GroovyPropertyContainer {
     public final Smithing smithing = new Smithing();
     public final Smoker smoker = new Smoker();
     public final Stonecutter stonecutter = new Stonecutter();
-
 }

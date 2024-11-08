@@ -39,5 +39,4 @@ public class InfoParserWeather extends GenericInfoParser<String> {
         }
         instance.add(info.getMessages(), "clear", info.isPrettyNbt());
     }
-
 }

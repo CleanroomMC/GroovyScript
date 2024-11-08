@@ -12,5 +12,4 @@ public interface HopperFiltersAccessor {
 
     @Accessor
     Map<String, IHopperFilter> getFILTERS();
-
 }

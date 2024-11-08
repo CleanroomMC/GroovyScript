@@ -30,7 +30,9 @@ public class ShapelessArcaneCR extends ShapelessArcaneRecipe implements ICraftin
     private final ShapelessCraftingRecipe craftingRecipe;
 
     public ShapelessArcaneCR(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction, @Nullable Closure<Void> recipeAction, String research, int vis, AspectList crystals) {
-        super(ArcaneWorkbench.DEFAULT, research, vis, crystals, output, new Object[]{Ingredient.EMPTY});
+        super(ArcaneWorkbench.DEFAULT, research, vis, crystals, output, new Object[]{
+                Ingredient.EMPTY
+        });
         this.craftingRecipe = new ShapelessCraftingRecipe(output, input, recipeFunction, recipeAction);
     }
 

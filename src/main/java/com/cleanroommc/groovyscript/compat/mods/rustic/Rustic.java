@@ -8,5 +8,4 @@ public class Rustic extends GroovyPropertyContainer {
     public final BrewingBarrel brewingBarrel = new BrewingBarrel();
     public final CrushingTub crushingTub = new CrushingTub();
     public final EvaporatingBasin evaporatingBasin = new EvaporatingBasin();
-
 }

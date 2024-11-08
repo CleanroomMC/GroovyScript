@@ -62,6 +62,7 @@ public class AltarRecipeBuilder {
 
     private static DiscoveryRecipe discoveryAltar(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, List<Integer> fluidStacks) {
         return new DiscoveryRecipe(registerNative(name, output, inputs)) {
+
             @Override
             public int getPassiveStarlightRequired() {
                 return starlightRequired;
@@ -81,6 +82,7 @@ public class AltarRecipeBuilder {
 
     private static AttunementRecipe attunementAltar(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, List<Integer> fluidStacks) {
         AttunementRecipe recipe = new AttunementRecipe(registerNative(name, output, inputs)) {
+
             @Override
             public int getPassiveStarlightRequired() {
                 return starlightRequired;
@@ -113,6 +115,7 @@ public class AltarRecipeBuilder {
 
     private static ConstellationRecipe constellationAltar(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, List<Integer> fluidStacks) {
         ConstellationRecipe recipe = new ConstellationRecipe(registerNative(name, output, inputs)) {
+
             @Override
             public int getPassiveStarlightRequired() {
                 return starlightRequired;
@@ -155,6 +158,7 @@ public class AltarRecipeBuilder {
 
     private static TraitRecipe traitAltar(String name, ItemStack output, ItemHandle[] inputs, int starlightRequired, int craftingTickTime, List<Integer> fluidStacks, IConstellation requiredConstellation, ItemHandle[] outerInputs) {
         TraitRecipe recipe = new TraitRecipe(registerNative(name, output, inputs)) {
+
             @Override
             public int getPassiveStarlightRequired() {
                 return starlightRequired;

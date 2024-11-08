@@ -57,14 +57,17 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         });
     }
 
-    @MethodDescription(example = {@Example("'demo', item('minecraft:diamond_block')"),
-                                  @Example("'demo', item('chisel:antiblock:3')"),
-                                  @Example("'demo', item('minecraft:sea_lantern')")}, type = MethodDescription.Type.ADDITION)
+    @MethodDescription(example = {
+            @Example("'demo', item('minecraft:diamond_block')"),
+            @Example("'demo', item('chisel:antiblock:3')"),
+            @Example("'demo', item('minecraft:sea_lantern')")
+    }, type = MethodDescription.Type.ADDITION)
     public void addVariation(String groupName, ItemStack item) {
         if (IngredientHelper.overMaxSize(item, 1)) {
-            GroovyLog.msg("Error adding Chisel Carving").error()
-                     .add("Item must have stack size of 1, got {}", item.getCount())
-                     .post();
+            GroovyLog.msg("Error adding Chisel Carving")
+                    .error()
+                    .add("Item must have stack size of 1, got {}", item.getCount())
+                    .post();
             return;
         }
         try {
@@ -79,7 +82,9 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         }
     }
 
-    @MethodDescription(example = {@Example("'antiblock', item('chisel:antiblock:3')"), @Example("'antiblock', item('chisel:antiblock:15')")})
+    @MethodDescription(example = {
+            @Example("'antiblock', item('chisel:antiblock:3')"), @Example("'antiblock', item('chisel:antiblock:15')")
+    })
     public void removeVariation(String groupName, ItemStack item) {
         try {
             getRegistry().removeVariation(item, groupName);
@@ -199,5 +204,4 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
             return this;
         }
     }
-
 }

@@ -48,8 +48,13 @@ public class CondenserRecipe implements ICondenserRecipe {
     }
 
     public CondenserRecipe(
-            @NotNull ItemStack output, List<IIngredient> inputs, IIngredient modifier, IIngredient bottle,
-            @NotNull FluidStack fluid, int time, boolean advanced) {
+            @NotNull ItemStack output,
+            List<IIngredient> inputs,
+            IIngredient modifier,
+            IIngredient bottle,
+            @NotNull FluidStack fluid,
+            int time,
+            boolean advanced) {
         this.output = output;
         this.fluid = fluid;
         this.bottle = bottle;
@@ -61,10 +66,7 @@ public class CondenserRecipe implements ICondenserRecipe {
 
     @Override
     public boolean matches(Fluid fluid, ItemStack modifier, ItemStack bottle, ItemStack[] inputs) {
-        if (fluid == this.fluid.getFluid() &&
-            (this.modifier == null || this.modifier.test(modifier)) &&
-            (this.modifier != null || modifier.isEmpty()) &&
-            (this.bottle == null || this.bottle.test(bottle))) {
+        if (fluid == this.fluid.getFluid() && (this.modifier == null || this.modifier.test(modifier)) && (this.modifier != null || modifier.isEmpty()) && (this.bottle == null || this.bottle.test(bottle))) {
             List<IIngredient> tempInputs = new ArrayList<>(this.inputs);
             for (ItemStack stack : inputs) {
                 if (stack != null && !stack.isEmpty()) {

@@ -29,5 +29,4 @@ public class InfoParserBiome extends GenericInfoParser<Biome> {
         if (info.getPos() == null || info.getEntity() == null) return;
         instance.add(info.getMessages(), info.getEntity().getEntityWorld().getBiome(info.getPos()), info.isPrettyNbt());
     }
-
 }

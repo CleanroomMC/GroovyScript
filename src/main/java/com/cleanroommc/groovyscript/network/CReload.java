@@ -7,12 +7,10 @@ import net.minecraft.network.PacketBuffer;
 public class CReload implements IPacket {
 
     @Override
-    public void encode(PacketBuffer buf) {
-    }
+    public void encode(PacketBuffer buf) {}
 
     @Override
-    public void decode(PacketBuffer buf) {
-    }
+    public void decode(PacketBuffer buf) {}
 
     @Override
     public IPacket executeServer(NetHandlerPlayServer handler) {

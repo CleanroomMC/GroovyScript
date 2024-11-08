@@ -89,5 +89,4 @@ public class Centrifuge extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

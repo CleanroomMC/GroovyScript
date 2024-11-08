@@ -123,7 +123,5 @@ public class HydraulicPress extends StandardListRegistry<IHydraulicPressRecipe> 
             }
             return recipe;
         }
-
     }
-
 }

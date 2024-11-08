@@ -45,9 +45,10 @@ public class Precipitator extends VirtualizedRegistry<PrecipitatorRecipe> {
     @ApiStatus.Internal
     public void afterScriptLoad() {
         PrecipitatorManagerAccessor.getOutputList().clear();
-        PrecipitatorManagerAccessor.getOutputList().addAll(
-                PrecipitatorManagerAccessor.getRecipeMap().values().stream().map(PrecipitatorManager.PrecipitatorRecipe::getOutput).collect(Collectors.toList())
-        );
+        PrecipitatorManagerAccessor.getOutputList()
+                .addAll(
+                        PrecipitatorManagerAccessor.getRecipeMap().values().stream().map(PrecipitatorManager.PrecipitatorRecipe::getOutput).collect(Collectors.toList())
+                );
     }
 
     public void add(PrecipitatorRecipe recipe) {

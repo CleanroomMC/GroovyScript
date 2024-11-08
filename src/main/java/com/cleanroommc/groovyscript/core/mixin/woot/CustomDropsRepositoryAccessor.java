@@ -11,5 +11,4 @@ public interface CustomDropsRepositoryAccessor {
 
     @Accessor
     List<Object> getDrops();
-
 }

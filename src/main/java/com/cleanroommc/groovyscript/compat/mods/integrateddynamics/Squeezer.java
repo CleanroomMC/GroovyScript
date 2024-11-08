@@ -58,8 +58,10 @@ public class Squeezer extends StandardListRegistry<IRecipe<IngredientRecipeCompo
     @Property(property = "fluidOutput", comp = @Comp(gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRecipe<IngredientRecipeComponent, IngredientsAndFluidStackRecipeComponent, DummyPropertiesComponent>> {
 
-        @Property(value = "groovyscript.wiki.integrateddynamics.squeezer.output.value", ignoresInheritedMethods = true,
-                  comp = @Comp(gte = 0, lte = 3))
+        @Property(
+                value = "groovyscript.wiki.integrateddynamics.squeezer.output.value",
+                ignoresInheritedMethods = true,
+                comp = @Comp(gte = 0, lte = 3))
         private final List<IngredientRecipeComponent> output = new ArrayList<>();
         @Property(value = "groovyscript.wiki.integrateddynamics.squeezer.duration.value", defaultValue = "10")
         private int duration = 10;
@@ -143,19 +145,23 @@ public class Squeezer extends StandardListRegistry<IRecipe<IngredientRecipeCompo
 
             if (basic) {
                 ModSupport.INTEGRATED_DYNAMICS.get().squeezer.addScripted(
-                        BlockSqueezer.getInstance().getRecipeRegistry().registerRecipe(
-                                new IngredientRecipeComponent(input.get(0).toMcIngredient()),
-                                new IngredientsAndFluidStackRecipeComponent(output, fluidOutput.getOrEmpty(0)),
-                                new DummyPropertiesComponent()
-                        ));
+                        BlockSqueezer.getInstance()
+                                .getRecipeRegistry()
+                                .registerRecipe(
+                                        new IngredientRecipeComponent(input.get(0).toMcIngredient()),
+                                        new IngredientsAndFluidStackRecipeComponent(output, fluidOutput.getOrEmpty(0)),
+                                        new DummyPropertiesComponent()
+                                ));
             }
             if (mechanical) {
                 ModSupport.INTEGRATED_DYNAMICS.get().mechanicalSqueezer.addScripted(
-                        BlockMechanicalSqueezer.getInstance().getRecipeRegistry().registerRecipe(
-                                new IngredientRecipeComponent(input.get(0).toMcIngredient()),
-                                new IngredientsAndFluidStackRecipeComponent(output, fluidOutput.getOrEmpty(0)),
-                                new DurationRecipeProperties(duration)
-                        ));
+                        BlockMechanicalSqueezer.getInstance()
+                                .getRecipeRegistry()
+                                .registerRecipe(
+                                        new IngredientRecipeComponent(input.get(0).toMcIngredient()),
+                                        new IngredientsAndFluidStackRecipeComponent(output, fluidOutput.getOrEmpty(0)),
+                                        new DurationRecipeProperties(duration)
+                                ));
             }
             return null;
         }

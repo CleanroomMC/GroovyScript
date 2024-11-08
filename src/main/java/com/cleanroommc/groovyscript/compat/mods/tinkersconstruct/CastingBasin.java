@@ -135,8 +135,15 @@ public class CastingBasin extends StandardListRegistry<ICastingRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable ICastingRecipe register() {
             if (!validate()) return null;
-            CastingRecipe recipe = new CastingRecipe(output.get(0), cast != null ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)
-                                                                                 : null, fluidInput.get(0), time, consumesCast, false);
+            CastingRecipe recipe = new CastingRecipe(
+                    output.get(0),
+                    cast != null
+                            ? MeltingRecipeBuilder.recipeMatchFromIngredient(cast)
+                            : null,
+                    fluidInput.get(0),
+                    time,
+                    consumesCast,
+                    false);
             add(recipe);
             return recipe;
         }

@@ -25,5 +25,4 @@ public abstract class OreSmeltingRecipeMixin {
         if (recipe == null) return "";
         return original.call(recipe);
     }
-
 }

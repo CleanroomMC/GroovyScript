@@ -14,5 +14,4 @@ public class EnderIO extends GroovyPropertyContainer {
     public final SoulBinder soulBinder = new SoulBinder();
     public final Tank tank = new Tank();
     public final Vat vat = new Vat();
-
 }
