@@ -6,5 +6,4 @@ public class RandomThings extends GroovyPropertyContainer {
 
     public final Imbuing imbuing = new Imbuing();
     public final Anvil anvil = new Anvil();
-
 }

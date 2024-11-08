@@ -108,7 +108,5 @@ public class ManualChoppingBlock extends StandardListRegistry<ChoppingBlockRecip
             }
             return recipe;
         }
-
     }
-
 }

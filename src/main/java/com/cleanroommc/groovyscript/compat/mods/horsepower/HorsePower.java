@@ -9,5 +9,4 @@ public class HorsePower extends GroovyPropertyContainer {
     public final Grindstone grindstone = new Grindstone();
     public final ManualGrindstone manualGrindstone = new ManualGrindstone();
     public final Press press = new Press();
-
 }

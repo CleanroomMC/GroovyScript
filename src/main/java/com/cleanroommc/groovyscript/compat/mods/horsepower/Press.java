@@ -116,7 +116,5 @@ public class Press extends StandardListRegistry<PressRecipe> {
             }
             return recipe;
         }
-
     }
-
 }

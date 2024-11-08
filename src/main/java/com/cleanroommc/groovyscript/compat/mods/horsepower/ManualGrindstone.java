@@ -126,7 +126,5 @@ public class ManualGrindstone extends StandardListRegistry<GrindstoneRecipe> {
             }
             return recipe;
         }
-
     }
-
 }

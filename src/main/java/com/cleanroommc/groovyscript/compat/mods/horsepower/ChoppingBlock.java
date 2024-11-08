@@ -127,7 +127,5 @@ public class ChoppingBlock extends StandardListRegistry<ChoppingBlockRecipe> {
             }
             return recipe;
         }
-
     }
-
 }
