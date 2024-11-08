@@ -88,5 +88,4 @@ public class BlastFurnace extends AbstractGenericTechRebornRegistry {
             return recipe;
         }
     }
-
 }

@@ -31,5 +31,4 @@ public interface ExtruderManagerAccessor {
     static List<ItemStack> getOutputListSedimentary() {
         throw new UnsupportedOperationException();
     }
-
 }

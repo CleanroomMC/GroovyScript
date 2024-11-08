@@ -187,9 +187,10 @@ public class GroovyScriptCodeConverter {
 
     public static String asGroovyCode(PotionEffect potionEffect, boolean colored) {
         StringBuilder builder = new StringBuilder();
-        List<String> list = Lists.newArrayList(asGroovyCode(potionEffect.getPotion(), colored),
-                                               formatNumber(potionEffect.getDuration(), colored),
-                                               formatNumber(potionEffect.getAmplifier(), colored));
+        List<String> list = Lists.newArrayList(
+                asGroovyCode(potionEffect.getPotion(), colored),
+                formatNumber(potionEffect.getDuration(), colored),
+                formatNumber(potionEffect.getAmplifier(), colored));
         builder.append(formatInstantiation("PotionEffect", list, colored));
         return builder.toString();
     }

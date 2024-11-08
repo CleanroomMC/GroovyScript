@@ -20,5 +20,4 @@ public class InfoParserRegistry {
     public static List<String> getIds() {
         return INFO_PARSERS.stream().sorted(Comparator.comparing(InfoParser::priority)).map(InfoParser::id).collect(Collectors.toList());
     }
-
 }

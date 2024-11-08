@@ -140,5 +140,4 @@ public class Turntable extends StandardListRegistry<TurntableRecipe> {
             return recipe;
         }
     }
-
 }

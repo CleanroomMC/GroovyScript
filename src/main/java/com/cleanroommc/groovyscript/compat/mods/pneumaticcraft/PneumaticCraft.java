@@ -25,5 +25,4 @@ public class PneumaticCraft extends GroovyPropertyContainer {
         if (IngredientHelper.isItem(ingredient)) return new ItemIngredient(IngredientHelper.toItemStack(ingredient).copy());
         return new ItemIngredient(ItemStack.EMPTY);
     }
-
 }

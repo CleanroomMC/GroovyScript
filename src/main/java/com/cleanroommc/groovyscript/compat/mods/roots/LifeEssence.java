@@ -39,5 +39,4 @@ public class LifeEssence extends StandardListRegistry<Class<? extends EntityLivi
     public boolean remove(EntityEntry entity) {
         return remove((Class<? extends EntityLivingBase>) entity.getEntityClass());
     }
-
 }

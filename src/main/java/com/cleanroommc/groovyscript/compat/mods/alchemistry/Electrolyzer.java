@@ -132,11 +132,16 @@ public class Electrolyzer extends StandardListRegistry<ElectrolyzerRecipe> {
         @RecipeBuilderRegistrationMethod
         public ElectrolyzerRecipe register() {
             if (!validate()) return null;
-            ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(fluidInput.get(0),
-                                                               input.size() >= 1 ? input.get(0).toMcIngredient() : Ingredient.EMPTY, consumptionChance,
-                                                               output.get(0), output.getOrEmpty(1),
-                                                               output.getOrEmpty(2), chance.size() >= 1 ? chance.getInt(0) : 0,
-                                                               output.getOrEmpty(3), chance.size() >= 2 ? chance.getInt(1) : 0);
+            ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(
+                    fluidInput.get(0),
+                    input.size() >= 1 ? input.get(0).toMcIngredient() : Ingredient.EMPTY,
+                    consumptionChance,
+                    output.get(0),
+                    output.getOrEmpty(1),
+                    output.getOrEmpty(2),
+                    chance.size() >= 1 ? chance.getInt(0) : 0,
+                    output.getOrEmpty(3),
+                    chance.size() >= 2 ? chance.getInt(1) : 0);
             ModSupport.ALCHEMISTRY.get().electrolyzer.add(recipe);
             return recipe;
         }

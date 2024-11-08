@@ -80,5 +80,4 @@ public class ImplosionCompressor extends AbstractGenericTechRebornRegistry {
             return recipe;
         }
     }
-
 }

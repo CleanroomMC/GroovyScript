@@ -19,10 +19,11 @@ import java.util.Collection;
 @RegistryDescription(
         admonition = {
                 @Admonition("groovyscript.wiki.bloodmagic.blood_altar.note0"),
-                @Admonition(value = "groovyscript.wiki.bloodmagic.blood_altar.note1",
-                            type = Admonition.Type.DANGER,
-                            format = Admonition.Format.STANDARD,
-                            hasTitle = true)
+                @Admonition(
+                        value = "groovyscript.wiki.bloodmagic.blood_altar.note1",
+                        type = Admonition.Type.DANGER,
+                        format = Admonition.Format.STANDARD,
+                        hasTitle = true)
         }
 )
 public class BloodAltar extends StandardListRegistry<RecipeBloodAltar> {

@@ -99,5 +99,4 @@ public class StyleConstant {
     public static Style getErrorStyle() {
         return new Style().setColor(ERROR);
     }
-
 }

@@ -94,5 +94,4 @@ public class SteamTurbine extends StandardListRegistry<SteamTurbineRecipe> {
             return recipe;
         }
     }
-
 }

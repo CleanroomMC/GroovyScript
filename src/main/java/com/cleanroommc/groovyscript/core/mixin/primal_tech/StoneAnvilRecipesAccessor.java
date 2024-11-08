@@ -20,5 +20,4 @@ public interface StoneAnvilRecipesAccessor {
     static StoneAnvilRecipes createStoneAnvilRecipes(ItemStack output, ItemStack input) {
         throw new UnsupportedOperationException();
     }
-
 }

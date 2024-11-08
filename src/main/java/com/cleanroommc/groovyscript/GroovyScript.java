@@ -70,11 +70,12 @@ import java.util.List;
 import java.util.Random;
 
 @GroovyBlacklist
-@Mod(modid = GroovyScript.ID,
-     name = GroovyScript.NAME,
-     version = GroovyScript.VERSION,
-     dependencies = "after:mixinbooter@[8.0,);",
-     guiFactory = "com.cleanroommc.groovyscript.DisabledConfigGui")
+@Mod(
+        modid = GroovyScript.ID,
+        name = GroovyScript.NAME,
+        version = GroovyScript.VERSION,
+        dependencies = "after:mixinbooter@[8.0,);",
+        guiFactory = "com.cleanroommc.groovyscript.DisabledConfigGui")
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
 

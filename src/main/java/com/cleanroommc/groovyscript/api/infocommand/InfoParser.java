@@ -43,5 +43,4 @@ public interface InfoParser {
      * @see InfoParserPackage
      */
     void parse(InfoParserPackage info, boolean enabled);
-
 }

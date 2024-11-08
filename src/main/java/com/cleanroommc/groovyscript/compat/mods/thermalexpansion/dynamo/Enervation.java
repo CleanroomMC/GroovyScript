@@ -101,8 +101,7 @@ public class Enervation extends VirtualizedRegistry<Enervation.EnervationRecipe>
             if (obj == this) return true;
             if (obj == null || obj.getClass() != this.getClass()) return false;
             var that = (EnervationRecipe) obj;
-            return Objects.equals(this.comparableItemStack, that.comparableItemStack) &&
-                   this.energy == that.energy;
+            return Objects.equals(this.comparableItemStack, that.comparableItemStack) && this.energy == that.energy;
         }
 
         @Override
@@ -112,10 +111,7 @@ public class Enervation extends VirtualizedRegistry<Enervation.EnervationRecipe>
 
         @Override
         public String toString() {
-            return "EnervationRecipe[" +
-                   "comparableItemStack=" + comparableItemStack + ", " +
-                   "energy=" + energy + ']';
+            return "EnervationRecipe[" + "comparableItemStack=" + comparableItemStack + ", " + "energy=" + energy + ']';
         }
     }
-
 }

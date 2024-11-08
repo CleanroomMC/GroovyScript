@@ -24,5 +24,4 @@ public class GeneratorTypeMixin {
             cir.setReturnValue(value);
         }
     }
-
 }

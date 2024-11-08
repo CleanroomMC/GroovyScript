@@ -35,5 +35,4 @@ public class InfoParserCompound extends GenericInfoParser<ChemicalCompound> {
             }
         }
     }
-
 }

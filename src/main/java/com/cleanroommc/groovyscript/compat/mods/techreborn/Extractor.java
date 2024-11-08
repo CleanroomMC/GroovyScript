@@ -89,5 +89,4 @@ public class Extractor extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

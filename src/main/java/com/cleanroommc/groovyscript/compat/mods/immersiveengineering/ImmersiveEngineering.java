@@ -55,5 +55,4 @@ public class ImmersiveEngineering extends GroovyPropertyContainer {
         ItemStack[] matchingStacks = ingredient.getMatchingStacks();
         return matchingStacks.length == 0 ? ItemStack.EMPTY : matchingStacks[0];
     }
-
 }

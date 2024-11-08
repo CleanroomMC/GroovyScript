@@ -89,5 +89,4 @@ public class SolidCanningMachine extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

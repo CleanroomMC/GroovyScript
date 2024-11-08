@@ -80,10 +80,11 @@ public abstract class BaseInfoCommand extends CommandBase {
 
     @Override
     public @NotNull String getUsage(@NotNull ICommandSender sender) {
-        return String.format("/gs %s [all, pretty, %s, %s]",
-                             getName(),
-                             String.join(", ", InfoParserRegistry.getIds()),
-                             InfoParserRegistry.getIds().stream().map(x -> "-" + x).collect(Collectors.joining(", ")));
+        return String.format(
+                "/gs %s [all, pretty, %s, %s]",
+                getName(),
+                String.join(", ", InfoParserRegistry.getIds()),
+                InfoParserRegistry.getIds().stream().map(x -> "-" + x).collect(Collectors.joining(", ")));
     }
 
     @Override
@@ -92,7 +93,9 @@ public abstract class BaseInfoCommand extends CommandBase {
     }
 
     @Override
-    public @NotNull List<String> getTabCompletions(@NotNull MinecraftServer server, @NotNull ICommandSender sender, String @NotNull [] args,
+    public @NotNull List<String> getTabCompletions(@NotNull MinecraftServer server,
+                                                   @NotNull ICommandSender sender,
+                                                   String @NotNull [] args,
                                                    @Nullable BlockPos targetPos) {
         List<String> enabledModes = new ArrayList<>();
         enabledModes.add("all");
@@ -145,5 +148,4 @@ public abstract class BaseInfoCommand extends CommandBase {
             print(player, messages, argList);
         }
     }
-
 }

@@ -13,5 +13,4 @@ public interface BWMHeatRegistryAccessor {
     static List<BWMHeatRegistry.HeatSource> getHEAT_SOURCES() {
         throw new UnsupportedOperationException();
     }
-
 }

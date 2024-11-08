@@ -79,5 +79,4 @@ public class GasTurbine extends AbstractGeneratorRegistry {
             return recipe;
         }
     }
-
 }

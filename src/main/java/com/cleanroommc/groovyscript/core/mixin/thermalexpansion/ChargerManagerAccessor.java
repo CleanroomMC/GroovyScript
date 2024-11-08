@@ -14,5 +14,4 @@ public interface ChargerManagerAccessor {
     static Map<ComparableItemStackValidated, ChargerManager.ChargerRecipe> getRecipeMap() {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -13,5 +13,4 @@ public interface PrecipitatorRecipeAccessor {
     static PrecipitatorManager.PrecipitatorRecipe createPrecipitatorRecipe(ItemStack output, FluidStack input, int energy) {
         throw new UnsupportedOperationException();
     }
-
 }

@@ -70,5 +70,4 @@ public abstract class GasRecipeBuilder<T> extends AbstractRecipeBuilder<T> {
     public void validateGases(GroovyLog.Msg msg) {
         validateGases(msg, 0, 0, 0, 0);
     }
-
 }

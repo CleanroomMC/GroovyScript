@@ -130,5 +130,4 @@ public class MillStone extends StandardListRegistry<MillRecipe> {
             return recipe;
         }
     }
-
 }

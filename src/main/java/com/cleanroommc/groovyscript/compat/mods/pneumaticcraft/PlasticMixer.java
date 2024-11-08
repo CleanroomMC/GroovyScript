@@ -160,5 +160,4 @@ public class PlasticMixer extends StandardListRegistry<PlasticMixerRegistry.Plas
             return recipe;
         }
     }
-
 }

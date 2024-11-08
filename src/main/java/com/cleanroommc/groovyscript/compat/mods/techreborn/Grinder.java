@@ -89,5 +89,4 @@ public class Grinder extends AbstractPraescriptumRegistry {
             return recipe;
         }
     }
-
 }

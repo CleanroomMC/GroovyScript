@@ -16,6 +16,7 @@ import java.util.Arrays;
 public class BlockStates {
 
     public static final BlockStates ANY = new BlockStates(null) {
+
         @Override
         public boolean matches(IBlockState state, boolean wildCardAir) {
             if (wildCardAir) return state.getBlock().equals(Blocks.AIR);

@@ -94,5 +94,4 @@ public class CoolingTower extends StandardListRegistry<CoolingTowerRecipe> {
             return recipe;
         }
     }
-
 }

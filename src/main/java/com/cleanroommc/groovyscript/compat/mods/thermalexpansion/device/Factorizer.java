@@ -202,5 +202,4 @@ public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerMana
             return recipe;
         }
     }
-
 }

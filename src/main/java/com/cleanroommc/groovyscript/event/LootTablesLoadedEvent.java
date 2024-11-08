@@ -146,5 +146,4 @@ public class LootTablesLoadedEvent extends Event {
             return new GroovyLootCondition(condition);
         }
     }
-
 }

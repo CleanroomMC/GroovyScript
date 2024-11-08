@@ -131,7 +131,5 @@ public class LootBag extends VirtualizedRegistry<LootBag.InternalLootbag> {
         public int getRarity() {
             return rarity;
         }
-
     }
-
 }

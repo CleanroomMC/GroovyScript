@@ -45,11 +45,15 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     @ApiStatus.Internal
     public void afterScriptLoad() {
         CrucibleManagerAccessor.getLavaSet().clear();
-        CrucibleManagerAccessor.getLavaSet().addAll(CrucibleManagerAccessor.getRecipeMap().values().stream()
-                                                            .filter(x -> x.getOutput().getFluid() == FluidRegistry.LAVA)
-                                                            .map(CrucibleRecipe::getInput)
-                                                            .map(CrucibleManager::convertInput)
-                                                            .collect(Collectors.toList()));
+        CrucibleManagerAccessor.getLavaSet()
+                .addAll(
+                        CrucibleManagerAccessor.getRecipeMap()
+                                .values()
+                                .stream()
+                                .filter(x -> x.getOutput().getFluid() == FluidRegistry.LAVA)
+                                .map(CrucibleRecipe::getInput)
+                                .map(CrucibleManager::convertInput)
+                                .collect(Collectors.toList()));
     }
 
     public void add(CrucibleRecipe recipe) {

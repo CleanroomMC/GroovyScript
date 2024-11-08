@@ -10,7 +10,6 @@ import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import quaternary.botaniatweaks.modules.botania.recipe.AgglomerationRecipe;
 import quaternary.botaniatweaks.modules.botania.recipe.AgglomerationRecipes;
@@ -117,14 +116,18 @@ public class AgglomerationPlate extends StandardListRegistry<AgglomerationRecipe
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"colorStart", "colorEnd"})
+        @RecipeBuilderMethodDescription(field = {
+                "colorStart", "colorEnd"
+        })
         public RecipeBuilder color(int colorStart, int colorEnd) {
             this.colorStart = colorStart;
             this.colorEnd = colorEnd;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {"center", "edge", "corner"})
+        @RecipeBuilderMethodDescription(field = {
+                "center", "edge", "corner"
+        })
         public RecipeBuilder baseStructure() {
             this.center = ModBlocks.livingrock.getDefaultState();
             this.edge = Objects.requireNonNull(Blocks.LAPIS_BLOCK).getDefaultState();
@@ -197,7 +200,5 @@ public class AgglomerationPlate extends StandardListRegistry<AgglomerationRecipe
             ModSupport.BOTANIA_TWEAKS.get().agglomerationPlate.add(recipe);
             return recipe;
         }
-
     }
-
 }

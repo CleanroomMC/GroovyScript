@@ -12,5 +12,4 @@ public interface MatterCannonAmmoRegistryAccessor {
 
     @Accessor("DamageModifiers")
     HashMap<ItemStack, Double> getDamageModifiers();
-
 }

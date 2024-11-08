@@ -13,5 +13,4 @@ public interface SteamManagerAccessor {
     static TObjectIntHashMap<ComparableItemStack> getFuelMap() {
         throw new UnsupportedOperationException();
     }
-
 }

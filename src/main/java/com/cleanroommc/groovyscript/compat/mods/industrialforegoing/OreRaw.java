@@ -32,9 +32,10 @@ public class OreRaw extends StandardListRegistry<OreFluidEntryRaw> {
     })
     public OreFluidEntryRaw add(OreDictIngredient ore, FluidStack input, FluidStack output) {
         if (IngredientHelper.overMaxSize(ore, 1)) {
-            GroovyLog.msg("Error adding Ore Washer recipe").error()
-                     .add("Stack size of input ore must be 1")
-                     .post();
+            GroovyLog.msg("Error adding Ore Washer recipe")
+                    .error()
+                    .add("Stack size of input ore must be 1")
+                    .post();
             return null;
         }
         return add(ore.getOreDict(), input, output);
@@ -84,5 +85,4 @@ public class OreRaw extends StandardListRegistry<OreFluidEntryRaw> {
             return false;
         });
     }
-
 }

@@ -149,8 +149,14 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
 
         @Override
         public @Nullable FluidToItem.Recipe register() {
-            Recipe recipe = new Recipe(this.fluidInput.get(0).getFluid(), this.input.toArray(new IIngredient[0]), this.chances.toFloatArray(),
-                                       this.startCondition, this.afterRecipe, this.output.get(0), this.fluidConsumptionChance);
+            Recipe recipe = new Recipe(
+                    this.fluidInput.get(0).getFluid(),
+                    this.input.toArray(new IIngredient[0]),
+                    this.chances.toFloatArray(),
+                    this.startCondition,
+                    this.afterRecipe,
+                    this.output.get(0),
+                    this.fluidConsumptionChance);
             VanillaModule.inWorldCrafting.fluidToItem.add(recipe);
             return recipe;
         }

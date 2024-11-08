@@ -130,8 +130,9 @@ public class BloodInfuser extends StandardListRegistry<IRecipe<IngredientFluidSt
         @RecipeBuilderRegistrationMethod
         public @Nullable IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties> register() {
             if (!validate()) return null;
-            IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties> recipe =
-                    org.cyclops.evilcraft.block.BloodInfuser.getInstance().getRecipeRegistry().registerRecipe(
+            IRecipe<IngredientFluidStackAndTierRecipeComponent, IngredientRecipeComponent, DurationXpRecipeProperties> recipe = org.cyclops.evilcraft.block.BloodInfuser.getInstance()
+                    .getRecipeRegistry()
+                    .registerRecipe(
                             new IngredientFluidStackAndTierRecipeComponent(input.get(0).toMcIngredient(), fluidInput.get(0), tier),
                             new IngredientRecipeComponent(output.get(0)),
                             new DurationXpRecipeProperties(duration, xp)
