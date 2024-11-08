@@ -1423,8 +1423,9 @@ groovyscript.wiki.jei.catalyst.remove=Removes the given catalyst items from the 
 groovyscript.wiki.jei.catalyst.removeByType=Removes all catalyst items from the given category
 
 groovyscript.wiki.jei.category.title=Categories
-groovyscript.wiki.jei.category.description=Modify the Categories visible in JEI, each of which contain recipes and are associated with specific blocks, typically machines.
+groovyscript.wiki.jei.category.description=Modify the Categories visible in JEI, each of which contain recipes and are associated with specific blocks, typically machines. Can also set the order of Categories.
 groovyscript.wiki.jei.category.note0=Hidden Categories will still take up load time, and recipes contained within can still be processed. This only prevents seeing Categories.
+groovyscript.wiki.jei.category.note1=Use the command `/gs jeiCategories` to log the UIDs of all JEI Categories to the `groovy.log` file!
 groovyscript.wiki.jei.category.annotation=Note that `classes.GenericRecipeCategory` must be defined elsewhere, and this example presumes certain fields and methods exist.
 groovyscript.wiki.jei.category.id.value=Sets the ID of the Category, which must be unique among all other Categories
 groovyscript.wiki.jei.category.wrapper.value=Sets the `IRecipeWrapper`s used by the Category to generate entries
@@ -1433,6 +1434,7 @@ groovyscript.wiki.jei.category.category.value=Sets the function used to generate
 groovyscript.wiki.jei.category.add=Adds a new Category to JEI in the format `id`, `category`, `catalsyts`, `wrappers`
 groovyscript.wiki.jei.category.hideCategory=Hides the given category from JEI
 groovyscript.wiki.jei.category.hideAll=Hides all categories from JEI
+groovyscript.wiki.jei.category.setOrder=Sets the order of categories in JEI. Categories not included in the list will be placed at the end according to their normal order.
 
 groovyscript.wiki.jei.description.title=Description Category
 groovyscript.wiki.jei.description.description=Modify the description of the input items, where the description is a unique JEI tab containing text.

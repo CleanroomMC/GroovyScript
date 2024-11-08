@@ -15,20 +15,19 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
-@RegistryDescription(
-        category = RegistryDescription.Category.ENTRIES,
-        admonition = @Admonition("groovyscript.wiki.jei.category.note0"))
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES, admonition = {
+        @Admonition("groovyscript.wiki.jei.category.note0"),
+        @Admonition(value = "groovyscript.wiki.jei.category.note1", type = Admonition.Type.TIP)
+})
 public class Category extends VirtualizedRegistry<String> {
 
     private boolean hideAllCategories;
 
     private final AbstractReloadableStorage<CustomCategory> categoryStorage = new AbstractReloadableStorage<>();
+    private final List<String> categoryUidOrder = new ArrayList<>();
 
     /**
      * Called by {@link JeiPlugin#afterRuntimeAvailable()}
@@ -37,6 +36,14 @@ public class Category extends VirtualizedRegistry<String> {
     public void applyChanges(IRecipeRegistry recipeRegistry) {
         if (hideAllCategories) recipeRegistry.getRecipeCategories().stream().map(IRecipeCategory::getUid).forEach(this::addBackup);
         getBackupRecipes().forEach(recipeRegistry::hideRecipeCategory);
+    }
+
+    /**
+     * Called by {@link JeiPlugin#getCategoryComparator()}
+     */
+    @GroovyBlacklist
+    public List<String> getOrder() {
+        return categoryUidOrder;
     }
 
     @MethodDescription
@@ -92,6 +99,17 @@ public class Category extends VirtualizedRegistry<String> {
         restoreFromBackup();
         hideAllCategories = false;
         categoryStorage.removeScripted();
+        categoryUidOrder.clear();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.VALUE)
+    public void setOrder(List<String> categoryUidOrder) {
+        this.categoryUidOrder.addAll(categoryUidOrder);
+    }
+
+    @MethodDescription(type = MethodDescription.Type.VALUE, example = @Example("'minecraft.crafting', 'jei.information', 'minecraft.smelting', 'groovyscript:burning', 'groovyscript:explosion', 'groovyscript:fluid_recipe', 'groovyscript:piston_push', 'minecraft.anvil'"))
+    public void setOrder(String... categoryUidOrder) {
+        setOrder(Arrays.asList(categoryUidOrder));
     }
 
     @MethodDescription(description = "groovyscript.wiki.jei.category.hideCategory")

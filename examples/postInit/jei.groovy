@@ -16,7 +16,7 @@ mods.jei.catalyst.add('minecraft.smelting', item('minecraft:clay') * 8, item('mi
 
 // Categories:
 // Modify the Categories visible in JEI, each of which contain recipes and are associated with specific blocks, typically
-// machines.
+// machines. Can also set the order of Categories.
 
 mods.jei.category.hideCategory('minecraft.fuel')
 // mods.jei.category.hideAll()
@@ -28,6 +28,8 @@ mods.jei.category.hideCategory('minecraft.fuel')
     .wrapper(classes.GenericRecipeCategory.getRecipeWrappers())
     .register()*/
 
+
+mods.jei.category.setOrder('minecraft.crafting', 'jei.information', 'minecraft.smelting', 'groovyscript:burning', 'groovyscript:explosion', 'groovyscript:fluid_recipe', 'groovyscript:piston_push', 'minecraft.anvil')
 
 // Description Category:
 // Modify the description of the input items, where the description is a unique JEI tab containing text.
