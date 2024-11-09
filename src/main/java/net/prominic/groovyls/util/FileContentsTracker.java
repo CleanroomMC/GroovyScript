@@ -20,6 +20,8 @@
 package net.prominic.groovyls.util;
 
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.eclipse.lsp4j.*;
 
 import java.io.BufferedReader;
@@ -27,15 +29,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class FileContentsTracker {
 
-    private final Map<URI, String> openFiles = new HashMap<>();
-    private Set<URI> changedFiles = new HashSet<>();
+    private final Map<URI, String> openFiles = new Object2ObjectOpenHashMap<>();
+    private Set<URI> changedFiles = new ObjectOpenHashSet<>();
 
     public Set<URI> getOpenURIs() {
         return openFiles.keySet();
@@ -46,7 +46,7 @@ public class FileContentsTracker {
     }
 
     public void resetChangedFiles() {
-        changedFiles = new HashSet<>();
+        changedFiles = new ObjectOpenHashSet<>();
     }
 
     public void forceChanged(URI uri) {
