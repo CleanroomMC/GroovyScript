@@ -192,7 +192,7 @@ public class GroovyScript {
     @Mod.EventHandler
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
-        VanillaModule.commands.onStartServer(event.getServer());
+        VanillaModule.command.onStartServer(event.getServer());
     }
 
     @SubscribeEvent

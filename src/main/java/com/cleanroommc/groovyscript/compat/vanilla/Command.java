@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class Commands extends NamedRegistry implements IScriptReloadable {
+public class Command extends NamedRegistry implements IScriptReloadable {
 
     private final List<ICommand> serverCommands = new ArrayList<>();
     private final AbstractReloadableStorage<ICommand> serverReloadableCommands = new AbstractReloadableStorage<>();
