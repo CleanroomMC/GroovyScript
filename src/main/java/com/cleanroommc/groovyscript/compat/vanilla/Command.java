@@ -65,7 +65,7 @@ public class Command extends NamedRegistry implements IScriptReloadable {
     public void removeCommand(CommandHandler commandHandler, ICommand command) {
         Set<ICommand> commands = ((CommandHandlerAccessor) commandHandler).getCommandSet();
         if (commands.remove(command)) {
-            commandHandler.getCommands().entrySet().removeIf(entry -> Objects.equals(commands, entry.getValue()));
+            commandHandler.getCommands().entrySet().removeIf(entry -> Objects.equals(command, entry.getValue()));
         }
     }
 
