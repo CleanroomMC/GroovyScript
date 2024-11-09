@@ -19,6 +19,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -148,6 +150,14 @@ public abstract class GroovySandbox {
             }
             // the superclass of class files is Object
             if (clazz.getSuperclass() != Script.class && shouldRunFile(classFile)) {
+                try {
+                    // $getLookup is present on all groovy created classes
+                    // call it cause the class to be initialised
+                    Method m = clazz.getMethod("$getLookup");
+                    m.invoke(null);
+                } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+                    GroovyLog.get().errorMC("Error initialising class '{}'", clazz.getName());
+                }
                 executedClasses.add(classFile);
             }
         }

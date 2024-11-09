@@ -132,6 +132,7 @@ dependencies {
     }
 
     api "codechicken:codechickenlib:3.2.3.358"
+    // api "gregtech:gregtech:2.8.10-beta", { transitive false }
 
     // compiles all mods, and selectively enables mods being debugged
     mod_dependencies.entrySet().forEach {
