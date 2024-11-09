@@ -67,7 +67,7 @@ public class ASTNodeVisitor extends ClassCodeVisitorSupport {
 
         @Override
         public int hashCode(ASTNode o) {
-            return o.hashCode();
+            return System.identityHashCode(o);
         }
 
         @Override
