@@ -256,3 +256,7 @@ item('minecraft:golden_apple').setRarity(textformat('-1'))
 eventManager.listen(EnderTeleportEvent) { event ->
     event.setAttackDamage 19.5f
 }
+
+commands.registerCommand('groovy_test') { server, sender, args ->
+    sender.sendMessage('Hello from GroovyScript')
+}
