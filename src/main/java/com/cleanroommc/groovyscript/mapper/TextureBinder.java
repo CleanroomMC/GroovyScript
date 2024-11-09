@@ -32,6 +32,7 @@ public interface TextureBinder<T> extends Function<T, List<String>> {
     static <A, T> TextureBinder<A> of(Function<A, List<T>> mapper, TextureBinder<T> binder, Function<T, String> tooltipMapper) {
         return o -> {
             var list = mapper.apply(o);
+            if (list == null || list.isEmpty()) return Collections.emptyList();
             binder.apply(list.get(0));
             return list.stream().map(tooltipMapper).collect(Collectors.toList());
         };
