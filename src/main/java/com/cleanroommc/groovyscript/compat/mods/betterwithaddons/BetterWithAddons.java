@@ -37,7 +37,7 @@ public class BetterWithAddons extends GroovyPropertyContainer {
     }
 
     public static boolean isBetterWithEverything() {
-        var entry = Loader.instance().getIndexedModList().get("betterwithmods");
+        var entry = Loader.instance().getIndexedModList().get("betterwithaddons");
         if (entry == null) return false;
         return entry.getMetadata().authorList.contains("ACGaming"); // TODO identify a better way to do this, if one exists
     }
