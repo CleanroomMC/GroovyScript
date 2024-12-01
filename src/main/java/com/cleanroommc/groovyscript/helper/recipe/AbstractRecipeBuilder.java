@@ -16,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
-import java.util.List;
 
 public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
