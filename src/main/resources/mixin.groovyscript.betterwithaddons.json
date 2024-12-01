@@ -1,0 +1,13 @@
+{
+  "package": "com.cleanroommc.groovyscript.core.mixin.betterwithaddons",
+  "refmap": "mixins.groovyscript.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BWAJEIPluginMixin",
+    "RotHandlerAccessor",
+    "RotInfoAccessor",
+    "TileEntityLureTreeAccessor"
+  ]
+}
