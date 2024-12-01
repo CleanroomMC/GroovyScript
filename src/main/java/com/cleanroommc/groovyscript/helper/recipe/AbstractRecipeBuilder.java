@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Collection;
+import java.util.List;
 
 public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
 
@@ -175,12 +176,7 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
         output.trim();
         validateCustom(msg, input, minInput, maxInput, "item input");
         validateCustom(msg, output, minOutput, maxOutput, "item output");
-        if (GroovyScriptConfig.compat.checkInputStackCounts) {
-            int maxAmountAllowed = getMaxItemInput();
-            for (IIngredient ingredient : input) {
-                msg.add(IngredientHelper.overMaxSize(ingredient, maxAmountAllowed), "Expected stack size of {} for {}, got {}", maxAmountAllowed, ingredient, ingredient.getAmount());
-            }
-        }
+        validateStackSize(msg, getMaxItemInput(), "input", input);
     }
 
     @GroovyBlacklist
@@ -191,6 +187,22 @@ public abstract class AbstractRecipeBuilder<T> implements IRecipeBuilder<T> {
     @GroovyBlacklist
     public void validateFluids(GroovyLog.Msg msg) {
         validateFluids(msg, 0, 0, 0, 0);
+    }
+
+    @GroovyBlacklist
+    public static void validateStackSize(GroovyLog.Msg msg, int maxAmountAllowed, String name, Iterable<IIngredient> ingredients) {
+        if (!GroovyScriptConfig.compat.checkInputStackCounts) return;
+        for (var ingredient : ingredients) {
+            msg.add(IngredientHelper.overMaxSize(ingredient, maxAmountAllowed), "Expected stack size of {} for {} in {}, got {}", maxAmountAllowed, ingredient, name, ingredient.getAmount());
+        }
+    }
+
+    @GroovyBlacklist
+    public static void validateStackSize(GroovyLog.Msg msg, int maxAmountAllowed, String name, IIngredient... ingredients) {
+        if (!GroovyScriptConfig.compat.checkInputStackCounts) return;
+        for (var ingredient : ingredients) {
+            msg.add(IngredientHelper.overMaxSize(ingredient, maxAmountAllowed), "Expected stack size of {} for {} in {}, got {}", maxAmountAllowed, ingredient, name, ingredient.getAmount());
+        }
     }
 
     @GroovyBlacklist

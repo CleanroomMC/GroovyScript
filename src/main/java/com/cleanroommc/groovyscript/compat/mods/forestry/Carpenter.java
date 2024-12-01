@@ -198,10 +198,8 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
             validateFluids(msg, 0, 1, 0, 0);
             validateItems(msg, 0, 0, 1, 1);
             validatePattern(msg, pattern, keys);
-            for (IIngredient ingredient : keys.values()) {
-                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Grid input {} must have a stack size of 1", ingredient);
-            }
-            msg.add(IngredientHelper.overMaxSize(box, 1), "Box must have a stack size of 1, got {}", box.getAmount());
+            validateStackSize(msg, 1, "grid input", keys.values());
+            validateStackSize(msg, 1, "box", box);
         }
 
         @Override

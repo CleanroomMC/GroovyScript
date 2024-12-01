@@ -174,7 +174,7 @@ public class AlchemyArray extends StandardListRegistry<RecipeAlchemyArray> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             msg.add(catalyst == null, "Must have a catalyst ItemStack but didn't find any!");
-            msg.add(IngredientHelper.overMaxSize(catalyst, 1), "Catalyst must have a stack size of 1!");
+            validateStackSize(msg, 1, "catalyst", catalyst);
         }
 
         @Override
