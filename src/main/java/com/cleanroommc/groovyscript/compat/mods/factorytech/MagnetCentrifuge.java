@@ -64,6 +64,11 @@ public class MagnetCentrifuge extends StandardListRegistry<MachineRecipes.Machin
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 3);
             validateFluids(msg);

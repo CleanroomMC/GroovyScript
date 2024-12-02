@@ -49,6 +49,11 @@ public class Crucible extends StandardListRegistry<MachineRecipes.MachineRecipe<
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg, 0, 0, 1, 1);

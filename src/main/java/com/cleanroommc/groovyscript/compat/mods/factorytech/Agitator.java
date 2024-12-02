@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.factorytech;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -54,6 +55,11 @@ public class Agitator extends StandardListRegistry<TileEntityAgitator.AgitatorRe
         @Override
         public String getErrorMsg() {
             return "Error adding Factory Tech Agitator recipe";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override
