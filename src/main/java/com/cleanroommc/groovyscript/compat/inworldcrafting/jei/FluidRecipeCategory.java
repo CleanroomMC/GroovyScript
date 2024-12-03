@@ -104,9 +104,8 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
         rightArrow.draw(minecraft, 76, outputY + 1);
     }
 
-    @Nullable
     @Override
-    public IDrawable getIcon() {
+    public @Nullable IDrawable getIcon() {
         return this.icon;
     }
 

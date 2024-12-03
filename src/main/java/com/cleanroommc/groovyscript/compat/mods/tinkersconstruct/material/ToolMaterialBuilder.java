@@ -219,8 +219,7 @@ public class ToolMaterialBuilder {
         msg.add(displayName == null || displayName.isEmpty(), "Expected a localized material name, got " + displayName);
     }
 
-    @Nullable
-    public Material register() {
+    public @Nullable Material register() {
         if (!validate()) return null;
         GroovyMaterial material = new GroovyMaterial(name, color, traits);
         addedMaterials.add(material);

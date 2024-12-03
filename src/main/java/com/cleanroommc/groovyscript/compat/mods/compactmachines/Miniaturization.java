@@ -173,10 +173,9 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
             msg.add(!missingKeys.isEmpty(), "shape must contain only characters that are underscore('_'), space(' '), or declared via a key, but the following keys were not declared: {}", missingKeys);
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public org.dave.compactmachines3.miniaturization.MultiblockRecipe register() {
+        public @Nullable org.dave.compactmachines3.miniaturization.MultiblockRecipe register() {
             if (!validate()) return null;
 
             org.dave.compactmachines3.miniaturization.MultiblockRecipe recipe = new org.dave.compactmachines3.miniaturization.MultiblockRecipe(

@@ -225,8 +225,7 @@ public class ModSupport {
         }
     }
 
-    @NotNull
-    public GroovyContainer<?> getContainer(String mod) {
+    public @NotNull GroovyContainer<?> getContainer(String mod) {
         if (!containers.containsKey(mod)) {
             throw new IllegalStateException("There is no compat registered for '" + mod + "'!");
         }

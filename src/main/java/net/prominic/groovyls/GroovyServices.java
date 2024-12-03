@@ -349,8 +349,7 @@ public class GroovyServices implements TextDocumentService, WorkspaceService, La
         return provider.provideRename(params);
     }
 
-    @Nullable
-    protected ASTNodeVisitor compileAndVisitAST(GroovyLSCompilationUnit compilationUnit, URI context) {
+    protected @Nullable ASTNodeVisitor compileAndVisitAST(GroovyLSCompilationUnit compilationUnit, URI context) {
         if (!isInGroovyWorkspace(context)) {
             return null;
         }

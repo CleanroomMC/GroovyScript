@@ -78,9 +78,8 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
         return Collections.unmodifiableList(this.itemStacks);
     }
 
-    @NotNull
     @Override
-    public Iterator<ItemStack> iterator() {
+    public @NotNull Iterator<ItemStack> iterator() {
         return Iterators.unmodifiableIterator(this.itemStacks.iterator());
     }
 }

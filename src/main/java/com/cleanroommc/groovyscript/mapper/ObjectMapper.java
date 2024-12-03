@@ -70,8 +70,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         this.textureBinder = textureBinder;
     }
 
-    @Nullable
-    public T invoke(boolean silent, String s, Object... args) {
+    public @Nullable T invoke(boolean silent, String s, Object... args) {
         Result<T> t = Objects.requireNonNull(handler.parse(s, args), "Object mapper must return a non null result!");
         if (t.hasError()) {
             if (!silent) {

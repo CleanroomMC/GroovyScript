@@ -15,8 +15,7 @@ public class EnumHelper {
     private static final Map<Class<? extends Enum<?>>, IObjectParser<?>> cs = new Object2ObjectOpenHashMap<>();
     private static final Map<Class<? extends Enum<?>>, IObjectParser<?>> ncs = new Object2ObjectOpenHashMap<>();
 
-    @NotNull
-    public static <T extends Enum<T>> Result<T> valueOf(Class<T> clazz, String s, boolean caseSensitive) {
+    public static @NotNull <T extends Enum<T>> Result<T> valueOf(Class<T> clazz, String s, boolean caseSensitive) {
         var map = caseSensitive ? cs : ncs;
         IObjectParser<?> goh = map.get(clazz);
         if (goh == null) {
@@ -26,8 +25,7 @@ public class EnumHelper {
         return (Result<T>) goh.parse(s, EMPTY);
     }
 
-    @Nullable
-    public static <T extends Enum<T>> T valueOfNullable(Class<T> clazz, String s, boolean caseSensitive) {
+    public static @Nullable <T extends Enum<T>> T valueOfNullable(Class<T> clazz, String s, boolean caseSensitive) {
         Result<T> res = valueOf(clazz, s, caseSensitive);
         return res.hasError() ? null : res.getValue();
     }

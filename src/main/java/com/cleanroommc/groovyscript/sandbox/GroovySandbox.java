@@ -265,8 +265,7 @@ public abstract class GroovySandbox {
         return scriptClass;
     }
 
-    @Nullable
-    private Class<?> tryLoadDynamicFile(GroovyScriptEngine engine, File file) throws ResourceException {
+    private @Nullable Class<?> tryLoadDynamicFile(GroovyScriptEngine engine, File file) throws ResourceException {
         Path path = null;
         for (URL root : this.scriptEnvironment) {
             try {

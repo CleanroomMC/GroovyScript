@@ -40,8 +40,7 @@ public class GroovyLanguageServer<T extends GroovyServices> implements LanguageS
         this.groovyServices = createGroovyServices(compilationUnitFactory, languageServerContext);
     }
 
-    @NotNull
-    protected T createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
+    protected @NotNull T createGroovyServices(ICompilationUnitFactory compilationUnitFactory, ILanguageServerContext languageServerContext) {
         return (T) new GroovyServices(compilationUnitFactory, languageServerContext);
     }
 

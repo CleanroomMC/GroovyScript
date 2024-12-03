@@ -23,9 +23,8 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
     protected abstract Class<?> getMachineClass();
 
     @Override
-    @NotNull
     @SuppressWarnings("unchecked")
-    public Collection<IRecipe> getRecipes() {
+    public @NotNull Collection<IRecipe> getRecipes() {
         Class<?> clazz = getMachineClass();
         RecipesMachine registry = RecipesMachine.getInstance();
         List<IRecipe> recipes = registry.getRecipes(clazz);

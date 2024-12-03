@@ -370,8 +370,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         return GroovyScript.getRunConfig().getSortedFiles(this.scriptRoot, this.currentLoadStage.getName());
     }
 
-    @Nullable
-    public LoadStage getCurrentLoader() {
+    public @Nullable LoadStage getCurrentLoader() {
         return currentLoadStage;
     }
 
