@@ -107,6 +107,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         return Collections.singleton(this.name);
     }
 
+    @Override
     public String getName() {
         return name;
     }

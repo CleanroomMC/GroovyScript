@@ -115,11 +115,13 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
             return this;
         }
 
+        @Override
         public AtomicReshaper.RecipeBuilder output(ItemStack output) {
             output(output, 1);
             return this;
         }
 
+        @Override
         public AtomicReshaper.RecipeBuilder output(ItemStack... outputs) {
             for (ItemStack output : outputs) {
                 output(output, 1);
@@ -127,6 +129,7 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
             return this;
         }
 
+        @Override
         public AtomicReshaper.RecipeBuilder output(Collection<ItemStack> outputs) {
             for (ItemStack output : outputs) {
                 output(output, 1);
