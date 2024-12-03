@@ -22,6 +22,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -227,5 +229,11 @@ public class ObjectMappers {
         } catch (NBTException e) {
             return Result.error("unable to parse provided nbt string");
         }
+    }
+
+    public static @NotNull Result<ModContainer> parseMod(String mainArg, Object... args) {
+        ModContainer mod = Loader.instance().getIndexedModList().get(mainArg);
+        if (mod == null) return Result.error("unable to identify mod with the name", mainArg);
+        return Result.some(mod);
     }
 }
