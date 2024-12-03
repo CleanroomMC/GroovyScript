@@ -122,7 +122,7 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
 
     public static class RecipeBuilder extends FluidRecipe.RecipeBuilder<FluidToItem.Recipe> {
 
-        private float fluidConsumptionChance = 1f;
+        private float fluidConsumptionChance = 1.0f;
 
         public RecipeBuilder fluidInput(FluidStack fluidStack, float fluidConsumptionChance) {
             fluidInput(fluidStack);
@@ -144,7 +144,7 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
             validateItems(msg, 1, Recipe.MAX_ITEM_INPUT, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
             validateChances(msg);
-            this.fluidConsumptionChance = MathHelper.clamp(this.fluidConsumptionChance, 0f, 1f);
+            this.fluidConsumptionChance = MathHelper.clamp(this.fluidConsumptionChance, 0.0f, 1.0f);
         }
 
         @Override

@@ -85,8 +85,7 @@ public class FluidCoolant extends VirtualizedRegistry<IFluidCoolant> {
         }
     }
 
-    @Nullable
-    public IFluidCoolant find(Fluid fluid) {
+    public @Nullable IFluidCoolant find(Fluid fluid) {
         return ((FluidFuelRegisterAccessor) FluidFuelRegister.instance).getCoolants().get(fluid.getName());
     }
 

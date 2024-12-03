@@ -203,33 +203,27 @@ public class GroovyScript {
         }
     }
 
-    @NotNull
-    public static String getScriptPath() {
+    public static @NotNull String getScriptPath() {
         return getScriptFile().getPath();
     }
 
-    @NotNull
-    public static File getMinecraftHome() {
+    public static @NotNull File getMinecraftHome() {
         return SandboxData.getMinecraftHome();
     }
 
-    @NotNull
-    public static File getScriptFile() {
+    public static @NotNull File getScriptFile() {
         return SandboxData.getScriptFile();
     }
 
-    @NotNull
-    public static File getResourcesFile() {
+    public static @NotNull File getResourcesFile() {
         return SandboxData.getResourcesFile();
     }
 
-    @NotNull
-    public static File getRunConfigFile() {
+    public static @NotNull File getRunConfigFile() {
         return SandboxData.getRunConfigFile();
     }
 
-    @NotNull
-    public static GroovyScriptSandbox getSandbox() {
+    public static @NotNull GroovyScriptSandbox getSandbox() {
         if (sandbox == null) {
             throw new IllegalStateException("GroovyScript is not yet loaded or failed to load!");
         }

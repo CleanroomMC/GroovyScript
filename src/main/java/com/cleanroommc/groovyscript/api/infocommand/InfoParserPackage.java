@@ -23,24 +23,20 @@ public class InfoParserPackage {
     /**
      * Server where the command is executed
      */
-    @NotNull
-    private final MinecraftServer server;
+    private final @NotNull MinecraftServer server;
     /**
      * Player who executes the command
      */
-    @NotNull
-    private final EntityPlayer player;
+    private final @NotNull EntityPlayer player;
     /**
      * Arguments of the command
      */
-    @NotNull
-    private final List<String> args;
+    private final @NotNull List<String> args;
     /**
      * A list of messages that will be sent to the player after this event.
      * Add or remove your messages here.
      */
-    @NotNull
-    private final List<ITextComponent> messages;
+    private final @NotNull List<ITextComponent> messages;
     /**
      * If pretty nbt is enabled
      */
@@ -48,33 +44,27 @@ public class InfoParserPackage {
     /**
      * The held item or the item form of the block being looked at.
      */
-    @NotNull
-    private ItemStack stack;
+    private @NotNull ItemStack stack;
     /**
      * The entity the player is looking at
      */
-    @Nullable
-    private Entity entity;
+    private @Nullable Entity entity;
     /**
      * The block position the player is looking at
      */
-    @Nullable
-    private BlockPos pos;
+    private @Nullable BlockPos pos;
     /**
      * The block state of the held item or the block state the player is looking at
      */
-    @Nullable
-    private IBlockState blockState;
+    private @Nullable IBlockState blockState;
     /**
      * The block of the held item or the block the player is looking at
      */
-    @Nullable
-    private Block block;
+    private @Nullable Block block;
     /**
      * The tile entity the player is looking at
      */
-    @Nullable
-    private TileEntity tileEntity;
+    private @Nullable TileEntity tileEntity;
 
     public InfoParserPackage(
             @NotNull MinecraftServer server,

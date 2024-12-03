@@ -219,8 +219,7 @@ public class ToolMaterialBuilder {
         msg.add(displayName == null || displayName.isEmpty(), "Expected a localized material name, got " + displayName);
     }
 
-    @Nullable
-    public Material register() {
+    public @Nullable Material register() {
         if (!validate()) return null;
         GroovyMaterial material = new GroovyMaterial(name, color, traits);
         addedMaterials.add(material);
@@ -237,13 +236,13 @@ public class ToolMaterialBuilder {
             if (stat != null) material.addStats(stat);
         });
         repairIngredients.forEach(repair -> {
-            if (repair.ingredient instanceof OreDictIngredient)
-                material.addItem(((OreDictIngredient) repair.ingredient).getOreDict(), repair.amountNeeded, repair.amountMatched * 144);
+            if (repair.ingredient instanceof OreDictIngredient oreDictIngredient)
+                material.addItem(oreDictIngredient.getOreDict(), repair.amountNeeded, repair.amountMatched * 144);
             else material.addItem(repair.ingredient.getMatchingStacks()[0], repair.amountNeeded, repair.amountMatched * 144);
         });
 
         if (representativeItem != null) {
-            if (representativeItem instanceof OreDictIngredient) material.setRepresentativeItem(((OreDictIngredient) representativeItem).getOreDict());
+            if (representativeItem instanceof OreDictIngredient oreDictIngredient) material.setRepresentativeItem(oreDictIngredient.getOreDict());
             else material.representativeItem = representativeItem;
         }
         material.shard = shard;

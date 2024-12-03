@@ -27,10 +27,8 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     protected final ItemStack output;
     protected final List<IIngredient> input;
     private final NonNullList<Ingredient> ingredients;
-    @Nullable
-    protected final Closure<ItemStack> recipeFunction;
-    @Nullable
-    protected final Closure<Void> recipeAction;
+    protected final @Nullable Closure<ItemStack> recipeFunction;
+    protected final @Nullable Closure<Void> recipeAction;
 
     public CraftingRecipe(ItemStack output, List<IIngredient> input, @Nullable Closure<ItemStack> recipeFunction, @Nullable Closure<Void> recipeAction) {
         this.output = output;
@@ -68,15 +66,13 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         return output;
     }
 
-    @Nullable
     @Override
-    public Closure<Void> getRecipeAction() {
+    public @Nullable Closure<Void> getRecipeAction() {
         return recipeAction;
     }
 
-    @Nullable
     @Override
-    public Closure<ItemStack> getRecipeFunction() {
+    public @Nullable Closure<ItemStack> getRecipeFunction() {
         return recipeFunction;
     }
 
@@ -109,8 +105,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         return !getMatchingList(inv).isEmpty();
     }
 
-    @NotNull
-    public abstract MatchList getMatchingList(InventoryCrafting inv);
+    public abstract @NotNull MatchList getMatchingList(InventoryCrafting inv);
 
     /**
      * Contains information about a inventory that was matched against a recipe.
@@ -134,6 +129,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         }
     }
 
+    @SuppressWarnings("ClassCanBeRecord")
     public static class SlotMatchResult {
 
         private final IIngredient recipeIngredient;
@@ -166,13 +162,11 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
     public static class InputList extends ArrayList<ItemStack> {
 
         // groovy [] operator
-        @Nullable
-        public ItemStack getAt(String mark) {
+        public @Nullable ItemStack getAt(String mark) {
             return findMarked(mark);
         }
 
-        @Nullable
-        public ItemStack findMarked(String mark) {
+        public @Nullable ItemStack findMarked(String mark) {
             if (isEmpty()) return null;
             for (ItemStack itemStack : this) {
                 if (mark.equals(ItemStackMixinExpansion.of(itemStack).getMark())) {
@@ -196,8 +190,8 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         Container eventHandler = ((InventoryCraftingAccess) inventory).getEventHandler();
         if (eventHandler != null) {
             for (Slot slot : eventHandler.inventorySlots) {
-                if (slot instanceof SlotCraftingAccess) {
-                    return ((SlotCraftingAccess) slot).getPlayer();
+                if (slot instanceof SlotCraftingAccess slotCraftingAccess) {
+                    return slotCraftingAccess.getPlayer();
                 }
             }
         }

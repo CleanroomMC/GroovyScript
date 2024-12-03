@@ -72,8 +72,8 @@ public class HopperFilters extends VirtualizedRegistry<IHopperFilter> {
     @MethodDescription
     public boolean removeByFiltered(IIngredient output) {
         return ((HopperFiltersAccessor) BWRegistry.HOPPER_FILTERS).getFILTERS().values().removeIf(r -> {
-            if (!(r instanceof HopperFilter)) return false;
-            for (Ingredient ingredient : ((HopperFilter) r).getFiltered()) {
+            if (!(r instanceof HopperFilter hopperFilter)) return false;
+            for (Ingredient ingredient : hopperFilter.getFiltered()) {
                 for (ItemStack item : ingredient.getMatchingStacks()) {
                     if (output.test(item)) {
                         addBackup(r);

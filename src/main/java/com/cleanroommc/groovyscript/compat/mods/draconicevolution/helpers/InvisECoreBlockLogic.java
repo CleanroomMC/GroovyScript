@@ -33,7 +33,7 @@ public class InvisECoreBlockLogic {
                 }
             }
 
-            IMultiBlockPart master = ((TileInvisECoreBlock) tile).getController();
+            IMultiBlockPart master = invis.getController();
             if (master != null) {
                 world.setBlockToAir(pos);
                 master.validateStructure();

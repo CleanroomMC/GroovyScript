@@ -178,8 +178,8 @@ public class BlockStateEnergyCoreStructure extends EnergyCoreStructure {
 
         else if (flag == FLAG_REVERT) {
             TileEntity tile = world.getTileEntity(pos);
-            if (tile instanceof TileInvisECoreBlock) {
-                ((TileInvisECoreBlock) tile).revert();
+            if (tile instanceof TileInvisECoreBlock tileInvisECoreBlock) {
+                tileInvisECoreBlock.revert();
             }
         }
 

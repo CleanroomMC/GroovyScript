@@ -31,9 +31,8 @@ public abstract class FluidStackMixin implements IIngredient, INbtIngredient, IN
     @Shadow
     public NBTTagCompound tag;
 
-    @NotNull
     @Shadow
-    public abstract FluidStack copy();
+    public abstract @NotNull FluidStack copy();
 
     @Shadow
     public abstract boolean isFluidEqual(FluidStack other);
@@ -182,9 +181,8 @@ public abstract class FluidStackMixin implements IIngredient, INbtIngredient, IN
         this.amount = amount;
     }
 
-    @Nullable
     @Override
-    public String getMark() {
+    public @Nullable String getMark() {
         return groovyScript$mark;
     }
 

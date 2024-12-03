@@ -77,7 +77,7 @@ public class Accessory extends ForgeRegistryWrapper<AetherAccessory> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg);
-            msg.add(accessoryType == null, "type with name {} does not exist. Valid values are {}.", accessoryType.toString(), Arrays.toString(AccessoryType.values()));
+            msg.add(accessoryType == null, "accessoryType must be defined. Valid values are {}.", Arrays.toString(AccessoryType.values()));
         }
 
         @RecipeBuilderRegistrationMethod

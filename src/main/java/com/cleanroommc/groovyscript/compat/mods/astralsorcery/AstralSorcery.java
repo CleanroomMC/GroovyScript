@@ -60,8 +60,8 @@ public class AstralSorcery extends GroovyPropertyContainer {
     }
 
     public static ItemHandle toItemHandle(IIngredient ingredient) {
-        if (ingredient instanceof FluidStack) return new ItemHandle(((FluidStack) ingredient).getFluid());
-        if (ingredient instanceof OreDictIngredient) return new ItemHandle(((OreDictIngredient) ingredient).getOreDict());
+        if (ingredient instanceof FluidStack fluidStack) return new ItemHandle(fluidStack.getFluid());
+        if (ingredient instanceof OreDictIngredient oreDictIngredient) return new ItemHandle(oreDictIngredient.getOreDict());
         return new ItemHandle(ingredient.getMatchingStacks());
     }
 }

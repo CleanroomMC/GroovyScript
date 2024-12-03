@@ -52,7 +52,9 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
                 if (!VanillaTypes.ITEM.equals(accessor.getIngredientType())) return;
 
                 for (Pair<List<IIngredient>, List<String>> entry : this.getBackupRecipes()) {
-                    if (entry.getKey().stream().anyMatch(x -> accessor.getIngredients().stream().anyMatch(a -> a instanceof ItemStack && x.test((ItemStack) a)))) {
+                    if (entry.getKey()
+                            .stream()
+                            .anyMatch(x -> accessor.getIngredients().stream().anyMatch(a -> a instanceof ItemStack itemStack && x.test(itemStack)))) {
                         recipeRegistry.hideRecipe(wrapper, VanillaRecipeCategoryUid.INFORMATION);
                     }
                 }

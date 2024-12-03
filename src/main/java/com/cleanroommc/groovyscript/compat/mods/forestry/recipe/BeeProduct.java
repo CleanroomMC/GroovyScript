@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.forestry.recipe;
 import forestry.apiculture.genetics.alleles.AlleleBeeSpecies;
 import net.minecraft.item.ItemStack;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class BeeProduct {
 
     public final AlleleBeeSpecies species;

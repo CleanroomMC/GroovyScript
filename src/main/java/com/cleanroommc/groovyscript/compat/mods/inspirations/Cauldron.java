@@ -37,7 +37,7 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
 
     private static boolean compareFluids(Object first, Object second) {
         if (first == second) return true;
-        if (first instanceof Fluid && second instanceof Fluid) return ((Fluid) first).getName().equals(((Fluid) second).getName());
+        if (first instanceof Fluid fluid1 && second instanceof Fluid fluid2) return fluid1.getName().equals(fluid2.getName());
         return false;
     }
 

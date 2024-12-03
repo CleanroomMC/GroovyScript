@@ -10,13 +10,12 @@ import org.jetbrains.annotations.NotNull;
 public class DummyRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
     @Override
-    public boolean matches(@NotNull final InventoryCrafting inv, @NotNull final World worldIn) {
+    public boolean matches(final @NotNull InventoryCrafting inv, final @NotNull World worldIn) {
         return false;
     }
 
-    @NotNull
     @Override
-    public ItemStack getCraftingResult(@NotNull final InventoryCrafting inv) {
+    public @NotNull ItemStack getCraftingResult(final @NotNull InventoryCrafting inv) {
         return ItemStack.EMPTY;
     }
 
@@ -25,9 +24,8 @@ public class DummyRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IR
         return false;
     }
 
-    @NotNull
     @Override
-    public ItemStack getRecipeOutput() {
+    public @NotNull ItemStack getRecipeOutput() {
         return ItemStack.EMPTY;
     }
 }

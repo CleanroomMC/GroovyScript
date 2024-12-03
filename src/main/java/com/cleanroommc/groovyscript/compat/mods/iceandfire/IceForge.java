@@ -55,10 +55,9 @@ public class IceForge extends StandardListRegistry<DragonForgeRecipe> {
             validateFluids(msg);
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public DragonForgeRecipe register() {
+        public @Nullable DragonForgeRecipe register() {
             if (!validate()) return null;
             DragonForgeRecipe recipe = null;
             for (var inputStack : input.get(0).getMatchingStacks()) {

@@ -48,9 +48,8 @@ public class ExternalModContainer extends GroovyContainer<GroovyPropertyContaine
         return true;
     }
 
-    @NotNull
     @Override
-    public Collection<String> getAliases() {
+    public @NotNull Collection<String> getAliases() {
         return aliases;
     }
 

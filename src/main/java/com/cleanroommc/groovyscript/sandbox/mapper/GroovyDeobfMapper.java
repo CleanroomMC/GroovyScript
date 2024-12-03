@@ -95,13 +95,11 @@ public class GroovyDeobfMapper {
         }
     }
 
-    @Nullable
-    public static String getDeobfMethod(Class<?> clazz, String obfMethod) {
+    public static @Nullable String getDeobfMethod(Class<?> clazz, String obfMethod) {
         return DEOBF_METHODS.getOrDefault(clazz.getName(), Object2ObjectMaps.emptyMap()).get(obfMethod);
     }
 
-    @Nullable
-    public static String getDeobfField(Class<?> clazz, String obfField) {
+    public static @Nullable String getDeobfField(Class<?> clazz, String obfField) {
         return DEOBF_FIELDS.getOrDefault(clazz.getName(), Object2ObjectMaps.emptyMap()).get(obfField);
     }
 

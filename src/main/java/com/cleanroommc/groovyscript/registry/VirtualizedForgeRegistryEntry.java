@@ -4,6 +4,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Objects;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class VirtualizedForgeRegistryEntry<T extends IForgeRegistryEntry<T>> {
 
     private final T value;
