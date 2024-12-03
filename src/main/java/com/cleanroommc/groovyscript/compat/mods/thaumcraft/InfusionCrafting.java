@@ -67,7 +67,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
                 recipes.add((InfusionRecipe) r);
         }
         recipes.forEach(rec -> {
-            if ("".equals(rec.getGroup())) {
+            if (rec.getGroup().isEmpty()) {
                 this.addBackup(Pair.of(new ResourceLocation("thaumcraft:" + ((ItemStack) rec.recipeOutput).getItem()), recipe));
             } else {
                 this.addBackup(Pair.of(new ResourceLocation(rec.getGroup()), recipe));
@@ -102,7 +102,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
             return;
         }
         recipes.forEach(recipe -> {
-            if ("".equals(recipe.getGroup())) {
+            if (recipe.getGroup().isEmpty()) {
                 this.addBackup(Pair.of(new ResourceLocation("thaumcraft:" + ((ItemStack) recipe.recipeOutput).getItem()), recipe));
             } else {
                 this.addBackup(Pair.of(new ResourceLocation(recipe.getGroup()), recipe));
