@@ -180,7 +180,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
         private Completer completer;
         private String documentation;
-        private TextureBinder textureBinder;
+        private TextureBinder<T> textureBinder;
 
         @ApiStatus.Internal
         public Builder(String name, Class<T> returnType) {
