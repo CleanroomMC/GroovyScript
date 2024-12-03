@@ -129,6 +129,7 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         }
     }
 
+    @SuppressWarnings("ClassCanBeRecord")
     public static class SlotMatchResult {
 
         private final IIngredient recipeIngredient;

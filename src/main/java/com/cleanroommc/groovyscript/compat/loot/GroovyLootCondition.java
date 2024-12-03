@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Random;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class GroovyLootCondition implements LootCondition {
 
     private static final Class<?>[] CLOSURE_CLASSES = {

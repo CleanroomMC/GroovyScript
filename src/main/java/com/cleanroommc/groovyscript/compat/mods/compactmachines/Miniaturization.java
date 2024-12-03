@@ -209,6 +209,7 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
             return recipe;
         }
 
+        @SuppressWarnings("ClassCanBeRecord")
         public static class ReferenceValues {
 
             private final IBlockState state;
