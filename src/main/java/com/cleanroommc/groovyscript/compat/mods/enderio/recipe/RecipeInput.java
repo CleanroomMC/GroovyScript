@@ -42,7 +42,7 @@ public class RecipeInput implements IRecipeInput {
 
     @Override
     public FluidStack getFluidInput() {
-        return ing instanceof FluidStack ? ((FluidStack) ing).copy() : null;
+        return ing instanceof FluidStack fluidStack ? fluidStack.copy() : null;
     }
 
     @Override

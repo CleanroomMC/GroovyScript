@@ -230,8 +230,8 @@ public abstract class FluidRecipe {
     public static @Nullable Fluid getFluid(IBlockState state) {
         Block block = state.getBlock();
 
-        if (block instanceof IFluidBlock) {
-            return ((IFluidBlock) block).getFluid();
+        if (block instanceof IFluidBlock iFluidBlock) {
+            return iFluidBlock.getFluid();
         }
         if (block instanceof BlockLiquid) {
             if (state.getMaterial() == Material.WATER) {

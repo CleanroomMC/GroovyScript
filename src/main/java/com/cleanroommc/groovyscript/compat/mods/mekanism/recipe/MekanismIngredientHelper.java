@@ -35,8 +35,8 @@ public class MekanismIngredientHelper {
     }
 
     private static IIngredient getIngredient(Object ingredient) {
-        if (ingredient instanceof IIngredient) {
-            return (IIngredient) ingredient;
+        if (ingredient instanceof IIngredient iIngredient) {
+            return iIngredient;
         }
 
         if (ingredient instanceof Gas) {
@@ -50,14 +50,14 @@ public class MekanismIngredientHelper {
     }
 
     public static boolean matches(IIngredient input, IIngredient toMatch) {
-        if (input instanceof GasStack) {
-            return matches(toMatch, (GasStack) input);
+        if (input instanceof GasStack gasStack) {
+            return matches(toMatch, gasStack);
         }
         if (IngredientHelper.isItem(input)) {
             return toMatch != null && toMatch.test(IngredientHelper.toItemStack(input));
         }
-        if (input instanceof FluidStack) {
-            return toMatch != null && toMatch.test((FluidStack) input);
+        if (input instanceof FluidStack fluidStack) {
+            return toMatch != null && toMatch.test(fluidStack);
         }
         //TODO: Support other types of things like ore dict
         return false;
@@ -113,8 +113,8 @@ public class MekanismIngredientHelper {
     }
 
     public static IMekanismIngredient<ItemStack> getMekanismIngredient(IIngredient ingredient) {
-        if (ingredient instanceof OreDictIngredient) {
-            return new OredictMekIngredient(((OreDictIngredient) ingredient).getOreDict());
+        if (ingredient instanceof OreDictIngredient oreDictIngredient) {
+            return new OredictMekIngredient(oreDictIngredient.getOreDict());
         }
         if (IngredientHelper.isItem(ingredient)) {
             return new ItemStackMekIngredient(IngredientHelper.toItemStack(ingredient));
@@ -129,8 +129,8 @@ public class MekanismIngredientHelper {
         if (ingredient == IIngredient.ANY) {
             return true;
         }
-        if (ingredient instanceof GasStack) {
-            return ((GasStack) ingredient).isGasEqual(gasStack);
+        if (ingredient instanceof GasStack stack) {
+            return stack.isGasEqual(gasStack);
         }
         return false;
     }

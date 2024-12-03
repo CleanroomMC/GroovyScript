@@ -42,8 +42,8 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
 
     @MethodDescription(example = @Example("ore('paper')"))
     public boolean removeByInput(IIngredient input) {
-        if (input instanceof OreDictIngredient) {
-            AtomicReshaperManager.AtomicReshaperRecipe recipe = AtomicReshaperManager.INSTANCE.removeOreRecipe(((OreDictIngredient) input).getOreDict());
+        if (input instanceof OreDictIngredient oreDictIngredient) {
+            AtomicReshaperManager.AtomicReshaperRecipe recipe = AtomicReshaperManager.INSTANCE.removeOreRecipe(oreDictIngredient.getOreDict());
             if (recipe == null) return false;
             addBackup(recipe);
             return true;
@@ -186,8 +186,8 @@ public class AtomicReshaper extends VirtualizedRegistry<AtomicReshaperManager.At
             if (!validate()) return null;
             AtomicReshaperManager.AtomicReshaperRecipe recipe = null;
             IIngredient inputItem = input.get(0);
-            if (inputItem instanceof OreDictIngredient) {
-                String oredict = ((OreDictIngredient) inputItem).getOreDict();
+            if (inputItem instanceof OreDictIngredient oreDictIngredient) {
+                String oredict = oreDictIngredient.getOreDict();
                 recipe = new AtomicReshaperManager.AtomicReshaperRecipe(oredict, time, primordium, getRecipeOutput());
                 ModSupport.PRODIGY_TECH.get().atomicReshaper.add(recipe);
             } else {

@@ -33,17 +33,17 @@ public class Alias extends ArrayList<String> {
     }
 
     public Alias andGenerateOfClass(Object o) {
-        Class<?> clazz = o instanceof Class ? (Class<?>) o : o.getClass();
+        Class<?> clazz = o instanceof Class<?>c ? c : o.getClass();
         return andGenerate(clazz.getSimpleName());
     }
 
     public static Alias generateOfClass(Object o) {
-        Class<?> clazz = o instanceof Class ? (Class<?>) o : o.getClass();
+        Class<?> clazz = o instanceof Class<?>c ? c : o.getClass();
         return generateOf(clazz.getSimpleName(), CaseFormat.UPPER_CAMEL);
     }
 
     public static Alias generateOfClassAnd(Object o, String... names) {
-        Class<?> clazz = o instanceof Class ? (Class<?>) o : o.getClass();
+        Class<?> clazz = o instanceof Class<?>c ? c : o.getClass();
         Alias alias = new Alias();
         generateAliases(alias, clazz.getSimpleName(), CaseFormat.UPPER_CAMEL);
         for (String name : names) {

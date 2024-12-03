@@ -49,8 +49,8 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
     }
 
     public boolean removeByInput(IIngredient inputItem) {
-        if (inputItem instanceof FluidStack) {
-            return removeByFluidInput((FluidStack) inputItem);
+        if (inputItem instanceof FluidStack fluidStack) {
+            return removeByFluidInput(fluidStack);
         }
         return getRecipes().removeIf(r -> {
             List<List<ItemStack>> input = r.getIngredients();
@@ -74,8 +74,8 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
     }
 
     public boolean removeByOutput(IIngredient outputItem) {
-        if (outputItem instanceof FluidStack) {
-            return removeByFluidInput((FluidStack) outputItem);
+        if (outputItem instanceof FluidStack fluidStack) {
+            return removeByFluidInput(fluidStack);
         }
         return getRecipes().removeIf(r -> {
             List<ItemStack> output = r.getOutput();
@@ -135,8 +135,8 @@ public abstract class BaseRegistry extends StandardListRegistry<IRecipe> {
             for (int i = 0; i < input.size(); i++) {
                 IIngredient in = input.get(i);
                 inputs.add(Arrays.asList(in.getMatchingStacks()));
-                if (in instanceof OreDictIngredient) {
-                    oredicts.put(i, ((OreDictIngredient) in).getOreDict());
+                if (in instanceof OreDictIngredient oreDictIngredient) {
+                    oredicts.put(i, oreDictIngredient.getOreDict());
                 }
             }
 

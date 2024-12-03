@@ -190,8 +190,8 @@ public abstract class CraftingRecipe extends IForgeRegistryEntry.Impl<IRecipe> i
         Container eventHandler = ((InventoryCraftingAccess) inventory).getEventHandler();
         if (eventHandler != null) {
             for (Slot slot : eventHandler.inventorySlots) {
-                if (slot instanceof SlotCraftingAccess) {
-                    return ((SlotCraftingAccess) slot).getPlayer();
+                if (slot instanceof SlotCraftingAccess slotCraftingAccess) {
+                    return slotCraftingAccess.getPlayer();
                 }
             }
         }

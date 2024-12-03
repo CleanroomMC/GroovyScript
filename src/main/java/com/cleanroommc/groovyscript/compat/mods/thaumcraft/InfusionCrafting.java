@@ -63,8 +63,8 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
     public boolean remove(InfusionRecipe recipe) {
         List<InfusionRecipe> recipes = new ArrayList<>();
         for (IThaumcraftRecipe r : ThaumcraftApi.getCraftingRecipes().values()) {
-            if (r instanceof InfusionRecipe && r.equals(recipe))
-                recipes.add((InfusionRecipe) r);
+            if (r instanceof InfusionRecipe infusionRecipe && r.equals(recipe))
+                recipes.add(infusionRecipe);
         }
         recipes.forEach(rec -> {
             if (rec.getGroup().isEmpty()) {
@@ -88,7 +88,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
         List<InfusionRecipe> recipes = new ArrayList<>();
         for (IThaumcraftRecipe r : ThaumcraftApi.getCraftingRecipes().values()) {
-            if (r instanceof InfusionRecipe && ((InfusionRecipe) r).getRecipeOutput() instanceof ItemStack ro) {
+            if (r instanceof InfusionRecipe infusionRecipe && infusionRecipe.getRecipeOutput() instanceof ItemStack ro) {
                 if (output.test(ro)) {
                     recipes.add((InfusionRecipe) r);
                 }

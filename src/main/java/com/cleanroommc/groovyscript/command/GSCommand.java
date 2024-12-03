@@ -32,22 +32,22 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> postLogFiles(sender)));
 
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
-            if (sender instanceof EntityPlayerMP) {
+            if (sender instanceof EntityPlayerMP player) {
                 if (hasArgument(args, "--clean")) {
                     GroovyLogImpl.LOG.cleanLog();
                 }
-                runReload((EntityPlayerMP) sender, server);
+                runReload(player, server);
             }
         }));
 
         addSubcommand(new SimpleCommand("check", (server, sender, args) -> {
-            if (sender instanceof EntityPlayerMP) {
+            if (sender instanceof EntityPlayerMP player) {
                 sender.sendMessage(new TextComponentString("Checking groovy syntax..."));
                 long time = System.currentTimeMillis();
                 GroovyScript.getSandbox().checkSyntax();
                 time = System.currentTimeMillis() - time;
                 sender.sendMessage(new TextComponentString("Checking syntax took " + time + "ms"));
-                GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, false, false, time);
+                GroovyScript.postScriptRunResult(player, false, false, false, time);
             }
         }));
 
