@@ -68,60 +68,45 @@ public class MekanismIngredientHelper {
     }
 
     public static <INPUT extends MachineInput<INPUT>> boolean matches(INPUT in, IngredientWrapper toMatch) {
-        if (in instanceof ItemStackInput) {
-            ItemStackInput input = (ItemStackInput) in;
+        if (in instanceof ItemStackInput input) {
             return matches(input.ingredient, toMatch.getIngredient());
-        } else if (in instanceof GasInput) {
-            GasInput input = (GasInput) in;
+        } else if (in instanceof GasInput input) {
             return matches(input.ingredient, toMatch.getIngredient());
-        } else if (in instanceof FluidInput) {
-            FluidInput input = (FluidInput) in;
+        } else if (in instanceof FluidInput input) {
             return matches(input.ingredient, toMatch.getIngredient());
-        } else if (in instanceof AdvancedMachineInput) {
-            AdvancedMachineInput input = (AdvancedMachineInput) in;
+        } else if (in instanceof AdvancedMachineInput input) {
             return matches(input.itemStack, toMatch.getLeft()) && matches(input.gasType, toMatch.getRight());
-        } else if (in instanceof ChemicalPairInput) {
-            ChemicalPairInput input = (ChemicalPairInput) in;
+        } else if (in instanceof ChemicalPairInput input) {
             return matches(input.leftGas, toMatch.getLeft()) && matches(input.rightGas, toMatch.getRight());
-        } else if (in instanceof DoubleMachineInput) {
-            DoubleMachineInput input = (DoubleMachineInput) in;
+        } else if (in instanceof DoubleMachineInput input) {
             return matches(input.itemStack, toMatch.getLeft()) && matches(input.extraStack, toMatch.getRight());
-        } else if (in instanceof PressurizedInput) {
-            PressurizedInput input = (PressurizedInput) in;
+        } else if (in instanceof PressurizedInput input) {
             return matches(input.getSolid(), toMatch.getLeft()) && matches(input.getFluid(), toMatch.getMiddle()) && matches(input.getGas(), toMatch.getRight());
-        } else if (in instanceof InfusionInput) {
-            InfusionInput input = (InfusionInput) in;
+        } else if (in instanceof InfusionInput input) {
             return matches(input.inputStack, toMatch.getIngredient()) && (toMatch.getInfuseType().isEmpty() || toMatch.getInfuseType().equalsIgnoreCase(input.infuse.getType().name));
-        } else if (in instanceof IntegerInput) {
-            IntegerInput input = (IntegerInput) in;
+        } else if (in instanceof IntegerInput input) {
             return input.ingredient == toMatch.getAmount();
         }
         return false;
     }
 
     public static <OUTPUT extends MachineOutput<OUTPUT>> boolean matches(OUTPUT out, IngredientWrapper toMatch) {
-        if (out instanceof ItemStackOutput) {
-            ItemStackOutput output = (ItemStackOutput) out;
+        if (out instanceof ItemStackOutput output) {
             return matches(output.output, toMatch.getIngredient());
         }
-        if (out instanceof GasOutput) {
-            GasOutput output = (GasOutput) out;
+        if (out instanceof GasOutput output) {
             return matches(output.output, toMatch.getIngredient());
         }
-        if (out instanceof FluidOutput) {
-            FluidOutput output = (FluidOutput) out;
+        if (out instanceof FluidOutput output) {
             return matches(output.output, toMatch.getIngredient());
         }
-        if (out instanceof ChanceOutput) {
-            ChanceOutput output = (ChanceOutput) out;
+        if (out instanceof ChanceOutput output) {
             return matches(output.primaryOutput, toMatch.getLeft()) && matches(output.secondaryOutput, toMatch.getRight());
         }
-        if (out instanceof ChemicalPairOutput) {
-            ChemicalPairOutput output = (ChemicalPairOutput) out;
+        if (out instanceof ChemicalPairOutput output) {
             return matches(output.leftGas, toMatch.getLeft()) && matches(output.rightGas, toMatch.getRight());
         }
-        if (out instanceof PressurizedOutput) {
-            PressurizedOutput output = (PressurizedOutput) out;
+        if (out instanceof PressurizedOutput output) {
             return matches(output.getItemOutput(), toMatch.getLeft()) && matches(output.getGasOutput(), toMatch.getRight());
         }
         return false;
