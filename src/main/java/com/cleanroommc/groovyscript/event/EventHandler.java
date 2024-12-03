@@ -127,8 +127,8 @@ public class EventHandler {
             Container container = ((InventoryCraftingAccess) inventoryCrafting).getEventHandler();
             if (container != null) {
                 for (Slot slot : container.inventorySlots) {
-                    if (slot instanceof SlotCrafting) {
-                        craftResult = (InventoryCraftResult) slot.inventory;
+                    if (slot instanceof SlotCrafting && slot.inventory instanceof InventoryCraftResult result) {
+                        craftResult = result;
                         player = ((SlotCraftingAccess) slot).getPlayer();
                         break;
                     }
