@@ -28,7 +28,7 @@ public class ModItemsIngredient extends ItemsIngredient {
     }
 
     public static ModItemsIngredient of(String modId) {
-        return new ModItemsIngredient(modId, new ArrayList<>(CACHE.computeIfAbsent(modId, ModItemsIngredient::itemStacksFromLocation)));
+        return new ModItemsIngredient(modId, CACHE.computeIfAbsent(modId, ModItemsIngredient::itemStacksFromLocation));
     }
 
     private static List<ItemStack> itemStacksFromLocation(String namespace) {
@@ -38,7 +38,7 @@ public class ModItemsIngredient extends ItemsIngredient {
                 .filter(entry -> entry.getValue() != null)
                 .filter(entry -> namespace.equals(entry.getKey().getNamespace()))
                 .forEach(entry -> entry.getValue().getSubItems(CreativeTabs.SEARCH, stacks));
-        return stacks;
+        return new ArrayList<>(stacks);
     }
 
     public String getModName() {
