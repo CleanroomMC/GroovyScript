@@ -17,7 +17,7 @@ public class ChaosAltar extends StandardListRegistry<RecipeChaosAltar> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).cost(5)"),
-            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).catalyst(item('minecraft:diamond')).cost(5000)")
+            @Example(".input(item('minecraft:gold_ingot') * 2).output(item('minecraft:clay')).catalyst(item('minecraft:diamond')).cost(5000)")
     })
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -67,11 +67,6 @@ public class ChaosAltar extends StandardListRegistry<RecipeChaosAltar> {
         @Override
         public String getErrorMsg() {
             return "Error adding Silents Gems Chaos Altar recipe";
-        }
-
-        @Override
-        protected int getMaxItemInput() {
-            return 1;
         }
 
         @Override
