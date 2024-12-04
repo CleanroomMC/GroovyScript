@@ -14,12 +14,9 @@ import scala.collection.Seq;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.yogpc.qp.recipe.WorkbenchRecipe.addIngredientRecipe;
-import static com.yogpc.qp.recipe.WorkbenchRecipe.getRecipeFromResult;
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
 
 public class WorkbenchPlusRecipe {
     private final List<List<IngredientWithCount>> input;
@@ -28,12 +25,11 @@ public class WorkbenchPlusRecipe {
     private final ResourceLocation location;
 
     public WorkbenchPlusRecipe(Collection<IIngredient> input, ItemStack output, Double energy , ResourceLocation location) {
-        List<List<IngredientWithCount>> inputList = input.stream()
+
+        this.input = input.stream()
                 .map(i -> new IngredientWithCount(i.toMcIngredient(), i.getAmount()))
                 .map(Collections::singletonList)
                 .collect(Collectors.toList());
-
-        this.input = inputList;
         this.output = output;
         this.energy = energy;
         this.location = location;
