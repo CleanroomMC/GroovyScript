@@ -13,6 +13,7 @@ import scala.Option;
 import scala.collection.JavaConversions;
 import scala.collection.Map;
 
+@RegistryDescription
 public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
 
     @Override
@@ -51,7 +52,7 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
     }
 
     @RecipeBuilderDescription(example =
-            @Example(".output(item('minecraft:nether_star')).input(item('minecraft:diamond'),item('minecraft:gold_ingot')).energy(10000).register()")
+            @Example(".output(item('minecraft:nether_star')).input(item('minecraft:diamond'),item('minecraft:gold_ingot')).energy(10000)")
     )
     public RecipeBuilder recipeBuilder(){return new RecipeBuilder();}
 
