@@ -53,7 +53,7 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
     @RecipeBuilderDescription(example =
             @Example(".output(item('minecraft:nether_star')).input(item('minecraft:diamond'),item('minecraft:gold_ingot')).energy(10000).register()")
     )
-    public RecipeBuilder recipeBuilder(){return new RecipeBuilder();};
+    public RecipeBuilder recipeBuilder(){return new RecipeBuilder();}
 
     @Property(property = "input", comp = @Comp(not = "null", gte = 1 , lte = 27))
     @Property(property = "output", comp = @Comp(not = "null" , eq = 1))
