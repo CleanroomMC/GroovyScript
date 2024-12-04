@@ -33,7 +33,6 @@ public class WorkbenchPlusRecipe {
         this.output = output;
         this.energy = energy;
         this.location = location;
-
     }
 
     public WorkbenchPlusRecipe(Seq<Seq<IngredientWithCount>> input, ItemStack output, Double energy , ResourceLocation location) {
@@ -46,15 +45,9 @@ public class WorkbenchPlusRecipe {
 
     }
 
+
     public static WorkbenchPlusRecipe addRecipe(WorkbenchPlusRecipe recipe) {
-        Map<ResourceLocation, WorkbenchRecipe> recipeMap = WorkbenchRecipe.getRecipeMap();
-        ResourceLocation resourceLocation = new ResourceLocation(recipe.location.toString());
-        Option<WorkbenchRecipe> optionalRecipe = recipeMap.get(resourceLocation);
-        if (optionalRecipe.isDefined()) {
-            addIngredientRecipe(optionalRecipe.get().location(), optionalRecipe.get().getOutput(), optionalRecipe.get().energy(), optionalRecipe.get().inputs(), true , true);
-        } else {
-            addIngredientRecipe(recipe.location, recipe.output, recipe.energy, recipe.input, true);
-        }
+        addIngredientRecipe(recipe.location, recipe.output, recipe.energy, recipe.input, true);
         return recipe;
     }
 
