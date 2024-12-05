@@ -77,7 +77,7 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding AdditionalEnchantedMiner WorkbenchPlus recipe";
+            return "Error adding Additional Enchanted Miner WorkbenchPlus recipe";
         }
 
         @Override
