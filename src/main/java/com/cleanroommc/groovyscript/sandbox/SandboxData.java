@@ -51,9 +51,9 @@ public class SandboxData {
         cachePath = new File(SandboxData.minecraftHome, "cache" + File.separator + "groovy");
         // If we are launching with the environment variable set to use the examples folder, use the examples folder for easy and consistent testing.
         if (Boolean.parseBoolean(System.getProperty("groovyscript.use_examples_folder"))) {
-            scriptPath = new File(minecraftHome.getParentFile(), "examples");
+            scriptPath = new File(SandboxData.minecraftHome.getParentFile(), "examples");
         } else {
-            scriptPath = new File(minecraftHome, "groovy");
+            scriptPath = new File(SandboxData.minecraftHome, "groovy");
         }
         try {
             scriptPath = scriptPath.getCanonicalFile();
