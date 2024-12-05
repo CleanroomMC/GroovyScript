@@ -45,6 +45,7 @@ public class GameRule extends NamedRegistry implements IScriptReloadable {
     @GroovyBlacklist
     public void onReload() {
         defaultGameRules.clear();
+        warnNewGameRule = false;
     }
 
     @Override
