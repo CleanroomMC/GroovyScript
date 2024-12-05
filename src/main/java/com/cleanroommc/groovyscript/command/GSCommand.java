@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class GSCommand extends CommandTreeBase {
 
@@ -57,6 +59,11 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new InfoHandCommand());
         addSubcommand(new InfoLookingCommand());
         addSubcommand(new InfoSelfCommand());
+
+        addSubcommand(new SimpleCommand("applyDefaultGameRules", (server, sender, args) -> {
+            VanillaModule.gameRule.setDefaultGameRules(Objects.requireNonNull(server.getServer()).getEntityWorld().getGameRules());
+            sender.sendMessage(new TextComponentString("Applied the default GameRules to the current world."));
+        }));
 
 
         addSubcommand(new SimpleCommand("wiki", (server, sender, args) -> sender.sendMessage(getTextForUrl("GroovyScript wiki", "Click to open wiki in browser", new TextComponentString("https://cleanroommc.com/groovy-script/"))), "doc", "docs", "documentation"));
