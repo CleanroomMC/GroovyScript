@@ -256,3 +256,8 @@ item('minecraft:golden_apple').setRarity(textformat('-1'))
 eventManager.listen(EnderTeleportEvent) { event ->
     event.setAttackDamage 19.5f
 }
+
+// Default GameRules
+gameRule.add('doDaylightCycle', 'false')
+gameRule.add(['mobGriefing': 'false', 'keepInventory': 'true'])
+gameRule.setWarnNewGameRule(true)
