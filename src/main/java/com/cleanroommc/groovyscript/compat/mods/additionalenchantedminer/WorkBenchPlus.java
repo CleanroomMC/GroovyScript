@@ -4,26 +4,34 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.yogpc.qp.recipe.R1;
 import com.yogpc.qp.recipe.WorkbenchRecipe;
 import com.yogpc.qp.tile.ItemDamage;
+import com.yogpc.qp.utils.IngredientWithCount;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import scala.Option;
+import scala.Symbol;
 import scala.collection.JavaConversions;
 import scala.collection.Map;
+
+import java.util.Collections;
+import java.util.stream.Collectors;
+
+import static com.yogpc.qp.recipe.WorkbenchRecipe.addIngredientRecipe;
 
 @RegistryDescription
 public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
 
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> WorkbenchPlusRecipe.removeById(recipe.getLocation().toString()));
+        removeScripted().forEach(recipe -> WorkbenchRecipe.removeRecipe(recipe.getLocation()));
         restoreFromBackup().forEach(WorkbenchPlusRecipe::addRecipe);
     }
 
     @MethodDescription(example = @Example("item('quarryplus:quarry')"))
-    public Boolean removeByOutput(ItemStack output) {
+    public boolean removeByOutput(ItemStack output) {
         ItemDamage itemDamage = ItemDamage.apply(output);
         Map<ResourceLocation, WorkbenchRecipe> recipeMap = WorkbenchRecipe.getRecipeMap();
         Iterable<WorkbenchRecipe> iterable  = JavaConversions.asJavaIterable(recipeMap.values());
@@ -35,19 +43,12 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
         return WorkbenchPlusRecipe.removeByOutput(output);
     }
 
-    public Boolean removeById(String id) {
-        Map<ResourceLocation, WorkbenchRecipe> OptinalList = WorkbenchRecipe.getRecipeMap();
-        ResourceLocation location = new ResourceLocation(id);
-        Option<WorkbenchRecipe> recipe = OptinalList.get(location);
-        if (recipe.isDefined()) addBackup(new WorkbenchPlusRecipe(recipe.get().inputs(), recipe.get().getOutput(), recipe.get().energy(), recipe.get().location()));
-        return WorkbenchPlusRecipe.removeById(id);
-    }
-
+    @MethodDescription(priority = 2000,example = @Example(commented = true))
     public void removeAll() {
         Map<ResourceLocation, WorkbenchRecipe> OptinalList = WorkbenchRecipe.getRecipeMap();
         Iterable<ResourceLocation> iterable  = JavaConversions.asJavaIterable(OptinalList.keys());
         iterable.forEach(
-                recipe -> removeById(recipe.toString())
+                location -> WorkbenchPlusRecipe.removeById(location.toString())
         );
     }
 
@@ -91,7 +92,7 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable WorkbenchPlusRecipe register() {
             if (!validate()) return null;
-            WorkbenchPlusRecipe recipe = new WorkbenchPlusRecipe(this.input, this.output.get(0), this.energy, name);
+            WorkbenchPlusRecipe recipe = new WorkbenchPlusRecipe(this.input, this.output.get(0), this.energy, this.name);
             addScripted(recipe);
             WorkbenchPlusRecipe.addRecipe(recipe);
             return recipe;

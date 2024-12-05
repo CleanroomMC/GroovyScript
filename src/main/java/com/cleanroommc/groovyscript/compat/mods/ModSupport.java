@@ -83,7 +83,7 @@ public class ModSupport {
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
     public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
-    public static final GroovyContainer<AdditionalEnchantedMiner> ADDITIONAL_ENCHANTED_MINER = new InternalModContainer<>("quarryplus", "Additional Enchanted Miner", AdditionalEnchantedMiner::new, "aem");
+    public static final GroovyContainer<AdditionalEnchantedMiner> ADDITIONAL_ENCHANTED_MINER = new InternalModContainer<>("quarryplus", "Additional Enchanted Miner", AdditionalEnchantedMiner::new);
     public static final GroovyContainer<AdvancedMortars> ADVANCED_MORTARS = new InternalModContainer<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
     public static final GroovyContainer<AdvancedRocketry> ADVANCED_ROCKETRY = new InternalModContainer<>("advancedrocketry", "Advanced Rocketry", AdvancedRocketry::new);
     public static final GroovyContainer<Aether> AETHER = new InternalModContainer<>("aether_legacy", "Aether Legacy", Aether::new, "aether");
