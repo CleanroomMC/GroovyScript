@@ -257,6 +257,6 @@ eventManager.listen(EnderTeleportEvent) { event ->
     event.setAttackDamage 19.5f
 }
 
-commands.registerCommand('groovy_test') { server, sender, args ->
+command.registerCommand('groovy_test') { server, sender, args ->
     sender.sendMessage('Hello from GroovyScript')
 }

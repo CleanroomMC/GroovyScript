@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.command.SimpleCommand;
 import com.cleanroommc.groovyscript.core.mixin.CommandHandlerAccessor;
@@ -33,14 +34,14 @@ public class Command extends NamedRegistry implements IScriptReloadable {
             this.serverCommands.add(command);
         }
         if (this.serverStarted) {
-            forServer(commandHandler -> commandHandler.registerCommand(command));
+            forServer(commandHandler -> registerCommand(commandHandler, command));
         }
     }
 
     public void registerClientCommand(ICommand command) {
         if (FMLCommonHandler.instance().getSide().isServer()) return;
-        ClientCommandHandler.instance.registerCommand(command);
-        if (GroovyScript.getSandbox().isRunning() && GroovyScript.getSandbox().getCurrentLoader().isReloadable()) {
+
+        if (registerCommand(ClientCommandHandler.instance, command) && GroovyScript.getSandbox().isRunning() && GroovyScript.getSandbox().getCurrentLoader().isReloadable()) {
             this.clientReloadableCommands.addScripted(command);
         }
     }
@@ -61,6 +62,21 @@ public class Command extends NamedRegistry implements IScriptReloadable {
         registerClientCommand(new SimpleCommand(name, "/" + name, command));
     }
 
+    public boolean registerCommand(CommandHandler handler, ICommand command) {
+        if (handler.getCommands().containsKey(command.getName())) {
+            GroovyLog.get().error("Error registering command '/{}', because a command with that name already exists", command.getName());
+            return false;
+        }
+        for (String alias : command.getAliases()) {
+            if (handler.getCommands().containsKey(alias)) {
+                GroovyLog.get().error("Error registering command '/{}', because a command for the alias '/{}' already exists", command.getName(), alias);
+                return false;
+            }
+        }
+        handler.registerCommand(command);
+        return true;
+    }
+
     @GroovyBlacklist
     public void removeCommand(CommandHandler commandHandler, ICommand command) {
         Set<ICommand> commands = ((CommandHandlerAccessor) commandHandler).getCommandSet();
@@ -74,10 +90,10 @@ public class Command extends NamedRegistry implements IScriptReloadable {
         this.serverStarted = true;
         CommandHandler commandHandler = (CommandHandler) server.getCommandManager();
         for (ICommand command : this.serverCommands) {
-            commandHandler.registerCommand(command);
+            registerCommand(commandHandler, command);
         }
         for (ICommand command : this.serverReloadableCommands.getScriptedRecipes()) {
-            commandHandler.registerCommand(command);
+            registerCommand(commandHandler, command);
         }
     }
 
