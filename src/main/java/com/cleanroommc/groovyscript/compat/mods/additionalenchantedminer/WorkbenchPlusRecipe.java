@@ -6,9 +6,7 @@ import com.yogpc.qp.tile.ItemDamage;
 import com.yogpc.qp.utils.IngredientWithCount;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import scala.Option;
 import scala.collection.JavaConversions;
-import scala.collection.Map;
 import scala.collection.Seq;
 
 import java.util.Collection;
@@ -57,10 +55,9 @@ public class WorkbenchPlusRecipe {
         return true;
     }
 
-    public static boolean removeById(String id) {
+    public static void removeById(String id) {
         ResourceLocation resourceLocation = new ResourceLocation(id);
         WorkbenchRecipe.removeRecipe(resourceLocation);
-        return true;
     }
 
     public ResourceLocation getLocation() {
