@@ -46,18 +46,18 @@ public class WorkbenchPlusRecipe {
     }
 
 
-    public static WorkbenchPlusRecipe addRecipe(WorkbenchPlusRecipe recipe) {
+    public static boolean addRecipe(WorkbenchPlusRecipe recipe) {
         addIngredientRecipe(recipe.location, recipe.output, recipe.energy, recipe.input, true);
-        return recipe;
+        return true;
     }
 
-    public static Boolean removeByOutput(ItemStack output) {
+    public static boolean removeByOutput(ItemStack output) {
         ItemDamage itemDamage = ItemDamage.apply(output);
         WorkbenchRecipe.removeRecipe(itemDamage);
         return true;
     }
 
-    public static Boolean removeById(String id) {
+    public static boolean removeById(String id) {
         ResourceLocation resourceLocation = new ResourceLocation(id);
         WorkbenchRecipe.removeRecipe(resourceLocation);
         return true;
