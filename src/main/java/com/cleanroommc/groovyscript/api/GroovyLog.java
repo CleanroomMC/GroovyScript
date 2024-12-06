@@ -232,6 +232,16 @@ public interface GroovyLog {
     void exception(Throwable throwable);
 
     /**
+     * Formats and logs an exception to this log AND Minecraft's log with a message.<br>
+     * The log will be printed without formatting to Minecraft's log.
+     * Unnecessary lines that clutter the log will get removed before logging to this log.<br>
+     * <b>The exception will NOT be thrown!</b>
+     *
+     * @param throwable exception to log
+     */
+    void exception(String msg, Throwable throwable);
+
+    /**
      * Formats a {@link String} and arguments according to the defined rules.
      *
      * @param msg  message to format

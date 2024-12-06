@@ -100,7 +100,7 @@ public class ClosureHelper {
                 return (Closure<?>) convertedClosure.getDelegate();
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            GroovyLog.get().exception(e);
+            GroovyLog.get().exception("A reflection error occurred while trying to obtain a closure from a lambda.", e);
         }
         return null;
     }
