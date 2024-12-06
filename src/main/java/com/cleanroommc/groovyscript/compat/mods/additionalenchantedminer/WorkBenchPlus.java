@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.additionalenchantedminer;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.yogpc.qp.recipe.WorkbenchRecipe;
@@ -9,7 +10,6 @@ import com.yogpc.qp.tile.ItemDamage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
-import scala.Option;
 import scala.collection.JavaConversions;
 import scala.collection.Map;
 
@@ -18,12 +18,12 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
 
     @Override
     public void onReload() {
-        removeScripted().forEach(recipe -> WorkbenchPlusRecipe.removeById(recipe.getLocation().toString()));
-        restoreFromBackup().forEach(WorkbenchPlusRecipe::addRecipe);
+        removeScripted().forEach(recipe -> WorkbenchRecipe.removeRecipe(recipe.getLocation()));
+        restoreFromBackup().forEach(ModSupport.ADDITIONAL_ENCHANTED_MINER.get().WorkBenchPlus::add);
     }
 
     @MethodDescription(example = @Example("item('quarryplus:quarry')"))
-    public Boolean removeByOutput(ItemStack output) {
+    public boolean removeByOutput(ItemStack output) {
         ItemDamage itemDamage = ItemDamage.apply(output);
         Map<ResourceLocation, WorkbenchRecipe> recipeMap = WorkbenchRecipe.getRecipeMap();
         Iterable<WorkbenchRecipe> iterable  = JavaConversions.asJavaIterable(recipeMap.values());
@@ -35,32 +35,29 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
         return WorkbenchPlusRecipe.removeByOutput(output);
     }
 
-    public Boolean removeById(String id) {
-        Map<ResourceLocation, WorkbenchRecipe> OptinalList = WorkbenchRecipe.getRecipeMap();
-        ResourceLocation location = new ResourceLocation(id);
-        Option<WorkbenchRecipe> recipe = OptinalList.get(location);
-        if (recipe.isDefined()) addBackup(new WorkbenchPlusRecipe(recipe.get().inputs(), recipe.get().getOutput(), recipe.get().energy(), recipe.get().location()));
-        return WorkbenchPlusRecipe.removeById(id);
-    }
-
+    @MethodDescription(priority = 2000,example = @Example(commented = true))
     public void removeAll() {
-        Map<ResourceLocation, WorkbenchRecipe> OptinalList = WorkbenchRecipe.getRecipeMap();
-        Iterable<ResourceLocation> iterable  = JavaConversions.asJavaIterable(OptinalList.keys());
-        iterable.forEach(
-                recipe -> removeById(recipe.toString())
+        Map<ResourceLocation, WorkbenchRecipe> recipeMap = WorkbenchRecipe.getRecipeMap();
+        Iterable<ResourceLocation> iterableRecipe = JavaConversions.asJavaIterable(recipeMap.keys());
+        iterableRecipe.forEach(
+                location -> WorkbenchPlusRecipe.removeById(location.toString())
         );
     }
 
+    private void add(WorkbenchPlusRecipe recipe) {
+        addScripted(recipe);
+        WorkbenchPlusRecipe.addRecipe(recipe);
+    }
+
     @RecipeBuilderDescription(example =
-            @Example(".output(item('minecraft:nether_star')).input(item('minecraft:diamond'),item('minecraft:gold_ingot')).energy(10000)")
-    )
+                              @Example(".output(item('minecraft:nether_star')).input(item('minecraft:diamond'),item('minecraft:gold_ingot')).energy(10000)"))
     public RecipeBuilder recipeBuilder(){return new RecipeBuilder();}
 
-    @Property(property = "input", comp = @Comp(not = "null", gte = 1 , lte = 27))
-    @Property(property = "output", comp = @Comp(not = "null" , eq = 1))
-    public class RecipeBuilder extends AbstractRecipeBuilder<WorkbenchPlusRecipe> {
+    @Property(property = "input", comp = @Comp(gte = 1 , lte = 27))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    public static class RecipeBuilder extends AbstractRecipeBuilder<WorkbenchPlusRecipe> {
 
-        @Property(property = "energy", comp = @Comp(gt = 0))
+        @Property(comp = @Comp(gt = 0))
         private double energy;
 
         @RecipeBuilderMethodDescription
@@ -73,7 +70,6 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
         public String getRecipeNamePrefix() {
             return "additionalenchantedminer_workbenchplus_";
         }
-
 
         @Override
         public String getErrorMsg() {
@@ -91,9 +87,8 @@ public class WorkBenchPlus extends VirtualizedRegistry<WorkbenchPlusRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable WorkbenchPlusRecipe register() {
             if (!validate()) return null;
-            WorkbenchPlusRecipe recipe = new WorkbenchPlusRecipe(this.input, this.output.get(0), this.energy, name);
-            addScripted(recipe);
-            WorkbenchPlusRecipe.addRecipe(recipe);
+            WorkbenchPlusRecipe recipe = new WorkbenchPlusRecipe(this.input, this.output.get(0), this.energy, super.name);
+            ModSupport.ADDITIONAL_ENCHANTED_MINER.get().WorkBenchPlus.add(recipe);
             return recipe;
         }
     }
