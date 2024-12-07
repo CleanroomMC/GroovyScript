@@ -118,10 +118,16 @@ final def mod_dependencies = [
 // These mods will be enabled at runtime, but will not be compiled.
 // Sorted alphabetically.
 final Map<String, List<String>> runtime_dependencies = [
+        'com.cleanroommc:configanytime:3.0'                 : [project.debug_universal_tweaks],
+        'curse.maven:aainfo-573154:3627065'                 : [project.debug_actually_advanced_info],
         'curse.maven:dropt-284973:3758733'                  : [project.debug_pyrotech],
         'curse.maven:jei-bees-248370:2490058'               : [project.debug_forestry],
         'curse.maven:just-enough-petroleum-291727:2549332'  : [project.debug_immersive_petroleum],
+        'curse.maven:mouse-tweaks-unofficial-461660:5876158': [project.debug_mouse_tweaks_unofficial],
+        'curse.maven:reid-629017:5502915'                   : [project.debug_roughly_enough_ids],
         'curse.maven:thaumic_jei-285492:2705304'            : [project.debug_thaum],
+        'curse.maven:universal-tweaks-705000:5860191'       : [project.debug_universal_tweaks],
+        'curse.maven:vintagefix-871198:5536276'             : [project.debug_vintagefix],
 ]
 
 dependencies {
@@ -156,7 +162,7 @@ dependencies {
     // enables mods for runtime
     runtime_dependencies.each { k, v ->
         if (v.any { it.toBoolean() }) {
-            runtimeOnly rfg.deobf(k)
+            runtimeOnly k
         }
     }
 
