@@ -186,21 +186,9 @@ mods.thebetweenlands.steeping_pot.removeByOutput(fluid('dye_fluid').withNbt(['ty
 // mods.thebetweenlands.steeping_pot.removeAllAcceptedItem()
 
 mods.thebetweenlands.steeping_pot.recipeBuilder()
-    .input(item('minecraft:clay'))
-    .fluidInput(fluid('water'))
-    .output(item('minecraft:diamond'))
-    .register()
-
-mods.thebetweenlands.steeping_pot.recipeBuilder()
     .input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'))
     .fluidInput(fluid('lava'))
     .fluidOutput(fluid('water'))
-    .register()
-
-mods.thebetweenlands.steeping_pot.recipeBuilder()
-    .input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:clay'))
-    .fluidInput(fluid('lava'))
-    .output(item('minecraft:diamond'))
     .register()
 
 mods.thebetweenlands.steeping_pot.recipeBuilder()

@@ -54,10 +54,14 @@ public class SteepingPot extends StandardListRegistry<SteepingPotRecipes> {
         acceptedItems.addAll(acceptedItemsStorage.restoreFromBackup());
     }
 
+    /**
+     * There is currently no support for output recipes in JEI - they throw a NPE error instead of appearing.
+     * As such, this feature of the RecipeBuilder is commented out
+     */
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:clay')).fluidInput(fluid('water')).output(item('minecraft:diamond'))"),
+//            @Example(".input(item('minecraft:clay')).fluidInput(fluid('water')).output(item('minecraft:diamond'))"),
             @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).fluidInput(fluid('lava')).fluidOutput(fluid('water'))"),
-            @Example(".input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:clay')).fluidInput(fluid('lava')).output(item('minecraft:diamond'))"),
+//            @Example(".input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:clay')).fluidInput(fluid('lava')).output(item('minecraft:diamond'))"),
             @Example(".input(item('minecraft:diamond')).fluidInput(fluid('lava')).fluidOutput(fluid('dye_fluid')).meta(5)"),
             @Example(".input(item('minecraft:emerald')).fluidInput(fluid('lava')).fluidOutput(fluid('water'))"),
     })
@@ -107,7 +111,9 @@ public class SteepingPot extends StandardListRegistry<SteepingPotRecipes> {
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 4))
     @Property(property = "fluidInput", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(gte = 0, lte = 1))
+    @Property(property = "fluidOutput", comp = @Comp(eq = 1))
+//    @Property(property = "output", comp = @Comp(gte = 0, lte = 1))
+//    @Property(property = "fluidOutput", comp = @Comp(gte = 0, lte = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<SteepingPotRecipes> {
 
         // Determines the color and state if relevant between two fluids.
@@ -135,10 +141,12 @@ public class SteepingPot extends StandardListRegistry<SteepingPotRecipes> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 4, 0, 1);
-            validateFluids(msg, 1, 1, 0, 1);
-            msg.add(output.isEmpty() && fluidOutput.isEmpty(), "either output or fluidOutput must contain an entry, but both were empty");
-            msg.add(!output.isEmpty() && !fluidOutput.isEmpty(), "either output or fluidOutput must have have an entry, yet both had an entry");
+            validateItems(msg, 1, 4, 0, 0);
+            validateFluids(msg, 1, 1, 1, 1);
+//            validateItems(msg, 1, 4, 0, 1);
+//            validateFluids(msg, 1, 1, 0, 1);
+//            msg.add(output.isEmpty() && fluidOutput.isEmpty(), "either output or fluidOutput must contain an entry, but both were empty");
+//            msg.add(!output.isEmpty() && !fluidOutput.isEmpty(), "either output or fluidOutput must have an entry, yet both had an entry");
             if (!fluidOutput.isEmpty()) {
                 var fluid = fluidOutput.get(0).getFluid();
                 if (fluid != FluidRegistry.DYE_FLUID && fluid != FluidRegistry.DRINKABLE_BREW) {
@@ -153,8 +161,6 @@ public class SteepingPot extends StandardListRegistry<SteepingPotRecipes> {
         @RecipeBuilderRegistrationMethod
         public @Nullable SteepingPotRecipes register() {
             if (!validate()) return null;
-            SteepingPotRecipes recipe = null;
-            List<List<Object>> inputs = IngredientHelper.cartesianProductOres(input);
 
             for (var ingredient : input) {
                 for (var stack : ingredient.getMatchingStacks()) {
@@ -162,17 +168,24 @@ public class SteepingPot extends StandardListRegistry<SteepingPotRecipes> {
                 }
             }
 
-            if (output.isEmpty()) {
-                for (var objects : inputs) {
-                    recipe = new SteepingPotRecipes(fluidOutput.get(0), meta, fluidInput.get(0), objects.toArray());
-                    ModSupport.BETWEENLANDS.get().steepingPot.add(recipe);
-                }
-            } else {
-                for (var objects : inputs) {
-                    recipe = new SteepingPotRecipes(output.get(0), fluidInput.get(0), objects.toArray());
-                    ModSupport.BETWEENLANDS.get().steepingPot.add(recipe);
-                }
+            SteepingPotRecipes recipe = null;
+            List<List<Object>> inputs = IngredientHelper.cartesianProductOres(input);
+            for (var objects : inputs) {
+                recipe = new SteepingPotRecipes(fluidOutput.get(0), meta, fluidInput.get(0), objects.toArray());
+                ModSupport.BETWEENLANDS.get().steepingPot.add(recipe);
             }
+
+//            if (output.isEmpty()) {
+//                for (var objects : inputs) {
+//                    recipe = new SteepingPotRecipes(fluidOutput.get(0), meta, fluidInput.get(0), objects.toArray());
+//                    ModSupport.BETWEENLANDS.get().steepingPot.add(recipe);
+//                }
+//            } else {
+//                for (var objects : inputs) {
+//                    recipe = new SteepingPotRecipes(output.get(0), fluidInput.get(0), objects.toArray());
+//                    ModSupport.BETWEENLANDS.get().steepingPot.add(recipe);
+//                }
+//            }
             return recipe;
         }
     }
