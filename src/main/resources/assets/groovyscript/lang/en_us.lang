@@ -1081,6 +1081,75 @@ groovyscript.wiki.extrautils2.resonator.requirementText.value=Sets the text in J
 groovyscript.wiki.extrautils2.resonator.shouldProgress.value=Sets the function used to determine if the recipe should run, with the Closure taking 3 parameters, `TileEntity resonator`, `int frequency`, `ItemStack input` and returning a `boolean`
 
 
+# Factory Tech
+groovyscript.wiki.factorytech.allowStoneParts.value=Sets if the recipe can use stone parts
+
+groovyscript.wiki.factorytech.agitator.title=Fluid Agitator
+groovyscript.wiki.factorytech.agitator.description=Converts either one or two input fluidstacks and up to one input itemstack into an output itemstack, output fluidstack, or both.
+
+groovyscript.wiki.factorytech.centrifuge.title=Centrifuge
+groovyscript.wiki.factorytech.centrifuge.description=Converts an input itemstack into up to 3 output itemstacks, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.circuit_scribe.title=Circuit Scribe
+groovyscript.wiki.factorytech.circuit_scribe.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+groovyscript.wiki.factorytech.circuit_scribe.note0=Recipes will not appear properly in JEI
+
+groovyscript.wiki.factorytech.compressor.title=Compression Chamber
+groovyscript.wiki.factorytech.compressor.description=Converts an input itemstack and input fluidstack into an output itemstack.
+
+groovyscript.wiki.factorytech.crucible.title=Crucible
+groovyscript.wiki.factorytech.crucible.description=Converts an input itemstack into an output fluidstack.
+
+groovyscript.wiki.factorytech.deep_drill.title=Terraneous Extractor
+groovyscript.wiki.factorytech.deep_drill.description=Passively generates resources when placed at or below y 8 and
+groovyscript.wiki.factorytech.deep_drill.weight.value=Sets the weight compared to other entries
+
+groovyscript.wiki.factorytech.disassembler.title=Mob Disassembler
+groovyscript.wiki.factorytech.disassembler.description=Kills an entity in-world, dropping the mob's normal loot in addition to custom loot.
+groovyscript.wiki.factorytech.disassembler.add=Adds the given entry to the map
+groovyscript.wiki.factorytech.disassembler.entity.value=Sets the entity class used
+groovyscript.wiki.factorytech.disassembler.remove=Removes the given entry from the map
+groovyscript.wiki.factorytech.disassembler.removeByEntity=Removes all recipes matching the given entity class
+
+groovyscript.wiki.factorytech.electroplater.title=Electroplater
+groovyscript.wiki.factorytech.electroplater.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.grindstone.title=Grindstone
+groovyscript.wiki.factorytech.grindstone.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.high_tech_furnace.title=Electric Furnace
+groovyscript.wiki.factorytech.high_tech_furnace.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.magnet_centrifuge.title=Magnet Centrifuge
+groovyscript.wiki.factorytech.magnet_centrifuge.description=Converts an input itemstack into up to 3 output itemstacks, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.magnetizer.title=Magnetizer
+groovyscript.wiki.factorytech.magnetizer.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.metal_cutter.title=Metal Cutter
+groovyscript.wiki.factorytech.metal_cutter.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.ore_drill.title=Drill Grinder
+groovyscript.wiki.factorytech.ore_drill.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.reclaimer.title=Scrap Furnace
+groovyscript.wiki.factorytech.reclaimer.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.refrigerator.title=Refrigerator
+groovyscript.wiki.factorytech.refrigerator.description=Converts an input fluidstack into an output itemstack.
+
+groovyscript.wiki.factorytech.river_grate.title=River Grate
+groovyscript.wiki.factorytech.river_grate.description=Slowly produces the output entries while in a river biome surrounded by water, and between y 60 and 70.
+groovyscript.wiki.factorytech.river_grate.weight.value=Sets the weight compared to other entries
+
+groovyscript.wiki.factorytech.saw.title=Chop Saw
+groovyscript.wiki.factorytech.saw.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
+
+groovyscript.wiki.factorytech.temperer.title=Tempering Oven
+groovyscript.wiki.factorytech.temperer.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed and how long the recipe takes.
+groovyscript.wiki.factorytech.temperer.time.value=Sets the time in ticks the recipe takes to complete
+
+
 # Future MC
 groovyscript.wiki.futuremc.blast_furnace.title=Blast Furnace
 groovyscript.wiki.futuremc.blast_furnace.description=Converts an input itemstack into an output itemstack at the cost of burnable fuel.
