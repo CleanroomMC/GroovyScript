@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
+import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
@@ -178,8 +179,8 @@ public class CompletionProvider extends DocProvider {
             ASTNode parentParent = astContext.getVisitor().getParent(parent);
             if (parentParent instanceof MethodCallExpression expr && expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty()) {
                 // TODO completions in file()
-                ObjectMapper<?> goh = GroovyASTUtils.getMapperOfNode(expr, astContext);
-                if (goh != null && goh.getCompleter() != null) {
+                AbstractObjectMapper<?> mapper = GroovyASTUtils.getMapperOfNode(expr, astContext);
+                if (mapper != null) {
                     int index = -1;
                     for (int i = 0; i < args.getExpressions().size(); i++) {
                         if (args.getExpression(i) == node) {
@@ -187,7 +188,7 @@ public class CompletionProvider extends DocProvider {
                             break;
                         }
                     }
-                    goh.getCompleter().complete(index, items);
+                    mapper.provideCompletion(index, items);
                 }
             }
             return false; // don't complete keyword in strings

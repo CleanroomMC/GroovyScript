@@ -15,7 +15,7 @@ import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHoo
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -153,7 +153,7 @@ public class GroovyScript {
         StandardInfoParserRegistry.init();
         VanillaModule.initializeBinding();
         ModSupport.init();
-        for (ObjectMapper<?> goh : ObjectMapperManager.getObjectMappers()) {
+        for (AbstractObjectMapper<?> goh : ObjectMapperManager.getObjectMappers()) {
             getSandbox().registerBinding(goh);
         }
         if (FMLLaunchHandler.isDeobfuscatedEnvironment()) Documentation.generate();
