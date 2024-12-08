@@ -2,9 +2,11 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.vanilla.ItemStackMixinExpansion;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.Closure;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +26,10 @@ public class IngredientHelper {
     public static final Closure<Object> REUSE = new LambdaClosure<>(args -> args[0]);
     public static final Closure<Object> NO_RETURN = new LambdaClosure<>(args -> ItemStack.EMPTY);
     public static final Closure<Object> MATCH_NBT = new LambdaClosure<>(args -> ItemStack.EMPTY);
+
+    public static ItemStack damageItem(ItemStack stack, int damage) {
+        return ItemStackMixinExpansion.of(stack).withMeta(Math.min(32767, Items.DIAMOND.getDamage(stack) + damage));
+    }
 
     public static boolean isFluid(IIngredient ingredient) {
         return ingredient instanceof FluidStack;
