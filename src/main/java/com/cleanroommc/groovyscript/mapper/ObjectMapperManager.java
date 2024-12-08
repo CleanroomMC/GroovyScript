@@ -15,7 +15,6 @@ import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.ExpandoMetaClass;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
@@ -110,6 +109,7 @@ public class ObjectMapperManager {
                 .parser(ObjectMappers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
                 .textureBinder(TextureBinder.ofFluid())
+                .tooltip(f -> Collections.singletonList(f.getLocalizedName()))
                 .register();
         ObjectMapper.builder("block", Block.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))

@@ -42,7 +42,7 @@ public class BlockStateMapper extends AbstractObjectMapper<IBlockState> {
     }
 
     @Override
-    public List<String> getTooltip(IBlockState iBlockState) {
+    public @NotNull List<String> getTooltip(IBlockState iBlockState) {
         ItemStack itemStack = new ItemStack(iBlockState.getBlock(), 1, iBlockState.getBlock().getMetaFromState(iBlockState));
         return Collections.singletonList(itemStack.getDisplayName());
     }

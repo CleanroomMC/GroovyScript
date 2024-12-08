@@ -93,7 +93,7 @@ public class TextureDecorationProvider extends DocProvider {
 
             var range = GroovyLSUtils.astNodeToRange(start, call);
             if (decoration.isFileExists()) {
-                List<String> tooltips = new ArrayList<>(decoration.getTooltip());
+                List<String> tooltips = decoration.getTooltip();
                 if (formatTooltips(tooltips, null)) {
                     decorationInformations.add(new TextureDecorationInformation(range, uri, tooltips));
                     continue;
@@ -182,7 +182,7 @@ public class TextureDecorationProvider extends DocProvider {
             TextureDecoration<?> decoration = queueDeco.get(i);
             Range range = queueRange.get(i);
             decoration.render(buffer);
-            var tooltipStrings = new ArrayList<>(decoration.getTooltip());
+            var tooltipStrings = decoration.getTooltip();
             formatTooltips(tooltipStrings, buffer);
             decorationInformations.add(new TextureDecorationInformation(range, decoration.getUri(), tooltipStrings));
         }
@@ -197,6 +197,7 @@ public class TextureDecorationProvider extends DocProvider {
     }
 
     private boolean formatTooltips(List<String> tooltipStrings, @Nullable ByteBuffer buffer) {
+        if (tooltipStrings.isEmpty()) return true;
         for (int j = 0; j < tooltipStrings.size(); j++) {
             var str = tooltipStrings.get(j);
             var tooltip = TooltipEmbedding.parseEmbeddings(str);

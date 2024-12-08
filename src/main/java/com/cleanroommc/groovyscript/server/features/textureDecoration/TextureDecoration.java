@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TextureDecoration<T> {
@@ -56,7 +57,8 @@ public class TextureDecoration<T> {
     }
 
     public List<String> getTooltip() {
-        return this.mapper.getTooltip(this.bindable);
+        List<String> tooltip = this.mapper.getTooltip(this.bindable);
+        return tooltip.isEmpty() ? tooltip : new ArrayList<>(tooltip);
     }
 
     public String getUri() {

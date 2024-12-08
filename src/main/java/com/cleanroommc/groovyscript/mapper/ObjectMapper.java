@@ -82,11 +82,11 @@ public class ObjectMapper<T> extends AbstractObjectMapper<T> {
     }
 
     @Override
-    public List<String> getTooltip(T t) {
+    public @NotNull List<String> getTooltip(T t) {
         if (this.tooltip != null) {
             return this.tooltip.apply(t);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

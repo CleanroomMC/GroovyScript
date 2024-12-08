@@ -54,7 +54,7 @@ public class ItemStackMapper extends AbstractObjectMapper<ItemStack> {
     }
 
     @Override
-    public List<String> getTooltip(ItemStack itemStack) {
+    public @NotNull List<String> getTooltip(ItemStack itemStack) {
         return Collections.singletonList(itemStack.getDisplayName());
     }
 }

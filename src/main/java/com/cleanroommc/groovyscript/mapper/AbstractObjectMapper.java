@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.MethodNode;
 import org.codehaus.groovy.ast.Parameter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
@@ -88,6 +89,7 @@ public abstract class AbstractObjectMapper<T> extends Closure<T> implements INam
 
     public void bindTexture(T t) {}
 
+    @NotNull
     public List<String> getTooltip(T t) {
         return Collections.emptyList();
     }
