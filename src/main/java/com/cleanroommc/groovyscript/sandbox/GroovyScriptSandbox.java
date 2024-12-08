@@ -54,7 +54,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
      * Setting this to true will cause the cache to be deleted before each script run.
      * Useful for debugging.
      */
-    public static final boolean DELETE_CACHE_ON_RUN = false;
+    public static final boolean DELETE_CACHE_ON_RUN = Boolean.parseBoolean(System.getProperty("groovyscript.disable_cache"));;
 
     private final File cacheRoot;
     private final File scriptRoot;
