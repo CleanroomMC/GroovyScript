@@ -22,7 +22,6 @@ public class Cauldron extends StandardListRegistry<CookingPotRecipe> {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16).ignoreHeat()")
     })
-    @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
