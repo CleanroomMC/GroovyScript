@@ -1,16 +1,15 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.IIngredient;
-import com.cleanroommc.groovyscript.api.INBTResourceStack;
-import com.cleanroommc.groovyscript.api.INbtIngredient;
+import com.cleanroommc.groovyscript.api.*;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.NbtHelper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
@@ -111,7 +110,7 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
 
     default ItemStack transformDamage(int amount) {
         // reliably set itemDamage field of item stack
-        return transform(self -> of(self).withDamage(Math.min(32767, Items.DIAMOND.getDamage(self) + amount)));
+        return transform(self -> IngredientHelper.damageItem(self, amount));
     }
 
     default ItemStack transformDamage() {
@@ -130,6 +129,10 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
         if (grs$getTransformer() != null) {
             ItemStack result = grs$getTransformer().transform(matchedInput);
             if (result == null) return ItemStack.EMPTY;
+            if (result.isItemStackDamageable() && result.getMetadata() > result.getMaxDamage()) {
+                ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), result, null);
+                return ItemStack.EMPTY;
+            }
             return result.copy();
         }
         return ForgeHooks.getContainerItem(matchedInput);
@@ -218,6 +221,16 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
 
     default ItemStack withDamage(int meta) {
         return withMeta(meta);
+    }
+
+    default ItemStack destroy() {
+        EntityPlayer player = ForgeHooks.getCraftingPlayer();
+        if (player != null) {
+            ForgeEventFactory.onPlayerDestroyItem(player, grs$getItemStack(), null);
+            return ItemStack.EMPTY;
+        }
+        GroovyLog.get().error("Should only destroy item during crafting!");
+        return grs$getItemStack();
     }
 
     @Nullable
