@@ -5,15 +5,15 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.registry.NamedRegistry;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.GameRules;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class GameRule extends NamedRegistry implements IScriptReloadable {
 
     private static final String LOG_MESSAGE = "Could not find an already existing rule with the name {}. This may be intentional! If it is, you can disable this via `gameRule.setWarnNewGameRule(false)`";
-    private final Map<String, String> defaultGameRules = new HashMap<>();
+    private final Map<String, String> defaultGameRules = new Object2ObjectOpenHashMap<>();
     private boolean warnNewGameRule;
 
     @GroovyBlacklist
