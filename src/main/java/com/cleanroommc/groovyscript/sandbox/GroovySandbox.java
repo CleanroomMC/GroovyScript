@@ -259,8 +259,7 @@ public abstract class GroovySandbox {
 
             // if the file is still not found something went wrong
         } catch (Exception e) {
-            GroovyLog.get().fatalMC("An error occurred while trying to load script class {}", file.toString());
-            GroovyLog.get().exception(e);
+            GroovyLog.get().exception("An error occurred while trying to load script class " + file.toString(), e);
         }
         return scriptClass;
     }

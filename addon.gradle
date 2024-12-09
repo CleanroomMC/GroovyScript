@@ -21,6 +21,9 @@ minecraft {
     if (project.debug_log_missing_lang_keys.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.log_missing_lang_keys=true')
     }
+    if (project.debug_disable_cache.toBoolean()) {
+        extraRunJvmArguments.add('-Dgroovyscript.disable_cache=true')
+    }
 
     //extraTweakClasses << "${modGroup}.LaunchTweaker"
 }

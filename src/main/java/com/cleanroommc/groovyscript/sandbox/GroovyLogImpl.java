@@ -250,6 +250,11 @@ public class GroovyLogImpl implements GroovyLog {
         logger.error(msg, args);
     }
 
+    @Override
+    public void exception(Throwable throwable) {
+        exception("An exception occurred while running scripts.", throwable);
+    }
+
     /**
      * Logs an exception to the groovy log AND Minecraft's log. It does NOT throw the exception! The stacktrace for the groovy log will be
      * stripped for better readability.
@@ -257,11 +262,12 @@ public class GroovyLogImpl implements GroovyLog {
      * @param throwable exception
      */
     @Override
-    public void exception(Throwable throwable) {
-        String msg = throwable.toString();
-        this.errors.add(msg);
-        writeLogLine(formatLine("ERROR", "An exception occurred while running scripts. Look at latest.log for a full stacktrace:"));
-        writeLogLine("\t" + msg);
+    public void exception(String msg, Throwable throwable) {
+        String throwableMsg = throwable.toString();
+        this.errors.add(throwableMsg);
+        msg += " Look at latest.log for a full stacktrace:";
+        writeLogLine(formatLine("ERROR", msg));
+        writeLogLine("\t" + throwableMsg);
         Pattern pattern = Pattern.compile("(\\w*).run\\(\\1(\\.\\w*):(\\d*)\\)");
         for (String line : prepareStackTrace(throwable.getStackTrace())) {
             Matcher matcher = pattern.matcher(line);
@@ -271,6 +277,7 @@ public class GroovyLogImpl implements GroovyLog {
                 writeLogLine("\t\tat " + line);
             }
         }
+        GroovyScript.LOGGER.error(msg);
         GroovyScript.LOGGER.throwing(throwable);
     }
 

@@ -54,7 +54,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
      * Setting this to true will cause the cache to be deleted before each script run.
      * Useful for debugging.
      */
-    public static final boolean DELETE_CACHE_ON_RUN = false;
+    public static final boolean DELETE_CACHE_ON_RUN = Boolean.parseBoolean(System.getProperty("groovyscript.disable_cache"));;
 
     private final File cacheRoot;
     private final File scriptRoot;
@@ -161,8 +161,7 @@ public class GroovyScriptSandbox extends GroovySandbox {
         try {
             super.load();
         } catch (IOException | ScriptException | ResourceException e) {
-            GroovyLog.get().errorMC("An exception occurred while trying to run groovy code! This is might be a internal groovy issue.");
-            GroovyLog.get().exception(e);
+            GroovyLog.get().exception("An exception occurred while trying to run groovy code! This is might be a internal groovy issue.", e);
         } catch (Throwable t) {
             GroovyLog.get().exception(t);
         } finally {
@@ -194,11 +193,16 @@ public class GroovyScriptSandbox extends GroovySandbox {
         try {
             result = runClosureInternal(closure, args);
         } catch (Throwable t) {
-            this.storedExceptions.computeIfAbsent(Arrays.asList(t.getStackTrace()), k -> {
-                GroovyLog.get().error("An exception occurred while running a closure!");
-                GroovyLog.get().exception(t);
-                return new AtomicInteger();
-            }).addAndGet(1);
+            List<StackTraceElement> stackTrace = Arrays.asList(t.getStackTrace());
+            AtomicInteger counter = this.storedExceptions.get(stackTrace);
+            if (counter == null) {
+                GroovyLog.get().exception("An exception occurred while running a closure at least once!", t);
+                this.storedExceptions.put(stackTrace, new AtomicInteger(1));
+                UncheckedThrow.rethrow(t);
+                return null; // unreachable statement
+            } else {
+                counter.getAndIncrement();
+            }
         } finally {
             if (!wasRunning) stopRunning();
         }
@@ -206,14 +210,13 @@ public class GroovyScriptSandbox extends GroovySandbox {
     }
 
     @GroovyBlacklist
-    private static <T> T runClosureInternal(Closure<T> closure, Object[] args) {
+    private static <T> T runClosureInternal(Closure<T> closure, Object[] args) throws Throwable {
         // original Closure.call(Object... arguments) code
         try {
             //noinspection unchecked
             return (T) closure.getMetaClass().invokeMethod(closure, "doCall", args);
         } catch (InvokerInvocationException e) {
-            UncheckedThrow.rethrow(e.getCause());
-            return null; // unreachable statement
+            throw e.getCause();
         } catch (Exception e) {
             if (e instanceof RuntimeException) {
                 throw e;

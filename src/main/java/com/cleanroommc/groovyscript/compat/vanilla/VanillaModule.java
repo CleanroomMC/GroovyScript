@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.inworldcrafting.InWorldCrafting;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
@@ -25,6 +26,7 @@ public class VanillaModule extends GroovyPropertyContainer implements IScriptRel
     public static final Content content = new Content();
     public static final Rarity rarity = new Rarity();
     public static final InWorldCrafting inWorldCrafting = new InWorldCrafting();
+    public static final Command command = new Command();
     public static final GameRule gameRule = new GameRule();
 
     public static void initializeBinding() {
@@ -36,9 +38,11 @@ public class VanillaModule extends GroovyPropertyContainer implements IScriptRel
         GroovyScript.getSandbox().registerBinding(content);
         GroovyScript.getSandbox().registerBinding(rarity);
         GroovyScript.getSandbox().registerBinding(inWorldCrafting);
+        GroovyScript.getSandbox().registerBinding(command);
         GroovyScript.getSandbox().registerBinding(gameRule);
 
         ExpansionHelper.mixinClass(ItemStack.class, ItemStackExpansion.class);
+        ExpansionHelper.mixinClass(ICommandSender.class, CommandSenderExpansion.class);
     }
 
     @Override
@@ -51,6 +55,7 @@ public class VanillaModule extends GroovyPropertyContainer implements IScriptRel
         rarity.onReload();
         player.onReload();
         inWorldCrafting.onReload();
+        command.onReload();
         gameRule.onReload();
     }
 
