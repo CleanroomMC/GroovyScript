@@ -27,6 +27,7 @@ public class VanillaModule extends GroovyPropertyContainer implements IScriptRel
     public static final Rarity rarity = new Rarity();
     public static final InWorldCrafting inWorldCrafting = new InWorldCrafting();
     public static final Command command = new Command();
+    public static final GameRule gameRule = new GameRule();
 
     public static void initializeBinding() {
         GroovyScript.getSandbox().registerBinding(crafting);
@@ -38,6 +39,7 @@ public class VanillaModule extends GroovyPropertyContainer implements IScriptRel
         GroovyScript.getSandbox().registerBinding(rarity);
         GroovyScript.getSandbox().registerBinding(inWorldCrafting);
         GroovyScript.getSandbox().registerBinding(command);
+        GroovyScript.getSandbox().registerBinding(gameRule);
 
         ExpansionHelper.mixinClass(ItemStack.class, ItemStackExpansion.class);
         ExpansionHelper.mixinClass(ICommandSender.class, CommandSenderExpansion.class);
@@ -54,6 +56,7 @@ public class VanillaModule extends GroovyPropertyContainer implements IScriptRel
         player.onReload();
         inWorldCrafting.onReload();
         command.onReload();
+        gameRule.onReload();
     }
 
     @Override
