@@ -167,7 +167,7 @@ public class GSCommand extends CommandTreeBase {
 
     @Override
     public @NotNull List<String> getAliases() {
-        return Arrays.asList("grs", "GroovyScript", "gs");
+        return Arrays.asList("grs", "gs");
     }
 
     @Override

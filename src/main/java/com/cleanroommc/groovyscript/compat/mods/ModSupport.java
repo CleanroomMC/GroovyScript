@@ -54,6 +54,7 @@ import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
 import com.cleanroommc.groovyscript.compat.mods.randomthings.RandomThings;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
 import com.cleanroommc.groovyscript.compat.mods.rustic.Rustic;
+import com.cleanroommc.groovyscript.compat.mods.silentsgems.SilentGems;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.TinkersComplement;
 import com.cleanroommc.groovyscript.compat.mods.techreborn.TechReborn;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
@@ -132,6 +133,7 @@ public class ModSupport {
     public static final GroovyContainer<RandomThings> RANDOM_THINGS = new InternalModContainer<>("randomthings", "Random Things", RandomThings::new);
     public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
     public static final GroovyContainer<Rustic> RUSTIC = new InternalModContainer<>("rustic", "Rustic", Rustic::new);
+    public static final GroovyContainer<SilentGems> SILENT_GEMS = new InternalModContainer<>("silentgems", "Silent's Gems", SilentGems::new);
     public static final GroovyContainer<TechReborn> TECH_REBORN = new InternalModContainer<>("techreborn", "Tech Reborn", TechReborn::new);
     public static final GroovyContainer<Thaumcraft> THAUMCRAFT = new InternalModContainer<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
     public static final GroovyContainer<TheAurorian> THE_AURORIAN = new InternalModContainer<>("theaurorian", "The Aurorian", TheAurorian::new, "aurorian");

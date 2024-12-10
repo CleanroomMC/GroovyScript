@@ -101,6 +101,8 @@ final def mod_dependencies = [
         'prodigytech-297414:2769520'                          : [project.debug_prodigytech],
         'roots-246183:3905074'                                : [project.debug_roots],
         'rustic-256141:3107974'                               : [project.debug_rustic],
+        'silents-gems-220311:2804966'                         : [project.debug_silents_gems],
+        'silents-lib-242998:2851111'                          : [project.debug_silents_gems],
         'reborncore-237903:3330308'                           : [project.debug_tech_reborn],
         'techreborn-233564:2966851'                           : [project.debug_tech_reborn],
         'thaumcraft-223628:2629023'                           : [project.debug_thaum],
