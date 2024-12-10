@@ -15,8 +15,7 @@ public class Packmode {
 
     private static String packmode;
 
-    @NotNull
-    public static String getPackmode() {
+    public static @NotNull String getPackmode() {
         if (GroovyScript.getRunConfig().isIntegratePackmodeMod()) return PackModeAPI.getInstance().getCurrentPackMode();
         if (hasPackmode()) return Packmode.packmode;
         if (needsPackmode()) {

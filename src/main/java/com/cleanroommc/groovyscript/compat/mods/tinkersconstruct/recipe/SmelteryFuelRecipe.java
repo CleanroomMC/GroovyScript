@@ -4,6 +4,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Map;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class SmelteryFuelRecipe {
 
     public final FluidStack fluid;

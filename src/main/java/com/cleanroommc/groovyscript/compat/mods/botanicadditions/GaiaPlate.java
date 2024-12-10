@@ -84,7 +84,7 @@ public class GaiaPlate extends StandardListRegistry<GaiaPlateRecipes.RecipeGaiaP
         public @Nullable GaiaPlateRecipes.RecipeGaiaPlate register() {
             if (!validate()) return null;
             Object[] inputs = input.stream()
-                    .map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict() : i.getMatchingStacks()[0])
+                    .map(i -> i instanceof OreDictIngredient oreDictIngredient ? oreDictIngredient.getOreDict() : i.getMatchingStacks()[0])
                     .toArray();
             GaiaPlateRecipes.RecipeGaiaPlate recipe = new GaiaPlateRecipes.RecipeGaiaPlate(output.get(0), mana, inputs);
             ModSupport.BOTANIC_ADDITIONS.get().gaiaPlate.add(recipe);

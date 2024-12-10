@@ -59,6 +59,7 @@ public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
         return true;
     }
 
+    @SuppressWarnings("unchecked")
     @MethodDescription(example = @Example("entity('minecraft:chicken')"))
     public boolean removeByEntity(EntityEntry entity) {
         return removeByEntity((Class<? extends EntityLivingBase>) entity.getEntityClass());
@@ -96,6 +97,7 @@ public class SummonCreature extends VirtualizedRegistry<SummonCreatureRecipe> {
         @Property(comp = @Comp(not = "null"))
         private Class<? extends EntityLivingBase> entity;
 
+        @SuppressWarnings("unchecked")
         @RecipeBuilderMethodDescription
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = (Class<? extends EntityLivingBase>) entity.getEntityClass();

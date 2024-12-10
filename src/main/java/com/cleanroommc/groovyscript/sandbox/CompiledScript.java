@@ -55,8 +55,7 @@ class CompiledScript extends CompiledClass {
         super.ensureLoaded(classLoader, basePath);
     }
 
-    @NotNull
-    public JsonObject toJson() {
+    public @NotNull JsonObject toJson() {
         JsonObject jsonEntry = new JsonObject();
         jsonEntry.addProperty("name", this.name);
         jsonEntry.addProperty("path", this.path);

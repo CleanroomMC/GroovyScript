@@ -156,10 +156,9 @@ public class CombinationCrafting extends StandardListRegistry<CombinationRecipe>
             msg.add(perTick < 0, () -> "per tick must not be negative");
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public CombinationRecipe register() {
+        public @Nullable CombinationRecipe register() {
             if (!validate()) return null;
             CombinationRecipe recipe = new CombinationRecipe(output.get(0), cost, perTick, input.get(0).toMcIngredient(), IngredientHelper.toIngredientNonNullList(pedestals));
             ModSupport.EXTENDED_CRAFTING.get().combinationCrafting.add(recipe);

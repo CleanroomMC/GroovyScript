@@ -28,8 +28,8 @@ public class Fermenter extends ForestryRegistry<IFermenterRecipe> {
 
     public IFermenterRecipe add(FluidStack output, FluidStack input, IIngredient catalyst, int value, float modifier) {
         IFermenterRecipe recipe;
-        if (catalyst instanceof OreDictIngredient)
-            recipe = new FermenterRecipe(((OreDictIngredient) catalyst).getOreDict(), value, modifier, input.getFluid(), output);
+        if (catalyst instanceof OreDictIngredient oreDictIngredient)
+            recipe = new FermenterRecipe(oreDictIngredient.getOreDict(), value, modifier, input.getFluid(), output);
         else recipe = new FermenterRecipe(catalyst.getMatchingStacks()[0], value, modifier, input.getFluid(), output);
         add(recipe);
         return recipe;
@@ -63,8 +63,8 @@ public class Fermenter extends ForestryRegistry<IFermenterRecipe> {
 
     public boolean removeByCatalyst(IIngredient input) {
         if (FermenterRecipeManagerAccessor.getRecipes().removeIf(recipe -> {
-            boolean found = input instanceof OreDictIngredient
-                    ? recipe.getResourceOreName().equals(((OreDictIngredient) input).getOreDict())
+            boolean found = input instanceof OreDictIngredient oreDictIngredient
+                    ? recipe.getResourceOreName().equals(oreDictIngredient.getOreDict())
                     : recipe.getResource().isItemEqual(input.getMatchingStacks()[0]);
             if (found) addBackup(recipe);
             return found;
@@ -131,8 +131,8 @@ public class Fermenter extends ForestryRegistry<IFermenterRecipe> {
             if (!validate()) return null;
             IFermenterRecipe recipe;
             IIngredient catalyst = input.get(0);
-            if (catalyst instanceof OreDictIngredient)
-                recipe = new FermenterRecipe(((OreDictIngredient) catalyst).getOreDict(), value, modifier, fluidInput.get(0).getFluid(), fluidOutput.get(0));
+            if (catalyst instanceof OreDictIngredient oreDictIngredient)
+                recipe = new FermenterRecipe(oreDictIngredient.getOreDict(), value, modifier, fluidInput.get(0).getFluid(), fluidOutput.get(0));
             else recipe = new FermenterRecipe(catalyst.getMatchingStacks()[0], value, modifier, fluidInput.get(0).getFluid(), fluidOutput.get(0));
             add(recipe);
             return recipe;

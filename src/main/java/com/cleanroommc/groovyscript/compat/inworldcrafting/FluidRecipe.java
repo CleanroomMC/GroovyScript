@@ -227,12 +227,11 @@ public abstract class FluidRecipe {
      */
     public abstract void handleRecipeResult(World world, BlockPos pos);
 
-    @Nullable
-    public static Fluid getFluid(IBlockState state) {
+    public static @Nullable Fluid getFluid(IBlockState state) {
         Block block = state.getBlock();
 
-        if (block instanceof IFluidBlock) {
-            return ((IFluidBlock) block).getFluid();
+        if (block instanceof IFluidBlock iFluidBlock) {
+            return iFluidBlock.getFluid();
         }
         if (block instanceof BlockLiquid) {
             if (state.getMaterial() == Material.WATER) {

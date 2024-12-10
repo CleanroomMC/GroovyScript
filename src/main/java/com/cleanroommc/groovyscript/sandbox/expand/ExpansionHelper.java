@@ -74,15 +74,15 @@ public class ExpansionHelper {
     private static boolean isValidProperty(MetaProperty prop) {
         if (prop instanceof MetaBeanProperty beanProperty) {
             if (!isValid(beanProperty.getField())) return false;
-            if (!(beanProperty.getGetter() instanceof CachedMethod) || isValid((CachedMethod) beanProperty.getGetter()))
+            if (!(beanProperty.getGetter() instanceof CachedMethod method) || isValid(method))
                 return false;
-            return beanProperty.getSetter() instanceof CachedMethod && !isValid((CachedMethod) beanProperty.getSetter());
+            return beanProperty.getSetter() instanceof CachedMethod cachedMethod && !isValid(cachedMethod);
         }
-        if (prop instanceof MethodMetaProperty && ((MethodMetaProperty) prop).getMetaMethod() instanceof CachedMethod) {
+        if (prop instanceof MethodMetaProperty methodMetaProperty && methodMetaProperty.getMetaMethod() instanceof CachedMethod) {
             return isValid((CachedMethod) ((MethodMetaProperty) prop).getMetaMethod());
         }
-        if (prop instanceof CachedField) {
-            return isValid((CachedField) prop);
+        if (prop instanceof CachedField cachedField) {
+            return isValid(cachedField);
         }
         return false;
     }
@@ -104,8 +104,8 @@ public class ExpansionHelper {
         MetaClass other = GroovySystem.getMetaClassRegistry().getMetaClass(clazz);
         mixinProperties(emc, other, mixin);
         for (MetaMethod method : other.getMethods()) {
-            if (method instanceof CachedMethod && clazz == ((CachedMethod) method).getCachedMethod().getDeclaringClass()) {
-                mixinMethod(emc, (CachedMethod) method, mixin);
+            if (method instanceof CachedMethod cachedMethod && clazz == cachedMethod.getCachedMethod().getDeclaringClass()) {
+                mixinMethod(emc, cachedMethod, mixin);
             }
         }
     }

@@ -63,11 +63,11 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
     public boolean remove(InfusionRecipe recipe) {
         List<InfusionRecipe> recipes = new ArrayList<>();
         for (IThaumcraftRecipe r : ThaumcraftApi.getCraftingRecipes().values()) {
-            if (r instanceof InfusionRecipe && r.equals(recipe))
-                recipes.add((InfusionRecipe) r);
+            if (r instanceof InfusionRecipe infusionRecipe && r.equals(recipe))
+                recipes.add(infusionRecipe);
         }
         recipes.forEach(rec -> {
-            if ("".equals(rec.getGroup())) {
+            if (rec.getGroup().isEmpty()) {
                 this.addBackup(Pair.of(new ResourceLocation("thaumcraft:" + ((ItemStack) rec.recipeOutput).getItem()), recipe));
             } else {
                 this.addBackup(Pair.of(new ResourceLocation(rec.getGroup()), recipe));
@@ -88,7 +88,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
         List<InfusionRecipe> recipes = new ArrayList<>();
         for (IThaumcraftRecipe r : ThaumcraftApi.getCraftingRecipes().values()) {
-            if (r instanceof InfusionRecipe && ((InfusionRecipe) r).getRecipeOutput() instanceof ItemStack ro) {
+            if (r instanceof InfusionRecipe infusionRecipe && infusionRecipe.getRecipeOutput() instanceof ItemStack ro) {
                 if (output.test(ro)) {
                     recipes.add((InfusionRecipe) r);
                 }
@@ -102,7 +102,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
             return;
         }
         recipes.forEach(recipe -> {
-            if ("".equals(recipe.getGroup())) {
+            if (recipe.getGroup().isEmpty()) {
                 this.addBackup(Pair.of(new ResourceLocation("thaumcraft:" + ((ItemStack) recipe.recipeOutput).getItem()), recipe));
             } else {
                 this.addBackup(Pair.of(new ResourceLocation(recipe.getGroup()), recipe));

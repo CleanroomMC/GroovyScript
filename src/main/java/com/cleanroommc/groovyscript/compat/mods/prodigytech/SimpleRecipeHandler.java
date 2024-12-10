@@ -64,8 +64,8 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
             if (!validate()) return null;
             SimpleRecipe recipe = null;
             IIngredient input1 = input.get(0);
-            if (input1 instanceof OreDictIngredient) {
-                recipe = new SimpleRecipe(((OreDictIngredient) input1).getOreDict(), output.get(0), time);
+            if (input1 instanceof OreDictIngredient oreDictIngredient) {
+                recipe = new SimpleRecipe(oreDictIngredient.getOreDict(), output.get(0), time);
                 addRecipe(recipe);
             } else {
                 for (ItemStack input : input1.getMatchingStacks()) {

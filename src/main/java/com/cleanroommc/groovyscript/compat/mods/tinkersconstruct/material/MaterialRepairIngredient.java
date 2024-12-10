@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.material;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class MaterialRepairIngredient {
 
     public final IIngredient ingredient;

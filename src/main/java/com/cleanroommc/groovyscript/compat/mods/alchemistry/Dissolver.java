@@ -140,10 +140,9 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
             msg.add(rolls < 1, "rolls must be greater than or equal to 1, yet it was {}", rolls);
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public DissolverRecipe register() {
+        public @Nullable DissolverRecipe register() {
             if (!validate()) return null;
 
             DissolverRecipe recipe = new DissolverRecipe(input.get(0).toMcIngredient(), false, new ProbabilitySet(probabilityGroup, relativeProbability, rolls));

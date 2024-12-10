@@ -127,10 +127,9 @@ public class Electrolyzer extends StandardListRegistry<ElectrolyzerRecipe> {
             msg.add(consumptionChance < 0 || consumptionChance > 100, "consumption chance must be between 0 and 100, yet it was {}", consumptionChance);
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public ElectrolyzerRecipe register() {
+        public @Nullable ElectrolyzerRecipe register() {
             if (!validate()) return null;
             ElectrolyzerRecipe recipe = new ElectrolyzerRecipe(
                     fluidInput.get(0),

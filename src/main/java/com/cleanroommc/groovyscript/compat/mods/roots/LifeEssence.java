@@ -25,6 +25,7 @@ public class LifeEssence extends StandardListRegistry<Class<? extends EntityLivi
         add(entity.getClass());
     }
 
+    @SuppressWarnings("unchecked")
     @MethodDescription(example = @Example("entity('minecraft:wither_skeleton')"), type = MethodDescription.Type.ADDITION)
     public void add(EntityEntry entity) {
         add((Class<? extends EntityLivingBase>) entity.getEntityClass());
@@ -35,6 +36,7 @@ public class LifeEssence extends StandardListRegistry<Class<? extends EntityLivi
         return remove(entity.getClass());
     }
 
+    @SuppressWarnings("unchecked")
     @MethodDescription(example = @Example("entity('minecraft:sheep')"))
     public boolean remove(EntityEntry entity) {
         return remove((Class<? extends EntityLivingBase>) entity.getEntityClass());

@@ -51,10 +51,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     public void addScripted(Object target, AspectStack aspect) {
         AtomicBoolean found = new AtomicBoolean(false);
         getScriptedRecipes().forEach(scriptedAspect -> {
-            if (target instanceof EntityEntry && scriptedAspect.entity != null && ((EntityEntry) target).getName().equals(scriptedAspect.entity.getName())) {
+            if (target instanceof EntityEntry entityEntry && scriptedAspect.entity != null && entityEntry.getName().equals(scriptedAspect.entity.getName())) {
                 found.set(true);
                 scriptedAspect.addAspect(aspect);
-            } else if (target instanceof ItemStack && scriptedAspect.item != null && ((ItemStack) target).isItemEqual(scriptedAspect.item)) {
+            } else if (target instanceof ItemStack itemStack && scriptedAspect.item != null && itemStack.isItemEqual(scriptedAspect.item)) {
                 found.set(true);
                 scriptedAspect.addAspect(aspect);
             }
@@ -63,10 +63,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         if (!found.get()) {
             ArrayList<AspectStack> aspectList = new ArrayList<>();
             aspectList.add(aspect);
-            if (target instanceof ItemStack)
-                addScripted(new AspectListHelper((ItemStack) target, aspectList));
-            else if (target instanceof EntityEntry)
-                addScripted(new AspectListHelper((EntityEntry) target, aspectList));
+            if (target instanceof ItemStack itemStack)
+                addScripted(new AspectListHelper(itemStack, aspectList));
+            else if (target instanceof EntityEntry entityEntry)
+                addScripted(new AspectListHelper(entityEntry, aspectList));
         }
     }
 
@@ -74,10 +74,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     public void addBackup(Object target, AspectStack aspect) {
         AtomicBoolean found = new AtomicBoolean(false);
         getBackupRecipes().forEach(backupAspect -> {
-            if (target instanceof EntityEntry && backupAspect.entity != null && ((EntityEntry) target).getName().equals(backupAspect.entity.getName())) {
+            if (target instanceof EntityEntry entityEntry && backupAspect.entity != null && entityEntry.getName().equals(backupAspect.entity.getName())) {
                 found.set(true);
                 backupAspect.addAspect(aspect);
-            } else if (target instanceof ItemStack && backupAspect.item != null && ((ItemStack) target).isItemEqual(backupAspect.item)) {
+            } else if (target instanceof ItemStack itemStack && backupAspect.item != null && itemStack.isItemEqual(backupAspect.item)) {
                 found.set(true);
                 backupAspect.addAspect(aspect);
             }
@@ -86,10 +86,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
         if (!found.get()) {
             ArrayList<AspectStack> aspectList = new ArrayList<>();
             aspectList.add(aspect);
-            if (target instanceof ItemStack)
-                addBackup(new AspectListHelper((ItemStack) target, aspectList));
-            else if (target instanceof EntityEntry)
-                addBackup(new AspectListHelper((EntityEntry) target, aspectList));
+            if (target instanceof ItemStack itemStack)
+                addBackup(new AspectListHelper(itemStack, aspectList));
+            else if (target instanceof EntityEntry entityEntry)
+                addBackup(new AspectListHelper(entityEntry, aspectList));
         }
     }
 
@@ -342,8 +342,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
             if (stripAspects) {
                 if (entity != null) {
                     ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(entity);
-                } else if (object != null && object instanceof OreDictIngredient) {
-                    ModSupport.THAUMCRAFT.get().aspectHelper.removeAll((OreDictIngredient) object);
+                } else if (object != null && object instanceof OreDictIngredient oreDictIngredient) {
+                    ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(oreDictIngredient);
                 } else if (object != null && IngredientHelper.isItem(object) && !IngredientHelper.isEmpty(object)) {
                     ModSupport.THAUMCRAFT.get().aspectHelper.removeAll(IngredientHelper.toItemStack(object));
                 } else {
@@ -355,8 +355,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
             aspects.forEach(aspectStack -> {
                 if (entity != null)
                     ModSupport.THAUMCRAFT.get().aspectHelper.add(entity, aspectStack);
-                else if (object != null && object instanceof OreDictIngredient)
-                    ModSupport.THAUMCRAFT.get().aspectHelper.add(((OreDictIngredient) object), aspectStack);
+                else if (object != null && object instanceof OreDictIngredient oreDictIngredient)
+                    ModSupport.THAUMCRAFT.get().aspectHelper.add(oreDictIngredient, aspectStack);
                 else if (object != null && IngredientHelper.isItem(object) && !IngredientHelper.isEmpty(object))
                     ModSupport.THAUMCRAFT.get().aspectHelper.add(IngredientHelper.toItemStack(object), aspectStack);
                 else

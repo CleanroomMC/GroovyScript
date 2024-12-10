@@ -74,8 +74,8 @@ public abstract class SimpleRecipeHandlerSecondaryOutput extends SimpleRecipeHan
             SimpleRecipeSecondaryOutput recipe = null;
             IIngredient input1 = input.get(0);
             ItemStack secondaryOutput = output.size() == 1 ? ItemStack.EMPTY : output.get(1);
-            if (input1 instanceof OreDictIngredient) {
-                recipe = new SimpleRecipeSecondaryOutput(((OreDictIngredient) input1).getOreDict(), output.get(0), secondaryOutput, time, secondaryChance);
+            if (input1 instanceof OreDictIngredient oreDictIngredient) {
+                recipe = new SimpleRecipeSecondaryOutput(oreDictIngredient.getOreDict(), output.get(0), secondaryOutput, time, secondaryChance);
                 addRecipe(recipe);
             } else {
                 for (ItemStack input : input1.getMatchingStacks()) {

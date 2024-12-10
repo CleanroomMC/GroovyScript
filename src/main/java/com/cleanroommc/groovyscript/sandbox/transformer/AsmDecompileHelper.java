@@ -77,8 +77,8 @@ public class AsmDecompileHelper {
                         Object key = ann.values.get(x);
                         Object value = ann.values.get(x + 1);
                         if (key instanceof String && key.equals("value")) {
-                            if (value instanceof String[]) {
-                                if (!((String[]) value)[1].equals(side)) {
+                            if (value instanceof String[]strings) {
+                                if (!strings[1].equals(side)) {
                                     return true;
                                 }
                             }

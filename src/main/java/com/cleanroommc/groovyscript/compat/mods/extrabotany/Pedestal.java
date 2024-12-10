@@ -71,10 +71,9 @@ public class Pedestal extends StandardListRegistry<RecipePedestal> {
             validateFluids(msg);
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public RecipePedestal register() {
+        public @Nullable RecipePedestal register() {
             if (!validate()) return null;
             RecipePedestal recipe = null;
             for (ItemStack matchingStack : input.get(0).getMatchingStacks()) {

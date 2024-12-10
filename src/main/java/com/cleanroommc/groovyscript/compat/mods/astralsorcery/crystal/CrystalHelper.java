@@ -66,16 +66,16 @@ public class CrystalHelper {
     }
 
     public static ItemStack tuneTo(ItemStack crystal, IConstellation constellation) {
-        if (constellation instanceof IWeakConstellation)
-            ItemTunedCrystalBase.applyMainConstellation(crystal, (IWeakConstellation) constellation);
+        if (constellation instanceof IWeakConstellation iWeakConstellation)
+            ItemTunedCrystalBase.applyMainConstellation(crystal, iWeakConstellation);
         else
             GroovyLog.msg("Main constellation must be Major or Weak (Bright or Dim)").error().post();
         return crystal;
     }
 
     public static ItemStack setTrait(ItemStack crystal, IConstellation constellation) {
-        if (constellation instanceof IMinorConstellation)
-            ItemTunedCrystalBase.applyTrait(crystal, (IMinorConstellation) constellation);
+        if (constellation instanceof IMinorConstellation iMinorConstellation)
+            ItemTunedCrystalBase.applyTrait(crystal, iMinorConstellation);
         else
             GroovyLog.msg("Trait constellation must be Minor (Faint)").error().post();
         return crystal;

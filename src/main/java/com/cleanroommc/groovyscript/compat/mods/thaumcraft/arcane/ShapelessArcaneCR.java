@@ -57,14 +57,12 @@ public class ShapelessArcaneCR extends ShapelessArcaneRecipe implements ICraftin
     }
 
     @Override
-    @Nullable
-    public Closure<Void> getRecipeAction() {
+    public @Nullable Closure<Void> getRecipeAction() {
         return craftingRecipe.getRecipeAction();
     }
 
     @Override
-    @Nullable
-    public Closure<ItemStack> getRecipeFunction() {
+    public @Nullable Closure<ItemStack> getRecipeFunction() {
         return craftingRecipe.getRecipeFunction();
     }
 
