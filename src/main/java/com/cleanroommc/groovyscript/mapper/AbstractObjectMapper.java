@@ -27,7 +27,7 @@ public abstract class AbstractObjectMapper<T> extends Closure<T> implements INam
     private final String name;
     private final GroovyContainer<?> mod;
     private final Class<T> returnType;
-    protected List<Class<?>[]> paramTypes;
+    private final List<Class<?>[]> paramTypes;
     protected String documentation = StringUtils.EMPTY;
     private List<MethodNode> methodNodes;
     private Boolean hasTextureBinder;
@@ -41,8 +41,20 @@ public abstract class AbstractObjectMapper<T> extends Closure<T> implements INam
         addSignature(String.class);
     }
 
+    /**
+     * Call in ctor to configure signatures
+     */
+    protected final void clearSignatures() {
+        this.paramTypes.clear();
+        this.methodNodes = null;
+    }
+
+    /**
+     * Call in ctor to configure signatures
+     */
     protected final void addSignature(Class<?>... types) {
         this.paramTypes.add(types);
+        this.methodNodes = null;
     }
 
     public final T doCall(String s, Object... args) {

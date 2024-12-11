@@ -32,11 +32,17 @@ import java.util.concurrent.CompletableFuture;
 
 public class TextureDecorationProvider extends DocProvider {
 
-    public static final int ICON_W = 16, ICON_H = 16;
-    public static final int ICON_X = 0, ICON_Y = 0;
+    public static final int ICON_W = 16;
+    public static final int ICON_H = 16;
+    public static final int ICON_X = 0;
+    public static final int ICON_Y = 0;
     private static final Map<String, TextureDecoration<?>> textures = new Object2ObjectOpenHashMap<>();
 
     public static final File cacheRoot = new File(SandboxData.getCachePath(), "texdecs");
+
+    static {
+        cacheRoot.mkdirs();
+    }
 
     public TextureDecorationProvider(URI doc, ASTContext context) {
         super(doc, context);

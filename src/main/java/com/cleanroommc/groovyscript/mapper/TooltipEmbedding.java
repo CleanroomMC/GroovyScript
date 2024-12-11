@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class TooltipEmbedding<T> {
 
-    private static final Pattern embeddingPattern = Pattern.compile("(?>\\$\\{(?<mapper>\\w+)\\(['\\\"](?<key>[\\w\\s:-]+)['\\\"]\\)})");
+    private static final Pattern embeddingPattern = Pattern.compile("(?>\\$\\{(?<mapper>\\w+)\\(['\"](?<key>[\\w\\s:-]+)['\"]\\)})");
 
     private static String computeTextureName(String name, String arg) {
         return DigestUtils.sha1Hex(name + arg);

@@ -20,8 +20,9 @@ public class TextureDecoration<T> {
     private static <T> T getObjectWithConstArgs(AbstractObjectMapper<T> mapper, ArgumentListExpression args) {
         var additionalArgs = new Object[args.getExpressions().size() - 1];
         for (int i = 0; i < additionalArgs.length; i++) {
-            if (args.getExpressions().get(i + 1) instanceof ConstantExpression argExpression)
+            if (args.getExpressions().get(i + 1) instanceof ConstantExpression argExpression) {
                 additionalArgs[i] = argExpression.getValue();
+            }
         }
         return mapper.invoke(true, args.getExpressions().get(0).getText(), additionalArgs);
     }
@@ -49,7 +50,7 @@ public class TextureDecoration<T> {
         this.bindable = bindable;
         this.uri = uri;
         File file = getFile();
-        this.fileExists = !file.getParentFile().mkdirs() && file.exists();
+        this.fileExists = file.exists();
     }
 
     public void bindTexture() {
@@ -86,7 +87,8 @@ public class TextureDecoration<T> {
     }
 
     private static void saveImage(File file, ByteBuffer buffer) {
-        final int w = TextureDecorationProvider.ICON_W, h = TextureDecorationProvider.ICON_H;
+        final int w = TextureDecorationProvider.ICON_W;
+        final int h = TextureDecorationProvider.ICON_H;
         var image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
