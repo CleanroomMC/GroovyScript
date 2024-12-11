@@ -31,6 +31,7 @@ public class EntityRandomizer extends VirtualizedRegistry<Class<? extends Entity
         WorldHelperAccessor.getMobs().add(entry);
     }
 
+    @SuppressWarnings("unchecked")
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("entity('minecraft:pig')"))
     public void addMob(EntityEntry entity) {
         addMob((Class<? extends EntityLiving>) entity.getEntityClass());
@@ -42,6 +43,7 @@ public class EntityRandomizer extends VirtualizedRegistry<Class<? extends Entity
         WorldHelperAccessor.getPeacefuls().add(entry);
     }
 
+    @SuppressWarnings("unchecked")
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("entity('minecraft:zombie')"))
     public void addPeaceful(EntityEntry entity) {
         addPeaceful((Class<? extends EntityLiving>) entity.getEntityClass());
@@ -56,6 +58,7 @@ public class EntityRandomizer extends VirtualizedRegistry<Class<? extends Entity
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     @MethodDescription(example = @Example("entity('minecraft:zombie')"))
     public boolean removeMob(EntityEntry entity) {
         return removeMob((Class<? extends EntityLiving>) entity.getEntityClass());
@@ -70,6 +73,7 @@ public class EntityRandomizer extends VirtualizedRegistry<Class<? extends Entity
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     @MethodDescription(example = @Example("entity('minecraft:pig')"))
     public boolean removePeaceful(EntityEntry entity) {
         return removePeaceful((Class<? extends EntityLiving>) entity.getEntityClass());

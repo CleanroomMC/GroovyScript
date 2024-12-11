@@ -142,8 +142,8 @@ public class EventHandler {
             }
             if (craftResult != null) {
                 IRecipe recipe = craftResult.getRecipeUsed();
-                if (recipe instanceof ICraftingRecipe) {
-                    Closure<Void> recipeAction = ((ICraftingRecipe) recipe).getRecipeAction();
+                if (recipe instanceof ICraftingRecipe iCraftingRecipe) {
+                    Closure<Void> recipeAction = iCraftingRecipe.getRecipeAction();
                     if (recipeAction != null) {
                         GroovyLog.get().infoMC("Fire Recipe Action");
                         ClosureHelper.call(recipeAction, event.crafting, new CraftingInfo(inventoryCrafting, player));
@@ -156,8 +156,8 @@ public class EventHandler {
     @SubscribeEvent
     public static void onExplosion(ExplosionEvent.Detonate event) {
         for (Entity entity : event.getAffectedEntities()) {
-            if (entity instanceof EntityItem) {
-                VanillaModule.inWorldCrafting.explosion.findAndRunRecipe((EntityItem) entity);
+            if (entity instanceof EntityItem entityItem) {
+                VanillaModule.inWorldCrafting.explosion.findAndRunRecipe(entityItem);
             }
         }
     }

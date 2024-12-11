@@ -47,15 +47,13 @@ public class FileUtil {
         }
     }
 
-    @NotNull
-    public static String relativize(String rootPath, String longerThanRootPath) {
+    public static @NotNull String relativize(String rootPath, String longerThanRootPath) {
         longerThanRootPath = encodeURI(fixPath(decodeURI(longerThanRootPath)));
         rootPath = encodeURI(rootPath);
         return relativizeInternal(rootPath, longerThanRootPath, false);
     }
 
-    @Nullable
-    public static String relativizeNullable(String rootPath, String longerThanRootPath) {
+    public static @Nullable String relativizeNullable(String rootPath, String longerThanRootPath) {
         longerThanRootPath = encodeURI(fixPath(decodeURI(longerThanRootPath)));
         rootPath = encodeURI(rootPath);
         return relativizeInternal(rootPath, longerThanRootPath, true);

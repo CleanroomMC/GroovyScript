@@ -22,6 +22,7 @@ import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 
@@ -66,7 +67,7 @@ public class JeiPlugin implements IModPlugin {
     }
 
     @Override
-    public void registerCategories(IRecipeCategoryRegistration registry) {
+    public void registerCategories(@NotNull IRecipeCategoryRegistration registry) {
         IngredientRegistry ingredientRegistry = Internal.getIngredientRegistry();
         fluidRenderer = ingredientRegistry.getIngredientRenderer(VanillaTypes.FLUID);
 

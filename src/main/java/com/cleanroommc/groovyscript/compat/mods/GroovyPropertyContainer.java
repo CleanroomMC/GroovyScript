@@ -32,13 +32,11 @@ public class GroovyPropertyContainer {
         }
     }
 
-    @UnmodifiableView
-    public Collection<INamed> getRegistries() {
+    public @UnmodifiableView Collection<INamed> getRegistries() {
         return this.view.values();
     }
 
-    @UnmodifiableView
-    public Map<String, INamed> getProperties() {
+    public @UnmodifiableView Map<String, INamed> getProperties() {
         return view;
     }
 

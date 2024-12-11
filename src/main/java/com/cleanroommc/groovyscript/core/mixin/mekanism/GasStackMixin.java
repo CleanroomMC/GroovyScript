@@ -52,9 +52,8 @@ public abstract class GasStackMixin implements IIngredient, IResourceStack {
         return false;
     }
 
-    @Nullable
     @Override
-    public String getMark() {
+    public @Nullable String getMark() {
         return groovyScript$mark;
     }
 

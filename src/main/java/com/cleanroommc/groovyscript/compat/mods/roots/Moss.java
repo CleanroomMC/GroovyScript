@@ -44,10 +44,10 @@ public class Moss extends VirtualizedRegistry<Pair<ItemStack, ItemStack>> {
             ItemStack in = entry.getKey();
             ItemStack out = entry.getValue();
 
-            if (!(in.getItem() instanceof ItemBlock) || !(out.getItem() instanceof ItemBlock)) continue;
+            if (!(in.getItem() instanceof ItemBlock itemBlockIn) || !(out.getItem() instanceof ItemBlock itemBlockOut)) continue;
 
-            Block blockIn = ((ItemBlock) in.getItem()).getBlock();
-            Block blockOut = ((ItemBlock) out.getItem()).getBlock();
+            Block blockIn = itemBlockIn.getBlock();
+            Block blockOut = itemBlockOut.getBlock();
 
             if (in.getMetadata() == 0 && out.getMetadata() == 0) {
                 MossConfigAccessor.getMossyBlocks().put(blockIn, blockOut);

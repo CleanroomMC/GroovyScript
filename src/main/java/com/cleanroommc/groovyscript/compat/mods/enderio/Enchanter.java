@@ -70,8 +70,8 @@ public class Enchanter extends VirtualizedRegistry<EnchanterRecipe> {
         }
         List<EnchanterRecipe> recipes = new ArrayList<>();
         for (IMachineRecipe recipe : MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.ENCHANTER).values()) {
-            if (recipe instanceof EnchanterRecipe && enchantment == ((EnchanterRecipe) recipe).getEnchantment()) {
-                recipes.add((EnchanterRecipe) recipe);
+            if (recipe instanceof EnchanterRecipe enchanterRecipe && enchantment == enchanterRecipe.getEnchantment()) {
+                recipes.add(enchanterRecipe);
             }
         }
         if (recipes.isEmpty()) {

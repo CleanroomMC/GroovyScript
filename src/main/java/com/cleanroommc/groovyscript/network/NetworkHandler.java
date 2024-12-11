@@ -47,7 +47,7 @@ public class NetworkHandler {
         network.sendTo(packet, player);
     }
 
-    final static IMessageHandler<IPacket, IPacket> S2CHandler = (message, ctx) -> {
+    static final IMessageHandler<IPacket, IPacket> S2CHandler = (message, ctx) -> {
         NetHandlerPlayClient handler = ctx.getClientHandler();
         IThreadListener threadListener = FMLCommonHandler.instance().getWorldThread(handler);
         if (threadListener.isCallingFromMinecraftThread()) {
@@ -57,7 +57,7 @@ public class NetworkHandler {
         }
         return null;
     };
-    final static IMessageHandler<IPacket, IPacket> C2SHandler = (message, ctx) -> {
+    static final IMessageHandler<IPacket, IPacket> C2SHandler = (message, ctx) -> {
         NetHandlerPlayServer handler = ctx.getServerHandler();
         IThreadListener threadListener = FMLCommonHandler.instance().getWorldThread(handler);
         if (threadListener.isCallingFromMinecraftThread()) {

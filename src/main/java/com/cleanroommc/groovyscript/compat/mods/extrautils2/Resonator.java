@@ -169,10 +169,9 @@ public class Resonator extends StandardListRegistry<IResonatorRecipe> {
             msg.add(energy < 100, () -> "energy must not be less than 1 GP (100)");
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public IResonatorRecipe register() {
+        public @Nullable IResonatorRecipe register() {
             if (!validate()) return null;
             IResonatorRecipe recipe = new ResonatorRecipe(input.get(0).getMatchingStacks()[0], output.get(0), energy, ownerTag) {
 

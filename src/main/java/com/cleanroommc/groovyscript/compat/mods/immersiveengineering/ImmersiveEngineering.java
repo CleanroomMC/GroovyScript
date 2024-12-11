@@ -31,11 +31,11 @@ public class ImmersiveEngineering extends GroovyPropertyContainer {
         if (IngredientHelper.isItem(ingredient)) {
             return new IngredientStack(IngredientHelper.toItemStack(ingredient).copy());
         }
-        if (ingredient instanceof OreDictIngredient) {
-            return new IngredientStack(((OreDictIngredient) ingredient).getOreDict(), ingredient.getAmount());
+        if (ingredient instanceof OreDictIngredient oreDictIngredient) {
+            return new IngredientStack(oreDictIngredient.getOreDict(), ingredient.getAmount());
         }
-        if (ingredient instanceof FluidStack) {
-            return new IngredientStack(((FluidStack) ingredient).copy());
+        if (ingredient instanceof FluidStack fluidStack) {
+            return new IngredientStack(fluidStack.copy());
         }
         return new IngredientStack(Arrays.asList(ingredient.getMatchingStacks()), ingredient.getAmount());
     }
@@ -49,8 +49,8 @@ public class ImmersiveEngineering extends GroovyPropertyContainer {
     }
 
     public static Object toIEInput(IIngredient ingredient) {
-        if (ingredient instanceof OreDictIngredient) {
-            return ((OreDictIngredient) ingredient).getOreDict();
+        if (ingredient instanceof OreDictIngredient oreDictIngredient) {
+            return oreDictIngredient.getOreDict();
         }
         ItemStack[] matchingStacks = ingredient.getMatchingStacks();
         return matchingStacks.length == 0 ? ItemStack.EMPTY : matchingStacks[0];

@@ -524,8 +524,7 @@ public class GroovyASTUtils {
         }
     }
 
-    @NotNull
-    private static PropertyNode makeProperty(ClassNode classNode, FieldNode field, int m) {
+    private static @NotNull PropertyNode makeProperty(ClassNode classNode, FieldNode field, int m) {
         PropertyNode property = new PropertyNode(field, m, null, null);
         property.setDeclaringClass(classNode);
         // remove any previous set fields and properties with the same name
