@@ -21,6 +21,7 @@ package net.prominic.groovyls.compiler.util;
 
 import com.cleanroommc.groovyscript.api.Hidden;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
+import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.sandbox.Preprocessor;
@@ -278,7 +279,7 @@ public class GroovyASTUtils {
         } else if (node instanceof ConstructorCallExpression expression) {
             return expression.getType();
         } else if (node instanceof MethodCallExpression expression) {
-            ObjectMapper<?> goh = getMapperOfNode(expression, context);
+            AbstractObjectMapper<?> goh = getMapperOfNode(expression, context);
             if (goh != null) {
                 return ClassHelper.makeCached(goh.getReturnType());
             }
@@ -478,7 +479,7 @@ public class GroovyASTUtils {
         return method;
     }
 
-    public static ObjectMapper<?> getMapperOfNode(MethodCallExpression expr, ASTContext context) {
+    public static AbstractObjectMapper<?> getMapperOfNode(MethodCallExpression expr, ASTContext context) {
         if (expr.isImplicitThis()) {
             return ObjectMapperManager.getObjectMapper(expr.getMethodAsString());
         }

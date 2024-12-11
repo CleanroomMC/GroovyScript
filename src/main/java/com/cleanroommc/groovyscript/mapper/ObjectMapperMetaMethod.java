@@ -9,10 +9,10 @@ import java.lang.reflect.Modifier;
 
 public class ObjectMapperMetaMethod extends MetaMethod implements IDocumented {
 
-    private final ObjectMapper<?> closure;
+    private final AbstractObjectMapper<?> closure;
     private final Class<?> owner;
 
-    ObjectMapperMetaMethod(ObjectMapper<?> closure, Class<?>[] nativeParamTypes, Class<?> owner) {
+    ObjectMapperMetaMethod(AbstractObjectMapper<?> closure, Class<?>[] nativeParamTypes, Class<?> owner) {
         super(nativeParamTypes);
         this.closure = closure;
         this.nativeParamTypes = nativeParamTypes;
