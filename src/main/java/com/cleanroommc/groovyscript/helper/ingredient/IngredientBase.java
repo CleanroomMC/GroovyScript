@@ -50,7 +50,7 @@ public abstract class IngredientBase implements IIngredient {
         return transform(self -> self);
     }
 
-    public IngredientBase noreturn() {
+    public IngredientBase noReturn() {
         return transform(self -> ItemStack.EMPTY);
     }
 

@@ -100,7 +100,7 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
         return transform(self -> self);
     }
 
-    default ItemStack noreturn() {
+    default ItemStack noReturn() {
         return transform(self -> ItemStack.EMPTY);
     }
 
@@ -224,6 +224,7 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
     }
 
     default ItemStack destroy() {
+        if (grs$getItemStack().isEmpty()) return ItemStack.EMPTY;
         EntityPlayer player = ForgeHooks.getCraftingPlayer();
         if (player != null) {
             ForgeEventFactory.onPlayerDestroyItem(player, grs$getItemStack(), null);

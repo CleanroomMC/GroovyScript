@@ -28,7 +28,9 @@ public class IngredientHelper {
     public static final Closure<Object> MATCH_NBT = new LambdaClosure<>(args -> ItemStack.EMPTY);
 
     public static ItemStack damageItem(ItemStack stack, int damage) {
-        return ItemStackMixinExpansion.of(stack).withMeta(Math.min(32767, Items.DIAMOND.getDamage(stack) + damage));
+        // Short.MAX_VALUE is meta wildcard
+        // Items.DIAMOND.getDamage(stack) is guaranteed to return the value of the damage field of stack
+        return ItemStackMixinExpansion.of(stack).withMeta(Math.min(Short.MAX_VALUE - 1, Items.DIAMOND.getDamage(stack) + damage));
     }
 
     public static boolean isFluid(IIngredient ingredient) {
