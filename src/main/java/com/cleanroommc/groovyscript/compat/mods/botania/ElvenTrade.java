@@ -31,8 +31,8 @@ public class ElvenTrade extends StandardListRegistry<RecipeElvenTrade> {
     protected Object[] convertIngredients(IIngredient[] inputs) {
         return Arrays.stream(inputs)
                 .map(
-                        input -> input instanceof OreDictIngredient
-                                ? ((OreDictIngredient) input).getOreDict()
+                        input -> input instanceof OreDictIngredient oreDictIngredient
+                                ? oreDictIngredient.getOreDict()
                                 : input.getMatchingStacks()[0])
                 .toArray();
     }

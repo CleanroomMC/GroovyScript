@@ -29,12 +29,12 @@ public class Attunement extends VirtualizedRegistry<Pair<Object, TunnelType>> {
             }
         });
         restoreFromBackup().forEach(pair -> {
-            if (pair.getKey() instanceof ItemStack) {
-                AEApi.instance().registries().p2pTunnel().addNewAttunement((ItemStack) pair.getKey(), pair.getValue());
-            } else if (pair.getKey() instanceof String) {
-                AEApi.instance().registries().p2pTunnel().addNewAttunement((String) pair.getKey(), pair.getValue());
-            } else if (pair.getKey() instanceof Capability<?>) {
-                AEApi.instance().registries().p2pTunnel().addNewAttunement((Capability<?>) pair.getKey(), pair.getValue());
+            if (pair.getKey() instanceof ItemStack itemStack) {
+                AEApi.instance().registries().p2pTunnel().addNewAttunement(itemStack, pair.getValue());
+            } else if (pair.getKey() instanceof String s) {
+                AEApi.instance().registries().p2pTunnel().addNewAttunement(s, pair.getValue());
+            } else if (pair.getKey() instanceof Capability<?>capability) {
+                AEApi.instance().registries().p2pTunnel().addNewAttunement(capability, pair.getValue());
             }
         });
     }

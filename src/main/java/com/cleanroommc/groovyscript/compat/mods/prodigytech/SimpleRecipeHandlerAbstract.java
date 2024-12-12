@@ -60,8 +60,8 @@ public abstract class SimpleRecipeHandlerAbstract<T extends SimpleRecipe> extend
     }
 
     public boolean removeByInput(IIngredient input) {
-        if (input instanceof OreDictIngredient) {
-            return removeOreRecipe(((OreDictIngredient) input).getOreDict());
+        if (input instanceof OreDictIngredient oreDictIngredient) {
+            return removeOreRecipe(oreDictIngredient.getOreDict());
         } else {
             boolean removed = false;
             for (ItemStack it : input.getMatchingStacks()) {

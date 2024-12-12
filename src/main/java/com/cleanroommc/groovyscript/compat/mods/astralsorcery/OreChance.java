@@ -68,7 +68,7 @@ public class OreChance extends VirtualizedRegistry<OreEntry> {
             GroovyLog.msg("Error adding Astral Sorcery OreChance. Weight must be a positive integer.").error().post();
             return;
         }
-        if (ore == null || "".equals(ore)) {
+        if (ore == null || ore.isEmpty()) {
             GroovyLog.msg("Error adding Astral Sorcery OreChance. Ore name cannot be null.").error().post();
             return;
         }
@@ -76,7 +76,7 @@ public class OreChance extends VirtualizedRegistry<OreEntry> {
     }
 
     public void add(OreDictIngredient ore, int weight) {
-        if (ore == null || ore.getOreDict() == null || "".equals(ore.getOreDict())) {
+        if (ore == null || ore.getOreDict() == null || ore.getOreDict().isEmpty()) {
             GroovyLog.msg("Error adding Astral Sorcery OreChance. Ore name cannot be null.").error().post();
             return;
         }

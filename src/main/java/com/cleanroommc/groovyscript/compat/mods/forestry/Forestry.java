@@ -38,10 +38,10 @@ public class Forestry extends GroovyPropertyContainer {
             }
         }
         IAlleleBeeSpecies species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + parts[1]);
-        if (species instanceof AlleleBeeSpecies) return Result.some((AlleleBeeSpecies) species);
+        if (species instanceof AlleleBeeSpecies beeSpecies) return Result.some(beeSpecies);
 
         species = (IAlleleBeeSpecies) AlleleManager.alleleRegistry.getAllele(parts[0] + "." + getNormalName(parts[1]));
-        if (species instanceof AlleleBeeSpecies) return Result.some((AlleleBeeSpecies) species);
+        if (species instanceof AlleleBeeSpecies alleleBeeSpecies) return Result.some(alleleBeeSpecies);
         return Result.error();
     }
 

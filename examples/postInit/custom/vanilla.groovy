@@ -260,3 +260,8 @@ eventManager.listen(EnderTeleportEvent) { event ->
 command.registerCommand('groovy_test') { server, sender, args ->
     sender.sendMessage('Hello from GroovyScript')
 }
+
+// Default GameRules
+gameRule.add('doDaylightCycle', 'false')
+gameRule.add(['mobGriefing': 'false', 'keepInventory': 'true'])
+gameRule.setWarnNewGameRule(true)

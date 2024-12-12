@@ -153,10 +153,9 @@ public class CompressionCrafting extends StandardListRegistry<CompressorRecipe> 
             msg.add(powerRate < 0, "power rate must not be negative");
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public CompressorRecipe register() {
+        public @Nullable CompressorRecipe register() {
             if (!validate()) return null;
             CompressorRecipe recipe = new CompressorRecipe(output.get(0), input.get(0).toMcIngredient(), inputCount, catalyst.toMcIngredient(), consumeCatalyst, powerCost, powerRate);
             ModSupport.EXTENDED_CRAFTING.get().compressionCrafting.add(recipe);

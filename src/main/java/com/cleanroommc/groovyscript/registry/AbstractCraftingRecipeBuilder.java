@@ -145,12 +145,11 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
     }
 
     @GroovyBlacklist
-    @Nullable
-    protected <T> T validateShape(GroovyLog.Msg msg,
-                                  List<String> errors,
-                                  String[] keyBasedMatrix,
-                                  Char2ObjectOpenHashMap<IIngredient> keyMap,
-                                  IRecipeCreator<T> recipeCreator) {
+    protected @Nullable <T> T validateShape(GroovyLog.Msg msg,
+                                            List<String> errors,
+                                            String[] keyBasedMatrix,
+                                            Char2ObjectOpenHashMap<IIngredient> keyMap,
+                                            IRecipeCreator<T> recipeCreator) {
         List<IIngredient> ingredients = new ArrayList<>();
         if (keyBasedMatrix.length > height) {
             msg.add("Defined matrix has %d rows, but should only have %d rows", keyBasedMatrix.length, height);
@@ -209,8 +208,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
     }
 
     @GroovyBlacklist
-    @Nullable
-    protected <T> T validateShape(GroovyLog.Msg msg, List<List<IIngredient>> ingredientMatrix, IRecipeCreator<T> recipeCreator) {
+    protected @Nullable <T> T validateShape(GroovyLog.Msg msg, List<List<IIngredient>> ingredientMatrix, IRecipeCreator<T> recipeCreator) {
         List<IIngredient> ingredients = new ArrayList<>();
         if (ingredientMatrix.size() > height) {
             msg.add("defined matrix has %d rows, but should only have %d rows", ingredientMatrix.size(), height);

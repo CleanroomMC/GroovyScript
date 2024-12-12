@@ -56,9 +56,8 @@ public class ExplosionRecipeCategory extends BaseCategory<ExplosionRecipeCategor
         GlStateManager.popMatrix();
     }
 
-    @Nullable
     @Override
-    public IDrawable getIcon() {
+    public @Nullable IDrawable getIcon() {
         return icon;
     }
 

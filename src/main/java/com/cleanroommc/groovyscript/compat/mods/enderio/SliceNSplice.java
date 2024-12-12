@@ -74,9 +74,9 @@ public class SliceNSplice extends StandardListRegistry<IManyToOneRecipe> {
     @MethodDescription(example = @Example("[item('enderio:item_alloy_ingot:7'), item('enderio:block_enderman_skull'), item('enderio:item_alloy_ingot:7'), item('minecraft:potion').withNbt(['Potion': 'minecraft:water']), item('enderio:item_basic_capacitor'), item('minecraft:potion').withNbt(['Potion': 'minecraft:water'])]"))
     public void removeByInput(List<ItemStack> input) {
         IRecipe recipe = SliceAndSpliceRecipeManager.getInstance().getRecipeForInputs(RecipeLevel.IGNORE, RecipeUtils.getMachineInputs(input));
-        if (recipe instanceof IManyToOneRecipe) {
+        if (recipe instanceof IManyToOneRecipe iManyToOneRecipe) {
             getRecipes().remove(recipe);
-            addBackup((IManyToOneRecipe) recipe);
+            addBackup(iManyToOneRecipe);
         } else {
             GroovyLog.get().error("No EnderIO Slice'n'Splice recipe found for " + input);
         }

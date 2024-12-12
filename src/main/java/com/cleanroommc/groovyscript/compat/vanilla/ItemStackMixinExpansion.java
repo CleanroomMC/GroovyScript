@@ -234,9 +234,8 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
         return grs$getItemStack();
     }
 
-    @Nullable
     @Override
-    default String getMark() {
+    default @Nullable String getMark() {
         return grs$getMark();
     }
 

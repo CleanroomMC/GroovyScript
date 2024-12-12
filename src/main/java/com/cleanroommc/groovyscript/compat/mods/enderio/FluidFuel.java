@@ -80,8 +80,7 @@ public class FluidFuel extends VirtualizedRegistry<IFluidFuel> {
         }
     }
 
-    @Nullable
-    public IFluidFuel find(Fluid fluid) {
+    public @Nullable IFluidFuel find(Fluid fluid) {
         return FluidFuelRegister.instance.getFuel(fluid);
     }
 
