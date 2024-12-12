@@ -52,10 +52,10 @@ public class NbtHelper {
         if (o instanceof Map) {
             return ofMap((Map<String, Object>) o);
         }
-        if (o instanceof List) {
+        if (o instanceof List<?>objects) {
             NBTTagList list = new NBTTagList();
             byte type = 0;
-            for (Object lo : (List<?>) o) {
+            for (Object lo : objects) {
                 NBTBase lNbt = toNbt(lo);
                 if (type == 0) {
                     type = lNbt.getId();

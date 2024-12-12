@@ -72,10 +72,9 @@ public class Liquifier extends StandardListRegistry<LiquifierRecipe> {
             validateFluids(msg, 0, 0, 1, 1);
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public LiquifierRecipe register() {
+        public @Nullable LiquifierRecipe register() {
             if (!validate()) return null;
             LiquifierRecipe recipe = new LiquifierRecipe(IngredientHelper.toItemStack(input.get(0)), fluidOutput.get(0));
             ModSupport.ALCHEMISTRY.get().liquifier.add(recipe);

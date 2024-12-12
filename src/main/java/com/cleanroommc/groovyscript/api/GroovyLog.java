@@ -39,8 +39,7 @@ public interface GroovyLog {
     /**
      * @return an instance of {@link GroovyLog}
      */
-    @NotNull
-    static GroovyLog get() {
+    static @NotNull GroovyLog get() {
         return GroovyLogImpl.LOG;
     }
 

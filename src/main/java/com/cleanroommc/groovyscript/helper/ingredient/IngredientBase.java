@@ -48,9 +48,8 @@ public abstract class IngredientBase implements IIngredient {
         return ForgeHooks.getContainerItem(matchedInput);
     }
 
-    @Nullable
     @Override
-    public String getMark() {
+    public @Nullable String getMark() {
         return mark;
     }
 

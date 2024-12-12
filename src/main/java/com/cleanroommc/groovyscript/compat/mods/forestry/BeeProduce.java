@@ -110,7 +110,7 @@ public class BeeProduce extends ForestryRegistry<BeeProduct> {
 
     public void removeAll() {
         ((AlleleRegistryAccessor) AlleleManager.alleleRegistry).getAlleleMap().forEach((uid, allele) -> {
-            if (allele instanceof AlleleBeeSpecies) removeAll((AlleleBeeSpecies) allele);
+            if (allele instanceof AlleleBeeSpecies alleleBeeSpecies) removeAll(alleleBeeSpecies);
         });
     }
 }

@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.botania.recipe;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class OrechidRecipe {
 
     public final int weight;

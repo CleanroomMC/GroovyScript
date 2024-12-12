@@ -16,7 +16,7 @@ public class GroovyTrait extends ModifierTrait implements ITrait {
     }
 
     public GroovyTrait addItem(IIngredient ingredient, int amountNeeded, int amountMatched) {
-        if (ingredient instanceof OreDictIngredient) addItem(((OreDictIngredient) ingredient).getOreDict(), amountNeeded, amountMatched);
+        if (ingredient instanceof OreDictIngredient oreDictIngredient) addItem(oreDictIngredient.getOreDict(), amountNeeded, amountMatched);
         else addItem(ingredient.getMatchingStacks()[0], amountNeeded, amountMatched);
         return this;
     }

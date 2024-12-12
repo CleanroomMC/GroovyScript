@@ -34,22 +34,22 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> postLogFiles(sender)));
 
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
-            if (sender instanceof EntityPlayerMP) {
+            if (sender instanceof EntityPlayerMP player) {
                 if (hasArgument(args, "--clean")) {
                     GroovyLogImpl.LOG.cleanLog();
                 }
-                runReload((EntityPlayerMP) sender, server);
+                runReload(player, server);
             }
         }));
 
         addSubcommand(new SimpleCommand("check", (server, sender, args) -> {
-            if (sender instanceof EntityPlayerMP) {
+            if (sender instanceof EntityPlayerMP player) {
                 sender.sendMessage(new TextComponentString("Checking groovy syntax..."));
                 long time = System.currentTimeMillis();
                 GroovyScript.getSandbox().checkSyntax();
                 time = System.currentTimeMillis() - time;
                 sender.sendMessage(new TextComponentString("Checking syntax took " + time + "ms"));
-                GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, false, false, time);
+                GroovyScript.postScriptRunResult(player, false, false, false, time);
             }
         }));
 
@@ -168,20 +168,17 @@ public class GSCommand extends CommandTreeBase {
     }
 
     @Override
-    @NotNull
-    public String getName() {
+    public @NotNull String getName() {
         return "groovyscript";
     }
 
     @Override
-    @NotNull
-    public List<String> getAliases() {
+    public @NotNull List<String> getAliases() {
         return Arrays.asList("grs", "gs");
     }
 
     @Override
-    @NotNull
-    public String getUsage(@NotNull ICommandSender sender) {
+    public @NotNull String getUsage(@NotNull ICommandSender sender) {
         return "/grs []";
     }
 }

@@ -24,63 +24,53 @@ public class GsHandEvent extends Event {
     /**
      * Server where the command is executed
      */
-    @NotNull
-    public final MinecraftServer server;
+    public final @NotNull MinecraftServer server;
 
     /**
      * Player who executes the command
      */
-    @NotNull
-    public final EntityPlayer player;
+    public final @NotNull EntityPlayer player;
 
     /**
      * Arguments of the command
      */
-    @NotNull
-    public final String[] commandArgs;
+    public final @NotNull String[] commandArgs;
 
     /**
      * A list of messages that will be sent to the player after this event.
      * Add or remove your messages here.
      */
-    @NotNull
-    public final List<ITextComponent> messages;
+    public final @NotNull List<ITextComponent> messages;
 
     /**
      * The held item or the item form of the block being looked at.
      */
-    @NotNull
-    public final ItemStack stack;
+    public final @NotNull ItemStack stack;
 
     /**
      * The entity the player is looking at
      */
-    @Nullable
-    public final Entity entity;
+    public final @Nullable Entity entity;
 
     /**
      * The block position the player is looking at
      */
-    @Nullable
-    public final BlockPos pos;
+    public final @Nullable BlockPos pos;
 
     /**
      * The block state of the held item or the block state the player is looking at
      */
-    @Nullable
-    public final IBlockState blockState;
+    public final @Nullable IBlockState blockState;
 
     /**
      * The block of the held item or the block the player is looking at
      */
-    @Nullable
-    public final Block block;
+    public final @Nullable Block block;
 
     /**
      * The tile entity the player is looking at
      */
-    @Nullable
-    public final TileEntity tileEntity;
+    public final @Nullable TileEntity tileEntity;
 
     /**
      * If pretty nbt is enabled

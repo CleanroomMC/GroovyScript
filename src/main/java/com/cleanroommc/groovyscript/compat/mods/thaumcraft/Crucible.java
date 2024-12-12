@@ -87,8 +87,8 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         List<CrucibleRecipe> recipes = new ArrayList<>();
         for (IThaumcraftRecipe iThaumcraftRecipe : ThaumcraftApi.getCraftingRecipes().values()) {
             r = iThaumcraftRecipe;
-            if ((r instanceof CrucibleRecipe) && output.test(((CrucibleRecipe) r).getRecipeOutput())) {
-                recipes.add((CrucibleRecipe) r);
+            if ((r instanceof CrucibleRecipe crucibleRecipe) && output.test(crucibleRecipe.getRecipeOutput())) {
+                recipes.add(crucibleRecipe);
             }
         }
         if (recipes.isEmpty()) {

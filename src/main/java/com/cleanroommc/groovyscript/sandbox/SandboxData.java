@@ -74,49 +74,41 @@ public class SandboxData {
         initialised = true;
     }
 
-    @NotNull
-    public static String getScriptPath() {
+    public static @NotNull String getScriptPath() {
         return getScriptFile().getPath();
     }
 
-    @NotNull
-    public static File getMinecraftHome() {
+    public static @NotNull File getMinecraftHome() {
         ensureLoaded();
         return minecraftHome;
     }
 
-    @NotNull
-    public static File getScriptFile() {
+    public static @NotNull File getScriptFile() {
         ensureLoaded();
         return scriptPath;
     }
 
-    @NotNull
-    public static File getResourcesFile() {
+    public static @NotNull File getResourcesFile() {
         ensureLoaded();
         return resourcesFile;
     }
 
-    @NotNull
-    public static File getRunConfigFile() {
+    public static @NotNull File getRunConfigFile() {
         ensureLoaded();
         return runConfigFile;
     }
 
-    @NotNull
-    public static File getCachePath() {
+    public static @NotNull File getCachePath() {
         ensureLoaded();
         return cachePath;
     }
 
-    @NotNull
-    public static URL getRootUrl() {
+    public static @NotNull URL getRootUrl() {
         ensureLoaded();
         return rootUrl;
     }
 
-    @NotNull
-    public static URL[] getRootUrls() {
+    public static @NotNull URL[] getRootUrls() {
         ensureLoaded();
         return rootUrls;
     }
