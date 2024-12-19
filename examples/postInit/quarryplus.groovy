@@ -4,8 +4,8 @@
 
 log.info 'mod \'quarryplus\' detected, running script'
 
-// groovyscript.wiki.quarryplus.work_bench_plus.title:
-// groovyscript.wiki.quarryplus.work_bench_plus.description.
+// Work bench:
+// Workbench for crafting items using electricity.
 
 mods.quarryplus.work_bench_plus.removeByOutput(item('quarryplus:quarry'))
 // mods.quarryplus.work_bench_plus.removeAll()
