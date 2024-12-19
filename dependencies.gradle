@@ -28,6 +28,7 @@
 // Sorted by alphabetical name of the `project.debug_[this]` value
 final def mod_dependencies = [
         'actually-additions-228404:3117927'                   : [project.debug_actually_additions],
+        'additionalenchantedminer-282837:3851282'             : [project.debug_additional_enchanted_miner],
         'advancedmortars-283777:2780626'                      : [project.debug_adv_mortars],
         'advanced-rocketry-236542:4671856'                    : [project.debug_advanced_rocketry],
         'libvulpes-236541:3801015'                            : [project.debug_advanced_rocketry],
