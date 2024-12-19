@@ -2100,6 +2100,14 @@ groovyscript.wiki.rustic.evaporating_basin.description=Converts fluids into item
 groovyscript.wiki.rustic.evaporating_basin.time.value=Sets the time in ticks the recipe will take
 
 
+# Silent's Gems
+groovyscript.wiki.silentgems.chaos_altar.title=Chaos Altar
+groovyscript.wiki.silentgems.chaos_altar.description=Converts an input itemstack into an output itemstack with an optional catalyst, consuming a specified amount of Chaos from a Chaos Altar. Chaos is consumed at a maximum of 400 per tick, meaning the time taken corresponds to the Chaos cost.
+groovyscript.wiki.silentgems.chaos_altar.note0=If no catalyst is required by the recipe, the Chaos Altar must have no item in the catalyst slot to be valid.
+groovyscript.wiki.silentgems.chaos_altar.cost.value=Sets the total amount of Chaos required
+groovyscript.wiki.silentgems.chaos_altar.catalyst.value=Sets the catalyst itemstack
+
+
 # Tech Reborn
 groovyscript.wiki.techreborn.alloy_smelter.title=Alloy Smelter
 groovyscript.wiki.techreborn.alloy_smelter.description=Converts two itemstack inputs into an itemstack output after a given process time, consuming energy per tick.

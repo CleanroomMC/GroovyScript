@@ -448,15 +448,13 @@ public class CompletionProvider extends DocProvider {
         return builder;
     }
 
-    @NotNull
-    private static CompletionItemLabelDetails getMethodNodeDetails(MethodNode method) {
+    private static @NotNull CompletionItemLabelDetails getMethodNodeDetails(MethodNode method) {
         var details = new CompletionItemLabelDetails();
         details.setDetail(getDescriptor(method, false, true, true));
         return details;
     }
 
-    @NotNull
-    private static CompletionItemLabelDetails getMethodInfoDetails(MethodInfo methodInfo) {
+    private static @NotNull CompletionItemLabelDetails getMethodInfoDetails(MethodInfo methodInfo) {
         var details = new CompletionItemLabelDetails();
         details.setDetail(getDescriptor(methodInfo, false, true, true));
         return details;

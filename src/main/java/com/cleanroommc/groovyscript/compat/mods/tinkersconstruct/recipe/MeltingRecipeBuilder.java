@@ -23,8 +23,8 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
     private final String recipeName;
 
     public static RecipeMatch recipeMatchFromIngredient(IIngredient ingredient, int amount) {
-        return (ingredient instanceof OreDictIngredient)
-                ? RecipeMatch.of(((OreDictIngredient) ingredient).getOreDict(), amount)
+        return (ingredient instanceof OreDictIngredient oreDictIngredient)
+                ? RecipeMatch.of(oreDictIngredient.getOreDict(), amount)
                 : RecipeMatch.of(ingredient.getMatchingStacks()[0], amount);
     }
 

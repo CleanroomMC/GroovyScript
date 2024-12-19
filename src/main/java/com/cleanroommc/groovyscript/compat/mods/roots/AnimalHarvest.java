@@ -87,6 +87,7 @@ public class AnimalHarvest extends VirtualizedRegistry<AnimalHarvestRecipe> {
         @Property(comp = @Comp(not = "null"))
         private Class<? extends EntityLivingBase> entity;
 
+        @SuppressWarnings("unchecked")
         @RecipeBuilderMethodDescription
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = (Class<? extends EntityLivingBase>) entity.getEntityClass();

@@ -88,10 +88,9 @@ public class Atomizer extends StandardListRegistry<AtomizerRecipe> {
             validateFluids(msg, 1, 1, 0, 0);
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public AtomizerRecipe register() {
+        public @Nullable AtomizerRecipe register() {
             if (!validate()) return null;
 
             AtomizerRecipe recipe = new AtomizerRecipe(false, fluidInput.get(0), output.get(0));

@@ -51,10 +51,10 @@ public class ObjectMappers {
         }
 
         if (args.length > 0) {
-            if (args.length > 1 || !(args[0] instanceof String)) {
+            if (args.length > 1 || !(args[0] instanceof String s)) {
                 return Result.error("Arguments not valid for object mapper. Use 'resource(String)' or 'resource(String mod, String path)'");
             }
-            return Result.some(new ResourceLocation(mainArg, (String) args[0]));
+            return Result.some(new ResourceLocation(mainArg, s));
         }
         return Result.some(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), mainArg));
     }

@@ -76,6 +76,7 @@ public class Rarity extends NamedRegistry {
         };
     }
 
+    @SuppressWarnings("ClassCanBeRecord")
     private static class RarityImpl implements IRarity {
 
         private final TextFormatting color;

@@ -209,8 +209,7 @@ public class ObjectMapperManager {
      * @param args    extra arguments
      * @return game object or null
      */
-    @Nullable
-    public static Object getGameObject(String name, String mainArg, Object... args) {
+    public static @Nullable Object getGameObject(String name, String mainArg, Object... args) {
         return getGameObject(false, name, mainArg, args);
     }
 
@@ -223,8 +222,7 @@ public class ObjectMapperManager {
      * @param silent if error messages should be logged
      * @return game object or null
      */
-    @Nullable
-    public static Object getGameObject(boolean silent, String name, String mainArg, Object... args) {
+    public static @Nullable Object getGameObject(boolean silent, String name, String mainArg, Object... args) {
         ObjectMapper<?> objectMapper = handlers.get(name);
         if (objectMapper != null) {
             return objectMapper.invokeWithDefault(silent, mainArg, args);

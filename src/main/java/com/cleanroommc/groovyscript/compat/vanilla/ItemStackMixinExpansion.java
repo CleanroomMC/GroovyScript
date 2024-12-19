@@ -220,9 +220,8 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
         return withMeta(meta);
     }
 
-    @Nullable
     @Override
-    default String getMark() {
+    default @Nullable String getMark() {
         return grs$getMark();
     }
 

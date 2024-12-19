@@ -15,13 +15,11 @@ public class ClosureHelper {
     private static final Object DUMMY = new Object();
     private static Field h;
 
-    @Nullable
-    public static <T> T call(Closure<T> closure, Object... args) {
+    public static @Nullable <T> T call(Closure<T> closure, Object... args) {
         return closure.call(args);
     }
 
-    @Nullable
-    public static <T> T call(Class<T> expectedType, Closure<?> closure, Object... args) {
+    public static @Nullable <T> T call(Class<T> expectedType, Closure<?> closure, Object... args) {
         Object o = call(closure, args);
         if (o != null && expectedType.isAssignableFrom(o.getClass())) {
             return (T) o;
@@ -73,8 +71,7 @@ public class ClosureHelper {
      * @return the underlying closure or null if there is no closure
      */
     @GroovyBlacklist
-    @Nullable
-    public static Closure<?> getUnderlyingClosure(Object functionalInterface) {
+    public static @Nullable Closure<?> getUnderlyingClosure(Object functionalInterface) {
         if (!(functionalInterface instanceof Proxy)) return null; // not a closure
         if (h == null) {
             try {
@@ -100,7 +97,7 @@ public class ClosureHelper {
                 return (Closure<?>) convertedClosure.getDelegate();
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            GroovyLog.get().exception(e);
+            GroovyLog.get().exception("A reflection error occurred while trying to obtain a closure from a lambda.", e);
         }
         return null;
     }
