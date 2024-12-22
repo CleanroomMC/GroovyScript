@@ -25,29 +25,15 @@ public class Crusher extends StandardListRegistry<LightningCrusherRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:saddle')"))
     public boolean removeByInput(IIngredient input) {
-        return getRecipes().removeIf(r -> {
-            if (r.getInput().stream().anyMatch(input)) {
-                addBackup(r);
-                return true;
-            }
-            return false;
-        });
+        return getRecipes().removeIf(r -> r.getInput().stream().anyMatch(input) && doAddBackup(r));
     }
 
     @MethodDescription(example = @Example("item('minecraft:redstone')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> {
-            if (output.test(r.getOutput())) {
-                addBackup(r);
-                return true;
-            }
-            return false;
-        });
+        return getRecipes().removeIf(r -> output.test(r.getOutput()) && doAddBackup(r));
     }
 
-    @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:nether_star'))"),
-    })
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:nether_star'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
