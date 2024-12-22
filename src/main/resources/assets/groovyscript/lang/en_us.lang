@@ -2108,7 +2108,7 @@ groovyscript.wiki.threng.etcher.top.value=Sets the top slot of the recipe
 groovyscript.wiki.threng.etcher.bottom.value=Sets the bottom slot of the recipe
 
 
-# Lightningcraft
+# LightningCraft
 groovyscript.wiki.lightningcraft.crusher.title=Lightning Crusher
 groovyscript.wiki.lightningcraft.crusher.description=Consumes LE to convert 1 input itemstack into an output itemstack
 

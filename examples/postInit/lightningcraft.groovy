@@ -33,7 +33,6 @@ mods.lightningcraft.infusion.recipeBuilder()
     .input(item('minecraft:clay'), item('minecraft:gold_ingot'), item('minecraft:potion').withNbt(['Potion': 'minecraft:leaping']))
     .output(item('minecraft:diamond_block'))
     .le(200)
-    .nbtSensitive()
     .register()
 
 
