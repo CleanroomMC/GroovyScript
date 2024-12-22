@@ -58,7 +58,7 @@ public class Crusher extends StandardListRegistry<LightningCrusherRecipe> {
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Lightningcraft Crusher recipe";
+            return "Error adding LightningCraft Crusher recipe";
         }
 
         @Override
