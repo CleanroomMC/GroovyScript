@@ -88,6 +88,7 @@ final Map<String, List<String>> mod_dependencies = [
         'lemonlib-306926:2639879'                             : [debug_arcane_world, debug_arcane_world_rotn],
         'libnine-322344:3509087'                              : [debug_lazy_ae2],
         'libvulpes-236541:3801015'                            : [debug_advanced_rocketry],
+        'lightningcraft-237422:2872478'                       : [debug_lightningcraft],
         'llibrary-243298:2504999'                             : [debug_ice_and_fire_old, debug_ice_and_fire_rotn],
         'magneticraft-224808:3791484'                         : [debug_magneticraft],
         'mantle-74924:2713386'                                : [debug_inspirations, debug_tinkers_construct],
