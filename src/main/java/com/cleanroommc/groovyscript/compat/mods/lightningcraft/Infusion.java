@@ -23,13 +23,7 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
 
     @MethodDescription(example = @Example("item('minecraft:diamond')"))
     public boolean removeByOutput(IIngredient output) {
-        return getRecipes().removeIf(r -> {
-            if (output.test(r.getOutput())) {
-                addBackup(r);
-                return true;
-            }
-            return false;
-        });
+        return getRecipes().removeIf(r -> output.test(r.getOutput()) && doAddBackup(r));
     }
 
     @RecipeBuilderDescription(example = {
@@ -44,7 +38,7 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightningInfusionRecipe> {
 
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0), defaultValue = "-1")
         private int le = -1;
 
         @Property(defaultValue = "determined automatically based on the input items")

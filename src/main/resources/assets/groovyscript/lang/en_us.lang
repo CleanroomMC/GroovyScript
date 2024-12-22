@@ -1490,6 +1490,7 @@ groovyscript.wiki.lightningcraft.infusion.description=Consumes LE to convert up 
 groovyscript.wiki.lightningcraft.infusion.le.value=Sets the LE cost for the recipe
 groovyscript.wiki.lightningcraft.infusion.nbtSensitive.value=Sets whether the recipe inputs require a specific NBT tag
 
+
 # Magneticraft
 groovyscript.wiki.magneticraft.crushing_table.title=Crushing Table
 groovyscript.wiki.magneticraft.crushing_table.description=Converts an input itemstack into an output itemstack when placed on top of the Crushing Table and interacted with by a Hammer which has
