@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
@@ -24,6 +25,10 @@ public class SanguineInfusion extends StandardListRegistry<RecipeSanguineInfusio
 
     @SuppressWarnings("rawtypes")
     private final AbstractReloadableStorage<Class> blacklistStorage = new AbstractReloadableStorage<>();
+
+    public SanguineInfusion() {
+        super(Alias.generateOfClassAnd(SanguineInfusion.class, "Infusion"));
+    }
 
     private static boolean containsInput(IIngredient input, List<Pair<Ingredient, Integer>> list) {
         for (var pair : list) {
