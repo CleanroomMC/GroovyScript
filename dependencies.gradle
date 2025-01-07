@@ -167,7 +167,7 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:angry-pixel-the-betweenlands-mod-243363:4479688')
-    if (project.debug_betweenlands) {
+    if (project.debug_betweenlands.toBoolean()) {
         // TODO: allow development toggling of the coremod
         //  until this is resolved, download and install the jar from
         //  https://www.curseforge.com/minecraft/mc-mods/angry-pixel-the-betweenlands-mod/files/4479688
