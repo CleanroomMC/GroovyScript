@@ -72,10 +72,9 @@ public class Evaporator extends StandardListRegistry<EvaporatorRecipe> {
             validateFluids(msg, 1, 1, 0, 0);
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public EvaporatorRecipe register() {
+        public @Nullable EvaporatorRecipe register() {
             if (!validate()) return null;
             EvaporatorRecipe recipe = new EvaporatorRecipe(fluidInput.get(0), output.get(0));
             ModSupport.ALCHEMISTRY.get().evaporator.add(recipe);

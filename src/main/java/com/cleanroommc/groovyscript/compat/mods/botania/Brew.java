@@ -170,10 +170,9 @@ public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
             msg.add(effects.size() < 1, "must have at least 1 potion effect, got " + effects.size());
         }
 
-        @Nullable
         @Override
         @RecipeBuilderRegistrationMethod
-        public vazkii.botania.api.brew.Brew register() {
+        public @Nullable vazkii.botania.api.brew.Brew register() {
             if (!validate()) return null;
             if (name == null) name = key;
             vazkii.botania.api.brew.Brew brew = new vazkii.botania.api.brew.Brew(key, name, color, cost, effects.toArray(new PotionEffect[0]));

@@ -60,15 +60,15 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
     }
 
     private boolean remove(AbstractInfusionRecipe recipe) {
-        if (recipe instanceof BasicInfusionRecipe) addBackup((BasicInfusionRecipe) recipe);
+        if (recipe instanceof BasicInfusionRecipe basicInfusionRecipe) addBackup(basicInfusionRecipe);
         return InfusionRecipeRegistry.recipes.removeIf(rec -> rec.getUniqueRecipeId() == recipe.getUniqueRecipeId());
     }
 
     @MethodDescription(example = @Example("item('minecraft:diamond_ore')"))
     public void removeByInput(ItemStack input) {
         InfusionRecipeRegistry.recipes.removeIf(r -> {
-            if (r instanceof BasicInfusionRecipe && r.getInput().matchCrafting(input)) {
-                addBackup((BasicInfusionRecipe) r);
+            if (r instanceof BasicInfusionRecipe basicInfusionRecipe && r.getInput().matchCrafting(input)) {
+                addBackup(basicInfusionRecipe);
                 return true;
             }
             return false;
@@ -89,8 +89,8 @@ public class InfusionAltar extends VirtualizedRegistry<BasicInfusionRecipe> {
     @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         InfusionRecipeRegistry.recipes.removeIf(r -> {
-            if (r instanceof BasicInfusionRecipe) {
-                addBackup((BasicInfusionRecipe) r);
+            if (r instanceof BasicInfusionRecipe basicInfusionRecipe) {
+                addBackup(basicInfusionRecipe);
                 return true;
             }
             return false;

@@ -204,8 +204,7 @@ public class Builder {
         return parts;
     }
 
-    @NotNull
-    private static List<String> getOutputs(List<String> parts) {
+    private static @NotNull List<String> getOutputs(List<String> parts) {
         List<String> output = new ArrayList<>();
         for (int i = 0; i < parts.size(); i++) {
             String part = parts.get(i);

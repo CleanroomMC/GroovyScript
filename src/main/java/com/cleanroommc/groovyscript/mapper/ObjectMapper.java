@@ -70,8 +70,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         this.textureBinder = textureBinder;
     }
 
-    @Nullable
-    public T invoke(boolean silent, String s, Object... args) {
+    public @Nullable T invoke(boolean silent, String s, Object... args) {
         Result<T> t = Objects.requireNonNull(handler.parse(s, args), "Object mapper must return a non null result!");
         if (t.hasError()) {
             if (!silent) {
@@ -108,6 +107,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         return Collections.singleton(this.name);
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -181,7 +181,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
         private Completer completer;
         private String documentation;
-        private TextureBinder textureBinder;
+        private TextureBinder<T> textureBinder;
 
         @ApiStatus.Internal
         public Builder(String name, Class<T> returnType) {

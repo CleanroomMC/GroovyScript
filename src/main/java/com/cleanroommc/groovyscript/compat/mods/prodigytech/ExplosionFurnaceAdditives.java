@@ -117,8 +117,8 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
         @Override
         public void register() {
-            if (this.input instanceof OreDictIngredient) {
-                ExplosionFurnaceManager.addExplosive(((OreDictIngredient) this.input).getOreDict(), this.value);
+            if (this.input instanceof OreDictIngredient oreDictIngredient) {
+                ExplosionFurnaceManager.addExplosive(oreDictIngredient.getOreDict(), this.value);
             } else {
                 for (ItemStack it : this.input.getMatchingStacks()) {
                     ExplosionFurnaceManager.addExplosive(it, this.value);
@@ -128,8 +128,8 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
         @Override
         public void unregister() {
-            if (this.input instanceof OreDictIngredient) {
-                ExplosionFurnaceManager.removeExplosive(((OreDictIngredient) this.input).getOreDict());
+            if (this.input instanceof OreDictIngredient oreDictIngredient) {
+                ExplosionFurnaceManager.removeExplosive(oreDictIngredient.getOreDict());
             } else {
                 for (ItemStack it : this.input.getMatchingStacks()) {
                     ExplosionFurnaceManager.removeExplosive(it);
@@ -177,8 +177,8 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
         @Override
         public void register() {
-            if (this.input instanceof OreDictIngredient) {
-                ExplosionFurnaceManager.addDampener(((OreDictIngredient) this.input).getOreDict(), this.value);
+            if (this.input instanceof OreDictIngredient oreDictIngredient) {
+                ExplosionFurnaceManager.addDampener(oreDictIngredient.getOreDict(), this.value);
             } else {
                 for (ItemStack it : this.input.getMatchingStacks()) {
                     ExplosionFurnaceManager.addDampener(it, this.value);
@@ -188,8 +188,8 @@ public class ExplosionFurnaceAdditives extends VirtualizedRegistry<ExplosionFurn
 
         @Override
         public void unregister() {
-            if (this.input instanceof OreDictIngredient) {
-                ExplosionFurnaceManager.removeDampener(((OreDictIngredient) this.input).getOreDict());
+            if (this.input instanceof OreDictIngredient oreDictIngredient) {
+                ExplosionFurnaceManager.removeDampener(oreDictIngredient.getOreDict());
             } else {
                 for (ItemStack it : this.input.getMatchingStacks()) {
                     ExplosionFurnaceManager.removeDampener(it);

@@ -52,8 +52,7 @@ public class IngredientHelper {
         return (IIngredient) fluidStack;
     }
 
-    @NotNull
-    public static NonNullList<IIngredient> toNonNullList(IngredientList<IIngredient> list) {
+    public static @NotNull NonNullList<IIngredient> toNonNullList(IngredientList<IIngredient> list) {
         NonNullList<IIngredient> ingredients = NonNullList.create();
         for (IIngredient i : list) {
             if (i == null) ingredients.add(IIngredient.EMPTY);
@@ -62,8 +61,7 @@ public class IngredientHelper {
         return ingredients;
     }
 
-    @NotNull
-    public static NonNullList<Ingredient> toIngredientNonNullList(Collection<IIngredient> list) {
+    public static @NotNull NonNullList<Ingredient> toIngredientNonNullList(Collection<IIngredient> list) {
         NonNullList<Ingredient> ingredients = NonNullList.create();
         for (IIngredient i : list) {
             if (i == null) ingredients.add(Ingredient.EMPTY);
@@ -218,24 +216,21 @@ public class IngredientHelper {
         return true;
     }
 
-    @NotNull
-    public static Collection<IIngredient> trim(@Nullable Collection<IIngredient> ingredients) {
+    public static @NotNull Collection<IIngredient> trim(@Nullable Collection<IIngredient> ingredients) {
         if (ingredients == null) return Collections.emptyList();
         if (ingredients.isEmpty()) return ingredients;
         ingredients.removeIf(IngredientHelper::isEmpty);
         return ingredients;
     }
 
-    @NotNull
-    public static Collection<ItemStack> trimItems(@Nullable Collection<ItemStack> ingredients) {
+    public static @NotNull Collection<ItemStack> trimItems(@Nullable Collection<ItemStack> ingredients) {
         if (ingredients == null) return Collections.emptyList();
         if (ingredients.isEmpty()) return ingredients;
         ingredients.removeIf(IngredientHelper::isEmpty);
         return ingredients;
     }
 
-    @NotNull
-    public static Collection<FluidStack> trimFluids(@Nullable Collection<FluidStack> ingredients) {
+    public static @NotNull Collection<FluidStack> trimFluids(@Nullable Collection<FluidStack> ingredients) {
         if (ingredients == null) return Collections.emptyList();
         if (ingredients.isEmpty()) return ingredients;
         ingredients.removeIf(IngredientHelper::isEmpty);
@@ -275,8 +270,7 @@ public class IngredientHelper {
     /**
      * Useful when the item can be empty or null, but only want to copy non empty items
      */
-    @NotNull
-    public static ItemStack copy(@Nullable ItemStack item) {
+    public static @NotNull ItemStack copy(@Nullable ItemStack item) {
         return item == null || item == ItemStack.EMPTY ? ItemStack.EMPTY : item.copy();
     }
 

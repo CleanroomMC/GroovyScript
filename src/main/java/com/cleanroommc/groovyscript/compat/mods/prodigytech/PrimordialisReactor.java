@@ -27,8 +27,8 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
     }
 
     private void addRecipeBase(IIngredient x) {
-        if (x instanceof OreDictIngredient) {
-            PrimordialisReactorManager.addInput(((OreDictIngredient) x).getOreDict());
+        if (x instanceof OreDictIngredient oreDictIngredient) {
+            PrimordialisReactorManager.addInput(oreDictIngredient.getOreDict());
         } else {
             for (ItemStack it : x.getMatchingStacks()) {
                 PrimordialisReactorManager.addInput(it);
@@ -37,8 +37,8 @@ public class PrimordialisReactor extends VirtualizedRegistry<IIngredient> {
     }
 
     private boolean removeRecipeBase(IIngredient x) {
-        if (x instanceof OreDictIngredient) {
-            PrimordialisReactorManager.removeInput(((OreDictIngredient) x).getOreDict());
+        if (x instanceof OreDictIngredient oreDictIngredient) {
+            PrimordialisReactorManager.removeInput(oreDictIngredient.getOreDict());
         } else {
             for (ItemStack it : x.getMatchingStacks()) {
                 PrimordialisReactorManager.removeInput(it);

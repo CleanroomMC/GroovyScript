@@ -39,11 +39,9 @@ import java.util.stream.Collectors;
 public class GroovyLSCompilationUnit extends CompilationUnit {
 
     private final ILanguageServerContext languageServerContext;
-    @Nullable
-    private ASTNodeVisitor visitor;
+    private @Nullable ASTNodeVisitor visitor;
 
-    @Nullable
-    private URI previousContext;
+    private @Nullable URI previousContext;
 
     public GroovyLSCompilationUnit(
             CompilerConfiguration config,
