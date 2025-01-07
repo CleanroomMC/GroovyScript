@@ -204,6 +204,4 @@ dependencies {
         runtimeOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
     }
 
-    runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
-
 }
