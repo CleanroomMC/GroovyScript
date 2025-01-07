@@ -55,8 +55,8 @@ public class SteepingPot extends StandardListRegistry<SteepingPotRecipes> {
     }
 
     /**
-     * There is currently no support for output recipes in JEI - they throw a NPE error instead of appearing.
-     * As such, this feature of the RecipeBuilder is commented out
+     * There is currently no support for item output recipes in JEI - they throw an NPE instead of appearing.
+     * As such, this functionality and corresponding examples of the RecipeBuilder is commented out.
      */
     @RecipeBuilderDescription(example = {
 //            @Example(".input(item('minecraft:clay')).fluidInput(fluid('water')).output(item('minecraft:diamond'))"),
