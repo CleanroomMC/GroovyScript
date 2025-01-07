@@ -5,10 +5,9 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.primal_tech.WoodenBasinRecipesAccessor;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
-import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
@@ -16,9 +15,7 @@ import primal_tech.recipes.WoodenBasinRecipes;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RegistryDescription(
         admonition = @Admonition(type = Admonition.Type.WARNING, value = "groovyscript.wiki.primal_tech.wooden_basin.note0")
@@ -96,13 +93,7 @@ public class WoodenBasin extends StandardListRegistry<WoodenBasinRecipes> {
         public @Nullable WoodenBasinRecipes register() {
             if (!validate()) return null;
             WoodenBasinRecipes recipe = null;
-            List<List<Object>> cartesian = Lists.cartesianProduct(
-                    input.stream()
-                            .map(
-                                    x -> x instanceof OreDictIngredient ore
-                                            ? Collections.singletonList(ore.getOreDict())
-                                            : Arrays.asList(x.toMcIngredient().getMatchingStacks()))
-                            .collect(Collectors.toList()));
+            List<List<Object>> cartesian = IngredientHelper.cartesianProductOres(input);
             for (List<Object> entry : cartesian) {
                 recipe = WoodenBasinRecipesAccessor.createWoodenBasinRecipes(output.get(0), fluidInput.get(0), entry.toArray());
                 ModSupport.PRIMAL_TECH.get().woodenBasin.add(recipe);

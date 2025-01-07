@@ -4,18 +4,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
-import com.google.common.collect.Lists;
 import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.packager.RecipePackager;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RegistryDescription
 public class Packager extends StandardListRegistry<RecipePackager> {
@@ -80,7 +78,7 @@ public class Packager extends StandardListRegistry<RecipePackager> {
         public @Nullable RecipePackager register() {
             if (!validate()) return null;
             RecipePackager recipe = null;
-            List<List<ItemStack>> cartesian = Lists.cartesianProduct(input.stream().map(x -> Arrays.asList(x.toMcIngredient().getMatchingStacks())).collect(Collectors.toList()));
+            List<List<ItemStack>> cartesian = IngredientHelper.cartesianProductItemStacks(input);
             for (List<ItemStack> stacks : cartesian) {
                 recipe = new RecipePackager(output.get(0), stacks.toArray(new ItemStack[0]));
                 ModSupport.CYCLIC.get().packager.add(recipe);

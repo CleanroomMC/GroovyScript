@@ -4,18 +4,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
-import com.google.common.collect.Lists;
 import lumien.randomthings.recipes.imbuing.ImbuingRecipe;
 import lumien.randomthings.recipes.imbuing.ImbuingRecipeHandler;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @RegistryDescription
 public class Imbuing extends StandardListRegistry<ImbuingRecipe> {
@@ -77,7 +75,7 @@ public class Imbuing extends StandardListRegistry<ImbuingRecipe> {
         public @Nullable ImbuingRecipe register() {
             if (!validate()) return null;
             ImbuingRecipe recipe = null;
-            var cartesian = Lists.cartesianProduct(input.stream().map(IIngredient::toMcIngredient).map(Ingredient::getMatchingStacks).map(Arrays::asList).collect(Collectors.toList()));
+            List<List<ItemStack>> cartesian = IngredientHelper.cartesianProductItemStacks(input);
             for (var toImbue : mainInput.getMatchingStacks()) {
                 for (var stacks : cartesian) {
                     recipe = new ImbuingRecipe(toImbue, output.get(0), stacks.toArray(new ItemStack[0]));

@@ -4,18 +4,16 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
-import com.google.common.collect.Lists;
 import com.lothrazar.cyclicmagic.CyclicContent;
 import com.lothrazar.cyclicmagic.block.solidifier.RecipeSolidifier;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RegistryDescription
 public class Solidifier extends StandardListRegistry<RecipeSolidifier> {
@@ -83,7 +81,7 @@ public class Solidifier extends StandardListRegistry<RecipeSolidifier> {
         public @Nullable RecipeSolidifier register() {
             if (!validate()) return null;
             RecipeSolidifier recipe = null;
-            List<List<ItemStack>> cartesian = Lists.cartesianProduct(input.stream().map(x -> Arrays.asList(x.toMcIngredient().getMatchingStacks())).collect(Collectors.toList()));
+            List<List<ItemStack>> cartesian = IngredientHelper.cartesianProductItemStacks(input);
             for (List<ItemStack> stacks : cartesian) {
                 recipe = new RecipeSolidifier(stacks.toArray(new ItemStack[0]), output.get(0), fluidInput.get(0).getFluid().getName(), fluidInput.get(0).amount);
                 ModSupport.CYCLIC.get().solidifier.add(recipe);

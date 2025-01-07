@@ -1,0 +1,16 @@
+{
+  "package": "com.cleanroommc.groovyscript.core.mixin.thebetweenlands",
+  "refmap": "mixins.groovyscript.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "CrabPotFilterRecipeBubblerAccessor",
+    "CrabPotFilterRecipeSiltAccessor",
+    "DruidAltarRecipeAccessor",
+    "PestleAndMortarRecipeAccessor",
+    "PurifierRecipeAccessor",
+    "SmokingRackRecipeAccessor",
+    "SteepingPotRecipesAccessor"
+  ]
+}
