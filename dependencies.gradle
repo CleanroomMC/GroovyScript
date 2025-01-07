@@ -166,6 +166,14 @@ dependencies {
         }
     }
 
+    compileOnly rfg.deobf('curse.maven:angry-pixel-the-betweenlands-mod-243363:4479688')
+    if (project.debug_betweenlands) {
+        // TODO: allow development toggling of the coremod
+        //  until this is resolved, download and install the jar from
+        //  https://www.curseforge.com/minecraft/mc-mods/angry-pixel-the-betweenlands-mod/files/4479688
+        // runtimeOnly rfg.deobf('curse.maven:angry-pixel-the-betweenlands-mod-243363:4479688')
+    }
+
     compileOnly 'com.enderio:endercore:0.5.78'
     compileOnly 'crazypants:enderio:5.3.72'
     if (project.debug_enderio.toBoolean()) {
