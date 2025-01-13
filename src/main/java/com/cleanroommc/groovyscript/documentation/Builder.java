@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.helper.DescriptorHelper;
 import com.google.common.collect.ComparisonChain;
 import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
@@ -37,10 +38,10 @@ public class Builder {
     private final Map<String, List<RecipeBuilderMethod>> methods;
     private final List<Method> registrationMethods;
 
-    public Builder(Method builderMethod, String reference, String baseTranslationKey) {
+    public Builder(Method builderMethod, RecipeBuilderDescription annotation, String reference, String baseTranslationKey) {
         this.builderMethod = builderMethod;
         this.reference = reference;
-        this.annotation = builderMethod.getAnnotation(RecipeBuilderDescription.class);
+        this.annotation = annotation;
         Class<?> builderClass = builderMethod.getReturnType();
         this.fields = gatherFields(builderClass, annotation, baseTranslationKey);
         this.methods = gatherMethods(builderClass, fields);
@@ -483,22 +484,10 @@ public class Builder {
     }
 
 
-    private static class RecipeBuilderMethod implements Comparable<RecipeBuilderMethod> {
-
-        private final Method method;
-        private final RecipeBuilderMethodDescription annotation;
+    private static class RecipeBuilderMethod extends DescriptorHelper.MethodAnnotation<RecipeBuilderMethodDescription> implements Comparable<RecipeBuilderMethod> {
 
         public RecipeBuilderMethod(Method method) {
-            this.method = method;
-            this.annotation = method.getAnnotation(RecipeBuilderMethodDescription.class);
-        }
-
-        public Method getMethod() {
-            return method;
-        }
-
-        public RecipeBuilderMethodDescription getAnnotation() {
-            return annotation;
+            super(method, method.getAnnotation(RecipeBuilderMethodDescription.class));
         }
 
         public List<String> targetFields() {
