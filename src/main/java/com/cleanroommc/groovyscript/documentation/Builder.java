@@ -247,7 +247,7 @@ public class Builder {
     }
 
     public List<String> annotations() {
-        return Arrays.stream(annotation.example()).flatMap(example -> Arrays.stream(example.annotations())).map(Documentation::translate).collect(Collectors.toList());
+        return Arrays.stream(annotation.example()).flatMap(example -> Arrays.stream(example.annotations())).map(LangHelper::translate).collect(Collectors.toList());
     }
 
     public String documentMethods() {
@@ -372,14 +372,14 @@ public class Builder {
         }
 
         private static String parseComparisonRequirements(Comp comp, EnumSet<Comp.Type> usedTypes) {
-            return usedTypes.stream().sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
+            return usedTypes.stream().sorted().map(type -> LangHelper.translate(type.getKey(), switch (type) {
                 case GT -> comp.gt();
                 case GTE -> comp.gte();
                 case EQ -> comp.eq();
                 case LTE -> comp.lte();
                 case LT -> comp.lt();
                 case NOT -> comp.not();
-                case UNI -> Documentation.translate(comp.unique());
+                case UNI -> LangHelper.translate(comp.unique());
             })).collect(Collectors.collectingAndThen(Collectors.toList(), SERIAL_COMMA_LIST));
         }
 
@@ -439,7 +439,7 @@ public class Builder {
             }
             return Arrays.stream(comparison.get())
                     .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
-                    .map(x -> Documentation.translate(x.type().getKey(), x.value()))
+                    .map(x -> LangHelper.translate(x.type().getKey(), x.value()))
                     .collect(Collectors.joining(String.format(" %s ", I18n.format("groovyscript.wiki.and"))));
         }
 
@@ -452,7 +452,7 @@ public class Builder {
                     .map(Property::requirement)
                     .filter(x -> !x.isEmpty())
                     .findFirst()
-                    .map(Documentation::translate)
+                    .map(LangHelper::translate)
                     .orElse("");
         }
 
@@ -470,7 +470,7 @@ public class Builder {
         }
 
         public String getDescription() {
-            return "- " + getFieldTypeInlineCode() + Documentation.ensurePeriod(Documentation.translate(getLangKey()));
+            return "- " + getFieldTypeInlineCode() + LangHelper.ensurePeriod(LangHelper.translate(getLangKey()));
         }
 
         @Override

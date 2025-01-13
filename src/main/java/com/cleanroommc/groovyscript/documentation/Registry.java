@@ -144,12 +144,12 @@ public class Registry {
     }
 
     public String getTitle() {
-        return Documentation.translate(description.title().isEmpty() ? String.format("%s.title", baseTranslationKey) : description.title());
+        return LangHelper.translate(description.title().isEmpty() ? String.format("%s.title", baseTranslationKey) : description.title());
     }
 
     public String getDescription() {
-        return Documentation.ensurePeriod(
-                Documentation.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
+        return LangHelper.ensurePeriod(
+                LangHelper.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
                         .replace("\"", "\\\""));
     }
 
@@ -214,7 +214,7 @@ public class Registry {
                             .title(note.title())
                             .hasTitle(note.hasTitle())
                             .format(note.format())
-                            .note(Documentation.ensurePeriod(Documentation.translate(note.value())))
+                            .note(LangHelper.ensurePeriod(LangHelper.translate(note.value())))
                             .generate());
             out.append("\n\n");
         }
@@ -284,7 +284,7 @@ public class Registry {
             out.append("## ").append(I18n.format("groovyscript.wiki.editing_values")).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.VALUE))).append("\n");
         }
         if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilderMethods.isEmpty()) {
-            out.append("## ").append(Documentation.translate(description.category().adding())).append("\n\n");
+            out.append("## ").append(LangHelper.translate(description.category().adding())).append("\n\n");
             if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
                 out.append(documentMethods(methods.get(MethodDescription.Type.ADDITION))).append("\n");
             }
@@ -293,10 +293,10 @@ public class Registry {
             }
         }
         if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) {
-            out.append("## ").append(Documentation.translate(description.category().removing())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.REMOVAL))).append("\n");
+            out.append("## ").append(LangHelper.translate(description.category().removing())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.REMOVAL))).append("\n");
         }
         if (!methods.get(MethodDescription.Type.QUERY).isEmpty()) {
-            out.append("## ").append(Documentation.translate(description.category().query())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.QUERY), true)).append("\n");
+            out.append("## ").append(LangHelper.translate(description.category().query())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.QUERY), true)).append("\n");
         }
         out.append("\n");
 
@@ -350,7 +350,7 @@ public class Registry {
 
         return String.format(
                 "- %s:\n\n%s",
-                PERIOD_END_PATTERN.matcher(Documentation.translate(lang)).replaceAll(""),
+                PERIOD_END_PATTERN.matcher(LangHelper.translate(lang)).replaceAll(""),
                 new CodeBlockBuilder()
                         .line(methodExample(method.getMethod(), Exporter.simpleSignature(method.getMethod(), types)))
                         .indentation(1)
