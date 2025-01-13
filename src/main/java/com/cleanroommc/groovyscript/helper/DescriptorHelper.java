@@ -43,7 +43,7 @@ public class DescriptorHelper {
         PRIMITIVE_TO_TERM.put(void.class, "V");
         PRIMITIVE_TO_TERM.put(boolean.class, "Z");
         var objectMethods = new ObjectOpenHashSet<>(Arrays.asList(Object.class.getMethods()));
-        DEFAULT_EXCLUSION = method -> method.isBridge() || !Modifier.isPublic(method.getModifiers()) || objectMethods.contains(method) || method.isAnnotationPresent(GroovyBlacklist.class);
+        DEFAULT_EXCLUSION = m -> m.isBridge() || !Modifier.isPublic(m.getModifiers()) || objectMethods.contains(m) || m.isAnnotationPresent(GroovyBlacklist.class);
     }
 
     /**
