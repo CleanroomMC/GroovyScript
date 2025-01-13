@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.techreborn;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -9,7 +8,10 @@ import org.jetbrains.annotations.Nullable;
 import techreborn.api.Reference;
 import techreborn.api.recipe.machines.VacuumFreezerRecipe;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = {
+        @MethodDescription(method = "removeByInput", example = @Example("item('techreborn:dynamiccell').withNbt(['Fluid': ['FluidName': 'water', 'Amount': 1000]])")),
+        @MethodDescription(method = "removeByOutput", example = @Example("item('minecraft:packed_ice')"))
+}))
 public class VacuumFreezer extends AbstractGenericTechRebornRegistry {
 
     @RecipeBuilderDescription(example = {
@@ -23,18 +25,6 @@ public class VacuumFreezer extends AbstractGenericTechRebornRegistry {
     @Override
     public String reference() {
         return Reference.VACUUM_FREEZER_RECIPE;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('techreborn:dynamiccell').withNbt(['Fluid': ['FluidName': 'water', 'Amount': 1000]])"))
-    public void removeByInput(IIngredient input) {
-        super.removeByInput(input);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:packed_ice')"))
-    public void removeByOutput(IIngredient output) {
-        super.removeByOutput(output);
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

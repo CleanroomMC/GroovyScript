@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileChemicalReactor;
@@ -10,7 +9,10 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 @RegistryDescription(admonition = {
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.input_slots", type = Admonition.Type.WARNING),
-})
+}, override = @MethodOverride(method = {
+        @MethodDescription(method = "removeByOutput", example = @Example("item('minecraft:leather_helmet')")),
+        @MethodDescription(method = "removeByInput", example = @Example("item('minecraft:bone')"))
+}))
 public class ChemicalReactor extends BaseRegistry {
 
     @RecipeBuilderDescription(
@@ -22,18 +24,6 @@ public class ChemicalReactor extends BaseRegistry {
     @Override
     protected Class<? extends TileMultiblockMachine> getMachineClass() {
         return TileChemicalReactor.class;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:leather_helmet')"))
-    public boolean removeByOutput(IIngredient output) {
-        return super.removeByOutput(output);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:bone')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
     }
 
     @Property(property = "input", comp = @Comp(lte = 8, unique = "groovyscript.wiki.advancedrocketry.input.required"))
