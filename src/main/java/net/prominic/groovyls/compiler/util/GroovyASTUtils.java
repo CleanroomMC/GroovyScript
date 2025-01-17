@@ -469,10 +469,10 @@ public class GroovyASTUtils {
                 name,
                 Modifier.PUBLIC,
                 ClassHelper.OBJECT_TYPE,
-                ArrayUtils.map(
+                closure.getParameterTypes() != null ? ArrayUtils.map(
                         closure.getParameterTypes(),
                         c -> new Parameter(ClassHelper.makeCached(c), ""),
-                        new Parameter[closure.getParameterTypes().length]),
+                        new Parameter[closure.getParameterTypes().length]) : new Parameter[0],
                 null,
                 null);
         method.setDeclaringClass(ClassHelper.makeCached(declarer));
