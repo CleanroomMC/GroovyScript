@@ -51,10 +51,13 @@ public class ObjectMapper<T> extends AbstractObjectMapper<T> {
         this.handler = handler;
         this.defaultValue = defaultValue;
         this.tooltip = tooltip;
-        this.paramTypes = paramTypes;
         this.completer = completer;
         this.documentation = documentation;
         this.textureBinder = textureBinder;
+        clearSignatures();
+        for (Class<?>[] signature : paramTypes) {
+            addSignature(signature);
+        }
     }
 
     @Override
