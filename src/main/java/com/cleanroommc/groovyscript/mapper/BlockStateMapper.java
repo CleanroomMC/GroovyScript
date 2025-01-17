@@ -25,6 +25,9 @@ public class BlockStateMapper extends AbstractObjectMapper<IBlockState> {
 
     protected BlockStateMapper(String name, GroovyContainer<?> mod) {
         super(name, mod, IBlockState.class);
+        addSignature(String.class, int.class);
+        addSignature(String.class, String[].class);
+        this.documentation = docOfType("block state");
     }
 
     @Override

@@ -488,7 +488,7 @@ public class CompletionProvider extends DocProvider {
             String name = entry.getKey();
             if (!name.toLowerCase(Locale.ENGLISH).contains(memberNamePrefix) || existingNames.contains(name)) return null;
             existingNames.add(name);
-            if (entry.getValue() instanceof ObjectMapper<?>goh) {
+            if (entry.getValue() instanceof AbstractObjectMapper<?>goh) {
                 for (MethodNode method : goh.getMethodNodes()) {
                     var item = CompletionItemFactory.createCompletion(method, goh.getName(), astContext);
                     item.setLabelDetails(getMethodNodeDetails(method));

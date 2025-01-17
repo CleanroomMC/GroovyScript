@@ -337,7 +337,7 @@ public class GroovyASTUtils {
             List<MethodNode> mn = new ArrayList<>();
             if (methodCallExpr.isImplicitThis()) {
                 Object o = context.getLanguageServerContext().getSandbox().getBindings().get(node.getMethodAsString());
-                if (o instanceof ObjectMapper<?>goh) {
+                if (o instanceof AbstractObjectMapper<?>goh) {
                     mn.addAll(goh.getMethodNodes());
                 } else if (o instanceof Closure<?>closure) {
                     mn.add(methodNodeOfClosure(node.getMethodAsString(), closure));
