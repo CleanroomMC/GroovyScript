@@ -22,7 +22,6 @@ package net.prominic.groovyls.compiler.util;
 import com.cleanroommc.groovyscript.api.Hidden;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.sandbox.Preprocessor;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
@@ -469,10 +468,12 @@ public class GroovyASTUtils {
                 name,
                 Modifier.PUBLIC,
                 ClassHelper.OBJECT_TYPE,
-                closure.getParameterTypes() != null ? ArrayUtils.map(
-                        closure.getParameterTypes(),
-                        c -> new Parameter(ClassHelper.makeCached(c), ""),
-                        new Parameter[closure.getParameterTypes().length]) : new Parameter[0],
+                closure.getParameterTypes() != null
+                        ? ArrayUtils.map(
+                                closure.getParameterTypes(),
+                                c -> new Parameter(ClassHelper.makeCached(c), ""),
+                                new Parameter[closure.getParameterTypes().length])
+                        : new Parameter[0],
                 null,
                 null);
         method.setDeclaringClass(ClassHelper.makeCached(declarer));

@@ -20,7 +20,6 @@
 package net.prominic.groovyls.providers;
 
 import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
 import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
