@@ -54,7 +54,7 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
     @MethodDescription(example = @Example("ore('runeEarthB')"))
     public boolean removeByInput(IIngredient... inputs) {
         List<Object> converted = Arrays.stream(inputs)
-                .map(i -> i instanceof OreDictIngredient ? ((OreDictIngredient) i).getOreDict() : i.getMatchingStacks()[0])
+                .map(i -> i instanceof OreDictIngredient oreDictIngredient ? oreDictIngredient.getOreDict() : i.getMatchingStacks()[0])
                 .collect(Collectors.toList());
         if (getRecipes().removeIf(recipe -> {
             boolean found = converted.stream()
@@ -121,8 +121,8 @@ public class RuneAltar extends StandardListRegistry<RecipeRuneAltar> {
                     mana,
                     input.stream()
                             .map(
-                                    i -> i instanceof OreDictIngredient
-                                            ? ((OreDictIngredient) i).getOreDict()
+                                    i -> i instanceof OreDictIngredient oreDictIngredient
+                                            ? oreDictIngredient.getOreDict()
                                             : i.getMatchingStacks()[0])
                             .toArray());
             add(recipe);

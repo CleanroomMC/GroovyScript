@@ -56,9 +56,8 @@ public class InternalModContainer<T extends GroovyPropertyContainer> extends Gro
         return loaded;
     }
 
-    @NotNull
     @Override
-    public Collection<String> getAliases() {
+    public @NotNull Collection<String> getAliases() {
         return aliases;
     }
 

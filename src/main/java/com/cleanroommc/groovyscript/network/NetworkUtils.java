@@ -51,8 +51,7 @@ public class NetworkUtils {
         }
     }
 
-    @Nullable
-    public static FluidStack readFluidStack(PacketBuffer buffer) throws IOException {
+    public static @Nullable FluidStack readFluidStack(PacketBuffer buffer) throws IOException {
         if (buffer.readBoolean()) {
             return null;
         }

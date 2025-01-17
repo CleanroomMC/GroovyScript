@@ -74,6 +74,7 @@ public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe
         });
     }
 
+    @SuppressWarnings("unchecked")
     @MethodDescription(example = @Example("entity('minecraft:chicken')"))
     public boolean removeByEntity(EntityEntry entity) {
         return removeByEntity((Class<? extends EntityLivingBase>) entity.getEntityClass());
@@ -114,6 +115,7 @@ public class RunicShearEntity extends VirtualizedRegistry<RunicShearEntityRecipe
         @Property
         private Function<EntityLivingBase, ItemStack> functionMap;
 
+        @SuppressWarnings("unchecked")
         @RecipeBuilderMethodDescription
         public RecipeBuilder entity(EntityEntry entity) {
             this.entity = (Class<? extends EntityLivingBase>) entity.getEntityClass();

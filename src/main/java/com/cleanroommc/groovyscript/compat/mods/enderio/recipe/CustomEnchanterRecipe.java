@@ -22,15 +22,13 @@ public class CustomEnchanterRecipe extends EnchanterRecipe {
         this.book = RecipeUtils.toThings(book);
     }
 
-    @NotNull
     @Override
-    public Things getLapis() {
+    public @NotNull Things getLapis() {
         return lapis;
     }
 
-    @NotNull
     @Override
-    public Things getBook() {
+    public @NotNull Things getBook() {
         return book;
     }
 

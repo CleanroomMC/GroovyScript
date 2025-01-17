@@ -121,9 +121,8 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
         }
     }
 
-    @NotNull
     @Override
-    public Iterator<ItemStack> iterator() {
+    public @NotNull Iterator<ItemStack> iterator() {
         return Arrays.asList(getMatchingStacks()).listIterator();
     }
 }

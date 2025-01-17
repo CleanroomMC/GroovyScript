@@ -52,9 +52,9 @@ public class ManaInfusion extends StandardListRegistry<RecipeManaInfusion> {
     @MethodDescription(example = @Example("item('minecraft:ender_pearl')"))
     public boolean removeByInput(IIngredient input) {
         if (getRecipes().removeIf(recipe -> {
-            boolean found = recipe.getInput() instanceof ItemStack
-                    ? input.test((ItemStack) recipe.getInput())
-                    : (input instanceof OreDictIngredient && ((OreDictIngredient) input).getOreDict().equals(recipe.getInput()));
+            boolean found = recipe.getInput() instanceof ItemStack itemStack
+                    ? input.test(itemStack)
+                    : (input instanceof OreDictIngredient oreDictIngredient && oreDictIngredient.getOreDict().equals(recipe.getInput()));
             if (found) addBackup(recipe);
             return found;
         })) return true;

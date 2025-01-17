@@ -36,6 +36,7 @@ public interface Result<T> {
     @NotNull
     T getValue();
 
+    @SuppressWarnings("ClassCanBeRecord")
     class Some<T> implements Result<T> {
 
         private final T value;
@@ -60,6 +61,7 @@ public interface Result<T> {
         }
     }
 
+    @SuppressWarnings("ClassCanBeRecord")
     class Error<T> implements Result<T> {
 
         private final String error;

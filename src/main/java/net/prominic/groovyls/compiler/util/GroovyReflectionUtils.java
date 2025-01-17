@@ -11,8 +11,7 @@ import java.util.function.Function;
 
 public class GroovyReflectionUtils {
 
-    @Nullable
-    public static Method resolveMethodFromMethodNode(MethodNode methodNode, ASTContext context) {
+    public static @Nullable Method resolveMethodFromMethodNode(MethodNode methodNode, ASTContext context) {
         for (Method m : methodNode.getDeclaringClass().getTypeClass().getMethods()) {
             if (!GroovySecurityManager.INSTANCE.isValid(m) || !methodNode.getName().equals(m.getName()) || methodNode.getParameters().length != m.getParameterCount()) {
                 continue;
@@ -24,8 +23,7 @@ public class GroovyReflectionUtils {
         return null;
     }
 
-    @Nullable
-    public static Method resolveMethodFromMethodInfo(MethodInfo methodInfo, ASTContext context) {
+    public static @Nullable Method resolveMethodFromMethodInfo(MethodInfo methodInfo, ASTContext context) {
         for (Method m : methodInfo.getClassInfo().loadClass().getMethods()) {
             if (!GroovySecurityManager.INSTANCE.isValid(m) || !methodInfo.getName().equals(m.getName()) || methodInfo.getParameterInfo().length != m.getParameterCount()) {
                 continue;

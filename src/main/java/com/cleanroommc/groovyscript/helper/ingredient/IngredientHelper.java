@@ -2,9 +2,11 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.compat.vanilla.ItemStackMixinExpansion;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
 import groovy.lang.Closure;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +26,12 @@ public class IngredientHelper {
     public static final Closure<Object> REUSE = new LambdaClosure<>(args -> args[0]);
     public static final Closure<Object> NO_RETURN = new LambdaClosure<>(args -> ItemStack.EMPTY);
     public static final Closure<Object> MATCH_NBT = new LambdaClosure<>(args -> ItemStack.EMPTY);
+
+    public static ItemStack damageItem(ItemStack stack, int damage) {
+        // Short.MAX_VALUE is meta wildcard
+        // Items.DIAMOND.getDamage(stack) is guaranteed to return the value of the damage field of stack
+        return ItemStackMixinExpansion.of(stack).withMeta(Math.min(Short.MAX_VALUE - 1, Items.DIAMOND.getDamage(stack) + damage));
+    }
 
     public static boolean isFluid(IIngredient ingredient) {
         return ingredient instanceof FluidStack;
@@ -51,8 +59,7 @@ public class IngredientHelper {
         return (IIngredient) fluidStack;
     }
 
-    @NotNull
-    public static NonNullList<IIngredient> toNonNullList(IngredientList<IIngredient> list) {
+    public static @NotNull NonNullList<IIngredient> toNonNullList(IngredientList<IIngredient> list) {
         NonNullList<IIngredient> ingredients = NonNullList.create();
         for (IIngredient i : list) {
             if (i == null) ingredients.add(IIngredient.EMPTY);
@@ -61,8 +68,7 @@ public class IngredientHelper {
         return ingredients;
     }
 
-    @NotNull
-    public static NonNullList<Ingredient> toIngredientNonNullList(Collection<IIngredient> list) {
+    public static @NotNull NonNullList<Ingredient> toIngredientNonNullList(Collection<IIngredient> list) {
         NonNullList<Ingredient> ingredients = NonNullList.create();
         for (IIngredient i : list) {
             if (i == null) ingredients.add(Ingredient.EMPTY);
@@ -185,24 +191,21 @@ public class IngredientHelper {
         return true;
     }
 
-    @NotNull
-    public static Collection<IIngredient> trim(@Nullable Collection<IIngredient> ingredients) {
+    public static @NotNull Collection<IIngredient> trim(@Nullable Collection<IIngredient> ingredients) {
         if (ingredients == null) return Collections.emptyList();
         if (ingredients.isEmpty()) return ingredients;
         ingredients.removeIf(IngredientHelper::isEmpty);
         return ingredients;
     }
 
-    @NotNull
-    public static Collection<ItemStack> trimItems(@Nullable Collection<ItemStack> ingredients) {
+    public static @NotNull Collection<ItemStack> trimItems(@Nullable Collection<ItemStack> ingredients) {
         if (ingredients == null) return Collections.emptyList();
         if (ingredients.isEmpty()) return ingredients;
         ingredients.removeIf(IngredientHelper::isEmpty);
         return ingredients;
     }
 
-    @NotNull
-    public static Collection<FluidStack> trimFluids(@Nullable Collection<FluidStack> ingredients) {
+    public static @NotNull Collection<FluidStack> trimFluids(@Nullable Collection<FluidStack> ingredients) {
         if (ingredients == null) return Collections.emptyList();
         if (ingredients.isEmpty()) return ingredients;
         ingredients.removeIf(IngredientHelper::isEmpty);
@@ -242,8 +245,7 @@ public class IngredientHelper {
     /**
      * Useful when the item can be empty or null, but only want to copy non empty items
      */
-    @NotNull
-    public static ItemStack copy(@Nullable ItemStack item) {
+    public static @NotNull ItemStack copy(@Nullable ItemStack item) {
         return item == null || item == ItemStack.EMPTY ? ItemStack.EMPTY : item.copy();
     }
 

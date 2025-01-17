@@ -20,8 +20,7 @@ public interface INBTResourceStack extends IResourceStack {
     @Nullable
     NBTTagCompound getNbt();
 
-    @NotNull
-    default NBTTagCompound getOrCreateNbt() {
+    default @NotNull NBTTagCompound getOrCreateNbt() {
         NBTTagCompound nbt = getNbt();
         if (nbt == null) {
             nbt = new NBTTagCompound();
@@ -30,8 +29,7 @@ public interface INBTResourceStack extends IResourceStack {
         return nbt;
     }
 
-    @Nullable
-    default NBTBase getSubTag(String key) {
+    default @Nullable NBTBase getSubTag(String key) {
         NBTTagCompound nbt = getNbt();
         return nbt == null ? null : nbt.getTag(key);
     }

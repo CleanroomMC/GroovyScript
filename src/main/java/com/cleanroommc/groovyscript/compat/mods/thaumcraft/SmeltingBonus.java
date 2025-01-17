@@ -39,9 +39,9 @@ public class SmeltingBonus extends VirtualizedRegistry<ThaumcraftApi.SmeltBonus>
 
     @MethodDescription(description = "groovyscript.wiki.thaumcraft.smelting_bonus.add1", type = MethodDescription.Type.ADDITION)
     public void add(IIngredient in, ItemStack out, float chance) {
-        if (in instanceof OreDictIngredient) {
-            ThaumcraftApi.addSmeltingBonus(((OreDictIngredient) in).getOreDict(), out, chance);
-            addScripted(new ThaumcraftApi.SmeltBonus(((OreDictIngredient) in).getOreDict(), out, chance));
+        if (in instanceof OreDictIngredient oreDictIngredient) {
+            ThaumcraftApi.addSmeltingBonus(oreDictIngredient.getOreDict(), out, chance);
+            addScripted(new ThaumcraftApi.SmeltBonus(oreDictIngredient.getOreDict(), out, chance));
         } else if (in.getMatchingStacks().length == 1) {
             ThaumcraftApi.addSmeltingBonus(in.getMatchingStacks()[0], out, chance);
             addScripted(new ThaumcraftApi.SmeltBonus(in.getMatchingStacks()[0], out, chance));
