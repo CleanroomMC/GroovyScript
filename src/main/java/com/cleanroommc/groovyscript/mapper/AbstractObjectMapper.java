@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
+import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
 import groovy.lang.groovydoc.Groovydoc;
@@ -29,7 +30,6 @@ public abstract class AbstractObjectMapper<T> extends Closure<T> implements INam
     private final List<Class<?>[]> paramTypes;
     protected String documentation = StringUtils.EMPTY;
     private List<MethodNode> methodNodes;
-    private Boolean hasTextureBinder;
 
     protected AbstractObjectMapper(String name, GroovyContainer<?> mod, Class<T> returnType) {
         super(null);
@@ -101,6 +101,15 @@ public abstract class AbstractObjectMapper<T> extends Closure<T> implements INam
      */
     public abstract Result<T> getDefaultValue();
 
+    /**
+     * Adds all possible values this mapper can have at a param position.
+     * For example the `item()` mapper adds all item registry names when the index is 0.
+     *
+     * @param index the index of the param to complete
+     * @param params the values of all current (constant) params of the mapper
+     * @param items a list of completion items
+     */
+    public void provideCompletion(int index, CompletionParams params, Completions items) {}
 
     /**
      * Draws an image representation of the given object. This is used for lsp.

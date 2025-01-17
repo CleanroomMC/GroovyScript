@@ -21,6 +21,7 @@ package net.prominic.groovyls.providers;
 
 import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -181,14 +182,21 @@ public class CompletionProvider extends DocProvider {
                 // TODO completions in file()
                 AbstractObjectMapper<?> mapper = GroovyASTUtils.getMapperOfNode(expr, astContext);
                 if (mapper != null) {
+                    CompletionParams params = CompletionParams.EMPTY;
                     int index = -1;
                     for (int i = 0; i < args.getExpressions().size(); i++) {
-                        if (args.getExpression(i) == node) {
+                        Expression arg = args.getExpression(i);
+                        if (arg instanceof ConstantExpression constArg) {
+                            params = CompletionParams.addParam(params, constArg.getValue());
+                        } else {
+                            params = CompletionParams.addUnparsableParam(params);
+                        }
+                        if (arg == node) {
                             index = i;
                             break;
                         }
                     }
-                    mapper.provideCompletion(index, items);
+                    mapper.provideCompletion(index, params, items);
                 }
             }
             return false; // don't complete keyword in strings

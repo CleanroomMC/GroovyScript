@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
+import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -71,7 +72,7 @@ public class ObjectMapper<T> extends AbstractObjectMapper<T> {
     }
 
     @Override
-    public void provideCompletion(int index, Completions items) {
+    public void provideCompletion(int index, CompletionParams params, Completions items) {
         if (this.completer != null) {
             this.completer.complete(index, items);
         }

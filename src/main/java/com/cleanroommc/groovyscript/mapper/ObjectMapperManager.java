@@ -11,6 +11,7 @@ import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.ExpandoMetaClass;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -263,6 +264,6 @@ public class ObjectMapperManager {
 
     @Deprecated
     public static void provideCompletion(String name, int index, Completions items) {
-        handlers.get(name).provideCompletion(index, items);
+        handlers.get(name).provideCompletion(index, CompletionParams.EMPTY, items);
     }
 }
