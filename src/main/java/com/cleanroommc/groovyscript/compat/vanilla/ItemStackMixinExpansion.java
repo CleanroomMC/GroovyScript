@@ -128,7 +128,7 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
     default ItemStack applyTransform(ItemStack matchedInput) {
         if (grs$getTransformer() != null) {
             ItemStack result = grs$getTransformer().transform(matchedInput);
-            if (result == null) return ItemStack.EMPTY;
+            if (result == null || result.isEmpty()) return ItemStack.EMPTY;
             if (result.isItemStackDamageable() && result.getMetadata() > result.getMaxDamage()) {
                 ForgeEventFactory.onPlayerDestroyItem(ForgeHooks.getCraftingPlayer(), result, null);
                 return ItemStack.EMPTY;
