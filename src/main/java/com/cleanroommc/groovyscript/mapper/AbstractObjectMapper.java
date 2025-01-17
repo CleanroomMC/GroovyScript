@@ -18,7 +18,6 @@ import org.codehaus.groovy.ast.Parameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
@@ -50,7 +49,8 @@ public abstract class AbstractObjectMapper<T> extends Closure<T> implements INam
     }
 
     /**
-     * Call in ctor to configure signatures
+     * Call in ctor to configure signatures.
+     * By default, only `name(String)` exists.
      */
     protected final void addSignature(Class<?>... types) {
         this.paramTypes.add(types);
@@ -94,29 +94,33 @@ public abstract class AbstractObjectMapper<T> extends Closure<T> implements INam
         return t == null || t.hasError() ? null : t.getValue();
     }
 
+    /**
+     * Returns a default value for this mapper. This is called every time the parser returns an errored result.
+     *
+     * @return default value of this mapper. May be null
+     */
     public abstract Result<T> getDefaultValue();
 
 
-    public void provideCompletion(int index, Completions items) {}
-
+    /**
+     * Draws an image representation of the given object. This is used for lsp.
+     * The icon will show up in VSC or other code editors with compat.
+     * If this is implemented, {@link #hasTextureBinder()} must return true. Otherwise, this will not be used.
+     *
+     * @param t object for which a texture should be drawn.
+     */
     public void bindTexture(T t) {}
+
+    /**
+     * Determines if {@link #bindTexture(Object)} is implemented and should be used.
+     *
+     * @return true if this mapper can bind textures
+     */
+    public abstract boolean hasTextureBinder();
 
     @NotNull
     public List<String> getTooltip(T t) {
         return Collections.emptyList();
-    }
-
-    public boolean hasTextureBinder() {
-        if (this.hasTextureBinder == null) {
-            for (Method method : getClass().getDeclaredMethods()) {
-                if (method.getName().equals("bindTexture") && method.getParameterTypes().length == 1 && this.returnType.isAssignableFrom(method.getParameterTypes()[0])) {
-                    this.hasTextureBinder = true;
-                    return true;
-                }
-            }
-            this.hasTextureBinder = false;
-        }
-        return this.hasTextureBinder;
     }
 
     public List<MethodNode> getMethodNodes() {

@@ -46,4 +46,9 @@ public class BlockStateMapper extends AbstractObjectMapper<IBlockState> {
         ItemStack itemStack = new ItemStack(iBlockState.getBlock(), 1, iBlockState.getBlock().getMetaFromState(iBlockState));
         return Collections.singletonList(itemStack.getDisplayName());
     }
+
+    @Override
+    public boolean hasTextureBinder() {
+        return true;
+    }
 }

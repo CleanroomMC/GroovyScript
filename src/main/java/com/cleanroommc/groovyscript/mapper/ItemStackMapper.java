@@ -57,4 +57,9 @@ public class ItemStackMapper extends AbstractObjectMapper<ItemStack> {
     public @NotNull List<String> getTooltip(ItemStack itemStack) {
         return Collections.singletonList(itemStack.getDisplayName());
     }
+
+    @Override
+    public boolean hasTextureBinder() {
+        return true;
+    }
 }
