@@ -21,7 +21,7 @@ package net.prominic.groovyls.compiler.util;
 
 import com.cleanroommc.groovyscript.api.Hidden;
 import com.cleanroommc.groovyscript.helper.ArrayUtils;
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
 import com.cleanroommc.groovyscript.sandbox.Preprocessor;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
@@ -278,7 +278,7 @@ public class GroovyASTUtils {
         } else if (node instanceof ConstructorCallExpression expression) {
             return expression.getType();
         } else if (node instanceof MethodCallExpression expression) {
-            ObjectMapper<?> goh = getMapperOfNode(expression, context);
+            AbstractObjectMapper<?> goh = getMapperOfNode(expression, context);
             if (goh != null) {
                 return ClassHelper.makeCached(goh.getReturnType());
             }
@@ -336,7 +336,7 @@ public class GroovyASTUtils {
             List<MethodNode> mn = new ArrayList<>();
             if (methodCallExpr.isImplicitThis()) {
                 Object o = context.getLanguageServerContext().getSandbox().getBindings().get(node.getMethodAsString());
-                if (o instanceof ObjectMapper<?>goh) {
+                if (o instanceof AbstractObjectMapper<?>goh) {
                     mn.addAll(goh.getMethodNodes());
                 } else if (o instanceof Closure<?>closure) {
                     mn.add(methodNodeOfClosure(node.getMethodAsString(), closure));
@@ -468,17 +468,19 @@ public class GroovyASTUtils {
                 name,
                 Modifier.PUBLIC,
                 ClassHelper.OBJECT_TYPE,
-                ArrayUtils.map(
-                        closure.getParameterTypes(),
-                        c -> new Parameter(ClassHelper.makeCached(c), ""),
-                        new Parameter[closure.getParameterTypes().length]),
+                closure.getParameterTypes() != null
+                        ? ArrayUtils.map(
+                                closure.getParameterTypes(),
+                                c -> new Parameter(ClassHelper.makeCached(c), ""),
+                                new Parameter[closure.getParameterTypes().length])
+                        : new Parameter[0],
                 null,
                 null);
         method.setDeclaringClass(ClassHelper.makeCached(declarer));
         return method;
     }
 
-    public static ObjectMapper<?> getMapperOfNode(MethodCallExpression expr, ASTContext context) {
+    public static AbstractObjectMapper<?> getMapperOfNode(MethodCallExpression expr, ASTContext context) {
         if (expr.isImplicitThis()) {
             return ObjectMapperManager.getObjectMapper(expr.getMethodAsString());
         }

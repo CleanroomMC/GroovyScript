@@ -19,7 +19,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
+import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
+import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -178,16 +179,23 @@ public class CompletionProvider extends DocProvider {
             ASTNode parentParent = astContext.getVisitor().getParent(parent);
             if (parentParent instanceof MethodCallExpression expr && expr.getArguments() instanceof ArgumentListExpression args && !args.getExpressions().isEmpty()) {
                 // TODO completions in file()
-                ObjectMapper<?> goh = GroovyASTUtils.getMapperOfNode(expr, astContext);
-                if (goh != null && goh.getCompleter() != null) {
+                AbstractObjectMapper<?> mapper = GroovyASTUtils.getMapperOfNode(expr, astContext);
+                if (mapper != null) {
+                    CompletionParams params = CompletionParams.EMPTY;
                     int index = -1;
                     for (int i = 0; i < args.getExpressions().size(); i++) {
-                        if (args.getExpression(i) == node) {
+                        Expression arg = args.getExpression(i);
+                        if (arg instanceof ConstantExpression constArg) {
+                            params = CompletionParams.addParam(params, constArg.getValue());
+                        } else {
+                            params = CompletionParams.addUnparsableParam(params);
+                        }
+                        if (arg == node) {
                             index = i;
                             break;
                         }
                     }
-                    goh.getCompleter().complete(index, items);
+                    mapper.provideCompletion(index, params, items);
                 }
             }
             return false; // don't complete keyword in strings
@@ -479,7 +487,7 @@ public class CompletionProvider extends DocProvider {
             String name = entry.getKey();
             if (!name.toLowerCase(Locale.ENGLISH).contains(memberNamePrefix) || existingNames.contains(name)) return null;
             existingNames.add(name);
-            if (entry.getValue() instanceof ObjectMapper<?>goh) {
+            if (entry.getValue() instanceof AbstractObjectMapper<?>goh) {
                 for (MethodNode method : goh.getMethodNodes()) {
                     var item = CompletionItemFactory.createCompletion(method, goh.getName(), astContext);
                     item.setLabelDetails(getMethodNodeDetails(method));
