@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -8,13 +9,12 @@ import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ModItemsIngredient extends ItemsIngredient {
 
-    private static final Map<String, List<ItemStack>> CACHE = new HashMap<>();
+    private static final Map<String, List<ItemStack>> CACHE = new Object2ObjectOpenHashMap<>();
 
     private final String modName;
 
