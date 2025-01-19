@@ -96,7 +96,7 @@ public class Registry {
                         (left, right) -> ComparisonChain.start()
                                 .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
                                 .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
-                                .compare(Exporter.simpleSignature(left.getMethod()), Exporter.simpleSignature(right.getMethod()), String::compareToIgnoreCase)
+                                .compare(DescriptorHelper.simpleParameters(left.getMethod()), DescriptorHelper.simpleParameters(right.getMethod()), String::compareToIgnoreCase)
                                 .result())
                 .collect(Collectors.toList());
     }
@@ -107,7 +107,7 @@ public class Registry {
                         (left, right) -> ComparisonChain.start()
                                 .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
                                 .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
-                                .compare(Exporter.simpleSignature(left.getMethod()), Exporter.simpleSignature(right.getMethod()), String::compareToIgnoreCase)
+                                .compare(DescriptorHelper.simpleParameters(left.getMethod()), DescriptorHelper.simpleParameters(right.getMethod()), String::compareToIgnoreCase)
                                 .result())
                 .collect(Collectors.toList());
     }
@@ -352,7 +352,7 @@ public class Registry {
                 "- %s:\n\n%s",
                 PERIOD_END_PATTERN.matcher(LangHelper.translate(lang)).replaceAll(""),
                 new CodeBlockBuilder()
-                        .line(methodExample(method.getMethod(), Exporter.simpleSignature(method.getMethod(), types)))
+                        .line(methodExample(method.getMethod(), DescriptorHelper.simpleParameters(method.getMethod(), types)))
                         .indentation(1)
                         .toString());
     }

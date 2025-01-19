@@ -466,7 +466,7 @@ public class Builder {
 
         private String getFieldTypeInlineCode() {
             //return "`#!groovy " + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
-            return "`" + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+            return "`" + DescriptorHelper.simpleTypeName(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
         }
 
         public String getDescription() {
@@ -495,7 +495,7 @@ public class Builder {
         }
 
         public String shortMethodSignature() {
-            return String.format("%s(%s)", getMethod().getName(), Exporter.simpleSignature(getMethod()));
+            return String.format("%s(%s)", getMethod().getName(), DescriptorHelper.simpleParameters(getMethod()));
         }
 
         @Override

@@ -13,11 +13,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class DescriptorHelper {
 
@@ -29,6 +30,7 @@ public class DescriptorHelper {
      * Blocks checking of methods that are a bridge, not public, from Object, or annotated with {@link GroovyBlacklist}.
      */
     private static final Predicate<Method> DEFAULT_EXCLUSION;
+    private static final Pattern CLASS_NAME_PATTERN;
 
     static {
         // Note: better to be String than a char here because we always have to convert to a String right away
@@ -44,6 +46,65 @@ public class DescriptorHelper {
         PRIMITIVE_TO_TERM.put(boolean.class, "Z");
         var objectMethods = new ObjectOpenHashSet<>(Arrays.asList(Object.class.getMethods()));
         DEFAULT_EXCLUSION = m -> m.isBridge() || !Modifier.isPublic(m.getModifiers()) || objectMethods.contains(m) || m.isAnnotationPresent(GroovyBlacklist.class);
+        CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z0-9_]+\\.)+([a-zA-Z0-9_$]+)");
+    }
+
+    /**
+     * A clean and readable string for the parameters of the given method.
+     *
+     * @param method the method to parse
+     * @return the classes of the parameters of the method
+     */
+    public static String simpleParameters(Method method) {
+        return adjustVarArgs(method, parameters(method, Function.identity()));
+    }
+
+    /**
+     * A clean and readable string for the parameters of the given method,
+     * modified to ensure generics are replaced with the relevant class.
+     *
+     * @param method the method to parse
+     * @param types  replacement types for the param's type name. Used to replace generics with the relevant class
+     * @return the classes of the parameters of the method, with the parameters being modified by the map
+     */
+    public static String simpleParameters(Method method, Map<String, String> types) {
+        return adjustVarArgs(method, parameters(method, param -> types.getOrDefault(param, param)));
+    }
+
+    /**
+     * @param method         the method to parse
+     * @param parseParameter modifies type names
+     * @return the parameters of the given method, modified via the parseParameter
+     */
+    private static String parameters(Method method, Function<String, String> parseParameter) {
+        var joiner = new StringJoiner(", ");
+        for (var annotatedType : method.getAnnotatedParameterTypes()) {
+            joiner.add(DescriptorHelper.simpleTypeName(parseParameter.apply(annotatedType.getType().getTypeName())));
+        }
+        return joiner.toString();
+    }
+
+    /**
+     * Remove the package and replaces the {@code $} for inner classes with a {@code .} to improve the appearance
+     *
+     * @param name the name to modify, typically a {@link java.lang.reflect.Type#getTypeName() Type#getTypeName()}
+     * @return a pretty type name
+     */
+    public static String simpleTypeName(String name) {
+        return CLASS_NAME_PATTERN.matcher(name).replaceAll("$1").replaceAll("\\$", ".");
+    }
+
+    /**
+     * If the method uses varargs, replaces the last `[]` in the parameters with `...` to represent varargs.
+     *
+     * @return the method parameters, respecting varargs
+     */
+    private static String adjustVarArgs(Method method, String parameters) {
+        if (method.isVarArgs()) {
+            int loc = parameters.lastIndexOf("[]");
+            return parameters.substring(0, loc) + "..." + parameters.substring(loc + 2);
+        }
+        return parameters;
     }
 
     /**
