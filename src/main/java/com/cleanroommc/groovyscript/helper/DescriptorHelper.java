@@ -44,9 +44,10 @@ public class DescriptorHelper {
         PRIMITIVE_TO_TERM.put(double.class, "D");
         PRIMITIVE_TO_TERM.put(void.class, "V");
         PRIMITIVE_TO_TERM.put(boolean.class, "Z");
-        var objectMethods = new ObjectOpenHashSet<>(Arrays.asList(Object.class.getMethods()));
+        var objectMethods = new ObjectOpenHashSet<>(Object.class.getMethods());
         DEFAULT_EXCLUSION = m -> m.isBridge() || !Modifier.isPublic(m.getModifiers()) || objectMethods.contains(m) || m.isAnnotationPresent(GroovyBlacklist.class);
-        CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z0-9_]+\\.)+([a-zA-Z0-9_$]+)");
+        // Pattern captures the final valid class
+        CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z_$][a-zA-Z\\d_$]*\\.)+([a-zA-Z_$][a-zA-Z\\d_$]*)");
     }
 
     /**
@@ -85,17 +86,17 @@ public class DescriptorHelper {
     }
 
     /**
-     * Remove the package and replaces the {@code $} for inner classes with a {@code .} to improve the appearance
+     * Remove the package and replaces the {@code $} for inner classes with a {@code .} to improve the appearance.
      *
      * @param name the name to modify, typically a {@link java.lang.reflect.Type#getTypeName() Type#getTypeName()}
      * @return a pretty type name
      */
     public static String simpleTypeName(String name) {
-        return CLASS_NAME_PATTERN.matcher(name).replaceAll("$1").replaceAll("\\$", ".");
+        return CLASS_NAME_PATTERN.matcher(name).replaceAll("$1").replace('$', '.');
     }
 
     /**
-     * If the method uses varargs, replaces the last `[]` in the parameters with `...` to represent varargs.
+     * If the method uses varargs, replaces the last {@code []} in the parameters with {@code ...} to represent varargs.
      *
      * @return the method parameters, respecting varargs
      */
@@ -115,8 +116,7 @@ public class DescriptorHelper {
         var result = new StringBuilder();
         result.append(method.getName());
         result.append('(');
-        var parameterTypes = method.getParameterTypes();
-        for (var parameterType : parameterTypes) {
+        for (var parameterType : method.getParameterTypes()) {
             result.append(getDescriptor(parameterType));
         }
         result.append(')');
