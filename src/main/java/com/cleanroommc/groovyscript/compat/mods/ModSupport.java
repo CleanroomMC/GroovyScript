@@ -44,6 +44,7 @@ import com.cleanroommc.groovyscript.compat.mods.jei.JustEnoughItems;
 import com.cleanroommc.groovyscript.compat.mods.lazyae2.LazyAE2;
 import com.cleanroommc.groovyscript.compat.mods.magneticraft.Magneticraft;
 import com.cleanroommc.groovyscript.compat.mods.mekanism.Mekanism;
+import com.cleanroommc.groovyscript.compat.mods.multiblocked.Multiblocked;
 import com.cleanroommc.groovyscript.compat.mods.mysticalagriculture.MysticalAgriculture;
 import com.cleanroommc.groovyscript.compat.mods.naturesaura.NaturesAura;
 import com.cleanroommc.groovyscript.compat.mods.pneumaticcraft.PneumaticCraft;
@@ -122,6 +123,7 @@ public class ModSupport {
     public static final GroovyContainer<JustEnoughItems> JEI = new InternalModContainer<>("jei", "Just Enough Items", JustEnoughItems::new, "hei");
     public static final GroovyContainer<Magneticraft> MAGNETICRAFT = new InternalModContainer<>("magneticraft", "Magneticraft", Magneticraft::new);
     public static final GroovyContainer<Mekanism> MEKANISM = new InternalModContainer<>("mekanism", "Mekanism", Mekanism::new);
+    public static final GroovyContainer<Multiblocked> Multiblocked = new InternalModContainer<>("multiblocked", "Multiblocked", Multiblocked::new);
     public static final GroovyContainer<MysticalAgriculture> MYSTICAL_AGRICULTURE = new InternalModContainer<>("mysticalagriculture", "Mystical Agriculture", MysticalAgriculture::new);
     public static final GroovyContainer<LazyAE2> LAZYAE2 = new InternalModContainer<>("threng", "LazyAE2", LazyAE2::new, "lazyae2");
     public static final GroovyContainer<NaturesAura> NATURES_AURA = new InternalModContainer<>("naturesaura", "Nature's Aura", NaturesAura::new);

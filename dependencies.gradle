@@ -87,6 +87,7 @@ final def mod_dependencies = [
         'magneticraft-224808:3791484'                         : [project.debug_magneticraft],
         'modelloader-277663:2744735'                          : [project.debug_magneticraft],
         'mekanism-268560:2835175'                             : [project.debug_mekanism],
+        'multiblocked-604054:5576739'                         : [project.debug_multiblocked],
         'mystical_agriculture-246640:2704562'                 : [project.debug_mystical_agriculture],
         'natures-aura-306626:2882138'                         : [project.debug_natures_aura],
         'packmode-278398:2567799'                             : [project.debug_packmode],
