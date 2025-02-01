@@ -1487,6 +1487,7 @@ groovyscript.wiki.lightningcraft.crusher.description=Consumes LE to convert 1 in
 
 groovyscript.wiki.lightningcraft.infusion.title=Lightning Infusion Table
 groovyscript.wiki.lightningcraft.infusion.description=Consumes LE to convert up to 5 input itemstacks into an output itemstack
+groovyscript.wiki.lightningcraft.infusion.centerItem.value=Sets the center slot of the recipe
 groovyscript.wiki.lightningcraft.infusion.le.value=Sets the LE cost for the recipe
 groovyscript.wiki.lightningcraft.infusion.nbtSensitive.value=Sets whether the recipe inputs require a specific NBT tag
 

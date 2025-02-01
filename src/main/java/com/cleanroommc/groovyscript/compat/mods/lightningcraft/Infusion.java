@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.lightningcraft;
 
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -27,16 +28,19 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
     }
 
     @RecipeBuilderDescription(example = {
-        @Example(".input(item('minecraft:clay'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:iron_ingot'), item('minecraft:iron_ingot')).output(item('minecraft:nether_star')).le(500)"),
-        @Example(".input(item('minecraft:clay'), item('minecraft:gold_ingot'), item('minecraft:potion').withNbt(['Potion': 'minecraft:leaping'])).output(item('minecraft:diamond_block')).le(200)"),
+        @Example(".centerItem(item('minecraft:clay')).input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:iron_ingot'), item('minecraft:iron_ingot')).output(item('minecraft:nether_star')).le(500)"),
+        @Example(".centerItem(item('minecraft:clay')).input(item('minecraft:gold_ingot'), item('minecraft:potion').withNbt(['Potion': 'minecraft:leaping'])).output(item('minecraft:diamond_block')).le(200)"),
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @Property(property = "input", comp = @Comp(gte = 1, lte = 5))
+    @Property(property = "input", comp = @Comp(gte = 0, lte = 4))
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightningInfusionRecipe> {
+
+        @Property()
+        private IIngredient centerItem = null;
 
         @Property(comp = @Comp(gte = 0), defaultValue = "-1")
         private int le = -1;
@@ -65,6 +69,12 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
             return this;
         }
 
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder centerItem(IIngredient centerItem) {
+            this.centerItem = centerItem;
+            return this;
+        }
+
         @Override
         public String getErrorMsg() {
             return "Error adding LightningCraft Infusion Table recipe";
@@ -78,11 +88,16 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 5, 1, 1);
+            validateItems(msg, 0, 4, 1, 1);
             validateFluids(msg);
+            msg.add(centerItem == null, "Center item must not be null");
+            msg.add(centerItem != null && centerItem.getMatchingStacks().length == 0, "Center item must not have a matching item");
             msg.add(le < 0, "LE cost must be positive");
             for (IIngredient it : this.input) {
-                msg.add(it == null || it.getMatchingStacks().length == 0, "all inputs must have a matching item");
+                msg.add(it == null || it.getMatchingStacks().length == 0, "All inputs must have a matching item");
+            }
+            if (GroovyScriptConfig.compat.checkInputStackCounts && centerItem != null) {
+                msg.add(centerItem.getAmount() > 1, "Expected stack size of 1 for {}, got {}", centerItem, centerItem.getAmount());
             }
         }
 
@@ -91,16 +106,19 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
         public @Nullable LightningInfusionRecipe register() {
             if (!validate()) return null;
 
-
-            Object centerItem = input.get(0).getMatchingStacks()[0];
-            ItemStack[] inputs = input.stream().skip(1).map(i -> i.getMatchingStacks()[0]).toArray(ItemStack[]::new);
+            ItemStack centerItem = this.centerItem.getMatchingStacks()[0];
+            ItemStack[] inputs = input.stream().map(i -> i.getMatchingStacks()[0]).toArray(ItemStack[]::new);
 
             // check if any input items have NBT to enable NBT sensitive mode automatically
             if (!nbtSensitiveChanged) {
-                for (ItemStack i : inputs) {
-                    if (i.hasTagCompound()) {
-                        nbtSensitive = true;
-                        break;
+                if (centerItem.hasTagCompound()) {
+                    nbtSensitive = true;
+                } else {
+                    for (ItemStack i : inputs) {
+                        if (i.hasTagCompound()) {
+                            nbtSensitive = true;
+                            break;
+                        }
                     }
                 }
             }
