@@ -1,10 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.lightningcraft;
 
-import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import net.minecraft.item.ItemStack;
@@ -39,7 +39,7 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightningInfusionRecipe> {
 
-        @Property()
+        @Property
         private IIngredient centerItem = null;
 
         @Property(comp = @Comp(gte = 0), defaultValue = "-1")
@@ -96,9 +96,7 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
             for (IIngredient it : this.input) {
                 msg.add(it == null || it.getMatchingStacks().length == 0, "All inputs must have a matching item");
             }
-            if (GroovyScriptConfig.compat.checkInputStackCounts && centerItem != null) {
-                msg.add(centerItem.getAmount() > 1, "Expected stack size of 1 for {}, got {}", centerItem, centerItem.getAmount());
-            }
+            msg.add(IngredientHelper.overMaxSize(centerItem, 1), "centerItem must have a stack size of 1");
         }
 
         @Override
