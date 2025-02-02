@@ -1,13 +1,15 @@
 package com.cleanroommc.groovyscript.compat.mods.multiblocked;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.compat.mods.AdvancedGroovyPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.multiblocked.api.recipe.RecipeMap;
 
-public class Multiblocked extends AdvancedGroovyPropertyContainer {
+public class Multiblocked extends GroovyPropertyContainer {
 
     @Override
-    public void onCompatLoaded() {
+    public void initialize(GroovyContainer<?> owner) {
+        super.initialize(owner);
         GroovyScript.getSandbox().registerBinding("mbd", mappers);
     }
 
