@@ -49,6 +49,10 @@ public class MbdMappers {
         return new MbdCapabilityData<>(amount, FEMultiblockCapability.CAP);
     }
 
+    public MbdCapabilityData<Integer> power(int amount) {
+        return fe(amount);
+    }
+
     // The following capabilities require a specific mod to be loaded
 
     @Optional.Method(modid = "thaumcraft")
