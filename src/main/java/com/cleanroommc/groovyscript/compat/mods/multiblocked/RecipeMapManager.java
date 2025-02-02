@@ -60,7 +60,7 @@ public class RecipeMapManager extends VirtualizedRegistry<Recipe> {
     }
 
     public static class RecipeBuilder implements IRecipeBuilder<Recipe> {
-        private final String mapName;
+        private final RecipeMap recipeMap;
 
         private String uid = "";
 
@@ -77,7 +77,7 @@ public class RecipeMapManager extends VirtualizedRegistry<Recipe> {
         private final List<RecipeCondition> conditions = new ArrayList<>();
 
         private RecipeBuilder(RecipeMap map) {
-            this.mapName = map.name;
+            this.recipeMap = map;
         }
 
         public RecipeBuilder uid(String uid) {
@@ -120,7 +120,7 @@ public class RecipeMapManager extends VirtualizedRegistry<Recipe> {
         }
 
         public String getErrorMsg() {
-            return "Error registering a Multiblocked recipe in Recipe Map " + mapName;
+            return "Error registering a Multiblocked recipe in Recipe Map " + recipeMap.name;
         }
 
         public void validate(GroovyLog.Msg msg) {
@@ -130,6 +130,8 @@ public class RecipeMapManager extends VirtualizedRegistry<Recipe> {
 
             if (uid.isEmpty()) {
                 uid = UUID.randomUUID().toString();
+            } else {
+                msg.add(recipeMap.recipes.containsKey(uid), "Recipe with ID {} already exists", uid);
             }
         }
 
@@ -166,7 +168,7 @@ public class RecipeMapManager extends VirtualizedRegistry<Recipe> {
                     toMbdMap(inputs, false), toMbdMap(outputs, false),
                     toMbdMap(inputs, true), toMbdMap(outputs, true),
                     ImmutableList.copyOf(conditions), time);
-            ModSupport.MULTIBLOCKED.get().recipeMap(mapName).add(r);
+            ModSupport.MULTIBLOCKED.get().recipeMap(recipeMap.name).add(r);
             return r;
         }
     }
