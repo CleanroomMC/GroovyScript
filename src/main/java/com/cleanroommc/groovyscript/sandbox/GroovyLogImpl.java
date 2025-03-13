@@ -283,7 +283,7 @@ public class GroovyLogImpl implements GroovyLog {
 
     private List<String> prepareStackTrace(StackTraceElement[] stackTrace) {
         List<String> lines = Arrays.stream(stackTrace).map(StackTraceElement::toString).collect(Collectors.toList());
-        String engineCause = "com.cleanroommc.groovyscript.sandbox.GroovySandbox.loadScripts";
+        String engineCause = "com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox.loadScripts";
         int i = 0;
         for (String line : lines) {
             i++;

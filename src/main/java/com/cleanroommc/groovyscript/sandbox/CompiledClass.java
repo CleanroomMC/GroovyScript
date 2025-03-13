@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.File;
@@ -34,7 +35,7 @@ class CompiledClass {
             GroovyLog.get().errorMC("The class doesnt seem to be compiled yet. (" + name + ")");
             return;
         }
-        if (!GroovyScriptSandbox.ENABLE_CACHE) return;
+        if (!CustomGroovyScriptEngine.ENABLE_CACHE) return;
         try {
             File file = getDataFile(basePath);
             file.getParentFile().mkdirs();
@@ -47,14 +48,21 @@ class CompiledClass {
         }
     }
 
+    @Deprecated
     protected void ensureLoaded(CachedClassLoader classLoader, String basePath) {
         if (this.clazz == null) {
             this.clazz = classLoader.defineClass(this.name, this.data);
         }
     }
 
+    protected void ensureLoaded(GroovyClassLoader classLoader, String basePath) {
+        if (this.clazz == null) {
+            this.clazz = classLoader.defineClass(this.name, this.data);
+        }
+    }
+
     public boolean readData(String basePath) {
-        if (this.data != null && GroovyScriptSandbox.ENABLE_CACHE) return true;
+        if (this.data != null && CustomGroovyScriptEngine.ENABLE_CACHE) return true;
         File file = getDataFile(basePath);
         if (!file.exists()) return false;
         try {

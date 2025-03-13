@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,8 @@ class CompiledScript extends CompiledClass {
     final List<CompiledClass> innerClasses = new ArrayList<>();
     long lastEdited;
     List<String> preprocessors;
+    boolean preprocessorCheckFailed;
+    boolean requiresReload;
 
     public CompiledScript(String path, long lastEdited) {
         this(path, null, lastEdited);
@@ -31,6 +34,12 @@ class CompiledScript extends CompiledClass {
         return lastEdited < 0;
     }
 
+    @Override
+    public void onCompile(Class<?> clazz, String basePath) {
+        this.requiresReload = this.data == null;
+        super.onCompile(clazz, basePath);
+    }
+
     public CompiledClass findInnerClass(String clazz) {
         for (CompiledClass comp : this.innerClasses) {
             if (comp.name.equals(clazz)) {
@@ -42,7 +51,21 @@ class CompiledScript extends CompiledClass {
         return comp;
     }
 
+    @Deprecated
     public void ensureLoaded(CachedClassLoader classLoader, String basePath) {
+        for (CompiledClass comp : this.innerClasses) {
+            if (comp.clazz == null) {
+                if (comp.readData(basePath)) {
+                    comp.ensureLoaded(classLoader, basePath);
+                } else {
+                    GroovyLog.get().error("Error loading inner class {} for class {}", comp.name, this.name);
+                }
+            }
+        }
+        super.ensureLoaded(classLoader, basePath);
+    }
+
+    public void ensureLoaded(GroovyClassLoader classLoader, String basePath) {
         for (CompiledClass comp : this.innerClasses) {
             if (comp.clazz == null) {
                 if (comp.readData(basePath)) {
