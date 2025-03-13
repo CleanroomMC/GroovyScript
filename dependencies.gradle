@@ -120,6 +120,22 @@ final def mod_dependencies = [
         'woot-244049:2712670'                                 : [project.debug_woot],
 ]
 
+// Maps mods from CurseMaven to the properties that enable the mod.
+// These mods will be enabled at runtime, but will not be compiled.
+// Sorted alphabetically.
+final Map<String, List<String>> runtime_dependencies = [
+        'com.cleanroommc:configanytime:3.0'                 : [project.debug_universal_tweaks],
+        'curse.maven:aainfo-573154:3627065'                 : [project.debug_actually_advanced_info],
+        'curse.maven:dropt-284973:3758733'                  : [project.debug_pyrotech],
+        'curse.maven:jei-bees-248370:2490058'               : [project.debug_forestry],
+        'curse.maven:just-enough-petroleum-291727:2549332'  : [project.debug_immersive_petroleum],
+        'curse.maven:mouse-tweaks-unofficial-461660:5876158': [project.debug_mouse_tweaks_unofficial],
+        'curse.maven:reid-629017:5502915'                   : [project.debug_roughly_enough_ids],
+        'curse.maven:thaumic_jei-285492:2705304'            : [project.debug_thaum],
+        'curse.maven:universal-tweaks-705000:5860191'       : [project.debug_universal_tweaks],
+        'curse.maven:vintagefix-871198:5536276'             : [project.debug_vintagefix],
+]
+
 dependencies {
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 
@@ -149,8 +165,19 @@ dependencies {
         }
     }
 
-    if (project.debug_thaum.toBoolean()) {
-        runtimeOnly 'curse.maven:thaumic_jei-285492:2705304'
+    // enables mods for runtime
+    runtime_dependencies.each { k, v ->
+        if (v.any { it.toBoolean() }) {
+            runtimeOnly k
+        }
+    }
+
+    compileOnly rfg.deobf('curse.maven:angry-pixel-the-betweenlands-mod-243363:4479688')
+    if (project.debug_betweenlands.toBoolean()) {
+        // TODO: allow development toggling of the coremod
+        //  until this is resolved, download and install the jar from
+        //  https://www.curseforge.com/minecraft/mc-mods/angry-pixel-the-betweenlands-mod/files/4479688
+        // runtimeOnly rfg.deobf('curse.maven:angry-pixel-the-betweenlands-mod-243363:4479688')
     }
 
     compileOnly 'com.enderio:endercore:0.5.78'
@@ -178,24 +205,9 @@ dependencies {
         runtimeOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
     }
 
-
-    if (project.debug_forestry.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:jei-bees-248370:2490058')
-    }
-
-    if (project.debug_immersive_petroleum.toBoolean()) {
-        runtimeOnly rfg.deobf('curse.maven:just-enough-petroleum-291727:2549332')
-    }
-
-    if (project.debug_pyrotech.toBoolean()) {
-        runtimeOnly rfg.deobf("curse.maven:dropt-284973:3758733")
-    }
-
     compileOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
     if (project.debug_tech_reborn.toBoolean()) {
         runtimeOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
     }
-
-    runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
 
 }
