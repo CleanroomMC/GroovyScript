@@ -66,9 +66,11 @@ import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansio
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -222,13 +224,25 @@ public class ModSupport {
         for (GroovyContainer<?> container : containerList) {
             if (container.isLoaded()) {
                 container.onCompatLoaded(container);
-                container.get().initialize(container);
+                GroovyPropertyContainer propertyContainer = container.get();
+                propertyContainer.initialize(container);
+                propertyContainer.initialize(container.getModId());
                 ExpansionHelper.mixinConstProperty(ModSupport.class, container.getModId(), container.get(), false);
                 for (String s : container.getAliases()) {
                     if (!container.getModId().equals(s)) {
                         ExpansionHelper.mixinConstProperty(ModSupport.class, s, container.get(), true);
                     }
                 }
+            }
+        }
+        for (ModContainer container : Loader.instance().getModList()) {
+            if (!containers.containsKey(container.getModId())) {
+                ExpansionHelper.mixinProperty(ModSupport.class,
+                                              container.getModId(),
+                                              BasicGroovyPropertyContainer.class,
+                                              Suppliers.memoize(() -> new BasicGroovyPropertyContainer(container)),
+                                              null,
+                                              false);
             }
         }
     }
