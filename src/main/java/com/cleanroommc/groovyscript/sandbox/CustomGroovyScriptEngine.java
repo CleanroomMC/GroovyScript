@@ -11,7 +11,6 @@ import groovy.lang.GroovyCodeSource;
 import groovy.lang.GroovyResourceLoader;
 import groovy.util.ResourceConnector;
 import groovy.util.ResourceException;
-import groovy.util.ScriptException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.ast.ClassHelper;
@@ -370,7 +369,8 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
     }
 
     private static void verifyInputStream(URLConnection urlConnection) throws IOException {
-        try (InputStream in = urlConnection.getInputStream()) {}
+        try (InputStream in = urlConnection.getInputStream()) {
+        }
     }
 
     private static class LocalData {
@@ -439,6 +439,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
             }, Phases.CLASS_GENERATION);
 
             cu.setClassNodeResolver(new ClassNodeResolver() {
+
                 @Override
                 public LookupResult findClassNode(String origName, CompilationUnit compilationUnit) {
                     String name = origName.replace('.', '/');

@@ -234,9 +234,9 @@ public class GroovyScriptSandbox {
                 }
                 if (run && shouldRunFile(scriptFile)) {
                     Script script = InvokerHelper.createScript(compiledScript.clazz, binding);
-                        t = System.currentTimeMillis();
-                        runScript(script);
-                        this.runTime += System.currentTimeMillis() - t;
+                    t = System.currentTimeMillis();
+                    runScript(script);
+                    this.runTime += System.currentTimeMillis() - t;
                 }
             }
         }
