@@ -559,6 +559,21 @@ groovyscript.wiki.betterwithmods.turntable.rotations.value=Sets the number of ro
 groovyscript.wiki.betterwithmods.turntable.outputBlock.value=Sets the blockstate that replaces the input block
 
 
+# Blood Arsenal
+groovyscript.wiki.bloodarsenal.sanguine_infusion.title=Sanguine Infusion
+groovyscript.wiki.bloodarsenal.sanguine_infusion.description=Converts an input infusion itemstack and up to 8 input surrounding itemstacks into an output itemstack, consuming Life Essence from the network to do so when the Infusion de Sanguine Ritual is activated. Alternatively, instead of consuming an infusion item, adds or upgrades a modifier to the given stasis tool, with the ability to increase the quantity of inputs consumed based on level.
+groovyscript.wiki.bloodarsenal.sanguine_infusion.note0=Blacklisting classes only have effect in conjunction with a recipe using a `filter` and a respective of a Modifier that overrides `getSpecialNBT` to save the relevant filtered stack. The `filter` can only be used for modifier recipes. By default, the relevant Modifiers are `bad_potion`, `beneficial_potion`, and `sigil`.
+groovyscript.wiki.bloodarsenal.sanguine_infusion.cost.value=Sets the Life Essence cost
+groovyscript.wiki.bloodarsenal.sanguine_infusion.filter.value=Sets the filter the recipe
+groovyscript.wiki.bloodarsenal.sanguine_infusion.infuse.value=Sets the item being infused
+groovyscript.wiki.bloodarsenal.sanguine_infusion.modifier.value=Sets the modifier key
+groovyscript.wiki.bloodarsenal.sanguine_infusion.levelMultiplier.value=Sets the amount inputs are multiplied for higher levels of the modifier
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeByModifierKey=Removes all recipes with the given modifier key
+groovyscript.wiki.bloodarsenal.sanguine_infusion.addBlacklist=Remove the given class from the blacklist
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeBlacklist=Add the given class to the blacklist
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeAllBlacklist=Removes all entries from the blacklist
+
+
 # Blood Magic
 groovyscript.wiki.bloodmagic.max_tier.required=less than `AltarTier.MAXTIERS`, which is determined by the config option `enableTierSixEvenThoughThereIsNoContent`
 
