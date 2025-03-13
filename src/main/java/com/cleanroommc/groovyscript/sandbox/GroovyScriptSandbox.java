@@ -289,6 +289,7 @@ public class GroovyScriptSandbox {
 
     @ApiStatus.OverrideOnly
     protected void initEngine(CompilerConfiguration config) {
+        config.addCompilationCustomizers(this.importCustomizer);
         config.addCompilationCustomizers(new GroovyScriptCompiler());
         config.addCompilationCustomizers(new GroovyScriptEarlyCompiler());
     }
