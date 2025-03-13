@@ -55,6 +55,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
@@ -101,6 +102,8 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
+        int jv = getJavaVersion();
+        if (jv > 21) handleJavaVersionException(jv, event.getSide());
         if (!SandboxData.isInitialised()) {
             LOGGER.throwing(new IllegalStateException("Sandbox data should have been initialised by now, but isn't! Trying to initialize again."));
             SandboxData.initialize((File) FMLInjectionData.data()[6], LOGGER);
@@ -125,6 +128,17 @@ public class GroovyScript {
 
         FluidRegistry.enableUniversalBucket();
         getRunConfig().initPackmode();
+    }
+
+    private static void handleJavaVersionException(int version, Side side) {
+        String msg1 = "Groovy does not work with Java versions greater than 21 currently.";
+        String msg2 = "Please downgrade to Java 21 or lower. Your current Java version is " + version + ".";
+        if (side.isClient()) {
+            // the super class of this exception is client only (since the screen only works on client)
+            throw new IncompatibleJavaException(msg1 + "\n" + msg2);
+        } else {
+            throw new IllegalStateException(msg1 + " " + msg2);
+        }
     }
 
     @Mod.EventHandler
@@ -311,5 +325,17 @@ public class GroovyScript {
         Loader.instance().setActiveModContainer(grsContainer);
         runnable.run();
         Loader.instance().setActiveModContainer(current);
+    }
+
+    public static int getJavaVersion() {
+        // from stack overflow
+        String version = System.getProperty("java.version");
+        if (version.startsWith("1.")) {
+            version = version.substring(2, 3);
+        } else {
+            int dot = version.indexOf(".");
+            if (dot != -1) version = version.substring(0, dot);
+        }
+        return Integer.parseInt(version);
     }
 }

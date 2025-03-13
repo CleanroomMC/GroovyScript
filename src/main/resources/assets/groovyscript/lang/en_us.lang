@@ -174,6 +174,10 @@ groovyscript.wiki.actuallyadditions.treasure_chest.min.required=less than or equ
 groovyscript.wiki.actuallyadditions.treasure_chest.max.value=Sets the maximum stack size given when rolled
 groovyscript.wiki.actuallyadditions.treasure_chest.max.required=greater than or equal to the size of min
 
+#Additional Enchanted Miner
+groovyscript.wiki.quarryplus.work_bench_plus.title=Work bench
+groovyscript.wiki.quarryplus.work_bench_plus.description=Workbench for crafting items using electricity.
+
 # Advanced Mortars
 groovyscript.wiki.advancedmortars.mortar.title=Mortar
 groovyscript.wiki.advancedmortars.mortar.description=Uses any number of specific types of Mortars to convert multiple items into a single output with a possible chance output after a number of player interactions.
@@ -329,6 +333,18 @@ groovyscript.wiki.appliedenergistics2.spatial.remove=Removes the given class fro
 groovyscript.wiki.arcanearchives.gem_cutting_table.title=Gem Cutting Table
 groovyscript.wiki.arcanearchives.gem_cutting_table.description=Converts any number of itemstacks into a single output itemstack via selecting the desired output itemstack in the GUI.
 groovyscript.wiki.arcanearchives.gem_cutting_table.note0=While more than 8 items can function as the input of a Stygian Iron Anvil recipe, only the first 8 are shown in JEI.
+
+
+# Arcane World
+groovyscript.wiki.arcaneworld.ritual.title=Ritual
+groovyscript.wiki.arcaneworld.ritual.description=Converts up to 5 input itemstacks into a wide number of possible effects, including spawning entities, opening a portal to a dungeon dimension to fight a mob, awarding an output itemstack, running commands, and even entirely customized effects.
+groovyscript.wiki.arcaneworld.ritual.time.value=Sets the amount of time that is passed when the Time Ritual is activated
+groovyscript.wiki.arcaneworld.ritual.entity.value=Sets the entity spawned when the Arena or Summon Rituals are activated
+groovyscript.wiki.arcaneworld.ritual.command.value=Sets the commands that will be run when the Command Ritual is activated
+groovyscript.wiki.arcaneworld.ritual.onActivate.value=Sets the effect that will happen when the Custom Ritual is run, with the Closure taking 4 parameters, `World world`, `BlockPos blockPos`, `EntityPlayer player`, and `ItemStack... itemStacks`
+groovyscript.wiki.arcaneworld.ritual.ritualType.value=Sets the mode of the ritual, different modes will require different values
+groovyscript.wiki.arcaneworld.ritual.weatherType.value=Sets the type of weather the world will change to when the Weather Ritual is activated
+groovyscript.wiki.arcaneworld.ritual.translationKey.value=Sets the translation key used to localize the name of the ritual
 
 
 # Astral Sorcery
@@ -589,6 +605,21 @@ groovyscript.wiki.thebetweenlands.steeping_pot.meta.value=Sets the color of the 
 groovyscript.wiki.thebetweenlands.steeping_pot.addAcceptedItem=Adds the given ItemStack to the accepted item list for the Silk Bundle
 groovyscript.wiki.thebetweenlands.steeping_pot.removeAcceptedItem=Removes the given ItemStack from the accepted item list for the Silk Bundle
 groovyscript.wiki.thebetweenlands.steeping_pot.removeAllAcceptedItem=Removes all entries from the accepted item list for the Silk Bundle
+
+
+# Blood Arsenal
+groovyscript.wiki.bloodarsenal.sanguine_infusion.title=Sanguine Infusion
+groovyscript.wiki.bloodarsenal.sanguine_infusion.description=Converts an input infusion itemstack and up to 8 input surrounding itemstacks into an output itemstack, consuming Life Essence from the network to do so when the Infusion de Sanguine Ritual is activated. Alternatively, instead of consuming an infusion item, adds or upgrades a modifier to the given stasis tool, with the ability to increase the quantity of inputs consumed based on level.
+groovyscript.wiki.bloodarsenal.sanguine_infusion.note0=Blacklisting classes only have effect in conjunction with a recipe using a `filter` and a respective of a Modifier that overrides `getSpecialNBT` to save the relevant filtered stack. The `filter` can only be used for modifier recipes. By default, the relevant Modifiers are `bad_potion`, `beneficial_potion`, and `sigil`.
+groovyscript.wiki.bloodarsenal.sanguine_infusion.cost.value=Sets the Life Essence cost
+groovyscript.wiki.bloodarsenal.sanguine_infusion.filter.value=Sets the filter the recipe
+groovyscript.wiki.bloodarsenal.sanguine_infusion.infuse.value=Sets the item being infused
+groovyscript.wiki.bloodarsenal.sanguine_infusion.modifier.value=Sets the modifier key
+groovyscript.wiki.bloodarsenal.sanguine_infusion.levelMultiplier.value=Sets the amount inputs are multiplied for higher levels of the modifier
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeByModifierKey=Removes all recipes with the given modifier key
+groovyscript.wiki.bloodarsenal.sanguine_infusion.addBlacklist=Remove the given class from the blacklist
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeBlacklist=Add the given class to the blacklist
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeAllBlacklist=Removes all entries from the blacklist
 
 
 # Blood Magic
