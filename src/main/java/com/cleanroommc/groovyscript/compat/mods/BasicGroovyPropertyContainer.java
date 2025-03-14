@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
+import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.google.common.collect.AbstractIterator;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -9,12 +10,14 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class BasicGroovyPropertyContainer {
 
     private ModContainer container;
-    private Iterable<ItemStack> items;
+    private ItemsIngredient items;
 
     public BasicGroovyPropertyContainer(ModContainer container) {
         this.container = container;
@@ -29,35 +32,19 @@ public class BasicGroovyPropertyContainer {
         }
     }
 
-    public Iterable<ItemStack> getAllItems() {
+    public ItemsIngredient getAllItems() {
         if (this.items == null) {
-            this.items = () -> new AbstractIterator<>() {
-
-                private final Iterator<Item> iterator = ForgeRegistries.ITEMS.iterator();
-                private final NonNullList<ItemStack> currentStacks = NonNullList.create();
-                private int i = 0;
-
-                @Override
-                protected ItemStack computeNext() {
-                    while (i >= currentStacks.size()) {
-                        if (!iterator.hasNext()) {
-                            return endOfData();
-                        }
-                        Item item = iterator.next();
-                        while (!item.getRegistryName().getNamespace().equals(BasicGroovyPropertyContainer.this.container.getModId())) {
-                            if (!iterator.hasNext()) {
-                                return endOfData();
-                            }
-                            item = iterator.next();
-                        }
-                        currentStacks.clear();
-                        item.getSubItems(CreativeTabs.SEARCH, currentStacks);
-                        i = 0;
-                    }
-                    return currentStacks.get(i++);
+            List<ItemStack> items = new ArrayList<>();
+            NonNullList<ItemStack> stacks = NonNullList.create();
+            for (Item item : ForgeRegistries.ITEMS) {
+                if (item.getRegistryName().getNamespace().equals(container.getModId())) {
+                    item.getSubItems(CreativeTabs.SEARCH, stacks);
+                    items.addAll(stacks);
+                    stacks.clear();
                 }
-            };
-        }
+            }
+            this.items = new ItemsIngredient(items);
+         }
         return this.items;
     }
 
