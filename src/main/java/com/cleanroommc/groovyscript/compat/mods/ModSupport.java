@@ -236,7 +236,7 @@ public class ModSupport {
             }
         }
         for (ModContainer container : Loader.instance().getModList()) {
-            if (!containers.containsKey(container.getModId())) {
+            if (!hasExplicitCompatFor(container.getModId())) {
                 ExpansionHelper.mixinProperty(ModSupport.class,
                                               container.getModId(),
                                               BasicGroovyPropertyContainer.class,
@@ -255,6 +255,10 @@ public class ModSupport {
     }
 
     public boolean hasCompatFor(String mod) {
+        return containers.containsKey(mod);
+    }
+
+    public static boolean hasExplicitCompatFor(String mod) {
         return containers.containsKey(mod);
     }
 

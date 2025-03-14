@@ -43,8 +43,15 @@ public class BasicGroovyPropertyContainer {
                         if (!iterator.hasNext()) {
                             return endOfData();
                         }
+                        Item item = iterator.next();
+                        while (!item.getRegistryName().getNamespace().equals(BasicGroovyPropertyContainer.this.container.getModId())) {
+                            if (!iterator.hasNext()) {
+                                return endOfData();
+                            }
+                            item = iterator.next();
+                        }
                         currentStacks.clear();
-                        iterator.next().getSubItems(CreativeTabs.SEARCH, currentStacks);
+                        item.getSubItems(CreativeTabs.SEARCH, currentStacks);
                         i = 0;
                     }
                     return currentStacks.get(i++);

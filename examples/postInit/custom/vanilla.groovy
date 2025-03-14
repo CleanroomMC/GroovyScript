@@ -21,6 +21,10 @@ log.info(ore_iron >> (item_iron * 3)) // false
     println file.path
 }*/
 
+for (var stack in mods.theoneprobe.allItems) {
+    log.info stack
+}
+
 // Crafting recipes are typically created via recipe builder, but also have shorthand versions for some common uses.
 // Here are a series of examples, with the shorthand and corresponding recipe builder:
 
