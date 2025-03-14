@@ -66,7 +66,7 @@ public class GroovyPropertyContainer {
     protected void addPropertyFieldsOf(@NotNull Object object, @Nullable Class<?> untilSuperclass, boolean privateToo) {
         boolean staticOnly = false;
         Class<?> clazz;
-        if (object instanceof Class<?> c) {
+        if (object instanceof Class<?>c) {
             clazz = c;
             staticOnly = true;
         } else {
