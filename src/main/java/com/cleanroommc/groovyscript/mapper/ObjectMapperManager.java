@@ -32,6 +32,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
@@ -198,6 +199,10 @@ public class ObjectMapperManager {
                 .parser(ObjectMappers::parseNBT)
                 .defaultValue(NBTTagCompound::new)
                 .docOfType("nbt tag")
+                .register();
+        ObjectMapper.builder("mod", ModContainer.class)
+                .parser(ObjectMappers::parseMod)
+                .docOfType("mod")
                 .register();
     }
 
