@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
-import com.google.common.collect.AbstractIterator;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,19 +10,18 @@ import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-public class BasicGroovyPropertyContainer {
+public class ForgeModWrapper {
 
     private ModContainer container;
     private ItemsIngredient items;
 
-    public BasicGroovyPropertyContainer(ModContainer container) {
+    public ForgeModWrapper(ModContainer container) {
         this.container = container;
     }
 
-    public BasicGroovyPropertyContainer() {}
+    public ForgeModWrapper() {}
 
     void initialize(String owner) {
         this.container = Loader.instance().getIndexedModList().get(owner);

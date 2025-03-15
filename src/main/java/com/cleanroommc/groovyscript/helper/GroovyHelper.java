@@ -105,12 +105,4 @@ public class GroovyHelper {
     public static GroovyFile file(String... parts) {
         return new GroovyFile(parts);
     }
-
-    public static ItemsIngredient items(ItemStack... stacks) {
-        return new ItemsIngredient(stacks);
-    }
-
-    public static ItemsIngredient items(Collection<ItemStack> stacks) {
-        return new ItemsIngredient(stacks);
-    }
 }

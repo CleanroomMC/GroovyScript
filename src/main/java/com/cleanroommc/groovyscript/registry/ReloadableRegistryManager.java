@@ -76,7 +76,6 @@ public class ReloadableRegistryManager {
     @ApiStatus.Internal
     public static void onReload() {
         GroovyScript.reloadRunConfig(false);
-        VanillaModule.INSTANCE.onReload();
         ModSupport.getAllContainers()
                 .stream()
                 .filter(GroovyContainer::isLoaded)
@@ -103,7 +102,6 @@ public class ReloadableRegistryManager {
                 .filter(IScriptReloadable.class::isInstance)
                 .map(IScriptReloadable.class::cast)
                 .forEach(IScriptReloadable::afterScriptLoad);
-        VanillaModule.INSTANCE.afterScriptLoad();
         unfreezeForgeRegistries();
     }
 

@@ -65,6 +65,7 @@ import com.cleanroommc.groovyscript.compat.mods.theaurorian.TheAurorian;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -86,6 +87,8 @@ public class ModSupport {
     private static boolean frozen;
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
+
+    public static final GroovyContainer<VanillaModule> MINECRAFT = new InternalModContainer<>("minecraft", "Minecraft", VanillaModule::new, "mc");
 
     public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
     public static final GroovyContainer<AdditionalEnchantedMiner> ADDITIONAL_ENCHANTED_MINER = new InternalModContainer<>("quarryplus", "Additional Enchanted Miner", AdditionalEnchantedMiner::new);
@@ -236,11 +239,11 @@ public class ModSupport {
             }
         }
         for (ModContainer container : Loader.instance().getModList()) {
-            if (!hasExplicitCompatFor(container.getModId())) {
+            if (!INSTANCE.hasCompatFor(container.getModId())) {
                 ExpansionHelper.mixinProperty(ModSupport.class,
                                               container.getModId(),
-                                              BasicGroovyPropertyContainer.class,
-                                              Suppliers.memoize(() -> new BasicGroovyPropertyContainer(container)),
+                                              ForgeModWrapper.class,
+                                              Suppliers.memoize(() -> new ForgeModWrapper(container)),
                                               null,
                                               false);
             }
@@ -255,10 +258,6 @@ public class ModSupport {
     }
 
     public boolean hasCompatFor(String mod) {
-        return containers.containsKey(mod);
-    }
-
-    public static boolean hasExplicitCompatFor(String mod) {
         return containers.containsKey(mod);
     }
 
