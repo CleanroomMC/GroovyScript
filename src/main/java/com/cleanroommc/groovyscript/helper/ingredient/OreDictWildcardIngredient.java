@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IOreDicts;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class OreDictWildcardIngredient extends ItemsIngredient {
+public class OreDictWildcardIngredient extends ItemsIngredient implements IOreDicts {
 
     private final String oreDict;
     private final List<String> matchingOreDictionaries = new ArrayList<>();
@@ -43,6 +44,11 @@ public class OreDictWildcardIngredient extends ItemsIngredient {
 
     public String getOreDict() {
         return oreDict;
+    }
+
+    @Override
+    public List<String> getOreDicts() {
+        return getMatchingOreDictionaries();
     }
 
     public List<String> getMatchingOreDictionaries() {

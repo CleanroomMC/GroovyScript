@@ -1,12 +1,14 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
-import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.api.IOreDicts;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
 
-public class OreDictIngredient extends ItemsIngredient implements Iterable<ItemStack> {
+public class OreDictIngredient extends ItemsIngredient implements Iterable<ItemStack>, IOreDicts {
 
     private final String oreDict;
 
@@ -26,6 +28,11 @@ public class OreDictIngredient extends ItemsIngredient implements Iterable<ItemS
     }
 
     @Override
+    public List<String> getOreDicts() {
+        return ImmutableList.of(getOreDict());
+    }
+
+    @Override
     public OreDictIngredient exactCopy() {
         OreDictIngredient oreDictIngredient = new OreDictIngredient(this.oreDict, getItemStacks());
         oreDictIngredient.setAmount(getAmount());
@@ -40,7 +47,7 @@ public class OreDictIngredient extends ItemsIngredient implements Iterable<ItemS
     }
 
     public void add(ItemStack itemStack) {
-        ModSupport.MINECRAFT.get().oreDict.add(this.oreDict, itemStack);
+        VanillaModule.oreDict.add(this.oreDict, itemStack);
     }
 
     public void add(ItemStack... itemStacks) {
@@ -60,7 +67,7 @@ public class OreDictIngredient extends ItemsIngredient implements Iterable<ItemS
     }
 
     public void remove(ItemStack itemStack) {
-        ModSupport.MINECRAFT.get().oreDict.remove(this.oreDict, itemStack);
+        VanillaModule.oreDict.remove(this.oreDict, itemStack);
     }
 
     public void remove(ItemStack... itemStacks) {

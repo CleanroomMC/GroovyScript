@@ -2,8 +2,10 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IOreDicts;
 import com.cleanroommc.groovyscript.compat.vanilla.ItemStackMixinExpansion;
 import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
+import com.google.common.collect.Lists;
 import groovy.lang.Closure;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
@@ -16,8 +18,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 public class IngredientHelper {
 
@@ -76,6 +77,38 @@ public class IngredientHelper {
         }
         return ingredients;
     }
+
+    /**
+     * Converts a List of IIngredients into every combination of oredict
+     * (if the IIngredient represents one or more oredicts)
+     * and matching ItemStacks
+     *
+     * @param inputs a list of IIngredients
+     * @return a list of cartesian product of the oredicts (if relevant) and matching stacks
+     */
+    public static @NotNull List<List<Object>> cartesianProductOres(@NotNull List<IIngredient> inputs) {
+        List<List<?>> entries = new ArrayList<>();
+        for (var input : inputs) {
+            if (input instanceof IOreDicts ore) entries.add(ore.getOreDicts());
+            else entries.add(Arrays.asList(input.getMatchingStacks()));
+        }
+        return Lists.cartesianProduct(entries);
+    }
+
+    /**
+     * Converts a List of IIngredients into every combination of matching ItemStacks
+     *
+     * @param inputs a list of IIngredients
+     * @return a list of cartesian product of the matching stacks
+     */
+    public static @NotNull List<List<ItemStack>> cartesianProductItemStacks(@NotNull List<IIngredient> inputs) {
+        List<List<ItemStack>> entries = new ArrayList<>();
+        for (var input : inputs) {
+            entries.add(Arrays.asList(input.getMatchingStacks()));
+        }
+        return Lists.cartesianProduct(entries);
+    }
+
 
     public static boolean isEmpty(@Nullable IIngredient ingredient) {
         return ingredient == null || ingredient.isEmpty();

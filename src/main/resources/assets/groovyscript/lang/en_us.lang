@@ -563,6 +563,50 @@ groovyscript.wiki.betterwithmods.turntable.rotations.value=Sets the number of ro
 groovyscript.wiki.betterwithmods.turntable.outputBlock.value=Sets the blockstate that replaces the input block
 
 
+# The Betweenlands
+groovyscript.wiki.thebetweenlands.animator.title=Animator
+groovyscript.wiki.thebetweenlands.animator.description=Converts an input item, Life amount from Life Crystals, and Fuel from Sulfur into an output itemstack, summoning an entity, a random item from a loottable, or summoning an entity and outputting an itemstack.
+groovyscript.wiki.thebetweenlands.animator.fuel.value=Sets the fuel consumed
+groovyscript.wiki.thebetweenlands.animator.life.value=Sets the life consumed from the life crystal
+groovyscript.wiki.thebetweenlands.animator.entity.value=Sets the entity being spawned
+groovyscript.wiki.thebetweenlands.animator.render.value=Sets the entity to render, typically the same as the entity to be spawned
+groovyscript.wiki.thebetweenlands.animator.lootTable.value=Sets the LootTable used to generate outputs
+groovyscript.wiki.thebetweenlands.animator.removeByEntity=Removes all entries that match the given entity
+groovyscript.wiki.thebetweenlands.animator.removeByLootTable=Removes all entries that output the given Loot Table
+
+groovyscript.wiki.thebetweenlands.compost.title=Compost
+groovyscript.wiki.thebetweenlands.compost.description=Converts an input itemstack into an amount of compost.
+groovyscript.wiki.thebetweenlands.compost.time.value=Sets the time the recipe takes in ticks
+groovyscript.wiki.thebetweenlands.compost.amount.value=Sets the amount of compost output
+
+groovyscript.wiki.thebetweenlands.crab_pot_filter_bubbler.title=Crab Pot Filter Bubbler
+groovyscript.wiki.thebetweenlands.crab_pot_filter_bubbler.description=Converts an input item into an output itemstack when a Bubbler Crab is placed inside a Crab Pot Filter.
+
+groovyscript.wiki.thebetweenlands.crab_pot_filter_silt.title=Crab Pot Filter Silt
+groovyscript.wiki.thebetweenlands.crab_pot_filter_silt.description=Converts an input item into an output itemstack when a Silt Crab is placed inside a Crab Pot Filter.
+
+groovyscript.wiki.thebetweenlands.druid_altar.title=Druid Altar
+groovyscript.wiki.thebetweenlands.druid_altar.description=Converts 4 input items into an output itemstack.
+groovyscript.wiki.thebetweenlands.druid_altar.note0=The 4 sapling recipe to reactivate the Druid Altar recipe will always appear in JEI, even if it has been removed. Additionally, this recipe cannot be removed via `removeByInput` or `removeByOutput`
+
+groovyscript.wiki.thebetweenlands.pestle_and_mortar.title=Pestle And Mortar
+groovyscript.wiki.thebetweenlands.pestle_and_mortar.description=Converts an input item into an output itemstack in a Pestle and Mortar by using a Pestle tool in the Mortar.
+
+groovyscript.wiki.thebetweenlands.purifier.title=Purifier
+groovyscript.wiki.thebetweenlands.purifier.description=Converts an input item into an output itemstack, consuming Sulfur and Swamp Water as fuel.
+
+groovyscript.wiki.thebetweenlands.smoking_rack.title=Smoking Rack
+groovyscript.wiki.thebetweenlands.smoking_rack.description=Converts an input item into an output itemstack over a configurable period of time, consuming Fallen Leaves to do so.
+groovyscript.wiki.thebetweenlands.smoking_rack.time.value=Sets the time the recipe takes times 10 in seconds (3 = 30 seconds)
+
+groovyscript.wiki.thebetweenlands.steeping_pot.title=Steeping Pot
+groovyscript.wiki.thebetweenlands.steeping_pot.description=Converts a 1,000mb of fluid into either 1,000mb of a fluid, an output itemstack, or both, consuming up to 4 items from a Silk Bundle placed inside the Steeping Pot to do so. The Silk Bundle is converted into a Dirty Silk Bundle in the process. The Silk Bundle can only hold specific items, which are also configurable.
+groovyscript.wiki.thebetweenlands.steeping_pot.meta.value=Sets the color of the output and the type of output if the fluidOutput is `dye_fluid` or `drinkable_brew`
+groovyscript.wiki.thebetweenlands.steeping_pot.addAcceptedItem=Adds the given ItemStack to the accepted item list for the Silk Bundle
+groovyscript.wiki.thebetweenlands.steeping_pot.removeAcceptedItem=Removes the given ItemStack from the accepted item list for the Silk Bundle
+groovyscript.wiki.thebetweenlands.steeping_pot.removeAllAcceptedItem=Removes all entries from the accepted item list for the Silk Bundle
+
+
 # Blood Arsenal
 groovyscript.wiki.bloodarsenal.sanguine_infusion.title=Sanguine Infusion
 groovyscript.wiki.bloodarsenal.sanguine_infusion.description=Converts an input infusion itemstack and up to 8 input surrounding itemstacks into an output itemstack, consuming Life Essence from the network to do so when the Infusion de Sanguine Ritual is activated. Alternatively, instead of consuming an infusion item, adds or upgrades a modifier to the given stasis tool, with the ability to increase the quantity of inputs consumed based on level.
@@ -2422,12 +2466,14 @@ groovyscript.wiki.thaumcraft.warp.description=Determines if holding an item or e
 groovyscript.wiki.thaumcraft.warp.addWarp=Adds Warp to the given item in the format `item`, `amount`
 groovyscript.wiki.thaumcraft.warp.removeWarp=Removes Warp from the given item
 
+
 # The Aurorian
 groovyscript.wiki.theaurorian.moonlight_forge.title=Moonlight Forge
 groovyscript.wiki.theaurorian.moonlight_forge.description=Combines two items to get a third item. Only works at night, and works faster the higher it is placed in the world.
 groovyscript.wiki.theaurorian.moonlight_forge.removeByInput=Removes a recipe by the input item and the catalyst item
 groovyscript.wiki.theaurorian.scrapper.title=Scrapper
 groovyscript.wiki.theaurorian.scrapper.description=Turns an input item into an output item. Can be sped up by placing a Crystal on top of it. The crystal has a chance to break every time a recipe is executed.
+
 
 # Thermal Expansion
 groovyscript.wiki.thermalexpansion.energy.value=Sets the energy cost of the recipe

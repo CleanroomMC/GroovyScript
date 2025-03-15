@@ -54,7 +54,7 @@ public class WorkBenchPlus extends VirtualizedRegistry<IngredientRecipe> {
                 WorkbenchRecipe::removeRecipe
         );
         iterableRecipe.forEach(
-            recipe -> addBackup(new IngredientRecipe(recipe.location(),recipe.getOutput(),recipe.energy(),recipe.showInJEI(),recipe.inputs(),recipe.hardCode()))
+                recipe -> addBackup(new IngredientRecipe(recipe.location(), recipe.getOutput(), recipe.energy(), recipe.showInJEI(), recipe.inputs(), recipe.hardCode()))
         );
     }
 

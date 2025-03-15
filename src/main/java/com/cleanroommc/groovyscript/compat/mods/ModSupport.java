@@ -16,6 +16,7 @@ import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.atum.Atum;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
+import com.cleanroommc.groovyscript.compat.mods.betweenlands.Betweenlands;
 import com.cleanroommc.groovyscript.compat.mods.bloodarsenal.BloodArsenal;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
@@ -103,6 +104,7 @@ public class ModSupport {
     public static final GroovyContainer<Atum> ATUM = new InternalModContainer<>("atum", "Atum 2", Atum::new);
     public static final GroovyContainer<Avaritia> AVARITIA = new InternalModContainer<>("avaritia", "Avaritia", Avaritia::new);
     public static final GroovyContainer<BetterWithMods> BETTER_WITH_MODS = new InternalModContainer<>("betterwithmods", "Better With Mods", BetterWithMods::new);
+    public static final GroovyContainer<Betweenlands> BETWEENLANDS = new InternalModContainer<>("thebetweenlands", "The Betweenlands", Betweenlands::new, "betweenlands");
     public static final GroovyContainer<BloodArsenal> BLOOD_ARSENAL = new InternalModContainer<>("bloodarsenal", "Blood Arsenal", BloodArsenal::new);
     public static final GroovyContainer<BloodMagic> BLOOD_MAGIC = new InternalModContainer<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
     public static final GroovyContainer<Botania> BOTANIA = new InternalModContainer<>("botania", "Botania", Botania::new);
