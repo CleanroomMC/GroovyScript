@@ -1,12 +1,15 @@
 package com.cleanroommc.groovyscript.api;
 
 import com.cleanroommc.groovyscript.helper.ingredient.OrIngredient;
+import com.google.common.collect.AbstractIterator;
+import groovy.lang.IntRange;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 /**
@@ -49,6 +52,33 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
     // item('minecraft:iron_ingot') in ore('ingotIron') // true
     default boolean isCase(ItemStack ingredient) {
         return ingredient != null && test(ingredient);
+    }
+
+    // [i] operator
+    default ItemStack getAt(int index) {
+        ItemStack[] stacks = getMatchingStacks();
+        while (index < 0) index += stacks.length;
+        return getMatchingStacks()[index];
+    }
+
+    default ItemStack getFirst() {
+        return getAt(0);
+    }
+
+    // allows using a range in [] operator like [5..12]
+    default Iterable<ItemStack> getAt(IntRange range) {
+        return () -> new AbstractIterator<>() {
+
+            private final Iterator<Integer> it = range.iterator();
+
+            @Override
+            protected ItemStack computeNext() {
+                if (it.hasNext()) {
+                    return getAt(it.next());
+                }
+                return endOfData();
+            }
+        };
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
-import com.google.common.collect.Iterators;
+import com.google.common.collect.AbstractIterator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
@@ -17,6 +17,8 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
     private final ItemStackList itemStacks = new ItemStackList();
     private int amount = 1;
 
+    protected ItemsIngredient() {}
+
     public ItemsIngredient(ItemStack... itemStacks) {
         Collections.addAll(this.itemStacks, itemStacks);
         this.itemStacks.trim();
@@ -24,6 +26,10 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
     }
 
     public ItemsIngredient(Collection<ItemStack> itemStacks) {
+        setItemStacks(itemStacks);
+    }
+
+    protected final void setItemStacks(Collection<ItemStack> itemStacks) {
         this.itemStacks.addAll(itemStacks);
         this.itemStacks.trim();
         this.itemStacks.copyElements();
@@ -47,11 +53,16 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
     public ItemStack[] getMatchingStacks() {
         ItemStack[] stacks = new ItemStack[itemStacks.size()];
         for (int i = 0; i < stacks.length; i++) {
-            ItemStack stack = itemStacks.get(i).copy();
-            stack.setCount(getAmount());
-            stacks[i] = stack;
+            stacks[i] = getAt(i);
         }
         return stacks;
+    }
+
+    @Override
+    public ItemStack getAt(int index) {
+        ItemStack stack = this.itemStacks.get(index).copy();
+        stack.setCount(getAmount());
+        return stack;
     }
 
     @Override
@@ -74,12 +85,22 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
         return false;
     }
 
-    public List<ItemStack> getItemStacks() {
+    // protected since modifying un-copied stack directly can result in unexpected results
+    protected List<ItemStack> getItemStacks() {
         return Collections.unmodifiableList(this.itemStacks);
     }
 
     @Override
     public @NotNull Iterator<ItemStack> iterator() {
-        return Iterators.unmodifiableIterator(this.itemStacks.iterator());
+        return new AbstractIterator<>() {
+
+            private int index = 0;
+
+            @Override
+            protected ItemStack computeNext() {
+                if (index >= itemStacks.size()) return endOfData();
+                return getAt(index++);
+            }
+        };
     }
 }
