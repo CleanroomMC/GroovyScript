@@ -19,7 +19,6 @@ import java.util.List;
 public class Saw extends StandardListRegistry<SawRecipe> {
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:gold_ingot') * 16)"))
-    @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

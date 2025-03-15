@@ -506,6 +506,62 @@ groovyscript.wiki.atum.spinning_wheel.description=Converts three input items int
 groovyscript.wiki.atum.spinning_wheel.rotations.value=Sets the amount of rotation required to convert the input into the output
 
 
+# Better With Addons
+groovyscript.wiki.betterwithaddons.drying_box.title=Drying Unit
+groovyscript.wiki.betterwithaddons.drying_box.description=Converts an input item into an output itemstack if placed within the appropriate multiblock. The multiblock is Sandstone directly below the Drying Box, 8 Sand around the Drying Box, and a Dead Bush placed on the Sand. Only functions in a non-snowy biome with sky access during the day, and functions twice as fast when in a hot biome.
+
+groovyscript.wiki.betterwithaddons.fire_net.title=Fire Net
+groovyscript.wiki.betterwithaddons.fire_net.description=Converts an input item into any number of output itemstacks if placed within the appropriate multiblock. The multiblock is Lava or Fire directly below the Netted Screen, 8 Stone Brick around the Lava or Fire, and 8 Slat Blocks placed around the Netted Screen.
+groovyscript.wiki.betterwithaddons.fire_net.note0=Because the Fire Net needs Lava/Fire below the net to work, items that are output below the net will be destroyed.
+
+groovyscript.wiki.betterwithaddons.infuser.title=Ancestral Infusion Crafting
+groovyscript.wiki.betterwithaddons.infuser.description=Converts a custom crafting recipe an output itemstack, consuming Spirits from the Infused Soul Sand placed below the Ancestral Infuser if placed within the appropriate multiblock. The multiblock is either Soul Sand or Infused Soul Sand placed below the Ancestral Infuser and exclusively air blocks adjacent to the Infuser and Soul Sand blocks.
+groovyscript.wiki.betterwithaddons.infuser.spirits.value=Sets the amount of spirits consumed
+
+groovyscript.wiki.betterwithaddons.lure_tree.title=Alicio Tree Foods
+groovyscript.wiki.betterwithaddons.lure_tree.description=Converts an input item into an amount of food for the tree to gradually consume, eventually summoning a random creature nearby.
+groovyscript.wiki.betterwithaddons.lure_tree.note0=The creature spawned will be a passive animal, and undesirable animals can be blacklisted. The blacklist has no entries by default.
+groovyscript.wiki.betterwithaddons.lure_tree.food.value=Sets the value of the food
+groovyscript.wiki.betterwithaddons.lure_tree.addBlacklist=Adds the given Entity to the blacklist
+groovyscript.wiki.betterwithaddons.lure_tree.removeBlacklist=Removes the given Entity from the blacklist
+groovyscript.wiki.betterwithaddons.lure_tree.getBlacklist=Returns a list of all blacklisted classes that the Alicio Tree cannot spawn
+
+groovyscript.wiki.betterwithaddons.packing.title=Packing
+groovyscript.wiki.betterwithaddons.packing.description=Converts an input itemstack in the form of a EntityItems into an IBlockState after a piston extends if the piston and location the EntityItems are in are fully surrounded by solid blocks.
+groovyscript.wiki.betterwithaddons.packing.compress.value=Sets the IBlockState that the input is compacted into
+groovyscript.wiki.betterwithaddons.packing.jeiOutput.value=Sets output that appears in JEI, but has no bearing on the actual recipe
+
+groovyscript.wiki.betterwithaddons.rotting.title=Rotting Food
+groovyscript.wiki.betterwithaddons.rotting.description=Converts an input item into an output itemstack after the given time has passed. Has the ability to customize the terminology used to indicate the age.
+groovyscript.wiki.betterwithaddons.rotting.note0=When an item (regardless of metadata) is the input of any entry in the Rotting map, all items will gain a new NBT tag with the day they were obtained. This may be them annoying to interact with.
+groovyscript.wiki.betterwithaddons.rotting.add=Adds the given entry to the Rotting map
+groovyscript.wiki.betterwithaddons.rotting.key.value=Sets the base key for the lang keys used to localize the stage the rotting is at
+groovyscript.wiki.betterwithaddons.rotting.time.value=Sets how long the item takes to rot
+groovyscript.wiki.betterwithaddons.rotting.rotted.value=Sets the item the rotted item turns into when the time has passed
+groovyscript.wiki.betterwithaddons.rotting.remove=Removes the given entry from the Rotting map
+
+groovyscript.wiki.betterwithaddons.sand_net.title=Sand Net
+groovyscript.wiki.betterwithaddons.sand_net.description=Converts an input item into any number of output itemstacks if placed within the appropriate multiblock. The multiblock is a Slat Block directly below the Netted Screen, 8 Water Blocks around the Water, and 8 Slat Blocks placed around the Netted Screen.
+groovyscript.wiki.betterwithaddons.sand_net.sand.value=Sets the amount of sand consumed when the recipe is processed
+
+groovyscript.wiki.betterwithaddons.soaking_box.title=Soaking Unit
+groovyscript.wiki.betterwithaddons.soaking_box.description=Converts an input item into an output itemstack if placed within the appropriate multiblock. The multiblock is Ice directly above the Soaking Box, 8 Water around the Soaking Box, and Water directly below the Soaking Box.
+
+groovyscript.wiki.betterwithaddons.spindle.title=Spindle
+groovyscript.wiki.betterwithaddons.spindle.description=Converts an input itemstack into an output itemstack, with the ability to consume the Spindle, when placed against a Spinning Wheel powered by Mechanical Power.
+groovyscript.wiki.betterwithaddons.spindle.popoff.value=Sets if the Spindle will break and be consumed when crafting
+
+groovyscript.wiki.betterwithaddons.tatara.title=Tatara
+groovyscript.wiki.betterwithaddons.tatara.description=Converts an input item into an output itemstack if placed within the appropriate multiblock while fueled by Rice Ashes. The multiblock is Lava or Fire directly below the Tatara, 8 Clay around the Lava or Fire, 9 Nether Brick above the Tatara, 4 Stone Brick diagonal to the Tatara and two Iron Blocks across from each other adjacent to the Tatara.
+
+groovyscript.wiki.betterwithaddons.transmutation.title=Ancestral Infusion Transmutation
+groovyscript.wiki.betterwithaddons.transmutation.description=Converts an input item into an output itemstack, consuming Spirits from the Infused Soul Sand placed below the Ancestral Infuser if placed within the appropriate multiblock. The multiblock is either Soul Sand or Infused Soul Sand placed below the Ancestral Infuser and exclusively air blocks adjacent to the Infuser and Soul Sand blocks.
+groovyscript.wiki.betterwithaddons.transmutation.spirits.value=Sets the amount of spirits consumed
+
+groovyscript.wiki.betterwithaddons.water_net.title=Water Net
+groovyscript.wiki.betterwithaddons.water_net.description=Converts an input item into any number of output itemstacks if placed within the appropriate multiblock. The multiblock is a Water Block directly below the Netted Screen, 8 Sakura Planks around the Water Block, and 8 Slat Blocks placed around the Netted Screen.
+
+
 # Better With Mods
 groovyscript.wiki.betterwithmods.anvil_crafting.title=Anvil Crafting
 groovyscript.wiki.betterwithmods.anvil_crafting.description=Similar to a normal crafting table, but 4x4 instead.

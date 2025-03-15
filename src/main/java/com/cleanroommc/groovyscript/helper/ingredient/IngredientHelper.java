@@ -48,6 +48,15 @@ public class IngredientHelper {
         return (ItemStack) (Object) ingredient;
     }
 
+    public static ItemStack toItemStack(IBlockState state) {
+        return toItemStack(state, 1);
+    }
+
+    public static ItemStack toItemStack(IBlockState state, int amount) {
+        var block = state.getBlock();
+        return new ItemStack(block, amount, block.getMetaFromState(state));
+    }
+
     public static FluidStack toFluidStack(IIngredient ingredient) {
         return (FluidStack) ingredient;
     }

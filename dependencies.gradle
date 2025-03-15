@@ -47,8 +47,9 @@ final def mod_dependencies = [
         'the-aurorian-352137:4981736'                         : [project.debug_aurorian],
         'avaritia_1_10-261348:3143349'                        : [project.debug_avaritia],
         'atum-2-59621:3116599'                                : [project.debug_atum],
-        'bwm-core-294335:2624990'                             : [project.debug_better_with_mods],
-        'bwm-suite-246760:3289033'                            : [project.debug_better_with_mods],
+        'better-with-addons-268326:2899407'                   : [project.debug_better_with_addons],
+        'bwm-core-294335:2624990'                             : [project.debug_better_with_addons, project.debug_better_with_mods],
+        'bwm-suite-246760:3289033'                            : [project.debug_better_with_addons, project.debug_better_with_mods],
         'blood-arsenal-228823:2904183'                        : [project.debug_blood_arsenal],
         'blood-magic-224791:2822288'                          : [project.debug_blood_arsenal, project.debug_blood_magic],
         'guide-api-228832:2645992'                            : [project.debug_blood_arsenal, project.debug_blood_magic, project.debug_woot],
@@ -178,6 +179,11 @@ dependencies {
         //  until this is resolved, download and install the jar from
         //  https://www.curseforge.com/minecraft/mc-mods/angry-pixel-the-betweenlands-mod/files/4479688
         // runtimeOnly rfg.deobf('curse.maven:angry-pixel-the-betweenlands-mod-243363:4479688')
+    }
+
+    compileOnly rfg.deobf('curse.maven:better-with-everything-896908:5202745')
+    if (!(project.debug_better_with_addons.toBoolean() || project.debug_better_with_mods.toBoolean()) && project.debug_better_with_everything.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:better-with-everything-896908:5202745')
     }
 
     compileOnly 'com.enderio:endercore:0.5.78'
