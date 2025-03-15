@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
+import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Supplier;
 
 /**
  * This is used for external mod compat. Don't use this directly. Instead, implement {@link GroovyPlugin} on any class.
@@ -16,7 +18,7 @@ import java.util.Set;
 public class ExternalModContainer extends GroovyContainer<GroovyPropertyContainer> {
 
     private final GroovyPlugin groovyContainer;
-    private final GroovyPropertyContainer container;
+    private final Supplier<GroovyPropertyContainer> container;
     private final String modId;
     private final String containerName;
     private final Collection<String> aliases;
@@ -24,7 +26,11 @@ public class ExternalModContainer extends GroovyContainer<GroovyPropertyContaine
 
     ExternalModContainer(@NotNull GroovyPlugin groovyContainer, @NotNull GroovyPropertyContainer container) {
         this.groovyContainer = Objects.requireNonNull(groovyContainer);
-        this.container = Objects.requireNonNull(container);
+        Objects.requireNonNull(container);
+        this.container = Suppliers.memoize(() -> {
+            container.addPropertyFieldsOf(container, false);
+            return container;
+        });
         this.modId = groovyContainer.getModId();
         this.containerName = groovyContainer.getContainerName();
         Set<String> aliasSet = new ObjectOpenHashSet<>(groovyContainer.getAliases());
@@ -48,9 +54,8 @@ public class ExternalModContainer extends GroovyContainer<GroovyPropertyContaine
         return true;
     }
 
-    @NotNull
     @Override
-    public Collection<String> getAliases() {
+    public @NotNull Collection<String> getAliases() {
         return aliases;
     }
 
@@ -61,7 +66,7 @@ public class ExternalModContainer extends GroovyContainer<GroovyPropertyContaine
 
     @Override
     public GroovyPropertyContainer get() {
-        return container;
+        return container.get();
     }
 
     @Override

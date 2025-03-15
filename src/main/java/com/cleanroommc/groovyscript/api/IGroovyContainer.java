@@ -45,8 +45,7 @@ public interface IGroovyContainer {
      *
      * @return aliases
      */
-    @NotNull
-    default Collection<String> getAliases() {
+    default @NotNull Collection<String> getAliases() {
         return Collections.singletonList(getModId());
     }
 
@@ -67,8 +66,7 @@ public interface IGroovyContainer {
      * @return the override priority
      * @see Priority
      */
-    @NotNull
-    default Priority getOverridePriority() {
+    default @NotNull Priority getOverridePriority() {
         return Priority.NONE;
     }
 

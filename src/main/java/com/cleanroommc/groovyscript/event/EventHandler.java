@@ -37,6 +37,7 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -76,6 +77,11 @@ public class EventHandler {
     @SideOnly(Side.CLIENT)
     public static void registerTextures(TextureStitchEvent.Post event) {
         GroovyFluid.initTextures(event.getMap());
+    }
+
+    @SubscribeEvent
+    public static void createSpawnPosition(WorldEvent.CreateSpawnPosition event) {
+        VanillaModule.gameRule.setDefaultGameRules(event.getWorld().getGameRules());
     }
 
     @SubscribeEvent
@@ -127,8 +133,8 @@ public class EventHandler {
             Container container = ((InventoryCraftingAccess) inventoryCrafting).getEventHandler();
             if (container != null) {
                 for (Slot slot : container.inventorySlots) {
-                    if (slot instanceof SlotCrafting) {
-                        craftResult = (InventoryCraftResult) slot.inventory;
+                    if (slot instanceof SlotCrafting && slot.inventory instanceof InventoryCraftResult result) {
+                        craftResult = result;
                         player = ((SlotCraftingAccess) slot).getPlayer();
                         break;
                     }
@@ -136,8 +142,8 @@ public class EventHandler {
             }
             if (craftResult != null) {
                 IRecipe recipe = craftResult.getRecipeUsed();
-                if (recipe instanceof ICraftingRecipe) {
-                    Closure<Void> recipeAction = ((ICraftingRecipe) recipe).getRecipeAction();
+                if (recipe instanceof ICraftingRecipe iCraftingRecipe) {
+                    Closure<Void> recipeAction = iCraftingRecipe.getRecipeAction();
                     if (recipeAction != null) {
                         GroovyLog.get().infoMC("Fire Recipe Action");
                         ClosureHelper.call(recipeAction, event.crafting, new CraftingInfo(inventoryCrafting, player));
@@ -150,8 +156,8 @@ public class EventHandler {
     @SubscribeEvent
     public static void onExplosion(ExplosionEvent.Detonate event) {
         for (Entity entity : event.getAffectedEntities()) {
-            if (entity instanceof EntityItem) {
-                VanillaModule.inWorldCrafting.explosion.findAndRunRecipe((EntityItem) entity);
+            if (entity instanceof EntityItem entityItem) {
+                VanillaModule.inWorldCrafting.explosion.findAndRunRecipe(entityItem);
             }
         }
     }

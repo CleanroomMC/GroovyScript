@@ -59,8 +59,7 @@ public class SimpleObjectStream<T> extends AbstractList<T> {
         return recipe;
     }
 
-    @Nullable
-    public T getFirst() {
+    public @Nullable T getFirst() {
         for (T recipe : this.recipes) {
             if (recipe != null) {
                 return recipe;

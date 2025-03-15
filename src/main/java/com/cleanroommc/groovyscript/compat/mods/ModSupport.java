@@ -4,17 +4,21 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
+import com.cleanroommc.groovyscript.compat.mods.additionalenchantedminer.AdditionalEnchantedMiner;
 import com.cleanroommc.groovyscript.compat.mods.advancedmortars.AdvancedMortars;
 import com.cleanroommc.groovyscript.compat.mods.advancedrocketry.AdvancedRocketry;
 import com.cleanroommc.groovyscript.compat.mods.aetherlegacy.Aether;
 import com.cleanroommc.groovyscript.compat.mods.alchemistry.Alchemistry;
 import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnergistics2;
 import com.cleanroommc.groovyscript.compat.mods.arcanearchives.ArcaneArchives;
+import com.cleanroommc.groovyscript.compat.mods.arcaneworld.ArcaneWorld;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.atum.Atum;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
 import com.cleanroommc.groovyscript.compat.mods.betterwithaddons.BetterWithAddons;
 import com.cleanroommc.groovyscript.compat.mods.betterwithmods.BetterWithMods;
+import com.cleanroommc.groovyscript.compat.mods.betweenlands.Betweenlands;
+import com.cleanroommc.groovyscript.compat.mods.bloodarsenal.BloodArsenal;
 import com.cleanroommc.groovyscript.compat.mods.bloodmagic.BloodMagic;
 import com.cleanroommc.groovyscript.compat.mods.botania.Botania;
 import com.cleanroommc.groovyscript.compat.mods.botaniatweaks.BotaniaTweaks;
@@ -55,6 +59,7 @@ import com.cleanroommc.groovyscript.compat.mods.pyrotech.PyroTech;
 import com.cleanroommc.groovyscript.compat.mods.randomthings.RandomThings;
 import com.cleanroommc.groovyscript.compat.mods.roots.Roots;
 import com.cleanroommc.groovyscript.compat.mods.rustic.Rustic;
+import com.cleanroommc.groovyscript.compat.mods.silentsgems.SilentGems;
 import com.cleanroommc.groovyscript.compat.mods.tcomplement.TinkersComplement;
 import com.cleanroommc.groovyscript.compat.mods.techreborn.TechReborn;
 import com.cleanroommc.groovyscript.compat.mods.thaumcraft.Thaumcraft;
@@ -83,17 +88,21 @@ public class ModSupport {
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
     public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
+    public static final GroovyContainer<AdditionalEnchantedMiner> ADDITIONAL_ENCHANTED_MINER = new InternalModContainer<>("quarryplus", "Additional Enchanted Miner", AdditionalEnchantedMiner::new);
     public static final GroovyContainer<AdvancedMortars> ADVANCED_MORTARS = new InternalModContainer<>("advancedmortars", "Advanced Mortars", AdvancedMortars::new);
     public static final GroovyContainer<AdvancedRocketry> ADVANCED_ROCKETRY = new InternalModContainer<>("advancedrocketry", "Advanced Rocketry", AdvancedRocketry::new);
     public static final GroovyContainer<Aether> AETHER = new InternalModContainer<>("aether_legacy", "Aether Legacy", Aether::new, "aether");
     public static final GroovyContainer<Alchemistry> ALCHEMISTRY = new InternalModContainer<>("alchemistry", "Alchemistry", Alchemistry::new);
     public static final GroovyContainer<AppliedEnergistics2> APPLIED_ENERGISTICS_2 = new InternalModContainer<>("appliedenergistics2", "Applied Energistics 2", AppliedEnergistics2::new, "ae2");
     public static final GroovyContainer<ArcaneArchives> ARCANE_ARCHIVES = new InternalModContainer<>("arcanearchives", "Arcane Archives", ArcaneArchives::new);
+    public static final GroovyContainer<ArcaneWorld> ARCANE_WORLD = new InternalModContainer<>("arcaneworld", "Arcane World", ArcaneWorld::new);
     public static final GroovyContainer<AstralSorcery> ASTRAL_SORCERY = new InternalModContainer<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral");
     public static final GroovyContainer<Atum> ATUM = new InternalModContainer<>("atum", "Atum 2", Atum::new);
     public static final GroovyContainer<Avaritia> AVARITIA = new InternalModContainer<>("avaritia", "Avaritia", Avaritia::new);
     public static final GroovyContainer<BetterWithAddons> BETTER_WITH_ADDONS = new InternalModContainer<>("betterwithaddons", "Better With Addons", BetterWithAddons::new);
     public static final GroovyContainer<BetterWithMods> BETTER_WITH_MODS = new InternalModContainer<>("betterwithmods", "Better With Mods", BetterWithMods::new);
+    public static final GroovyContainer<Betweenlands> BETWEENLANDS = new InternalModContainer<>("thebetweenlands", "The Betweenlands", Betweenlands::new, "betweenlands");
+    public static final GroovyContainer<BloodArsenal> BLOOD_ARSENAL = new InternalModContainer<>("bloodarsenal", "Blood Arsenal", BloodArsenal::new);
     public static final GroovyContainer<BloodMagic> BLOOD_MAGIC = new InternalModContainer<>("bloodmagic", "Blood Magic: Alchemical Wizardry", BloodMagic::new, "bm");
     public static final GroovyContainer<Botania> BOTANIA = new InternalModContainer<>("botania", "Botania", Botania::new);
     public static final GroovyContainer<BotaniaTweaks> BOTANIA_TWEAKS = new InternalModContainer<>("botania_tweaks", "Botania Tweaks", BotaniaTweaks::new);
@@ -134,6 +143,7 @@ public class ModSupport {
     public static final GroovyContainer<RandomThings> RANDOM_THINGS = new InternalModContainer<>("randomthings", "Random Things", RandomThings::new);
     public static final GroovyContainer<Roots> ROOTS = new InternalModContainer<>("roots", "Roots 3", Roots::new);
     public static final GroovyContainer<Rustic> RUSTIC = new InternalModContainer<>("rustic", "Rustic", Rustic::new);
+    public static final GroovyContainer<SilentGems> SILENT_GEMS = new InternalModContainer<>("silentgems", "Silent's Gems", SilentGems::new);
     public static final GroovyContainer<TechReborn> TECH_REBORN = new InternalModContainer<>("techreborn", "Tech Reborn", TechReborn::new);
     public static final GroovyContainer<Thaumcraft> THAUMCRAFT = new InternalModContainer<>("thaumcraft", "Thaumcraft", Thaumcraft::new, "tc", "thaum");
     public static final GroovyContainer<TheAurorian> THE_AURORIAN = new InternalModContainer<>("theaurorian", "The Aurorian", TheAurorian::new, "aurorian");
@@ -227,8 +237,7 @@ public class ModSupport {
         }
     }
 
-    @NotNull
-    public GroovyContainer<?> getContainer(String mod) {
+    public @NotNull GroovyContainer<?> getContainer(String mod) {
         if (!containers.containsKey(mod)) {
             throw new IllegalStateException("There is no compat registered for '" + mod + "'!");
         }

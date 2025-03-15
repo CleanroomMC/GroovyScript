@@ -174,6 +174,10 @@ groovyscript.wiki.actuallyadditions.treasure_chest.min.required=less than or equ
 groovyscript.wiki.actuallyadditions.treasure_chest.max.value=Sets the maximum stack size given when rolled
 groovyscript.wiki.actuallyadditions.treasure_chest.max.required=greater than or equal to the size of min
 
+#Additional Enchanted Miner
+groovyscript.wiki.quarryplus.work_bench_plus.title=Work bench
+groovyscript.wiki.quarryplus.work_bench_plus.description=Workbench for crafting items using electricity.
+
 # Advanced Mortars
 groovyscript.wiki.advancedmortars.mortar.title=Mortar
 groovyscript.wiki.advancedmortars.mortar.description=Uses any number of specific types of Mortars to convert multiple items into a single output with a possible chance output after a number of player interactions.
@@ -329,6 +333,18 @@ groovyscript.wiki.appliedenergistics2.spatial.remove=Removes the given class fro
 groovyscript.wiki.arcanearchives.gem_cutting_table.title=Gem Cutting Table
 groovyscript.wiki.arcanearchives.gem_cutting_table.description=Converts any number of itemstacks into a single output itemstack via selecting the desired output itemstack in the GUI.
 groovyscript.wiki.arcanearchives.gem_cutting_table.note0=While more than 8 items can function as the input of a Stygian Iron Anvil recipe, only the first 8 are shown in JEI.
+
+
+# Arcane World
+groovyscript.wiki.arcaneworld.ritual.title=Ritual
+groovyscript.wiki.arcaneworld.ritual.description=Converts up to 5 input itemstacks into a wide number of possible effects, including spawning entities, opening a portal to a dungeon dimension to fight a mob, awarding an output itemstack, running commands, and even entirely customized effects.
+groovyscript.wiki.arcaneworld.ritual.time.value=Sets the amount of time that is passed when the Time Ritual is activated
+groovyscript.wiki.arcaneworld.ritual.entity.value=Sets the entity spawned when the Arena or Summon Rituals are activated
+groovyscript.wiki.arcaneworld.ritual.command.value=Sets the commands that will be run when the Command Ritual is activated
+groovyscript.wiki.arcaneworld.ritual.onActivate.value=Sets the effect that will happen when the Custom Ritual is run, with the Closure taking 4 parameters, `World world`, `BlockPos blockPos`, `EntityPlayer player`, and `ItemStack... itemStacks`
+groovyscript.wiki.arcaneworld.ritual.ritualType.value=Sets the mode of the ritual, different modes will require different values
+groovyscript.wiki.arcaneworld.ritual.weatherType.value=Sets the type of weather the world will change to when the Weather Ritual is activated
+groovyscript.wiki.arcaneworld.ritual.translationKey.value=Sets the translation key used to localize the name of the ritual
 
 
 # Astral Sorcery
@@ -601,6 +617,65 @@ groovyscript.wiki.betterwithmods.turntable.description=Converts a block into an 
 groovyscript.wiki.betterwithmods.turntable.input.value=Sets the input block
 groovyscript.wiki.betterwithmods.turntable.rotations.value=Sets the number of rotations required to complete the recipe
 groovyscript.wiki.betterwithmods.turntable.outputBlock.value=Sets the blockstate that replaces the input block
+
+
+# The Betweenlands
+groovyscript.wiki.thebetweenlands.animator.title=Animator
+groovyscript.wiki.thebetweenlands.animator.description=Converts an input item, Life amount from Life Crystals, and Fuel from Sulfur into an output itemstack, summoning an entity, a random item from a loottable, or summoning an entity and outputting an itemstack.
+groovyscript.wiki.thebetweenlands.animator.fuel.value=Sets the fuel consumed
+groovyscript.wiki.thebetweenlands.animator.life.value=Sets the life consumed from the life crystal
+groovyscript.wiki.thebetweenlands.animator.entity.value=Sets the entity being spawned
+groovyscript.wiki.thebetweenlands.animator.render.value=Sets the entity to render, typically the same as the entity to be spawned
+groovyscript.wiki.thebetweenlands.animator.lootTable.value=Sets the LootTable used to generate outputs
+groovyscript.wiki.thebetweenlands.animator.removeByEntity=Removes all entries that match the given entity
+groovyscript.wiki.thebetweenlands.animator.removeByLootTable=Removes all entries that output the given Loot Table
+
+groovyscript.wiki.thebetweenlands.compost.title=Compost
+groovyscript.wiki.thebetweenlands.compost.description=Converts an input itemstack into an amount of compost.
+groovyscript.wiki.thebetweenlands.compost.time.value=Sets the time the recipe takes in ticks
+groovyscript.wiki.thebetweenlands.compost.amount.value=Sets the amount of compost output
+
+groovyscript.wiki.thebetweenlands.crab_pot_filter_bubbler.title=Crab Pot Filter Bubbler
+groovyscript.wiki.thebetweenlands.crab_pot_filter_bubbler.description=Converts an input item into an output itemstack when a Bubbler Crab is placed inside a Crab Pot Filter.
+
+groovyscript.wiki.thebetweenlands.crab_pot_filter_silt.title=Crab Pot Filter Silt
+groovyscript.wiki.thebetweenlands.crab_pot_filter_silt.description=Converts an input item into an output itemstack when a Silt Crab is placed inside a Crab Pot Filter.
+
+groovyscript.wiki.thebetweenlands.druid_altar.title=Druid Altar
+groovyscript.wiki.thebetweenlands.druid_altar.description=Converts 4 input items into an output itemstack.
+groovyscript.wiki.thebetweenlands.druid_altar.note0=The 4 sapling recipe to reactivate the Druid Altar recipe will always appear in JEI, even if it has been removed. Additionally, this recipe cannot be removed via `removeByInput` or `removeByOutput`
+
+groovyscript.wiki.thebetweenlands.pestle_and_mortar.title=Pestle And Mortar
+groovyscript.wiki.thebetweenlands.pestle_and_mortar.description=Converts an input item into an output itemstack in a Pestle and Mortar by using a Pestle tool in the Mortar.
+
+groovyscript.wiki.thebetweenlands.purifier.title=Purifier
+groovyscript.wiki.thebetweenlands.purifier.description=Converts an input item into an output itemstack, consuming Sulfur and Swamp Water as fuel.
+
+groovyscript.wiki.thebetweenlands.smoking_rack.title=Smoking Rack
+groovyscript.wiki.thebetweenlands.smoking_rack.description=Converts an input item into an output itemstack over a configurable period of time, consuming Fallen Leaves to do so.
+groovyscript.wiki.thebetweenlands.smoking_rack.time.value=Sets the time the recipe takes times 10 in seconds (3 = 30 seconds)
+
+groovyscript.wiki.thebetweenlands.steeping_pot.title=Steeping Pot
+groovyscript.wiki.thebetweenlands.steeping_pot.description=Converts a 1,000mb of fluid into either 1,000mb of a fluid, an output itemstack, or both, consuming up to 4 items from a Silk Bundle placed inside the Steeping Pot to do so. The Silk Bundle is converted into a Dirty Silk Bundle in the process. The Silk Bundle can only hold specific items, which are also configurable.
+groovyscript.wiki.thebetweenlands.steeping_pot.meta.value=Sets the color of the output and the type of output if the fluidOutput is `dye_fluid` or `drinkable_brew`
+groovyscript.wiki.thebetweenlands.steeping_pot.addAcceptedItem=Adds the given ItemStack to the accepted item list for the Silk Bundle
+groovyscript.wiki.thebetweenlands.steeping_pot.removeAcceptedItem=Removes the given ItemStack from the accepted item list for the Silk Bundle
+groovyscript.wiki.thebetweenlands.steeping_pot.removeAllAcceptedItem=Removes all entries from the accepted item list for the Silk Bundle
+
+
+# Blood Arsenal
+groovyscript.wiki.bloodarsenal.sanguine_infusion.title=Sanguine Infusion
+groovyscript.wiki.bloodarsenal.sanguine_infusion.description=Converts an input infusion itemstack and up to 8 input surrounding itemstacks into an output itemstack, consuming Life Essence from the network to do so when the Infusion de Sanguine Ritual is activated. Alternatively, instead of consuming an infusion item, adds or upgrades a modifier to the given stasis tool, with the ability to increase the quantity of inputs consumed based on level.
+groovyscript.wiki.bloodarsenal.sanguine_infusion.note0=Blacklisting classes only have effect in conjunction with a recipe using a `filter` and a respective of a Modifier that overrides `getSpecialNBT` to save the relevant filtered stack. The `filter` can only be used for modifier recipes. By default, the relevant Modifiers are `bad_potion`, `beneficial_potion`, and `sigil`.
+groovyscript.wiki.bloodarsenal.sanguine_infusion.cost.value=Sets the Life Essence cost
+groovyscript.wiki.bloodarsenal.sanguine_infusion.filter.value=Sets the filter the recipe
+groovyscript.wiki.bloodarsenal.sanguine_infusion.infuse.value=Sets the item being infused
+groovyscript.wiki.bloodarsenal.sanguine_infusion.modifier.value=Sets the modifier key
+groovyscript.wiki.bloodarsenal.sanguine_infusion.levelMultiplier.value=Sets the amount inputs are multiplied for higher levels of the modifier
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeByModifierKey=Removes all recipes with the given modifier key
+groovyscript.wiki.bloodarsenal.sanguine_infusion.addBlacklist=Remove the given class from the blacklist
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeBlacklist=Add the given class to the blacklist
+groovyscript.wiki.bloodarsenal.sanguine_infusion.removeAllBlacklist=Removes all entries from the blacklist
 
 
 # Blood Magic
@@ -2156,6 +2231,14 @@ groovyscript.wiki.rustic.evaporating_basin.description=Converts fluids into item
 groovyscript.wiki.rustic.evaporating_basin.time.value=Sets the time in ticks the recipe will take
 
 
+# Silent's Gems
+groovyscript.wiki.silentgems.chaos_altar.title=Chaos Altar
+groovyscript.wiki.silentgems.chaos_altar.description=Converts an input itemstack into an output itemstack with an optional catalyst, consuming a specified amount of Chaos from a Chaos Altar. Chaos is consumed at a maximum of 400 per tick, meaning the time taken corresponds to the Chaos cost.
+groovyscript.wiki.silentgems.chaos_altar.note0=If no catalyst is required by the recipe, the Chaos Altar must have no item in the catalyst slot to be valid.
+groovyscript.wiki.silentgems.chaos_altar.cost.value=Sets the total amount of Chaos required
+groovyscript.wiki.silentgems.chaos_altar.catalyst.value=Sets the catalyst itemstack
+
+
 # Tech Reborn
 groovyscript.wiki.techreborn.alloy_smelter.title=Alloy Smelter
 groovyscript.wiki.techreborn.alloy_smelter.description=Converts two itemstack inputs into an itemstack output after a given process time, consuming energy per tick.
@@ -2439,12 +2522,14 @@ groovyscript.wiki.thaumcraft.warp.description=Determines if holding an item or e
 groovyscript.wiki.thaumcraft.warp.addWarp=Adds Warp to the given item in the format `item`, `amount`
 groovyscript.wiki.thaumcraft.warp.removeWarp=Removes Warp from the given item
 
+
 # The Aurorian
 groovyscript.wiki.theaurorian.moonlight_forge.title=Moonlight Forge
 groovyscript.wiki.theaurorian.moonlight_forge.description=Combines two items to get a third item. Only works at night, and works faster the higher it is placed in the world.
 groovyscript.wiki.theaurorian.moonlight_forge.removeByInput=Removes a recipe by the input item and the catalyst item
 groovyscript.wiki.theaurorian.scrapper.title=Scrapper
 groovyscript.wiki.theaurorian.scrapper.description=Turns an input item into an output item. Can be sped up by placing a Crystal on top of it. The crystal has a chance to break every time a recipe is executed.
+
 
 # Thermal Expansion
 groovyscript.wiki.thermalexpansion.energy.value=Sets the energy cost of the recipe

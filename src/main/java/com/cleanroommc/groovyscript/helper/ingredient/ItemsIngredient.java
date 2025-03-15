@@ -45,9 +45,9 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
 
     @Override
     public ItemStack[] getMatchingStacks() {
-        ItemStack[] stacks = itemStacks.toArray(new ItemStack[0]);
+        ItemStack[] stacks = new ItemStack[itemStacks.size()];
         for (int i = 0; i < stacks.length; i++) {
-            ItemStack stack = stacks[i].copy();
+            ItemStack stack = itemStacks.get(i).copy();
             stack.setCount(getAmount());
             stacks[i] = stack;
         }
@@ -78,9 +78,8 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
         return Collections.unmodifiableList(this.itemStacks);
     }
 
-    @NotNull
     @Override
-    public Iterator<ItemStack> iterator() {
+    public @NotNull Iterator<ItemStack> iterator() {
         return Iterators.unmodifiableIterator(this.itemStacks.iterator());
     }
 }

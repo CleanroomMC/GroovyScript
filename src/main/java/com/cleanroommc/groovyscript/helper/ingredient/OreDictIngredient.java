@@ -1,17 +1,18 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
-import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.IOreDicts;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
-import com.google.common.collect.Iterators;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class OreDictIngredient extends IngredientBase implements Iterable<ItemStack> {
+public class OreDictIngredient extends IngredientBase implements Iterable<ItemStack>, IOreDicts {
 
     private final String oreDict;
     private int count = 1;
@@ -22,6 +23,11 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
 
     public String getOreDict() {
         return oreDict;
+    }
+
+    @Override
+    public List<String> getOreDicts() {
+        return ImmutableList.of(getOreDict());
     }
 
     @Override
@@ -61,28 +67,24 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
         return Ingredient.fromStacks(getMatchingStacks());
     }
 
-    @GroovyBlacklist
-    private List<ItemStack> prepareItemStacks() {
+    @Override
+    public ItemStack[] getMatchingStacks() {
         List<ItemStack> stacks = OreDictionary.getOres(this.oreDict);
+        ItemStack[] copies = new ItemStack[stacks.size()];
         for (int i = 0; i < stacks.size(); i++) {
             ItemStack stack = stacks.get(i).copy();
             stack.setCount(getAmount());
-            stacks.set(i, stack);
+            copies[i] = stack;
         }
-        return stacks;
-    }
-
-    @Override
-    public ItemStack[] getMatchingStacks() {
-        return prepareItemStacks().toArray(new ItemStack[0]);
+        return copies;
     }
 
     public ItemStack getFirst() {
-        return prepareItemStacks().get(0);
+        return getMatchingStacks()[0];
     }
 
     public ItemStack getAt(int index) {
-        return prepareItemStacks().get(index);
+        return getMatchingStacks()[index];
     }
 
     @Override
@@ -126,9 +128,8 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
         }
     }
 
-    @NotNull
     @Override
-    public Iterator<ItemStack> iterator() {
-        return Iterators.unmodifiableIterator(prepareItemStacks().listIterator());
+    public @NotNull Iterator<ItemStack> iterator() {
+        return Arrays.asList(getMatchingStacks()).listIterator();
     }
 }

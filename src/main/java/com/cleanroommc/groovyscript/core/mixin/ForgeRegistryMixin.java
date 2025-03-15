@@ -209,8 +209,7 @@ public abstract class ForgeRegistryMixin<V extends IForgeRegistryEntry<V>> imple
     }
 
     @Unique
-    @Nullable
-    public V groovyScript$getDummy(ResourceLocation rl) {
+    public @Nullable V groovyScript$getDummy(ResourceLocation rl) {
         if (dummyFactory != null) {
             return dummyFactory.createDummy(rl);
         }

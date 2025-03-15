@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import net.minecraft.item.ItemStack;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class OreDictEntry {
 
     public final String name;

@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
+import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class GSCommand extends CommandTreeBase {
 
@@ -32,22 +34,22 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> postLogFiles(sender)));
 
         addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
-            if (sender instanceof EntityPlayerMP) {
+            if (sender instanceof EntityPlayerMP player) {
                 if (hasArgument(args, "--clean")) {
                     GroovyLogImpl.LOG.cleanLog();
                 }
-                runReload((EntityPlayerMP) sender, server);
+                runReload(player, server);
             }
         }));
 
         addSubcommand(new SimpleCommand("check", (server, sender, args) -> {
-            if (sender instanceof EntityPlayerMP) {
+            if (sender instanceof EntityPlayerMP player) {
                 sender.sendMessage(new TextComponentString("Checking groovy syntax..."));
                 long time = System.currentTimeMillis();
                 GroovyScript.getSandbox().checkSyntax();
                 time = System.currentTimeMillis() - time;
                 sender.sendMessage(new TextComponentString("Checking syntax took " + time + "ms"));
-                GroovyScript.postScriptRunResult((EntityPlayerMP) sender, false, false, false, time);
+                GroovyScript.postScriptRunResult(player, false, false, false, time);
             }
         }));
 
@@ -57,6 +59,11 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new InfoHandCommand());
         addSubcommand(new InfoLookingCommand());
         addSubcommand(new InfoSelfCommand());
+
+        addSubcommand(new SimpleCommand("applyDefaultGameRules", (server, sender, args) -> {
+            VanillaModule.gameRule.setDefaultGameRules(Objects.requireNonNull(server.getServer()).getEntityWorld().getGameRules());
+            sender.sendMessage(new TextComponentString("Applied the default GameRules to the current world."));
+        }));
 
 
         addSubcommand(new SimpleCommand("wiki", (server, sender, args) -> sender.sendMessage(getTextForUrl("GroovyScript wiki", "Click to open wiki in browser", new TextComponentString("https://cleanroommc.com/groovy-script/"))), "doc", "docs", "documentation"));
@@ -161,20 +168,17 @@ public class GSCommand extends CommandTreeBase {
     }
 
     @Override
-    @NotNull
-    public String getName() {
+    public @NotNull String getName() {
         return "groovyscript";
     }
 
     @Override
-    @NotNull
-    public List<String> getAliases() {
-        return Arrays.asList("grs", "GroovyScript", "gs");
+    public @NotNull List<String> getAliases() {
+        return Arrays.asList("grs", "gs");
     }
 
     @Override
-    @NotNull
-    public String getUsage(@NotNull ICommandSender sender) {
+    public @NotNull String getUsage(@NotNull ICommandSender sender) {
         return "/grs []";
     }
 }

@@ -5,7 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.apache.commons.lang3.tuple.Pair;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.Parameter;
@@ -15,11 +15,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.function.Function;
 
 public class GroovyDeobfMapper {
 
@@ -95,13 +92,11 @@ public class GroovyDeobfMapper {
         }
     }
 
-    @Nullable
-    public static String getDeobfMethod(Class<?> clazz, String obfMethod) {
+    public static @Nullable String getDeobfMethod(Class<?> clazz, String obfMethod) {
         return DEOBF_METHODS.getOrDefault(clazz.getName(), Object2ObjectMaps.emptyMap()).get(obfMethod);
     }
 
-    @Nullable
-    public static String getDeobfField(Class<?> clazz, String obfField) {
+    public static @Nullable String getDeobfField(Class<?> clazz, String obfField) {
         return DEOBF_FIELDS.getOrDefault(clazz.getName(), Object2ObjectMaps.emptyMap()).get(obfField);
     }
 
@@ -115,21 +110,58 @@ public class GroovyDeobfMapper {
 
     public static String getObfuscatedMethodName(ClassNode receiver, String method, Parameter[] args) {
         ClassNode objClass = ClassHelper.OBJECT_TYPE;
-        Map<String, MethodInfo> obfNames;
-        String obfName = null;
+        Set<String> searched = new ObjectOpenHashSet<>();
+        String obfName;
 
         do {
-            obfNames = OBF_METHOD_NAMES.get(receiver.getName());
-            if (obfNames != null) {
-                MethodInfo methodInfo = obfNames.get(method);
-                if (methodInfo != null) {
-                    obfName = methodInfo.findMethod(args);
-                }
+            obfName = getObfMethodInClass(receiver, method, args);
+            if (obfName == null) {
+                searched.add(receiver.getName());
+                obfName = forAllInterfaces(receiver, searched, i -> getObfMethodInClass(i, method, args));
             }
             receiver = receiver.getSuperClass();
         } while (obfName == null && receiver != null && receiver != objClass);
 
         return obfName;
+    }
+
+    private static <T> T forAllInterfaces(ClassNode clz, Set<String> searched, Function<ClassNode, T> consumer) {
+        ClassNode[] interfaces = clz.getInterfaces();
+        if (interfaces == null || interfaces.length == 0) return null;
+        List<ClassNode> queue = new ArrayList<>();
+        Collections.addAll(queue, interfaces);
+        while (!queue.isEmpty()) {
+            ClassNode current = queue.remove(0);
+            T t = consumer.apply(current);
+            if (t != null) return t;
+            ClassNode superClass = current.getSuperClass();
+            if (superClass != null && !searched.contains(superClass.getName())) {
+                queue.add(superClass); // idk if interfaces can have super classes or if its counted as interfaces everytime
+                searched.add(superClass.getName());
+            }
+            interfaces = current.getInterfaces();
+            if (interfaces != null) {
+                for (ClassNode i : interfaces) {
+                    if (!searched.contains(i.getName())) {
+                        queue.add(i);
+                        searched.add(i.getName());
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static String getObfMethodInClass(ClassNode clz, String method, Parameter[] args) {
+        Map<String, MethodInfo> obfNames = OBF_METHOD_NAMES.get(clz.getName());
+        if (obfNames != null) {
+            MethodInfo methodInfo = obfNames.get(method);
+            if (methodInfo != null) {
+                return methodInfo.findMethod(args);
+            }
+        }
+        return null;
     }
 
     public static String getObfuscatedFieldName(Class<?> receiver, String field) {
@@ -151,8 +183,8 @@ public class GroovyDeobfMapper {
     private static class MethodInfo {
 
         private final String deobfName;
-        //private Object2ObjectOpenCustomHashMap<Object[], String> obfNames;
-        private List<Pair<String[], String>> obfNames;
+        private List<String> obfNames;
+        private List<String[]> obfArgs;
         private final String defObfName;
         private final String defArgs;
 
@@ -165,35 +197,45 @@ public class GroovyDeobfMapper {
         public void registerOverloadedMethod(String obfName, String args) {
             if (obfName.equals(defObfName)) return;
             if (obfNames == null) {
-                //obfNames = new Object2ObjectOpenCustomHashMap<>(PARAM_HASH_STRATEGY);
-                //obfNames.put(makeClassArray(defArgs), defObfName);
                 obfNames = new ArrayList<>();
-                obfNames.add(Pair.of(makeClassArray(defArgs), defObfName));
+                obfArgs = new ArrayList<>();
+                obfNames.add(defObfName);
+                obfArgs.add(makeClassArray(defArgs));
             }
-            obfNames.add(Pair.of(makeClassArray(args), obfName));
+            obfNames.add(obfName);
+            obfArgs.add(makeClassArray(args));
         }
 
+        @Nullable
         public String findMethod(Parameter[] args) {
             if (this.obfNames == null) {
                 return this.defObfName;
             }
-            List<String> results = this.obfNames.stream()
-                    .filter(pair -> pair.getKey().length == args.length)
-                    .filter(pair -> {
-                        for (int i = 0; i < args.length; i++) {
-                            String origParam = pair.getKey()[i];
-                            if (!matches(origParam, args[i])) {
-                                return false;
-                            }
-                        }
-                        return true;
-                    })
-                    .map(Pair::getValue)
-                    .collect(Collectors.toList());
-            if (results.isEmpty()) return null;
-            if (results.size() == 1) return results.get(0);
-            GroovyLog.get().errorMC("Multiple methods match the name {} and params {}", this.deobfName, Arrays.toString(args));
-            return results.get(0);
+            String result = null;
+            for (int i = 0; i < this.obfNames.size(); i++) {
+                String obfName = this.obfNames.get(i);
+                String[] obfArgs = this.obfArgs.get(i);
+                if (matches(obfArgs, args)) {
+                    if (result == null) {
+                        result = obfName;
+                    } else {
+                        GroovyLog.get().errorMC("Multiple methods match the name {} and params {}", this.deobfName, Arrays.toString(args));
+                        return result;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static boolean matches(String[] original, Parameter[] parameters) {
+            if (original.length != parameters.length) return false;
+            for (int j = 0; j < parameters.length; j++) {
+                String origParam = original[j];
+                if (!matches(origParam, parameters[j])) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public static boolean matches(String original, Parameter param) {

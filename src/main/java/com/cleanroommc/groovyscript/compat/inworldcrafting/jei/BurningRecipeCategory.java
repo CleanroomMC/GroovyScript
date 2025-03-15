@@ -55,9 +55,8 @@ public class BurningRecipeCategory extends BaseCategory<BurningRecipeCategory.Re
         GlStateManager.popMatrix();
     }
 
-    @Nullable
     @Override
-    public IDrawable getIcon() {
+    public @Nullable IDrawable getIcon() {
         return icon;
     }
 

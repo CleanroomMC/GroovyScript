@@ -68,7 +68,7 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (slotIndex < 9) {
                 float chance = recipeWrapper.recipe.getItemConsumeChance()[slotIndex];
-                if (chance < 1f) {
+                if (chance < 1.0f) {
                     tooltip.add(1, I18n.format("groovyscript.recipe.chance_consume", numberFormat.format(chance)));
                 }
             }
@@ -76,7 +76,7 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
         recipeLayout.getFluidStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (slotIndex == 10 && recipeWrapper.recipe instanceof FluidToItem.Recipe fluidToItemRecipe) {
                 float chance = fluidToItemRecipe.getFluidConsumptionChance();
-                if (chance < 1f) {
+                if (chance < 1.0f) {
                     tooltip.add(1, I18n.format("groovyscript.recipe.chance_consume", numberFormat.format(chance)));
                 }
             }
@@ -104,9 +104,8 @@ public class FluidRecipeCategory extends BaseCategory<FluidRecipeCategory.Recipe
         rightArrow.draw(minecraft, 76, outputY + 1);
     }
 
-    @Nullable
     @Override
-    public IDrawable getIcon() {
+    public @Nullable IDrawable getIcon() {
         return this.icon;
     }
 

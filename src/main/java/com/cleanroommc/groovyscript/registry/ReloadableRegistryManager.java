@@ -153,7 +153,7 @@ public class ReloadableRegistryManager {
             // So, to prevent duplicate categories, we need to clear the List before running.
             if (Loader.isModLoaded("sonarcore")) {
                 jeiProxy.getPlugins().forEach(plugin -> {
-                    if (plugin instanceof JEISonarPlugin) ((JEISonarPlugin) plugin).providers.clear();
+                    if (plugin instanceof JEISonarPlugin jeiSonarPlugin) jeiSonarPlugin.providers.clear();
                 });
             }
 

@@ -72,9 +72,8 @@ public abstract class ItemStackMixin implements ItemStackMixinExpansion {
     }
 
     @GroovyBlacklist
-    @Nullable
     @Override
-    public String grs$getMark() {
+    public @Nullable String grs$getMark() {
         return groovyScript$mark;
     }
 

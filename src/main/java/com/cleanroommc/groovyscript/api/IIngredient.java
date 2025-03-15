@@ -98,9 +98,8 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
             return stack.isEmpty();
         }
 
-        @Nullable
         @Override
-        public String getMark() {
+        public @Nullable String getMark() {
             return null;
         }
 
@@ -152,9 +151,8 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
             return true;
         }
 
-        @Nullable
         @Override
-        public String getMark() {
+        public @Nullable String getMark() {
             return null;
         }
 

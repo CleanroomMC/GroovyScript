@@ -117,10 +117,10 @@ public abstract class MetaClassImplMixin {
         Object value = null;
         if (metaProperty != null) {
             value = metaProperty.getProperty(object);
-        } else if (object instanceof Map) {
-            value = ((Map<?, ?>) object).get(methodName);
-        } else if (object instanceof Script) {
-            value = ((Script) object).getBinding().getVariables().get(methodName);
+        } else if (object instanceof Map<?, ?>map) {
+            value = map.get(methodName);
+        } else if (object instanceof Script script) {
+            value = script.getBinding().getVariables().get(methodName);
         } else if (object instanceof GroovyObject) {
             value = GroovyScript.getSandbox().getBindings().get(methodName);
         }

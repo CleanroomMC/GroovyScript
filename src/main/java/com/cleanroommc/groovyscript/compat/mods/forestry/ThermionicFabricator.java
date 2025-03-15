@@ -98,8 +98,8 @@ public class ThermionicFabricator extends ForestryRegistry<IFabricatorRecipe> {
         if (FabricatorRecipeManagerAccessor.getRecipes().removeIf(recipe -> {
             boolean found = Arrays.stream(input).allMatch(i -> {
                 boolean matches = false;
-                if (i instanceof OreDictIngredient) {
-                    matches = recipe.getOreDicts().contains(((OreDictIngredient) i).getOreDict());
+                if (i instanceof OreDictIngredient oreDictIngredient) {
+                    matches = recipe.getOreDicts().contains(oreDictIngredient.getOreDict());
                 } else {
                     for (int x = 0; x < recipe.getWidth(); x++) {
                         if (recipe.getIngredients().get(x).contains(i.getMatchingStacks()[0])) {

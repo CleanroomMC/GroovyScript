@@ -35,6 +35,7 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
         return managers.get(key);
     }
 
+    @Override
     @GroovyBlacklist
     public void onReload() {
         removeScripted().forEach(this::removeEnchantment);

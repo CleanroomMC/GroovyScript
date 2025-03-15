@@ -90,8 +90,8 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
         if (CarpenterRecipeManagerAccessor.getRecipes().removeIf(recipe -> {
             boolean found = Arrays.stream(inputs).allMatch(i -> {
                 boolean matches = false;
-                if (i instanceof OreDictIngredient) {
-                    matches = recipe.getCraftingGridRecipe().getOreDicts().contains(((OreDictIngredient) i).getOreDict());
+                if (i instanceof OreDictIngredient oreDictIngredient) {
+                    matches = recipe.getCraftingGridRecipe().getOreDicts().contains(oreDictIngredient.getOreDict());
                 } else {
                     for (int x = 0; x < recipe.getCraftingGridRecipe().getWidth(); x++) {
                         if (recipe.getCraftingGridRecipe().getRawIngredients().get(x).contains(i.getMatchingStacks()[0])) {
@@ -128,7 +128,7 @@ public class Carpenter extends ForestryRegistry<ICarpenterRecipe> {
         List<Object> argList = new ArrayList<>(Arrays.asList(pattern));
         for (Map.Entry<Character, IIngredient> entry : keyMap.entrySet()) {
             argList.add(entry.getKey());
-            if (entry.getValue() instanceof OreDictIngredient) argList.add(((OreDictIngredient) entry.getValue()).getOreDict());
+            if (entry.getValue() instanceof OreDictIngredient oreDictIngredient) argList.add(oreDictIngredient.getOreDict());
             else argList.add(entry.getValue().getMatchingStacks()[0]);
         }
         return ShapedRecipeCustom.createShapedRecipe(output, argList.toArray());

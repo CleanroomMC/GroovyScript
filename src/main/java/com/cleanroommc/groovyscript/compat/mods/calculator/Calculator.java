@@ -39,8 +39,8 @@ public class Calculator extends GroovyPropertyContainer {
     public static List<ISonarRecipeObject> toSonarRecipeObjectList(IngredientList<IIngredient> list) {
         List<ISonarRecipeObject> output = new ArrayList<>();
         for (IIngredient ingredient : list) {
-            if (ingredient instanceof OreDictIngredient) {
-                output.add(new RecipeOreStack(((OreDictIngredient) ingredient).getOreDict(), ingredient.getAmount()));
+            if (ingredient instanceof OreDictIngredient oreDictIngredient) {
+                output.add(new RecipeOreStack(oreDictIngredient.getOreDict(), ingredient.getAmount()));
             } else if (IngredientHelper.isItem(ingredient)) {
                 output.add(new RecipeItemStack(IngredientHelper.toItemStack(ingredient), true));
             } else {

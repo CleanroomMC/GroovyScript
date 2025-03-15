@@ -25,9 +25,8 @@ public class RecipeInput implements IRecipeInput {
         }
     }
 
-    @NotNull
     @Override
-    public IRecipeInput copy() {
+    public @NotNull IRecipeInput copy() {
         return new RecipeInput(ing);
     }
 
@@ -36,15 +35,14 @@ public class RecipeInput implements IRecipeInput {
         return ing instanceof FluidStack;
     }
 
-    @NotNull
     @Override
-    public ItemStack getInput() {
+    public @NotNull ItemStack getInput() {
         return ing.getMatchingStacks().length == 0 ? ItemStack.EMPTY : ing.getMatchingStacks()[0].copy();
     }
 
     @Override
     public FluidStack getFluidInput() {
-        return ing instanceof FluidStack ? ((FluidStack) ing).copy() : null;
+        return ing instanceof FluidStack fluidStack ? fluidStack.copy() : null;
     }
 
     @Override
