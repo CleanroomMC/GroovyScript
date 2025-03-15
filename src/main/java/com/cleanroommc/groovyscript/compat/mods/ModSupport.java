@@ -66,7 +66,6 @@ import com.cleanroommc.groovyscript.compat.mods.theaurorian.TheAurorian;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.ThermalExpansion;
 import com.cleanroommc.groovyscript.compat.mods.tinkersconstruct.TinkersConstruct;
 import com.cleanroommc.groovyscript.compat.mods.woot.Woot;
-import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -242,12 +241,13 @@ public class ModSupport {
         }
         for (ModContainer container : Loader.instance().getModList()) {
             if (!INSTANCE.hasCompatFor(container.getModId())) {
-                ExpansionHelper.mixinProperty(ModSupport.class,
-                                              container.getModId(),
-                                              ForgeModWrapper.class,
-                                              Suppliers.memoize(() -> new ForgeModWrapper(container)),
-                                              null,
-                                              false);
+                ExpansionHelper.mixinProperty(
+                        ModSupport.class,
+                        container.getModId(),
+                        ForgeModWrapper.class,
+                        Suppliers.memoize(() -> new ForgeModWrapper(container)),
+                        null,
+                        false);
             }
         }
     }

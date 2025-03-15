@@ -42,7 +42,7 @@ public class ForgeModWrapper {
                 }
             }
             this.items = new ItemsIngredient(items);
-         }
+        }
         return this.items;
     }
 

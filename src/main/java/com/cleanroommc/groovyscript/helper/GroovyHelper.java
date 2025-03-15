@@ -2,16 +2,13 @@ package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.helper.ingredient.ItemsIngredient;
 import com.cleanroommc.groovyscript.packmode.Packmode;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 
 import java.io.File;
-import java.util.Collection;
 
 public class GroovyHelper {
 
