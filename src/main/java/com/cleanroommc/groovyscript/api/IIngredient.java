@@ -51,6 +51,15 @@ public interface IIngredient extends IResourceStack, Predicate<ItemStack>, IMark
         return ingredient != null && test(ingredient);
     }
 
+    // [i] operator
+    default ItemStack getAt(int index) {
+        return getMatchingStacks()[index];
+    }
+
+    default ItemStack getFirst() {
+        return getAt(0);
+    }
+
     @Override
     default IIngredient withAmount(int amount) {
         IIngredient iIngredientStack = exactCopy();
