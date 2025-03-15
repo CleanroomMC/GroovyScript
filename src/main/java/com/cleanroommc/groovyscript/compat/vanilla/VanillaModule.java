@@ -12,16 +12,20 @@ import net.minecraft.item.ItemStack;
 
 public class VanillaModule extends GroovyPropertyContainer {
 
-    public final Crafting crafting = new Crafting();
-    public final Furnace furnace = new Furnace();
-    public final Loot loot = new Loot();
-    public final OreDict oreDict = new OreDict();
-    public final Player player = new Player();
-    public final Content content = new Content();
-    public final Rarity rarity = new Rarity();
-    public final InWorldCrafting inWorldCrafting = new InWorldCrafting();
-    public final Command command = new Command();
-    public final GameRule gameRule = new GameRule();
+    public static final VanillaModule INSTANCE = new VanillaModule();
+
+    public static final Crafting crafting = new Crafting();
+    public static final Furnace furnace = new Furnace();
+    public static final Loot loot = new Loot();
+    public static final OreDict oreDict = new OreDict();
+    public static final Player player = new Player();
+    public static final Content content = new Content();
+    public static final Rarity rarity = new Rarity();
+    public static final InWorldCrafting inWorldCrafting = new InWorldCrafting();
+    public static final Command command = new Command();
+    public static final GameRule gameRule = new GameRule();
+
+    private VanillaModule() {}
 
     @Override
     public void initialize(GroovyContainer<?> owner) {

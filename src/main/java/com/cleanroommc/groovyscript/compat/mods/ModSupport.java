@@ -88,7 +88,7 @@ public class ModSupport {
 
     public static final ModSupport INSTANCE = new ModSupport(); // Just for Binding purposes
 
-    public static final GroovyContainer<VanillaModule> MINECRAFT = new InternalModContainer<>("minecraft", "Minecraft", VanillaModule::new, "mc");
+    public static final MinecraftModContainer MINECRAFT = new MinecraftModContainer();
 
     public static final GroovyContainer<ActuallyAdditions> ACTUALLY_ADDITIONS = new InternalModContainer<>("actuallyadditions", "Actually Additions", ActuallyAdditions::new, "aa");
     public static final GroovyContainer<AdditionalEnchantedMiner> ADDITIONAL_ENCHANTED_MINER = new InternalModContainer<>("quarryplus", "Additional Enchanted Miner", AdditionalEnchantedMiner::new);

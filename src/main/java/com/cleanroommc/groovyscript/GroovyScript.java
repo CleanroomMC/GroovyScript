@@ -165,7 +165,6 @@ public class GroovyScript {
         // called via mixin in between construction and fml pre init
         ObjectMapperManager.init();
         StandardInfoParserRegistry.init();
-        VanillaModule.initializeBinding();
         ModSupport.init();
         for (ObjectMapper<?> goh : ObjectMapperManager.getObjectMappers()) {
             getSandbox().registerBinding(goh);
