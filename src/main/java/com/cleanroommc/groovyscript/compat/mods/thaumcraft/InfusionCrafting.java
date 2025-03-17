@@ -207,7 +207,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
             validateItems(msg, 1, 100, 1, 1);
             msg.add(IngredientHelper.isEmpty(mainInput), () -> "Main Input must not be empty");
             // More than 1 item cannot be placed
-            msg.add(IngredientHelper.overMaxSize(mainInput, 1), () -> "Main input amount must be 1");
+            validateStackSize(msg, 1, "mainInput", mainInput);
             if (researchKey == null) {
                 researchKey = "";
             }

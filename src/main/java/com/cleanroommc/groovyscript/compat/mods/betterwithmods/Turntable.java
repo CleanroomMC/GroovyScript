@@ -24,7 +24,6 @@ public class Turntable extends StandardListRegistry<TurntableRecipe> {
             @Example(".input(item('minecraft:gold_block')).outputBlock(blockstate('minecraft:clay')).output(item('minecraft:gold_ingot') * 5).rotations(5)"),
             @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot')).rotations(2)")
     })
-    @RecipeBuilderMethodDescription
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

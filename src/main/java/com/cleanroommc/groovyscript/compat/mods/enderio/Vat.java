@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.enderio.recipe.RecipeInput;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientList;
+import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import com.enderio.core.common.util.NNList;
@@ -172,13 +173,8 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding EnderIO Vat recipe").error();
             msg.add(IngredientHelper.isEmpty(input), () -> "fluid input must not be empty");
             msg.add(IngredientHelper.isEmpty(output), () -> "fluid output must not be empty");
-            for (IIngredient ingredient : itemInputs1) {
-                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "First slot input {} must have a stack size of 1", ingredient);
-            }
-            for (IIngredient ingredient : itemInputs2) {
-                msg.add(IngredientHelper.overMaxSize(ingredient, 1), "Second slot input {} must have a stack size of 1", ingredient);
-            }
-
+            AbstractRecipeBuilder.validateStackSize(msg, 1, "first slot input", itemInputs1);
+            AbstractRecipeBuilder.validateStackSize(msg, 1, "second slot input", itemInputs2);
             if (energy <= 0) energy = 5000;
             if (baseMultiplier <= 0) baseMultiplier = 1;
 

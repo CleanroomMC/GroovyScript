@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.IOreDicts;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -11,13 +12,20 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class OreDictWildcardIngredient extends ItemsIngredient {
+public class OreDictWildcardIngredient extends ItemsIngredient implements IOreDicts {
 
     private final String oreDict;
     private final List<String> matchingOreDictionaries = new ArrayList<>();
     public final List<String> ores = Collections.unmodifiableList(this.matchingOreDictionaries);
 
-    public static OreDictWildcardIngredient of(String oreDict) {
+    private OreDictWildcardIngredient(String oreDict, List<String> matchingOreDictionaries, List<ItemStack> itemStacks) {
+        super(itemStacks);
+        this.oreDict = oreDict;
+        this.matchingOreDictionaries.addAll(matchingOreDictionaries);
+    }
+
+    public OreDictWildcardIngredient(String oreDict) {
+        this.oreDict = oreDict;
         List<String> matchingOreDictionaries = new ArrayList<>();
         List<ItemStack> stacks = new ArrayList<>();
         Pattern pattern = Pattern.compile(oreDict.replace("*", ".*"));
@@ -30,17 +38,17 @@ public class OreDictWildcardIngredient extends ItemsIngredient {
                 }
             }
         }
-        return new OreDictWildcardIngredient(oreDict, matchingOreDictionaries, stacks);
-    }
-
-    public OreDictWildcardIngredient(String oreDict, List<String> matchingOreDictionaries, List<ItemStack> itemStacks) {
-        super(itemStacks);
-        this.oreDict = oreDict;
         this.matchingOreDictionaries.addAll(matchingOreDictionaries);
+        setItemStacks(stacks);
     }
 
     public String getOreDict() {
         return oreDict;
+    }
+
+    @Override
+    public List<String> getOreDicts() {
+        return getMatchingOreDictionaries();
     }
 
     public List<String> getMatchingOreDictionaries() {
