@@ -87,7 +87,7 @@ public class Spindle extends StandardListRegistry<SpindleRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable SpindleRecipe register() {
             if (!validate()) return null;
-            SpindleRecipe recipe = new SpindleRecipe(popoff, BetterWithAddons.fromIIngredient(input.get(0)), output.toArray(new ItemStack[0]));
+            SpindleRecipe recipe = new SpindleRecipe(popoff, BetterWithAddons.FromIngredient.fromIIngredient(input.get(0)), output.toArray(new ItemStack[0]));
             ModSupport.BETTER_WITH_ADDONS.get().spindle.add(recipe);
             return recipe;
         }

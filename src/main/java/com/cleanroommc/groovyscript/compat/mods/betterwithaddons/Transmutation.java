@@ -86,7 +86,7 @@ public class Transmutation extends StandardListRegistry<TransmutationRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable TransmutationRecipe register() {
             if (!validate()) return null;
-            TransmutationRecipe recipe = new TransmutationRecipe(BetterWithAddons.fromIIngredient(input.get(0)), spirits, output.get(0));
+            TransmutationRecipe recipe = new TransmutationRecipe(BetterWithAddons.FromIngredient.fromIIngredient(input.get(0)), spirits, output.get(0));
             ModSupport.BETTER_WITH_ADDONS.get().transmutation.add(recipe);
             return recipe;
         }
