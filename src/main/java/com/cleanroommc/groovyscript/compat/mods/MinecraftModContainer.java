@@ -12,8 +12,8 @@ import java.util.Set;
 
 public final class MinecraftModContainer extends GroovyContainer<VanillaModule> {
 
-    private final String modId = "minecraft";
-    private final String containerName = "Minecraft";
+    private static final String modId = "minecraft";
+    private static final String containerName = "Minecraft";
     private final Supplier<VanillaModule> modProperty;
     private final Collection<String> aliases;
 

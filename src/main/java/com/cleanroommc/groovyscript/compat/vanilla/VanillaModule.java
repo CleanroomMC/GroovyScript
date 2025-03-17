@@ -30,6 +30,7 @@ public class VanillaModule extends GroovyPropertyContainer {
     @Override
     public void initialize(GroovyContainer<?> owner) {
         GroovyScript.getSandbox().registerBinding("Minecraft", this);
+        GroovyScript.getSandbox().registerBinding("Vanilla", this);
         // maybe remove some of these as globals?
         GroovyScript.getSandbox().registerBinding(crafting);
         GroovyScript.getSandbox().registerBinding(furnace);
