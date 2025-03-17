@@ -77,7 +77,7 @@ public class DryingBox extends StandardListRegistry<CherryBoxRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable CherryBoxRecipe register() {
             if (!validate()) return null;
-            CherryBoxRecipe recipe = new CherryBoxRecipe(BlockCherryBox.CherryBoxType.DRYING, BetterWithAddons.fromIIngredient(input.get(0)), output.get(0));
+            CherryBoxRecipe recipe = new CherryBoxRecipe(BlockCherryBox.CherryBoxType.DRYING, BetterWithAddons.FromIngredient.fromIIngredient(input.get(0)), output.get(0));
             ModSupport.BETTER_WITH_ADDONS.get().dryingBox.add(recipe);
             return recipe;
         }

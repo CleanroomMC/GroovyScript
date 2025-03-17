@@ -85,7 +85,7 @@ public class Packing extends StandardListRegistry<PackingRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable PackingRecipe register() {
             if (!validate()) return null;
-            PackingRecipe recipe = new PackingRecipe(BetterWithAddons.fromIIngredient(input.get(0)), compress);
+            PackingRecipe recipe = new PackingRecipe(BetterWithAddons.FromIngredient.fromIIngredient(input.get(0)), compress);
             recipe.setJeiOutput(IngredientHelper.isEmpty(jeiOutput) ? IngredientHelper.toItemStack(compress) : jeiOutput);
             ModSupport.BETTER_WITH_ADDONS.get().packing.add(recipe);
             return recipe;

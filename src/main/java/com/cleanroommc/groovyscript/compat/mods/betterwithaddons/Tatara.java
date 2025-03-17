@@ -76,7 +76,7 @@ public class Tatara extends StandardListRegistry<SmeltingRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable SmeltingRecipe register() {
             if (!validate()) return null;
-            SmeltingRecipe recipe = new SmeltingRecipe(BetterWithAddons.fromIIngredient(input.get(0)), output.get(0));
+            SmeltingRecipe recipe = new SmeltingRecipe(BetterWithAddons.FromIngredient.fromIIngredient(input.get(0)), output.get(0));
             ModSupport.BETTER_WITH_ADDONS.get().tatara.add(recipe);
             return recipe;
         }

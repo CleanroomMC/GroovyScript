@@ -11,11 +11,11 @@ import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
+import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.ExpandoMetaClass;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
@@ -41,42 +41,43 @@ import java.util.*;
 
 public class ObjectMapperManager {
 
-    private static final Map<String, ObjectMapper<?>> handlers = new Object2ObjectOpenHashMap<>();
-    private static final Map<String, List<ObjectMapper<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
-    private static final Map<Class<? extends GroovyPropertyContainer>, Map<String, ObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, AbstractObjectMapper<?>> handlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, List<AbstractObjectMapper<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends GroovyPropertyContainer>, Map<String, AbstractObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty";
     public static final String WILDCARD = "*";
     public static final String SPLITTER = ":";
 
-    static void registerObjectMapper(GroovyContainer<?> container, ObjectMapper<?> goh) {
-        String key = goh.getName();
-        if (goh.getMod() != null) {
-            Class<?> clazz = goh.getMod().get().getClass();
-            for (Class<?>[] paramTypes : goh.getParamTypes()) {
+    public static void registerObjectMapper(AbstractObjectMapper<?> mapper) {
+        String key = mapper.getName();
+        if (mapper.getMod() != null) {
+            GroovyContainer<?> mod = mapper.getMod();
+            Class<?> clazz = mapper.getMod().get().getClass();
+            for (Class<?>[] paramTypes : mapper.getParamTypes()) {
                 ExpandoMetaClass emc = ExpansionHelper.getExpandoClass(clazz);
-                emc.registerInstanceMethod(new ObjectMapperMetaMethod(goh, paramTypes, clazz));
+                emc.registerInstanceMethod(new ObjectMapperMetaMethod(mapper, paramTypes, clazz));
             }
-        }
-        if (handlerConflicts.containsKey(key)) {
-            handlerConflicts.get(key).add(goh);
-        } else if (handlers.containsKey(key)) {
-            List<ObjectMapper<?>> conflicts = handlerConflicts.computeIfAbsent(key, k -> new ArrayList<>());
-            conflicts.add(handlers.remove(key));
-            conflicts.add(goh);
-        } else {
-            handlers.put(key, goh);
-        }
-        if (container != null) {
-            GroovyPropertyContainer propertyContainer = container.get();
+            GroovyPropertyContainer propertyContainer = mod.get();
             var map = modHandlers.computeIfAbsent(propertyContainer.getClass(), k -> new Object2ObjectOpenHashMap<>());
             if (map.containsKey(key)) {
-                throw new IllegalStateException("There already is a ObjectMapper with name '" + key + "' in mod " + container.getContainerName());
+                throw new IllegalStateException("There already is a ObjectMapper with name '" + key + "' in mod " + mod.getContainerName());
             }
-            map.put(key, goh);
+            map.put(key, mapper);
+        }
+        if (handlerConflicts.containsKey(key)) {
+            handlerConflicts.get(key).add(mapper);
+        } else if (handlers.containsKey(key)) {
+            List<AbstractObjectMapper<?>> conflicts = handlerConflicts.computeIfAbsent(key, k -> new ArrayList<>());
+            conflicts.add(handlers.remove(key));
+            conflicts.add(mapper);
+        } else {
+            handlers.put(key, mapper);
         }
     }
 
     public static void init() {
+        registerObjectMapper(ItemStackMapper.INSTANCE);
+        registerObjectMapper(BlockStateMapper.INSTANCE);
         ObjectMapper.builder("resource", ResourceLocation.class)
                 .parser(ObjectMappers::parseResourceLocation)
                 .addSignature(String.class)
@@ -87,9 +88,10 @@ public class ObjectMapperManager {
                 .parser((s, args) -> s.contains(WILDCARD) ? Result.some(new OreDictWildcardIngredient(s)) : Result.some(new OreDictIngredient(s)))
                 .completerOfNames(OreDictionaryAccessor::getIdToName)
                 .docOfType("ore dict entry")
-                .textureBinder(TextureBinder.of(i -> Arrays.asList(i.getMatchingStacks()), TextureBinder.ofItem(), i -> String.format("![](${item('%s')}) %s", i.getItem().getRegistryName(), i.getDisplayName())))
+                .textureBinder(TextureBinder.ofArray(IIngredient::getMatchingStacks, TextureBinder.ofItem()))
+                .tooltipOfArray(IIngredient::getMatchingStacks, i -> String.format("![](${item('%s')}) %s", i.getItem().getRegistryName(), i.getDisplayName()))
                 .register();
-        ObjectMapper.builder("item", ItemStack.class)
+        /*ObjectMapper.builder("item", ItemStack.class)
                 .parser(ObjectMappers::parseItemStack)
                 .addSignature(String.class)
                 .addSignature(String.class, int.class)
@@ -97,7 +99,7 @@ public class ObjectMapperManager {
                 .completer(ForgeRegistries.ITEMS)
                 .docOfType("item stack")
                 .textureBinder(TextureBinder.ofItem())
-                .register();
+                .register();*/
         ObjectMapper.builder("liquid", FluidStack.class)
                 .parser(ObjectMappers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
@@ -108,6 +110,7 @@ public class ObjectMapperManager {
                 .parser(ObjectMappers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
                 .textureBinder(TextureBinder.ofFluid())
+                .tooltip(f -> Collections.singletonList(f.getLocalizedName()))
                 .register();
         ObjectMapper.builder("block", Block.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BLOCKS))
@@ -116,7 +119,7 @@ public class ObjectMapperManager {
                 .docOfType("block")
                 .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
                 .register();
-        ObjectMapper.builder("blockstate", IBlockState.class)
+        /*ObjectMapper.builder("blockstate", IBlockState.class)
                 .parser(ObjectMappers::parseBlockState)
                 .addSignature(String.class)
                 .addSignature(String.class, int.class)
@@ -124,7 +127,7 @@ public class ObjectMapperManager {
                 .completer(ForgeRegistries.BLOCKS)
                 .defaultValue(() -> Blocks.AIR.getBlockState().getBaseState())
                 .docOfType("block state")
-                .register();
+                .register();*/
         ObjectMapper.builder("enchantment", Enchantment.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS))
                 .completer(ForgeRegistries.ENCHANTMENTS)
@@ -222,8 +225,9 @@ public class ObjectMapperManager {
      * @param silent if error messages should be logged
      * @return game object or null
      */
+
     public static @Nullable Object getGameObject(boolean silent, String name, String mainArg, Object... args) {
-        ObjectMapper<?> objectMapper = handlers.get(name);
+        AbstractObjectMapper<?> objectMapper = handlers.get(name);
         if (objectMapper != null) {
             return objectMapper.invokeWithDefault(silent, mainArg, args);
         }
@@ -234,32 +238,32 @@ public class ObjectMapperManager {
         return handlers.containsKey(key);
     }
 
-    public static ObjectMapper<?> getObjectMapper(String key) {
+    public static AbstractObjectMapper<?> getObjectMapper(String key) {
         return handlers.get(key);
     }
 
-    public static List<ObjectMapper<?>> getConflicts(String key) {
+    public static List<AbstractObjectMapper<?>> getConflicts(String key) {
         return handlerConflicts.get(key);
     }
 
-    public static ObjectMapper<?> getObjectMapper(Class<?> containerClass, String key) {
+    public static AbstractObjectMapper<?> getObjectMapper(Class<?> containerClass, String key) {
         if (!GroovyPropertyContainer.class.isAssignableFrom(containerClass)) return null;
         var map = modHandlers.get(containerClass);
         return map != null ? map.get(key) : null;
     }
 
-    public static Collection<ObjectMapper<?>> getObjectMappers() {
+    public static Collection<AbstractObjectMapper<?>> getObjectMappers() {
         return handlers.values();
     }
 
+    @Deprecated
     public static Class<?> getReturnTypeOf(String name) {
-        ObjectMapper<?> goh = handlers.get(name);
+        AbstractObjectMapper<?> goh = handlers.get(name);
         return goh == null ? null : goh.getReturnType();
     }
 
+    @Deprecated
     public static void provideCompletion(String name, int index, Completions items) {
-        Completer completer = handlers.get(name).getCompleter();
-        if (completer == null) return;
-        completer.complete(index, items);
+        handlers.get(name).provideCompletion(index, CompletionParams.EMPTY, items);
     }
 }

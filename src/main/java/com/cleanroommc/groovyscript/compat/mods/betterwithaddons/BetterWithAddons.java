@@ -27,13 +27,19 @@ public class BetterWithAddons extends GroovyPropertyContainer {
     }
 
     /**
-     * Because Better With Addons checks if the ingredient is an instanceof {@link betterwithaddons.util.IHasSize IHasSize}
-     * to determine if the Ingredient has an amount, we have to use their custom Ingredient.
-     * <p>
-     * If this isn't used, then the recipe may appear correctly in JEI but will actually only consume 1 when done in-game.
+     * This is required for grs to not crash when bwm is not loaded for some reason.
      */
-    public static Ingredient fromIIngredient(IIngredient ingredient) {
-        return new IngredientSized(ingredient.toMcIngredient(), ingredient.getAmount());
+    public static class FromIngredient {
+
+        /**
+         * Because Better With Addons checks if the ingredient is an instanceof {@link betterwithaddons.util.IHasSize IHasSize}
+         * to determine if the Ingredient has an amount, we have to use their custom Ingredient.
+         * <p>
+         * If this isn't used, then the recipe may appear correctly in JEI but will actually only consume 1 when done in-game.
+         */
+        public static Ingredient fromIIngredient(IIngredient ingredient) {
+            return new IngredientSized(ingredient.toMcIngredient(), ingredient.getAmount());
+        }
     }
 
     public static boolean isBetterWithEverything() {

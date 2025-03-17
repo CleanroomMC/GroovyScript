@@ -78,7 +78,7 @@ public class FireNet extends StandardListRegistry<NetRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable NetRecipe register() {
             if (!validate()) return null;
-            NetRecipe recipe = new NetRecipe(BlockNettedScreen.SifterType.FIRE, BetterWithAddons.fromIIngredient(input.get(0)), 0, output.toArray(new ItemStack[0]));
+            NetRecipe recipe = new NetRecipe(BlockNettedScreen.SifterType.FIRE, BetterWithAddons.FromIngredient.fromIIngredient(input.get(0)), 0, output.toArray(new ItemStack[0]));
             ModSupport.BETTER_WITH_ADDONS.get().fireNet.add(recipe);
             return recipe;
         }

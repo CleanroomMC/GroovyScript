@@ -91,7 +91,7 @@ public class SandNet extends StandardListRegistry<NetRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable NetRecipe register() {
             if (!validate()) return null;
-            NetRecipe recipe = new NetRecipe(BlockNettedScreen.SifterType.SAND, BetterWithAddons.fromIIngredient(input.get(0)), sand, output.toArray(new ItemStack[0]));
+            NetRecipe recipe = new NetRecipe(BlockNettedScreen.SifterType.SAND, BetterWithAddons.FromIngredient.fromIIngredient(input.get(0)), sand, output.toArray(new ItemStack[0]));
             ModSupport.BETTER_WITH_ADDONS.get().sandNet.add(recipe);
             return recipe;
         }

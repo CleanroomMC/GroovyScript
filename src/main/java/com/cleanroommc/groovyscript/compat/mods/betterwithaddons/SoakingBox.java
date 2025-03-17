@@ -77,7 +77,7 @@ public class SoakingBox extends StandardListRegistry<CherryBoxRecipe> {
         @RecipeBuilderRegistrationMethod
         public @Nullable CherryBoxRecipe register() {
             if (!validate()) return null;
-            CherryBoxRecipe recipe = new CherryBoxRecipe(BlockCherryBox.CherryBoxType.SOAKING, BetterWithAddons.fromIIngredient(input.get(0)), output.get(0));
+            CherryBoxRecipe recipe = new CherryBoxRecipe(BlockCherryBox.CherryBoxType.SOAKING, BetterWithAddons.FromIngredient.fromIIngredient(input.get(0)), output.get(0));
             ModSupport.BETTER_WITH_ADDONS.get().soakingBox.add(recipe);
             return recipe;
         }
