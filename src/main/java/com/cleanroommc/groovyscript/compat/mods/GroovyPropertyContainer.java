@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-public class GroovyPropertyContainer {
+public class GroovyPropertyContainer extends ForgeModWrapper {
 
     private final Map<String, INamed> properties = new Object2ObjectOpenHashMap<>();
     private final Map<String, INamed> view = Collections.unmodifiableMap(properties);
