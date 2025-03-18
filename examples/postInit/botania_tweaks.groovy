@@ -9,7 +9,7 @@ log.info 'mod \'botania_tweaks\' detected, running script'
 // Terrestrial Agglomeration Plate place on top of a small 3x3 multiblock, of which the center, sides, and corners may be
 // set to require specific blockstates. While the recipe is running, particles will gradually change color until the recipe
 // is finished. Upon finishing the recipe, the center, sides, and corners can each be converted into a replacement
-// blockstate.
+// blockstate, if a replacement blockstate was set.
 
 // mods.botania_tweaks.agglomeration_plate.removeByCenter(blockstate('botania:livingrock'))
 // mods.botania_tweaks.agglomeration_plate.removeByCorner(blockstate('botania:livingrock'))

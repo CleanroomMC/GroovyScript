@@ -4,5 +4,5 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 
 public class AdditionalEnchantedMiner extends GroovyPropertyContainer {
 
-    public final WorkBenchPlus workBenchPlus = new WorkBenchPlus();
+    public final WorkbenchPlus workbenchPlus = new WorkbenchPlus();
 }
