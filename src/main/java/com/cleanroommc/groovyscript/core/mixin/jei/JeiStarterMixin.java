@@ -14,7 +14,7 @@ public abstract class JeiStarterMixin {
      * @reason run GroovyScript removal methods after all plugins have been registered to allow users to customize information related to all plugins
      * @see JeiPlugin#afterRegister()
      */
-    @Inject(method = "registerPlugins", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/fml/common/ProgressManager;pop(Lnet/minecraftforge/fml/common/ProgressManager$ProgressBar;)V"))
+    @Inject(method = "registerPlugins", at = @At("TAIL"))
     private static void grs$onRegisterPlugins(CallbackInfo ci) {
         JeiPlugin.afterRegister();
     }
@@ -23,7 +23,7 @@ public abstract class JeiStarterMixin {
      * @reason run GroovyScript removal methods after all plugins have acted on runtime to allow users to customize information related to all plugins
      * @see JeiPlugin#afterRuntimeAvailable()
      */
-    @Inject(method = "sendRuntime", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/fml/common/ProgressManager;pop(Lnet/minecraftforge/fml/common/ProgressManager$ProgressBar;)V"))
+    @Inject(method = "sendRuntime", at = @At("TAIL"))
     private static void grs$onSendRuntime(CallbackInfo ci) {
         JeiPlugin.afterRuntimeAvailable();
     }
