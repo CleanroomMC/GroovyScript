@@ -13,12 +13,14 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
 public class Registry {
 
+    private static final Pattern PERIOD_END_PATTERN = Pattern.compile("\\.$");
     private final GroovyContainer<? extends GroovyPropertyContainer> mod;
     private final INamed registry;
     private final String baseTranslationKey;
@@ -339,7 +341,7 @@ public class Registry {
 
         return String.format(
                 "- %s:\n\n%s",
-                Documentation.translate(lang),
+                PERIOD_END_PATTERN.matcher(Documentation.translate(lang)).replaceAll(""),
                 new CodeBlockBuilder()
                         .line(methodExample(method, Exporter.simpleSignature(method, types)))
                         .indentation(1)
