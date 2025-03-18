@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RegistryDescription
-public class WorkBenchPlus extends VirtualizedRegistry<IngredientRecipe> {
+public class WorkbenchPlus extends VirtualizedRegistry<IngredientRecipe> {
 
     @Override
     public void onReload() {
@@ -83,12 +83,12 @@ public class WorkBenchPlus extends VirtualizedRegistry<IngredientRecipe> {
 
         @Override
         public String getRecipeNamePrefix() {
-            return "additionalenchantedminer_workbenchplus_";
+            return "additionalenchantedminer_workbench_";
         }
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Additional Enchanted Miner WorkbenchPlus recipe";
+            return "Error adding Additional Enchanted Miner Workbench recipe";
         }
 
         @Override
@@ -116,7 +116,7 @@ public class WorkBenchPlus extends VirtualizedRegistry<IngredientRecipe> {
                             .map(SeqLike::toSeq)
                             .collect(Collectors.toList())).asScala().toSeq();
             IngredientRecipe recipe = new IngredientRecipe(this.name, output.get(0), energy, true, inputScalaList, true);
-            ModSupport.ADDITIONAL_ENCHANTED_MINER.get().workBenchPlus.add(recipe);
+            ModSupport.ADDITIONAL_ENCHANTED_MINER.get().workbenchPlus.add(recipe);
             return recipe;
         }
     }

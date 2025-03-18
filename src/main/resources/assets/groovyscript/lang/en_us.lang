@@ -174,9 +174,12 @@ groovyscript.wiki.actuallyadditions.treasure_chest.min.required=less than or equ
 groovyscript.wiki.actuallyadditions.treasure_chest.max.value=Sets the maximum stack size given when rolled
 groovyscript.wiki.actuallyadditions.treasure_chest.max.required=greater than or equal to the size of min
 
-#Additional Enchanted Miner
-groovyscript.wiki.quarryplus.work_bench_plus.title=Work bench
-groovyscript.wiki.quarryplus.work_bench_plus.description=Workbench for crafting items using electricity.
+
+# Additional Enchanted Miner
+groovyscript.wiki.quarryplus.workbench_plus.title=Workbench Plus
+groovyscript.wiki.quarryplus.workbench_plus.description=Converts up to 27 itemstacks into an output itemstack at the cost of power.
+groovyscript.wiki.quarryplus.workbench_plus.energy.value=Sets the amount of energy consumed to craft the recipe.
+
 
 # Advanced Mortars
 groovyscript.wiki.advancedmortars.mortar.title=Mortar
@@ -188,6 +191,7 @@ groovyscript.wiki.advancedmortars.mortar.types.required=a list of Strings that a
 groovyscript.wiki.advancedmortars.mortar.duration.value=Sets how many interactions are required to process the recipe
 groovyscript.wiki.advancedmortars.mortar.secondaryOutput.value=Sets the additional output itemstack
 groovyscript.wiki.advancedmortars.mortar.secondaryOutputChance.value=Sets the chance of the additional output itemstack being output
+
 
 # Advanced Rocketry
 groovyscript.wiki.advancedrocketry.admonition.weights=The 'chances' used with the recipe outputs are actually output weights. For example, setting 'chance' to 0.1 will set the output's chance to 1, unless other outputs add up to the weight of 0.9. The output chances will also not do anything unless 'outputSize' is set to a number greater than 0.
