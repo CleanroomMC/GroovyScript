@@ -10,6 +10,9 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
@@ -46,6 +49,7 @@ public interface TextureBinder<T> {
     }
 
     static TextureBinder<ItemStack> ofItem() {
+        if (FMLCommonHandler.instance().getSide().isServer()) return x -> {};
         return item -> {
             GlStateManager.enableDepth();
             RenderHelper.enableGUIStandardItemLighting();
@@ -63,6 +67,7 @@ public interface TextureBinder<T> {
     }
 
     static TextureBinder<FluidStack> ofFluid() {
+        if (FMLCommonHandler.instance().getSide().isServer()) return x -> {};
         return fluid -> {
             GlStateManager.enableBlend();
             GlStateManager.enableAlpha();
@@ -79,6 +84,7 @@ public interface TextureBinder<T> {
         };
     }
 
+    @SideOnly(Side.CLIENT)
     static void drawSprite(TextureAtlasSprite textureSprite) {
         double uMin = textureSprite.getMinU();
         double uMax = textureSprite.getMaxU();
