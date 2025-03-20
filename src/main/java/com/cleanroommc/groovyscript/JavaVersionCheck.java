@@ -23,10 +23,19 @@ public class JavaVersionCheck {
         String msg1 = "GroovyScript's version of Groovy does not work with Java versions greater than " + MAXIMUM_VERSION + " currently.";
         String msg2 = "Please downgrade to Java " + MAXIMUM_VERSION + " or lower. Your current Java version is " + version + ".";
         if (side.isClient()) {
-            throw new IncompatibleJavaException(msg1 + "\n" + msg2);
+            throwIncompatibleJavaException(msg1 + "\n" + msg2);
         } else {
             throw new IllegalStateException(msg1 + " " + msg2);
         }
+    }
+
+    /**
+     * Because the super class of this exception is client only (since the screen only works on client)
+     * this has to be in a separate method.
+     */
+    @SideOnly(Side.CLIENT)
+    private static void throwIncompatibleJavaException(String msg) {
+        throw new IncompatibleJavaException(msg);
     }
 
     /**
