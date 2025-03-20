@@ -3,9 +3,12 @@ package com.cleanroommc.groovyscript;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiErrorScreen;
 import net.minecraftforge.fml.client.CustomModLoadingErrorDisplayException;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class IncompatibleJavaException extends CustomModLoadingErrorDisplayException {
 
     private final String msg;
