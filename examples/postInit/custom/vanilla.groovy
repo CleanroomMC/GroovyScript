@@ -21,17 +21,21 @@ log.info(ore_iron >> (item_iron * 3)) // false
     println file.path
 }*/
 
+for (var stack in mods.minecraft.allItems[5..12]) {
+    log.info stack
+}
+
 // Crafting recipes are typically created via recipe builder, but also have shorthand versions for some common uses.
 // Here are a series of examples, with the shorthand and corresponding recipe builder:
 
 //crafting.addShaped(item('minecraft:gold_block'), [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[null, null, null],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
-crafting.shapedBuilder()
+mods.minecraft.crafting.shapedBuilder()
     .output(item('minecraft:gold_block'))
     .shape([[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[null, null, null],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
     .register()
 
 //crafting.addShaped('gold_v_to_clay', item('minecraft:clay'), [[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:gold_ingot'),null]])
-crafting.shapedBuilder()
+minecraft.crafting.shapedBuilder()
     .name('gold_v_to_clay')
     .output(item('minecraft:clay'))
     .shape([[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:stone_pickaxe').transformDamage(2).whenAnyDamage(),null]])

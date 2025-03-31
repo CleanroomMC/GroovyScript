@@ -1,26 +1,21 @@
 package com.cleanroommc.groovyscript.mapper;
 
-import com.cleanroommc.groovyscript.api.*;
+import com.cleanroommc.groovyscript.api.IObjectParser;
+import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
-import com.cleanroommc.groovyscript.helper.ArrayUtils;
 import com.cleanroommc.groovyscript.sandbox.expand.IDocumented;
-import groovy.lang.Closure;
-import groovy.lang.groovydoc.Groovydoc;
-import groovy.lang.groovydoc.GroovydocHolder;
+import com.cleanroommc.groovyscript.server.CompletionParams;
+import com.cleanroommc.groovyscript.server.Completions;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.groovy.ast.ClassHelper;
-import org.codehaus.groovy.ast.MethodNode;
-import org.codehaus.groovy.ast.Parameter;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -30,7 +25,7 @@ import java.util.function.Supplier;
  *
  * @param <T> return type of the function
  */
-public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
+public class ObjectMapper<T> extends AbstractObjectMapper<T> {
 
     /**
      * Creates an object mapper builder.
@@ -46,124 +41,61 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         return new Builder<>(name, returnType);
     }
 
-    private final String name;
-    private final GroovyContainer<?> mod;
     private final IObjectParser<T> handler;
     private final Supplier<Result<T>> defaultValue;
-    private final Class<T> returnType;
-    private final List<Class<?>[]> paramTypes;
     private final Completer completer;
-    private final String documentation;
     private final TextureBinder<T> textureBinder;
-    private List<MethodNode> methodNodes;
+    private final Function<T, List<String>> tooltip;
 
-    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation, TextureBinder<T> textureBinder) {
-        super(null);
-        this.name = name;
-        this.mod = mod;
+    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation, TextureBinder<T> textureBinder, Function<T, List<String>> tooltip) {
+        super(name, mod, returnType);
         this.handler = handler;
         this.defaultValue = defaultValue;
-        this.returnType = returnType;
-        this.paramTypes = paramTypes;
+        this.tooltip = tooltip;
         this.completer = completer;
         this.documentation = documentation;
         this.textureBinder = textureBinder;
-    }
-
-    public @Nullable T invoke(boolean silent, String s, Object... args) {
-        Result<T> t = Objects.requireNonNull(handler.parse(s, args), "Object mapper must return a non null result!");
-        if (t.hasError()) {
-            if (!silent) {
-                if (this.mod == null) {
-                    GroovyLog.get().error("Can't find {} for name {}!", name, s);
-                } else {
-                    GroovyLog.get().error("Can't find {} {} for name {}!", mod, name, s);
-                }
-                if (t.getError() != null && !t.getError().isEmpty()) {
-                    GroovyLog.get().error(" - reason: {}", t.getError());
-                }
-            }
-            return null;
+        clearSignatures();
+        for (Class<?>[] signature : paramTypes) {
+            addSignature(signature);
         }
-        return Objects.requireNonNull(t.getValue(), "Object mapper result must contain a non-null value!");
-    }
-
-    public T invokeWithDefault(boolean silent, String s, Object... args) {
-        T t = invoke(silent, s, args);
-        return t != null ? t : invokeDefault();
-    }
-
-    public T invokeDefault() {
-        Result<T> t = this.defaultValue.get();
-        return t == null || t.hasError() ? null : t.getValue();
-    }
-
-    public GroovyContainer<?> getMod() {
-        return mod;
     }
 
     @Override
-    public Collection<String> getAliases() {
-        return Collections.singleton(this.name);
+    public @NotNull Result<T> parse(String mainArg, Object[] args) {
+        return this.handler.parse(mainArg, args);
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    public List<Class<?>[]> getParamTypes() {
-        return this.paramTypes;
-    }
-
-    public Class<T> getReturnType() {
-        return returnType;
-    }
-
-    @GroovyBlacklist
-    public Completer getCompleter() {
-        return completer;
-    }
-
-    public T doCall(String s, Object... args) {
-        return invokeWithDefault(false, s, args);
-    }
-
-    public T doCall() {
-        return invokeDefault();
+    public Result<T> getDefaultValue() {
+        return defaultValue.get();
     }
 
     @Override
-    public String getDocumentation() {
-        return documentation;
-    }
-
-    public List<MethodNode> getMethodNodes() {
-        if (methodNodes == null) {
-            this.methodNodes = new ArrayList<>();
-            for (Class<?>[] paramType : this.paramTypes) {
-                Parameter[] params = ArrayUtils.map(
-                        paramType,
-                        c -> new Parameter(ClassHelper.makeCached(c), ""),
-                        new Parameter[paramType.length]);
-                MethodNode node = new MethodNode(
-                        this.name,
-                        Modifier.PUBLIC | Modifier.FINAL,
-                        ClassHelper.makeCached(this.returnType),
-                        params,
-                        null,
-                        null);
-                node.setDeclaringClass(this.mod != null ? ClassHelper.makeCached(this.mod.get().getClass()) : ClassHelper.makeCached(ObjectMapperManager.class));
-                node.setNodeMetaData(GroovydocHolder.DOC_COMMENT, new Groovydoc(this.documentation, node));
-                this.methodNodes.add(node);
-            }
+    public void provideCompletion(int index, CompletionParams params, Completions items) {
+        if (this.completer != null) {
+            this.completer.complete(index, items);
         }
-        return methodNodes;
     }
 
-    @ApiStatus.Experimental
-    public TextureBinder<T> getTextureBinder() {
-        return textureBinder;
+    @Override
+    public void bindTexture(T t) {
+        if (this.textureBinder != null) {
+            this.textureBinder.bindTexture(t);
+        }
+    }
+
+    @Override
+    public @NotNull List<String> getTooltip(T t) {
+        if (this.tooltip != null) {
+            return this.tooltip.apply(t);
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean hasTextureBinder() {
+        return this.textureBinder != null;
     }
 
     /**
@@ -182,6 +114,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
         private Completer completer;
         private String documentation;
         private TextureBinder<T> textureBinder;
+        private Function<T, List<String>> tooltip;
 
         @ApiStatus.Internal
         public Builder(String name, Class<T> returnType) {
@@ -350,6 +283,46 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             return this;
         }
 
+        @ApiStatus.Experimental
+        public <V> Builder<T> textureBinder(Function<T, V> mapper, TextureBinder<V> binder) {
+            return textureBinder(TextureBinder.of(mapper, binder));
+        }
+
+        @ApiStatus.Experimental
+        public <V> Builder<T> textureBinderOfList(Function<T, List<V>> mapper, TextureBinder<V> binder) {
+            return textureBinder(TextureBinder.ofList(mapper, binder));
+        }
+
+        @ApiStatus.Experimental
+        public <V> Builder<T> textureBinderOfArray(Function<T, V[]> mapper, TextureBinder<V> binder) {
+            return textureBinder(TextureBinder.ofArray(mapper, binder));
+        }
+
+        public Builder<T> tooltip(Function<T, List<String>> tooltip) {
+            this.tooltip = tooltip;
+            return this;
+        }
+
+        public <V> Builder<T> tooltipOfValues(Function<T, Iterable<V>> values, Function<V, String> toString) {
+            return tooltip(t -> {
+                List<String> list = new ArrayList<>();
+                for (V v : values.apply(t)) {
+                    list.add(toString.apply(v));
+                }
+                return list;
+            });
+        }
+
+        public <V> Builder<T> tooltipOfArray(Function<T, V[]> values, Function<V, String> toString) {
+            return tooltip(t -> {
+                List<String> list = new ArrayList<>();
+                for (V v : values.apply(t)) {
+                    list.add(toString.apply(v));
+                }
+                return list;
+            });
+        }
+
         /**
          * Registers the mapper.
          *
@@ -366,7 +339,7 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
             });
             if (this.defaultValue == null) this.defaultValue = () -> null;
             this.documentation = IDocumented.toJavaDoc(this.documentation);
-            ObjectMapper<T> goh = new ObjectMapper<>(
+            ObjectMapper<T> mapper = new ObjectMapper<>(
                     this.name,
                     this.mod,
                     this.handler,
@@ -375,8 +348,9 @@ public class ObjectMapper<T> extends Closure<T> implements INamed, IDocumented {
                     this.paramTypes,
                     this.completer,
                     this.documentation,
-                    this.textureBinder);
-            ObjectMapperManager.registerObjectMapper(this.mod, goh);
+                    this.textureBinder,
+                    this.tooltip);
+            ObjectMapperManager.registerObjectMapper(mapper);
         }
     }
 }

@@ -1,8 +1,7 @@
 package com.cleanroommc.groovyscript.server.features.textureDecoration;
 
-import com.cleanroommc.groovyscript.mapper.ObjectMapper;
-import com.cleanroommc.groovyscript.mapper.TextureBinder;
-import com.cleanroommc.groovyscript.mapper.TextureTooltip;
+import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
+import com.cleanroommc.groovyscript.mapper.TooltipEmbedding;
 import com.cleanroommc.groovyscript.sandbox.SandboxData;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -17,14 +16,11 @@ import org.codehaus.groovy.GroovyBugError;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.expr.*;
 import org.eclipse.lsp4j.Range;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -33,15 +29,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 public class TextureDecorationProvider extends DocProvider {
 
-    private static final int ICON_W = 16, ICON_H = 16;
-    private static final int ICON_X = 0, ICON_Y = 0;
-    private static final Map<String, TextureDecoration> textures = new Object2ObjectOpenHashMap<>();
+    public static final int ICON_W = 16;
+    public static final int ICON_H = 16;
+    public static final int ICON_X = 0;
+    public static final int ICON_Y = 0;
+    private static final Map<String, TextureDecoration<?>> textures = new Object2ObjectOpenHashMap<>();
 
-    private final File cacheRoot = new File(SandboxData.getCachePath(), "textureDecorations");
+    public static final File cacheRoot = new File(SandboxData.getCachePath(), "texdecs");
+
+    static {
+        cacheRoot.mkdirs();
+    }
 
     public TextureDecorationProvider(URI doc, ASTContext context) {
         super(doc, context);
@@ -49,7 +50,7 @@ public class TextureDecorationProvider extends DocProvider {
 
     public CompletableFuture<List<TextureDecorationInformation>> provideTextureDecorations() {
         List<TextureDecorationInformation> decorationInformations = new ArrayList<>();
-        List<TextureDecoration> queueDeco = new ArrayList<>();
+        List<TextureDecoration<?>> queueDeco = new ArrayList<>();
         List<Range> queueRange = new ArrayList<>();
         Set<MethodCallExpression> mappers = new ObjectOpenHashSet<>();
         for (ASTNode node : getNodes()) {
@@ -70,7 +71,7 @@ public class TextureDecorationProvider extends DocProvider {
                 }
             } else continue;
             if (mappers.contains(call) || !(call.getArguments() instanceof ArgumentListExpression args) || args.getExpressions().isEmpty()) continue;
-            ObjectMapper<?> mapper;
+            AbstractObjectMapper<?> mapper;
             try {
                 mapper = GroovyASTUtils.getMapperOfNode(call, astContext);
             } catch (GroovyBugError e) {
@@ -79,36 +80,37 @@ public class TextureDecorationProvider extends DocProvider {
             if (mapper == null) continue;
             mappers.add(call);
 
-            if (!args.getExpressions().stream().allMatch(e -> e instanceof ConstantExpression)) {
+            if (!mapper.hasTextureBinder() || !args.getExpressions().stream().allMatch(e -> e instanceof ConstantExpression)) {
                 continue;
             }
 
-            var binder = mapper.getTextureBinder();
-            if (binder == null) continue;
-
             var textureName = computeTextureName(mapper.getName(), args.getExpressions());
             var uri = getURIForDecoration(textureName);
-            var decoration = textures.get(uri);
 
-            if (decoration == null) {
-                var bindable = getObjectWithConstArgs(mapper, args);
-                if (bindable == null) continue;
-                decoration = new TextureDecoration(textureName, binder, bindable, uri);
-                textures.put(uri, decoration);
+            TextureDecoration<?> decoration;
+            synchronized (textures) {
+                decoration = textures.get(uri);
+                if (decoration == null) {
+                    decoration = TextureDecoration.create(textureName, uri, mapper, args);
+                    if (decoration == null) continue;
+                    textures.put(uri, decoration);
+                }
             }
 
             var range = GroovyLSUtils.astNodeToRange(start, call);
             if (decoration.isFileExists()) {
-                var tooltips = new ArrayList<>(decoration.render());
+                List<String> tooltips = decoration.getTooltip();
                 if (formatTooltips(tooltips, null)) {
                     decorationInformations.add(new TextureDecorationInformation(range, uri, tooltips));
                     continue;
                 }
             }
-            if (!decoration.queued) {
-                decoration.queued = true;
-                queueDeco.add(decoration);
-                queueRange.add(range);
+            synchronized (decoration) {
+                if (!decoration.queued) {
+                    decoration.queued = true;
+                    queueDeco.add(decoration);
+                    queueRange.add(range);
+                }
             }
         }
 
@@ -125,15 +127,6 @@ public class TextureDecorationProvider extends DocProvider {
         return future;
     }
 
-    private static <T> T getObjectWithConstArgs(ObjectMapper<T> mapper, ArgumentListExpression args) {
-        var additionalArgs = new Object[args.getExpressions().size() - 1];
-        for (int i = 0; i < additionalArgs.length; i++) {
-            if (args.getExpressions().get(i + 1) instanceof ConstantExpression argExpression)
-                additionalArgs[i] = argExpression.getValue();
-        }
-        return mapper.invoke(true, args.getExpressions().get(0).getText(), additionalArgs);
-    }
-
     private String computeTextureName(String name, List<Expression> expressions) {
         var sb = new StringBuilder(name);
         for (Expression expression : expressions) {
@@ -142,7 +135,7 @@ public class TextureDecorationProvider extends DocProvider {
         return DigestUtils.sha1Hex(sb.toString());
     }
 
-    private void render(List<TextureDecoration> queueDeco,
+    private void render(List<TextureDecoration<?>> queueDeco,
                         List<Range> queueRange,
                         List<TextureDecorationInformation> decorationInformations) {
         var framebuffer = GL30.glGenFramebuffers();
@@ -192,15 +185,11 @@ public class TextureDecorationProvider extends DocProvider {
         var buffer = BufferUtils.createByteBuffer(ICON_W * ICON_H * 4);
 
         for (int i = 0; i < queueDeco.size(); i++) {
-            TextureDecoration decoration = queueDeco.get(i);
+            TextureDecoration<?> decoration = queueDeco.get(i);
             Range range = queueRange.get(i);
-
-            var tooltipStrings = new ArrayList<>(render(buffer, decoration.getFile(), decoration::render));
-
+            decoration.render(buffer);
+            var tooltipStrings = decoration.getTooltip();
             formatTooltips(tooltipStrings, buffer);
-
-            decoration.fileExists = true;
-            decoration.queued = false;
             decorationInformations.add(new TextureDecorationInformation(range, decoration.getUri(), tooltipStrings));
         }
 
@@ -213,25 +202,33 @@ public class TextureDecorationProvider extends DocProvider {
         GL30.glDeleteFramebuffers(framebuffer);
     }
 
-    private boolean formatTooltips(ArrayList<String> tooltipStrings, @Nullable ByteBuffer buffer) {
+    private boolean formatTooltips(List<String> tooltipStrings, @Nullable ByteBuffer buffer) {
+        if (tooltipStrings.isEmpty()) return true;
         for (int j = 0; j < tooltipStrings.size(); j++) {
             var str = tooltipStrings.get(j);
-            var tooltip = new TextureTooltip(str);
+            var tooltip = TooltipEmbedding.parseEmbeddings(str);
 
-            for (var embedding : tooltip.getEmbeddings()) {
-                var embeddingDeco = new TextureDecoration(embedding.getTextureName(), embedding.getTextureBinder(), embedding.getContext(), getURIForDecoration(embedding.getTextureName()));
-
-                if (!embeddingDeco.isFileExists()) {
+            for (var embedding : tooltip) {
+                var uri = getURIForDecoration(embedding.getTextureName());
+                TextureDecoration<?> decoration;
+                synchronized (textures) {
+                    decoration = textures.get(uri);
+                    if (decoration == null) {
+                        decoration = TextureDecoration.of(embedding);
+                        textures.put(uri, decoration);
+                    }
+                }
+                if (!decoration.isFileExists()) {
                     if (buffer == null) {
                         return false;
                     }
-                    render(buffer, embeddingDeco.getFile(), embeddingDeco::render);
+                    decoration.render(buffer);
                 }
 
                 var before = embedding.getStart() == 0 ? "" : str.substring(0, embedding.getStart());
                 var after = embedding.getEnd() == str.length() - 1 ? "" : str.substring(embedding.getEnd());
 
-                str = before + embeddingDeco.getUri() + after;
+                str = before + decoration.getUri() + after;
             }
 
             tooltipStrings.set(j, str);
@@ -240,75 +237,7 @@ public class TextureDecorationProvider extends DocProvider {
         return true;
     }
 
-    private static List<String> render(ByteBuffer buffer, File outputFile, Supplier<List<String>> renderer) {
-        GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-
-        var tooltips = renderer.get();
-
-        GL11.glReadPixels(0, 0, ICON_W, ICON_H, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-        saveImage(outputFile, buffer);
-        buffer.rewind();
-
-        return tooltips;
-    }
-
-    private static void saveImage(File file, ByteBuffer buffer) {
-        var image = new BufferedImage(ICON_W, ICON_H, BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < ICON_H; y++) {
-            for (int x = 0; x < ICON_W; x++) {
-                int r = buffer.get() & 0xFF;
-                int g = buffer.get() & 0xFF;
-                int b = buffer.get() & 0xFF;
-                int a = buffer.get() & 0xFF;
-                int color = (a << 24) | (r << 16) | (g << 8) | b;
-                image.setRGB(x, ICON_H - 1 - y, color); // Flip the y-coordinate to correct the image orientation
-            }
-        }
-
-        try {
-            ImageIO.write(image, "PNG", file);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private String getURIForDecoration(String name) {
+    static String getURIForDecoration(String name) {
         return new File(cacheRoot, name + ".png").toURI().toString();
-    }
-
-    private class TextureDecoration {
-
-        private final String name;
-        private final String uri;
-        private final TextureBinder<?> binder;
-        private final Object bindable;
-        private boolean fileExists;
-        private boolean queued;
-
-        private TextureDecoration(String name, TextureBinder<?> binder, Object bindable, String uri) {
-            this.name = name;
-            this.binder = binder;
-            this.bindable = bindable;
-            this.uri = uri;
-            File file = getFile();
-            this.fileExists = !file.getParentFile().mkdirs() && file.exists();
-        }
-
-        public String getUri() {
-            return uri;
-        }
-
-        private @NotNull File getFile() {
-            return new File(cacheRoot, name + ".png");
-        }
-
-        public List<String> render() {
-            return (List<String>) ((TextureBinder) binder).apply(bindable);
-        }
-
-        public boolean isFileExists() {
-            return fileExists;
-        }
     }
 }

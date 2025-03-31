@@ -1,6 +1,9 @@
 package com.cleanroommc.groovyscript.server;
 
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.IForgeRegistry;
 import org.eclipse.lsp4j.CompletionItem;
+import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.jetbrains.annotations.Nullable;
@@ -43,6 +46,26 @@ public class Completions extends ArrayList<CompletionItem> {
                 add(item);
             }
         }
+    }
+
+    public <V> void addAllNamed(Iterable<V> values, Function<V, String> toString) {
+        addAll(values, v -> {
+            String s = toString.apply(v);
+            if (s != null) {
+                var item = new CompletionItem(toString.apply(v));
+                item.setKind(CompletionItemKind.Constant);
+                return item;
+            }
+            return null;
+        });
+    }
+
+    public void addAllNamed(Iterable<ResourceLocation> values) {
+        addAllNamed(values, ResourceLocation::toString);
+    }
+
+    public void addAllOfRegistry(IForgeRegistry<?> registry) {
+        addAllNamed(registry.getKeys());
     }
 
     public Either<List<CompletionItem>, CompletionList> getResult(boolean incomplete) {
