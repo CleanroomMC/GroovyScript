@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedMethod;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.MethodNode;
 import org.codehaus.groovy.reflection.*;
@@ -88,17 +89,34 @@ public class GroovyCodeFactory {
         return new CachedMethod(cachedClass, method);
     }
 
+    public static boolean inheritsMCClas(ClassNode classNode) {
+        do {
+            if (classNode.getName().startsWith(MC_CLASS)) {
+                return true;
+            }
+            ClassNode[] interfaces = classNode.getInterfaces();
+            if (interfaces != null) {
+                for (ClassNode iface : interfaces) {
+                    if (inheritsMCClas(iface)) {
+                        return true;
+                    }
+                }
+            }
+            classNode = classNode.getSuperClass();
+        } while (classNode != null && classNode != ClassHelper.OBJECT_TYPE);
+        return false;
+    }
+
     /**
      * This bad boy is responsible for remapping overriden methods. Called via Mixin
      */
     public static void remapOverrides(ClassNode classNode) {
         if (FMLLaunchHandler.isDeobfuscatedEnvironment()) return;
-        ClassNode superClass = classNode.getSuperClass();
-        if (superClass == null || !superClass.getName().startsWith(MC_CLASS)) return;
+        if (!inheritsMCClas(classNode)) return;
         List<MethodNode> methodNodes = classNode.getMethods();
         for (int i = 0, methodNodesSize = methodNodes.size(); i < methodNodesSize; i++) {
             MethodNode methodNode = methodNodes.get(i);
-            String obf = GroovyDeobfMapper.getObfuscatedMethodName(superClass, methodNode.getName(), methodNode.getParameters());
+            String obf = GroovyDeobfMapper.getObfuscatedMethodName(classNode, methodNode.getName(), methodNode.getParameters());
             if (obf != null) {
                 classNode.addMethod(copyRemappedMethodNode(obf, methodNode));
             }

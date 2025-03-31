@@ -74,11 +74,11 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
                 });
 
         // add all other classes too
-        getAllClasses()
+        /*getAllClasses()
                 .filter(path -> !languageServerContext.getFileContentsTracker().isOpen(path.toUri()))
                 .forEach(path -> {
                     addOpenFileToCompilationUnit(path.toUri(), languageServerContext.getFileContentsTracker().getContents(path.toUri()), unit);
-                });
+                });*/
 
         if (context != null) {
             var contents = languageServerContext.getFileContentsTracker().getContents(context);
@@ -91,19 +91,20 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
     }
 
     protected boolean isInClassesContext(URI uri) {
-        var file = Paths.get(uri).getParent();
+        return false;
+        //var file = Paths.get(uri).getParent();
 
-        return getAllClasses().anyMatch(file::startsWith);
+        //return getAllClasses().anyMatch(file::startsWith);
     }
 
-    protected Stream<Path> getAllClasses() {
+    /*protected Stream<Path> getAllClasses() {
         return LoadStage.getLoadStages()
                 .stream()
                 .map(LoadStage::getName)
                 .flatMap(loader -> GroovyScript.getRunConfig().getClassFiles(this.root, loader).stream())
                 .map(File::toPath)
                 .map(path -> GroovyScript.getScriptFile().toPath().resolve(path));
-    }
+    }*/
 
     protected void removeSources(GroovyLSCompilationUnit unit, Set<URI> urisToRemove) {
         List<SourceUnit> sourcesToRemove = new ArrayList<>();

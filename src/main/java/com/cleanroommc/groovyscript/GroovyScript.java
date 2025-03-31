@@ -275,7 +275,7 @@ public class GroovyScript {
         if (!Files.exists(main.toPath())) {
             try {
                 main.getParentFile().mkdirs();
-                Files.write(main.toPath(), "\nprintln('Hello World!')\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+                Files.write(main.toPath(), "\nlog.info('Hello World!')\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

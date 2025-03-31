@@ -133,15 +133,33 @@ public class GroovyScriptSandbox {
     }
 
     protected void runScript(Script script) {
-        GroovyLog.get().info(" - running {}", script.getClass().getName());
+        GroovyLog.get().info(" - running script {}", script.getClass().getName());
         setCurrentScript(script.getClass().getName());
-        script.run();
-        setCurrentScript(null);
+        try {
+            script.run();
+        } finally {
+            setCurrentScript(null);
+        }
+    }
+
+    protected void runClass(Class<?> script) {
+        GroovyLog.get().info(" - loading class {}", script.getName());
+        setCurrentScript(script.getName());
+        try {
+            // $getLookup is present on all groovy created classes
+            // call it cause the class to be initialised
+            Method m = script.getMethod("$getLookup");
+            m.invoke(null);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            GroovyLog.get().errorMC("Error initialising class '{}'", script);
+        } finally {
+            setCurrentScript(null);
+        }
     }
 
     public void checkSyntax() {
         Binding binding = createBindings();
-        Set<File> executedClasses = new ObjectOpenHashSet<>();
+        Set<String> executedClasses = new ObjectOpenHashSet<>();
 
         for (LoadStage loadStage : LoadStage.getLoadStages()) {
             GroovyLog.get().info("Checking syntax in loader '{}'", this.currentLoadStage);
@@ -195,7 +213,7 @@ public class GroovyScriptSandbox {
         preRun();
 
         Binding binding = createBindings();
-        Set<File> executedClasses = new ObjectOpenHashSet<>();
+        Set<String> executedClasses = new ObjectOpenHashSet<>();
 
         this.running.set(true);
         try {
@@ -207,7 +225,7 @@ public class GroovyScriptSandbox {
         }
     }
 
-    protected void load(Binding binding, Set<File> executedClasses, boolean run) {
+    protected void load(Binding binding, Set<String> executedClasses, boolean run) {
         this.compileTime = 0L;
         this.runTime = 0L;
         // load and run any configured class files
@@ -216,23 +234,29 @@ public class GroovyScriptSandbox {
         loadScripts(binding, executedClasses, run);
     }
 
-    protected void loadScripts(Binding binding, Set<File> executedClasses, boolean run) {
-        for (File scriptFile : getScriptFiles()) {
-            if (!executedClasses.contains(scriptFile)) {
+    protected void loadScripts(Binding binding, Set<String> executedClasses, boolean run) {
+        for (CompiledScript compiledScript : this.engine.findScripts(getScriptFiles())) {
+            if (!executedClasses.contains(compiledScript.path)) {
                 long t = System.currentTimeMillis();
-                CompiledScript compiledScript = engine.loadScriptClass(scriptFile);
+                this.engine.loadScript(compiledScript);
                 this.compileTime += System.currentTimeMillis() - t;
                 if (compiledScript.preprocessorCheckFailed) continue;
                 if (compiledScript.clazz == null) {
-                    GroovyLog.get().errorMC("Error loading script for {}", scriptFile.getPath());
+                    GroovyLog.get().errorMC("Error loading script for {}", compiledScript.path);
                     GroovyLog.get().errorMC("Did you forget to register your class file in your run config?");
                     continue;
                 }
                 if (compiledScript.clazz.getSuperclass() != Script.class) {
-                    GroovyLog.get().errorMC("Class file '{}' should be defined in the runConfig in the classes property!", scriptFile);
+                    //GroovyLog.get().errorMC("Class file '{}' should be defined in the runConfig in the classes property!", scriptFile);
+                    if (run && shouldRunFile(compiledScript.path)) {
+                        t = System.currentTimeMillis();
+                        runClass(compiledScript.clazz);
+                        this.runTime += System.currentTimeMillis() - t;
+                    }
+                    executedClasses.add(compiledScript.path);
                     continue;
                 }
-                if (run && shouldRunFile(scriptFile)) {
+                if (run && shouldRunFile(compiledScript.path)) {
                     Script script = InvokerHelper.createScript(compiledScript.clazz, binding);
                     t = System.currentTimeMillis();
                     runScript(script);
@@ -242,9 +266,9 @@ public class GroovyScriptSandbox {
         }
     }
 
-    protected void loadClassScripts(Binding binding, Set<File> executedClasses, boolean run) {
+    protected void loadClassScripts(Binding binding, Set<String> executedClasses, boolean run) {
         for (File classFile : getClassFiles()) {
-            if (executedClasses.contains(classFile)) continue;
+            if (executedClasses.contains(classFile.getPath())) continue;
             long t = System.currentTimeMillis();
             CompiledScript compiledScript = engine.loadScriptClass(classFile);
             this.compileTime += System.currentTimeMillis() - t;
@@ -256,7 +280,7 @@ public class GroovyScriptSandbox {
             }
             // the superclass of class files is Object
             if (compiledScript.clazz.getSuperclass() != Script.class) {
-                if (run && shouldRunFile(classFile)) {
+                if (run && shouldRunFile(classFile.getPath())) {
                     try {
                         // $getLookup is present on all groovy created classes
                         // call it cause the class to be initialised
@@ -268,7 +292,7 @@ public class GroovyScriptSandbox {
                         GroovyLog.get().errorMC("Error initialising class '{}'", compiledScript.clazz.getName());
                     }
                 }
-                executedClasses.add(classFile);
+                executedClasses.add(classFile.getPath());
             }
         }
     }
@@ -296,7 +320,7 @@ public class GroovyScriptSandbox {
 
     @ApiStatus.OverrideOnly
     protected void preRun() {
-        if (CustomGroovyScriptEngine.DELETE_CACHE_ON_RUN) engine.deleteScriptCache();
+        if (CustomGroovyScriptEngine.DELETE_CACHE_ON_RUN) this.engine.deleteScriptCache();
         // first clear all added events
         GroovyEventManager.INSTANCE.reset();
         if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
@@ -306,12 +330,13 @@ public class GroovyScriptSandbox {
             MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
         }
         GroovyLog.get().infoMC("Running scripts in loader '{}'", this.currentLoadStage);
+        //this.engine.prepareEngine(this.currentLoadStage);
         // and finally invoke pre script run event
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre(this.currentLoadStage));
     }
 
     @ApiStatus.OverrideOnly
-    protected boolean shouldRunFile(File file) {
+    protected boolean shouldRunFile(String file) {
         return true;
     }
 
@@ -330,8 +355,10 @@ public class GroovyScriptSandbox {
         return SandboxData.getScriptFile();
     }
 
+    @Deprecated
     public Collection<File> getClassFiles() {
-        return GroovyScript.getRunConfig().getClassFiles(getScriptRoot(), this.currentLoadStage.getName());
+        return Collections.emptyList();
+        //return GroovyScript.getRunConfig().getClassFiles(getScriptRoot(), this.currentLoadStage.getName());
     }
 
     public Collection<File> getScriptFiles() {

@@ -8,7 +8,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
-import groovy.lang.GroovyResourceLoader;
 import groovy.util.ResourceConnector;
 import groovy.util.ResourceException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -18,10 +17,12 @@ import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.classgen.GeneratorContext;
 import org.codehaus.groovy.control.*;
 import org.codehaus.groovy.runtime.IOGroovyMethods;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.codehaus.groovy.tools.gse.DependencyTracker;
 import org.codehaus.groovy.tools.gse.StringSetMap;
 import org.codehaus.groovy.vmplugin.VMPlugin;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -34,8 +35,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.CodeSource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class CustomGroovyScriptEngine implements ResourceConnector {
 
@@ -71,14 +71,14 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
     private final CompilerConfiguration config;
     private final ScriptClassLoader classLoader;
     private final Map<String, CompiledScript> index = new Object2ObjectOpenHashMap<>();
-    private final Map<String, Class<?>> loadedScripts = new Object2ObjectOpenHashMap<>();
+    private final Map<String, CompiledClass> loadedClasses = new Object2ObjectOpenHashMap<>();
 
     public CustomGroovyScriptEngine(URL[] scriptEnvironment, File cacheRoot, File scriptRoot, CompilerConfiguration config) {
         this.scriptEnvironment = scriptEnvironment;
         this.cacheRoot = cacheRoot;
         this.scriptRoot = scriptRoot;
         this.config = config;
-        this.classLoader = new ScriptClassLoader(CustomGroovyScriptEngine.class.getClassLoader(), config);
+        this.classLoader = new ScriptClassLoader(CustomGroovyScriptEngine.class.getClassLoader(), config, Collections.unmodifiableMap(this.loadedClasses));
         readIndex();
     }
 
@@ -94,7 +94,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         return config;
     }
 
-    public GroovyClassLoader getClassLoader() {
+    public GroovyScriptClassLoader getClassLoader() {
         return classLoader;
     }
 
@@ -115,6 +115,10 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
                 CompiledScript cs = CompiledScript.fromJson(element.getAsJsonObject(), this.scriptRoot.getPath(), this.cacheRoot.getPath());
                 if (cs != null) {
                     this.index.put(cs.path, cs);
+                    this.loadedClasses.put(cs.name, cs);
+                    for (CompiledClass cc : cs.innerClasses) {
+                        this.loadedClasses.put(cc.name, cc);
+                    }
                 }
             }
         }
@@ -136,7 +140,9 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
 
     @ApiStatus.Internal
     public boolean deleteScriptCache() {
+        this.index.values().forEach(script -> script.deleteCache(this.cacheRoot.getPath()));
         this.index.clear();
+        this.loadedClasses.clear();
         getClassLoader().clearCache();
         try {
             FileUtils.cleanDirectory(this.cacheRoot);
@@ -147,20 +153,33 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         }
     }
 
-    CompiledScript loadScriptClass(File file) {
-        CompiledScript compiledScript = checkScriptLoadability(file);
-        if (compiledScript.requiresReload && !compiledScript.preprocessorCheckFailed) {
-            Class<?> clazz = loadScriptClassInternal(new File(compiledScript.path), true);
-            if (compiledScript.clazz == null) {
+    List<CompiledScript> findScripts(Collection<File> files) {
+        List<CompiledScript> scripts = new ArrayList<>(files.size());
+        for (File file : files) {
+            CompiledScript cs = checkScriptLoadability(file);
+            if (!cs.preprocessorCheckFailed) scripts.add(cs);
+        }
+        return scripts;
+    }
+
+    void loadScript(CompiledScript script) {
+        if (script.requiresReload && !script.preprocessorCheckFailed) {
+            Class<?> clazz = loadScriptClassInternal(new File(script.path), true);
+            if (script.clazz == null) {
                 // should not happen
-                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback!", compiledScript.path);
-                if (ENABLE_CACHE) compiledScript.clazz = clazz;
+                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback!", script.path);
+                if (ENABLE_CACHE) script.clazz = clazz;
             }
         }
+    }
+
+    CompiledScript loadScriptClass(File file) {
+        CompiledScript compiledScript = checkScriptLoadability(file);
+        loadScript(compiledScript);
         return compiledScript;
     }
 
-    CompiledScript checkScriptLoadability(File file) {
+    @NotNull CompiledScript checkScriptLoadability(File file) {
         String relativeFileName = FileUtil.relativize(this.scriptRoot.getPath(), file.getPath());
         File relativeFile = new File(relativeFileName);
         long lastModified = file.lastModified();
@@ -173,12 +192,16 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
                 comp.preprocessorCheckFailed = true;
                 return comp;
             }
-            comp.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
+            comp.ensureLoaded(getClassLoader(), this.loadedClasses, this.cacheRoot.getPath());
         } else if (!ENABLE_CACHE || (comp == null || comp.clazz == null || lastModified > comp.lastEdited)) {
             // class is not loaded and class bytes don't exist yet or script has been edited
             if (comp == null) {
                 comp = new CompiledScript(relativeFileName, 0);
                 this.index.put(relativeFileName, comp);
+            }
+            if (comp.clazz != null) {
+                InvokerHelper.removeClass(comp.clazz);
+                comp.clazz = null;
             }
             comp.requiresReload = true;
             if (lastModified > comp.lastEdited || comp.preprocessors == null) {
@@ -189,8 +212,6 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
             if (!comp.checkPreprocessors(this.scriptRoot)) {
                 // delete class bytes to make sure it's recompiled once the preprocessors returns true
                 comp.deleteCache(this.cacheRoot.getPath());
-                comp.clazz = null;
-                comp.data = null;
                 comp.preprocessorCheckFailed = true;
                 return comp;
             }
@@ -201,7 +222,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
                 comp.preprocessorCheckFailed = true;
                 return comp;
             }
-            comp.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
+            comp.ensureLoaded(getClassLoader(), this.loadedClasses, this.cacheRoot.getPath());
         }
         comp.preprocessorCheckFailed = false;
         return comp;
@@ -282,7 +303,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         CompiledClass innerClass = comp;
         if (inner) innerClass = comp.findInnerClass(clazz.getName());
         innerClass.onCompile(code, clazz, this.cacheRoot.getPath());
-        this.loadedScripts.put(clazz.getName(), clazz);
+        this.loadedClasses.put(innerClass.name, innerClass);
     }
 
     /**
@@ -297,7 +318,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         Class<?> c = null;
         if (cs != null) {
             if (cs.clazz == null && cs.readData(this.cacheRoot.getPath())) {
-                cs.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
+                cs.ensureLoaded(getClassLoader(), this.loadedClasses, this.cacheRoot.getPath());
             }
             c = cs.clazz;
         }
@@ -380,32 +401,26 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         final Map<String, String> precompiledEntries = new HashMap<>();
     }
 
-    private class ScriptClassLoader extends GroovyClassLoader {
+    private class ScriptClassLoader extends GroovyScriptClassLoader {
 
-
-        public ScriptClassLoader(GroovyClassLoader loader) {
-            super(loader);
-        }
-
-        public ScriptClassLoader(ClassLoader loader, CompilerConfiguration config) {
-            super(loader, config, false);
-            setResLoader();
-        }
-
-        private void setResLoader() {
-            final GroovyResourceLoader rl = getResourceLoader();
-            setResourceLoader(className -> {
-                File file = CustomGroovyScriptEngine.this.findScriptFileOfClass(className);
-                if (file != null) {
-                    return file.toURI().toURL();
-                }
-                return rl.loadGroovySource(className);
-            });
+        public ScriptClassLoader(ClassLoader loader, CompilerConfiguration config, Map<String, CompiledClass> cache) {
+            super(loader, config, cache);
         }
 
         @Override
-        protected ClassCollector createCollector(CompilationUnit unit, SourceUnit su) {
-            return new CustomClassCollector(new InnerLoader(this), unit, su, CustomGroovyScriptEngine.this);
+        public URL loadResource(String name) throws MalformedURLException {
+            File file = CustomGroovyScriptEngine.this.findScriptFileOfClass(name);
+            if (file != null) {
+                return file.toURI().toURL();
+            }
+            return null;
+        }
+
+        @Override
+        protected ClassCollector createCustomCollector(CompilationUnit unit, SourceUnit su) {
+            return super.createCustomCollector(unit, su).creatClassCallback((code, clz) -> {
+                onCompileClass(su, su.getName(), clz, code, clz.getName().contains("$"));
+            });
         }
 
         @Override
@@ -464,14 +479,14 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         }
 
         @Override
-        protected Class<?> recompile(URL source, String className, Class oldClass) throws CompilationFailedException, IOException {
-            if (source != null && oldClass == null) {
+        protected Class<?> recompile(URL source, String className) throws CompilationFailedException, IOException {
+            if (source != null) {
                 Class<?> c = CustomGroovyScriptEngine.this.onRecompileClass(source, className);
                 if (c != null) {
                     return c;
                 }
             }
-            return super.recompile(source, className, oldClass);
+            return super.recompile(source, className);
         }
 
         @Override
@@ -522,25 +537,6 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
                 localTh.remove();
             }
             return answer;
-        }
-    }
-
-    public static class CustomClassCollector extends GroovyClassLoader.ClassCollector {
-
-        private final SourceUnit su;
-        private final CustomGroovyScriptEngine engine;
-
-        protected CustomClassCollector(GroovyClassLoader.InnerLoader cl, CompilationUnit unit, SourceUnit su, CustomGroovyScriptEngine engine) {
-            super(cl, unit, su);
-            this.su = su;
-            this.engine = engine;
-        }
-
-        @Override
-        protected Class<?> createClass(byte[] code, ClassNode classNode) {
-            Class<?> clz = super.createClass(code, classNode);
-            this.engine.onCompileClass(this.su, this.su.getName(), clz, code, classNode.getName().contains("$"));
-            return clz;
         }
     }
 }

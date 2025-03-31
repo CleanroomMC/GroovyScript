@@ -31,14 +31,15 @@ public class RunConfig {
         json.addProperty("packId", "placeholdername");
         json.addProperty("version", "1.0.0");
         json.addProperty("debug", false);
-        JsonObject classes = new JsonObject();
-        JsonArray preInit = new JsonArray();
-        classes.add("preInit", preInit);
-        json.add("classes", classes);
+        //JsonObject classes = new JsonObject();
+        //JsonArray preInit = new JsonArray();
+        //classes.add("preInit", preInit);
+        //json.add("classes", classes);
         JsonObject loaders = new JsonObject();
         json.add("loaders", loaders);
-        preInit = new JsonArray();
+        JsonArray preInit = new JsonArray();
         loaders.add("preInit", preInit);
+        preInit.add("classes/");
         preInit.add("preInit/");
         JsonArray postInit = new JsonArray();
         loaders.add("postInit", postInit);
@@ -65,7 +66,7 @@ public class RunConfig {
     private final String packName;
     private final String packId;
     private final String version;
-    private final Map<String, List<String>> classes = new Object2ObjectOpenHashMap<>();
+    //private final Map<String, List<String>> classes = new Object2ObjectOpenHashMap<>();
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
     private final List<String> packmodeList = new ArrayList<>();
     private final Set<String> packmodeSet = new ObjectOpenHashSet<>();
@@ -109,7 +110,7 @@ public class RunConfig {
             throw new RuntimeException();
         }
         this.debug = JsonHelper.getBoolean(json, false, "debug");
-        this.classes.clear();
+        //this.classes.clear();
         this.loaderPaths.clear();
         this.packmodeList.clear();
         this.packmodeSet.clear();
@@ -119,7 +120,8 @@ public class RunConfig {
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
         String replacement = getSeparator();
         if (json.has("classes")) {
-            JsonElement jsonClasses = json.get("classes");
+            throw new IllegalStateException("GroovyScript classes definition in runConfig is deprecated!");
+            /*JsonElement jsonClasses = json.get("classes");
 
             if (jsonClasses.isJsonArray()) {
                 List<String> classes = this.classes.computeIfAbsent("all", key -> new ArrayList<>());
@@ -140,7 +142,7 @@ public class RunConfig {
                         this.classes.remove(entry.getKey());
                     }
                 }
-            }
+            }*/
         }
 
 
@@ -279,20 +281,20 @@ public class RunConfig {
     }
 
     public boolean isLoaderConfigured(String loader) {
-        List<String> path = this.classes.get(loader);
-        if (path != null && !path.isEmpty()) return true;
-        path = this.loaderPaths.get(loader);
+        //List<String> path = this.classes.get(loader);
+        //if (path != null && !path.isEmpty()) return true;
+        List<String> path = this.loaderPaths.get(loader);
         return path != null && !path.isEmpty();
     }
 
-    public Collection<File> getClassFiles(File root, String loader) {
+    /*public Collection<File> getClassFiles(File root, String loader) {
         List<String> paths = this.classes.get("all");
         paths = paths == null ? new ArrayList<>() : new ArrayList<>(paths);
         if (this.classes.containsKey(loader)) {
             paths.addAll(this.classes.get(loader));
         }
         return SandboxData.getSortedFilesOf(root, paths);
-    }
+    }*/
 
     public Collection<File> getSortedFiles(File root, String loader) {
         List<String> paths = loaderPaths.get(loader);

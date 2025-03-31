@@ -12,8 +12,15 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 class CompiledScript extends CompiledClass {
+
+    public static String classNameFromPath(String path) {
+        int i = path.lastIndexOf('.');
+        path = path.substring(0, i);
+        return path.replace('/', '.');
+    }
 
     final List<CompiledClass> innerClasses = new ArrayList<>();
     long lastEdited;
@@ -22,7 +29,7 @@ class CompiledScript extends CompiledClass {
     boolean requiresReload;
 
     public CompiledScript(String path, long lastEdited) {
-        this(path, null, lastEdited);
+        this(path, classNameFromPath(path), lastEdited);
     }
 
     public CompiledScript(String path, String name, long lastEdited) {
@@ -65,17 +72,17 @@ class CompiledScript extends CompiledClass {
         super.ensureLoaded(classLoader, basePath);
     }
 
-    public void ensureLoaded(GroovyClassLoader classLoader, String basePath) {
+    public void ensureLoaded(GroovyClassLoader classLoader, Map<String, CompiledClass> cache, String basePath) {
         for (CompiledClass comp : this.innerClasses) {
             if (comp.clazz == null) {
                 if (comp.readData(basePath)) {
-                    comp.ensureLoaded(classLoader, basePath);
+                    comp.ensureLoaded(classLoader, cache, basePath);
                 } else {
                     GroovyLog.get().error("Error loading inner class {} for class {}", comp.name, this.name);
                 }
             }
         }
-        super.ensureLoaded(classLoader, basePath);
+        super.ensureLoaded(classLoader, cache, basePath);
     }
 
     public @NotNull JsonObject toJson() {

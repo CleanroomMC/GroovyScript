@@ -150,6 +150,7 @@ public abstract class GroovySandbox {
             }
             // the superclass of class files is Object
             if (clazz.getSuperclass() != Script.class && shouldRunFile(classFile)) {
+                GroovyLog.get().info(" - loading {}", clazz.getName());
                 try {
                     // $getLookup is present on all groovy created classes
                     // call it cause the class to be initialised
