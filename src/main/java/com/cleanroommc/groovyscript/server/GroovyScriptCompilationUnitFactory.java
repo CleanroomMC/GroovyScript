@@ -1,7 +1,5 @@
 package com.cleanroommc.groovyscript.server;
 
-import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptEarlyCompiler;
 import groovy.lang.GroovyClassLoader;
@@ -17,7 +15,6 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBase {
 

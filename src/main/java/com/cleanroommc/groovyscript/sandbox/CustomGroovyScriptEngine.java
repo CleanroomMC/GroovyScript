@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
 import groovy.util.ResourceConnector;
 import groovy.util.ResourceException;
@@ -179,7 +178,8 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         return compiledScript;
     }
 
-    @NotNull CompiledScript checkScriptLoadability(File file) {
+    @NotNull
+    CompiledScript checkScriptLoadability(File file) {
         String relativeFileName = FileUtil.relativize(this.scriptRoot.getPath(), file.getPath());
         File relativeFile = new File(relativeFileName);
         long lastModified = file.lastModified();

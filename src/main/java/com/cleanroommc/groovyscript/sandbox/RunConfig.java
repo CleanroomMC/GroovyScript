@@ -122,7 +122,7 @@ public class RunConfig {
         if (json.has("classes")) {
             throw new IllegalStateException("GroovyScript classes definition in runConfig is deprecated!");
             /*JsonElement jsonClasses = json.get("classes");
-
+            
             if (jsonClasses.isJsonArray()) {
                 List<String> classes = this.classes.computeIfAbsent("all", key -> new ArrayList<>());
                 for (JsonElement element : jsonClasses.getAsJsonArray()) {

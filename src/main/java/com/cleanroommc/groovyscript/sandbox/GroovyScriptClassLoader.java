@@ -146,8 +146,7 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
      * @throws CompilationFailedException if the source file could not be compiled
      */
     @Override
-    public Class<?> loadClass(final String name, boolean lookupScriptFiles, boolean preferClassOverScript, boolean resolve)
-            throws ClassNotFoundException, CompilationFailedException {
+    public Class<?> loadClass(final String name, boolean lookupScriptFiles, boolean preferClassOverScript, boolean resolve) throws ClassNotFoundException, CompilationFailedException {
         // look into cache
         Class<?> cls = getClassCacheEntry(name);
 
