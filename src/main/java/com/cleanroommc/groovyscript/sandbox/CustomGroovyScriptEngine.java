@@ -164,6 +164,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
     void loadScript(CompiledScript script) {
         if (script.requiresReload && !script.preprocessorCheckFailed) {
             Class<?> clazz = loadScriptClassInternal(new File(script.path), true);
+            script.requiresReload = false;
             if (script.clazz == null) {
                 // should not happen
                 GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback!", script.path);
@@ -405,6 +406,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
 
         public ScriptClassLoader(ClassLoader loader, CompilerConfiguration config, Map<String, CompiledClass> cache) {
             super(loader, config, cache);
+            init();
         }
 
         @Override
