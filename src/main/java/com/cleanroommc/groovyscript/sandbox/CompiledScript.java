@@ -58,20 +58,6 @@ class CompiledScript extends CompiledClass {
         return comp;
     }
 
-    @Deprecated
-    public void ensureLoaded(CachedClassLoader classLoader, String basePath) {
-        for (CompiledClass comp : this.innerClasses) {
-            if (comp.clazz == null) {
-                if (comp.readData(basePath)) {
-                    comp.ensureLoaded(classLoader, basePath);
-                } else {
-                    GroovyLog.get().error("Error loading inner class {} for class {}", comp.name, this.name);
-                }
-            }
-        }
-        super.ensureLoaded(classLoader, basePath);
-    }
-
     public void ensureLoaded(GroovyClassLoader classLoader, Map<String, CompiledClass> cache, String basePath) {
         for (CompiledClass comp : this.innerClasses) {
             if (comp.clazz == null) {

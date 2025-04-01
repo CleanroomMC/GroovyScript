@@ -17,7 +17,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -182,7 +181,8 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
             // try groovy file
             try {
                 // check if recompilation already happened.
-                final Class<?> classCacheEntry = null;
+                final Class<?> classCacheEntry = getClassCacheEntry(name);
+                if (classCacheEntry != cls) return classCacheEntry;
                 URL source = loadResource(name);
                 // if recompilation fails, we want cls==null
                 cls = recompile(source, name);
@@ -250,27 +250,6 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
     @Override
     protected long getTimeStamp(Class cls) {
         return Long.MAX_VALUE;
-    }
-
-    /**
-     * This method will take a file name and try to "decode" any URL encoded characters.  For example
-     * if the file name contains any spaces this method call will take the resulting %20 encoded values
-     * and convert them to spaces.
-     * <p>
-     * This method was added specifically to fix defect:  Groovy-1787.  The defect involved a situation
-     * where two scripts were sitting in a directory with spaces in its name.  The code would fail
-     * when the class loader tried to resolve the file name and would choke on the URLEncoded space values.
-     */
-    private static String decodeFileName(String fileName) {
-        String decodedFile = fileName;
-        try {
-            decodedFile = URLDecoder.decode(fileName, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            System.err.println("Encountered an invalid encoding scheme when trying to use URLDecoder.decode() inside of the GroovyClassLoader.decodeFileName() method.  Returning the unencoded URL.");
-            System.err.println("Please note that if you encounter this error and you have spaces in your directory you will run into issues.  Refer to GROOVY-1787 for description of this bug.");
-        }
-
-        return decodedFile;
     }
 
     private static boolean isFile(URL ret) {

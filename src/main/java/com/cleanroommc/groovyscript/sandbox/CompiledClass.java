@@ -51,13 +51,6 @@ class CompiledClass {
         }
     }
 
-    @Deprecated
-    protected void ensureLoaded(CachedClassLoader classLoader, String basePath) {
-        if (this.clazz == null) {
-            this.clazz = classLoader.defineClass(this.name, this.data);
-        }
-    }
-
     protected void ensureLoaded(GroovyClassLoader classLoader, Map<String, CompiledClass> cache, String basePath) {
         if (this.clazz == null) {
             this.clazz = classLoader.defineClass(this.name, this.data);

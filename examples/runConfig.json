@@ -1,6 +1,6 @@
 {
-  "packName": "Technological Journey CEu",
-  "packId": "tjceu",
+  "packName": "GroovyScript Dev",
+  "packId": "groovyscriptdev",
   "version": "1.0.0",
   "debug": true,
   "loaders": {
