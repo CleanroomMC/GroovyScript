@@ -103,6 +103,31 @@ mods.betterwithaddons.lure_tree.recipeBuilder()
 
 mods.betterwithaddons.lure_tree.addBlacklist(entity('minecraft:chicken'))
 
+// Packing:
+// Converts an input itemstack in the form of a EntityItems into an IBlockState after a piston extends if the piston and
+// location the EntityItems are in are fully surrounded by solid blocks.
+
+mods.betterwithaddons.packing.removeByInput(item('minecraft:clay_ball'))
+mods.betterwithaddons.packing.removeByOutput(blockstate('minecraft:gravel'))
+// mods.betterwithaddons.packing.removeAll()
+
+mods.betterwithaddons.packing.recipeBuilder()
+    .input(item('minecraft:gold_ingot'))
+    .compress(blockstate('minecraft:clay'))
+    .register()
+
+mods.betterwithaddons.packing.recipeBuilder()
+    .input(item('minecraft:clay') * 10)
+    .compress(blockstate('minecraft:diamond_block'))
+    .register()
+
+mods.betterwithaddons.packing.recipeBuilder()
+    .input(item('minecraft:diamond'))
+    .compress(blockstate('minecraft:dirt'))
+    .jeiOutput(item('minecraft:diamond') * 64)
+    .register()
+
+
 // Rotting Food:
 // Converts an input item into an output itemstack after the given time has passed. Has the ability to customize the
 // terminology used to indicate the age.

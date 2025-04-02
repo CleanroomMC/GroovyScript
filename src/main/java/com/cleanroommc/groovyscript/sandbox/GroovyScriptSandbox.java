@@ -3,71 +3,59 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
 import com.cleanroommc.groovyscript.event.ScriptRunEvent;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.GroovyHelper;
-import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptEarlyCompiler;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import groovy.lang.*;
-import groovy.util.GroovyScriptEngine;
+import groovy.lang.Binding;
+import groovy.lang.Closure;
+import groovy.lang.GroovyRuntimeException;
+import groovy.lang.Script;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
-import org.apache.commons.io.FileUtils;
 import org.apache.groovy.internal.util.UncheckedThrow;
 import org.codehaus.groovy.control.CompilerConfiguration;
-import org.codehaus.groovy.control.SourceUnit;
+import org.codehaus.groovy.control.customizers.ImportCustomizer;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.codehaus.groovy.runtime.InvokerInvocationException;
-import org.codehaus.groovy.vmplugin.VMPlugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GroovyScriptSandbox extends GroovySandbox {
+public class GroovyScriptSandbox {
 
-    /**
-     * Changing this number will force the cache to be deleted and every script has to be recompiled.
-     * Useful when changes to the compilation process were made.
-     */
-    public static final int CACHE_VERSION = 3;
-    /**
-     * Setting this to false will cause compiled classes to never be cached.
-     * As a side effect some compilation behaviour might change. Can be useful for debugging.
-     */
-    public static final boolean ENABLE_CACHE = true;
-    /**
-     * Setting this to true will cause the cache to be deleted before each script run.
-     * Useful for debugging.
-     */
-    public static final boolean DELETE_CACHE_ON_RUN = Boolean.parseBoolean(System.getProperty("groovyscript.disable_cache"));
+    private final CustomGroovyScriptEngine engine;
 
-    private final File cacheRoot;
-    private final File scriptRoot;
-    private final Map<List<StackTraceElement>, AtomicInteger> storedExceptions;
-    private final Map<String, CompiledScript> index = new Object2ObjectOpenHashMap<>();
-
+    private String currentScript;
     private LoadStage currentLoadStage;
 
-    @ApiStatus.Internal
+    private final ThreadLocal<Boolean> running = ThreadLocal.withInitial(() -> false);
+    private final Map<String, Object> bindings = new Object2ObjectOpenHashMap<>();
+    private final ImportCustomizer importCustomizer = new ImportCustomizer();
+    private final Map<List<StackTraceElement>, AtomicInteger> storedExceptions = new Object2ObjectOpenHashMap<>();
+
+    private long compileTime;
+    private long runTime;
+
     public GroovyScriptSandbox() {
-        super(SandboxData.getRootUrls());
-        this.scriptRoot = SandboxData.getScriptFile();
-        this.cacheRoot = SandboxData.getCachePath();
+        CompilerConfiguration config = new CompilerConfiguration();
+        initEngine(config);
+        this.engine = new CustomGroovyScriptEngine(SandboxData.getRootUrls(), SandboxData.getCachePath(), SandboxData.getScriptFile(), config);
         registerBinding("Mods", ModSupport.INSTANCE);
         registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
@@ -104,88 +92,83 @@ public class GroovyScriptSandbox extends GroovySandbox {
                 "com.cleanroommc.groovyscript.event.EventBusType",
                 "net.minecraftforge.fml.relauncher.Side",
                 "net.minecraftforge.fml.relauncher.SideOnly");
-        this.storedExceptions = new Object2ObjectOpenHashMap<>();
-        readIndex();
     }
 
-    private void readIndex() {
-        this.index.clear();
-        JsonElement jsonElement = JsonHelper.loadJson(new File(this.cacheRoot, "_index.json"));
-        if (jsonElement == null || !jsonElement.isJsonObject()) return;
-        JsonObject json = jsonElement.getAsJsonObject();
-        int cacheVersion = json.get("version").getAsInt();
-        String java = json.has("java") ? json.get("java").getAsString() : "";
-        if (cacheVersion != CACHE_VERSION || !java.equals(VMPlugin.getJavaVersion())) {
-            // cache version changed -> force delete cache
-            deleteScriptCache();
-            return;
-        }
-        for (JsonElement element : json.getAsJsonArray("index")) {
-            if (element.isJsonObject()) {
-                CompiledScript cs = CompiledScript.fromJson(element.getAsJsonObject(), this.scriptRoot.getPath(), this.cacheRoot.getPath());
-                if (cs != null) {
-                    this.index.put(cs.path, cs);
-                }
-            }
+    protected Binding createBindings() {
+        Binding binding = new Binding(this.bindings);
+        postInitBindings(binding);
+        return binding;
+    }
+
+    public void registerBinding(String name, Object obj) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(obj);
+        for (String alias : Alias.generateOf(name)) {
+            bindings.put(alias, obj);
         }
     }
 
-    private void writeIndex() {
-        if (!ENABLE_CACHE) return;
-        JsonObject json = new JsonObject();
-        json.addProperty("!DANGER!", "DO NOT EDIT THIS FILE!!!");
-        json.addProperty("version", CACHE_VERSION);
-        json.addProperty("java", VMPlugin.getJavaVersion());
-        JsonArray index = new JsonArray();
-        json.add("index", index);
-        for (Map.Entry<String, CompiledScript> entry : this.index.entrySet()) {
-            index.add(entry.getValue().toJson());
-        }
-        JsonHelper.saveJson(new File(this.cacheRoot, "_index.json"), json);
-    }
-
-    public void checkSyntax() {
-        GroovyScriptEngine engine = createScriptEngine();
-        Binding binding = createBindings();
-        Set<File> executedClasses = new ObjectOpenHashSet<>();
-
-        for (LoadStage loadStage : LoadStage.getLoadStages()) {
-            GroovyLog.get().info("Checking syntax in loader '{}'", this.currentLoadStage);
-            this.currentLoadStage = loadStage;
-            load(engine, binding, executedClasses, false);
+    public void registerBinding(INamed named) {
+        Objects.requireNonNull(named);
+        for (String alias : named.getAliases()) {
+            bindings.put(alias, named);
         }
     }
 
     public void run(LoadStage currentLoadStage) {
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
-            super.load();
+            load();
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.get().exception("An exception occurred while trying to run groovy code! This is might be a internal groovy issue.", e);
         } catch (Throwable t) {
             GroovyLog.get().exception(t);
         } finally {
+            GroovyLog.get().infoMC("Groovy scripts took {}ms to compile and {}ms to run in {}.", this.compileTime, this.runTime, currentLoadStage.getName());
             this.currentLoadStage = null;
             if (currentLoadStage == LoadStage.POST_INIT) {
-                writeIndex();
+                engine.writeIndex();
             }
         }
     }
 
-    @Override
     protected void runScript(Script script) {
-        GroovyLog.get().info(" - running {}", script.getClass().getName());
-        super.runScript(script);
+        GroovyLog.get().info(" - running script {}", script.getClass().getName());
+        setCurrentScript(script.getClass().getName());
+        try {
+            script.run();
+        } finally {
+            setCurrentScript(null);
+        }
+    }
+
+    protected void runClass(Class<?> script) {
+        GroovyLog.get().info(" - loading class {}", script.getName());
+        setCurrentScript(script.getName());
+        try {
+            // $getLookup is present on all groovy created classes
+            // call it cause the class to be initialised
+            Method m = script.getMethod("$getLookup");
+            m.invoke(null);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            GroovyLog.get().errorMC("Error initialising class '{}'", script);
+        } finally {
+            setCurrentScript(null);
+        }
+    }
+
+    public void checkSyntax() {
+        Binding binding = createBindings();
+        Set<String> executedClasses = new ObjectOpenHashSet<>();
+
+        for (LoadStage loadStage : LoadStage.getLoadStages()) {
+            GroovyLog.get().info("Checking syntax in loader '{}'", this.currentLoadStage);
+            this.currentLoadStage = loadStage;
+            load(binding, executedClasses, false);
+        }
     }
 
     @ApiStatus.Internal
-    @Override
-    public void load() throws Exception {
-        throw new UnsupportedOperationException("Use run(Loader loader) instead!");
-    }
-
-    @ApiStatus.Internal
-    @Override
     public <T> T runClosure(Closure<T> closure, Object... args) {
         boolean wasRunning = isRunning();
         if (!wasRunning) startRunning();
@@ -226,113 +209,84 @@ public class GroovyScriptSandbox extends GroovySandbox {
         }
     }
 
-    private static String mainClassName(String name) {
-        return name.contains("$") ? name.split("\\$", 2)[0] : name;
-    }
+    private void load() throws Exception {
+        preRun();
 
-    /**
-     * Called via mixin when groovy compiled a class from scripts.
-     */
-    @ApiStatus.Internal
-    public void onCompileClass(SourceUnit su, String path, Class<?> clazz, byte[] code, boolean inner) {
-        String shortPath = FileUtil.relativize(this.scriptRoot.getPath(), path);
-        // if the script was compiled because another script depends on it, the source unit is wrong
-        // we need to find the source unit of the compiled class
-        SourceUnit trueSource = su.getAST().getUnit().getScriptSourceLocation(mainClassName(clazz.getName()));
-        String truePath = trueSource == null ? shortPath : FileUtil.relativize(this.scriptRoot.getPath(), trueSource.getName());
-        if (shortPath.equals(truePath) && su.getAST().getMainClassName() != null && !su.getAST().getMainClassName().equals(clazz.getName())) {
-            inner = true;
+        Binding binding = createBindings();
+        Set<String> executedClasses = new ObjectOpenHashSet<>();
+
+        this.running.set(true);
+        try {
+            load(binding, executedClasses, true);
+        } finally {
+            this.running.set(false);
+            postRun();
+            setCurrentScript(null);
         }
-
-        boolean finalInner = inner;
-        CompiledScript comp = this.index.computeIfAbsent(truePath, k -> new CompiledScript(k, finalInner ? -1 : 0));
-        CompiledClass innerClass = comp;
-        if (inner) innerClass = comp.findInnerClass(clazz.getName());
-        innerClass.onCompile(code, clazz, this.cacheRoot.getPath());
     }
 
-    /**
-     * Called via mixin when a script class needs to be recompiled. This happens when a script was loaded because another script depends on
-     * it. Groovy will then try to compile the script again. If we already compiled the class we just stop the compilation process.
-     */
-    @ApiStatus.Internal
-    public Class<?> onRecompileClass(URL source, String className) {
-        String path = source.toExternalForm();
-        String rel = FileUtil.relativize(this.scriptRoot.getPath(), path);
-        CompiledScript cs = this.index.get(rel);
-        Class<?> c = null;
-        if (cs != null) {
-            if (cs.clazz == null && cs.readData(this.cacheRoot.getPath())) {
-                cs.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
+    protected void load(Binding binding, Set<String> executedClasses, boolean run) {
+        this.compileTime = 0L;
+        this.runTime = 0L;
+        // now run all script files
+        loadScripts(binding, executedClasses, run);
+    }
+
+    protected void loadScripts(Binding binding, Set<String> executedClasses, boolean run) {
+        for (CompiledScript compiledScript : this.engine.findScripts(getScriptFiles())) {
+            if (!executedClasses.contains(compiledScript.path)) {
+                long t = System.currentTimeMillis();
+                this.engine.loadScript(compiledScript);
+                this.compileTime += System.currentTimeMillis() - t;
+                if (compiledScript.preprocessorCheckFailed()) continue;
+                if (compiledScript.clazz == null) {
+                    GroovyLog.get().errorMC("Error loading script {}", compiledScript.path);
+                    continue;
+                }
+                if (compiledScript.clazz.getSuperclass() != Script.class) {
+                    // script is a class
+                    if (run && shouldRunFile(compiledScript.path)) {
+                        t = System.currentTimeMillis();
+                        runClass(compiledScript.clazz);
+                        this.runTime += System.currentTimeMillis() - t;
+                    }
+                    executedClasses.add(compiledScript.path);
+                    continue;
+                }
+                if (run && shouldRunFile(compiledScript.path)) {
+                    Script script = InvokerHelper.createScript(compiledScript.clazz, binding);
+                    t = System.currentTimeMillis();
+                    runScript(script);
+                    this.runTime += System.currentTimeMillis() - t;
+                }
             }
-            c = cs.clazz;
         }
-        return c;
     }
 
-    @Override
-    protected Class<?> loadScriptClass(GroovyScriptEngine engine, File file) {
-        String relativeFileName = FileUtil.relativize(this.scriptRoot.getPath(), file.getPath());
-        File relativeFile = new File(relativeFileName);
-        long lastModified = file.lastModified();
-        CompiledScript comp = this.index.get(relativeFileName);
-
-        if (ENABLE_CACHE && comp != null && lastModified <= comp.lastEdited && comp.clazz == null && comp.readData(this.cacheRoot.getPath())) {
-            // class is not loaded, but the cached class bytes are still valid
-            if (!comp.checkPreprocessors(this.scriptRoot)) {
-                return GroovyLog.class; // failed preprocessor check
-            }
-            comp.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
-
-        } else if (!ENABLE_CACHE || (comp == null || comp.clazz == null || lastModified > comp.lastEdited)) {
-            // class is not loaded and class bytes don't exist yet or script has been edited
-            if (comp == null) {
-                comp = new CompiledScript(relativeFileName, 0);
-                this.index.put(relativeFileName, comp);
-            }
-            if (lastModified > comp.lastEdited || comp.preprocessors == null) {
-                // recompile preprocessors if there is no data or script was edited
-                comp.preprocessors = Preprocessor.parsePreprocessors(file);
-            }
-            comp.lastEdited = lastModified;
-            if (!comp.checkPreprocessors(this.scriptRoot)) {
-                // delete class bytes to make sure it's recompiled once the preprocessors returns true
-                comp.deleteCache(this.cacheRoot.getPath());
-                comp.clazz = null;
-                comp.data = null;
-                return GroovyLog.class; // failed preprocessor check
-            }
-            Class<?> clazz = super.loadScriptClass(engine, relativeFile);
-            if (comp.clazz == null) {
-                // should not happen
-                GroovyLog.get().errorMC("Class for {} was loaded, but didn't receive class created callback!", relativeFileName);
-                if (ENABLE_CACHE) comp.clazz = clazz;
-            }
-        } else {
-            // class is loaded and script wasn't edited
-            if (!comp.checkPreprocessors(this.scriptRoot)) {
-                return GroovyLog.class; // failed preprocessor check
-            }
-            comp.ensureLoaded(getClassLoader(), this.cacheRoot.getPath());
-        }
-        return comp.clazz;
+    protected void startRunning() {
+        this.running.set(true);
     }
 
-    @Override
+    protected void stopRunning() {
+        this.running.set(false);
+    }
+
+    @ApiStatus.OverrideOnly
     protected void postInitBindings(Binding binding) {
         binding.setProperty("out", GroovyLog.get().getWriter());
         binding.setVariable("globals", getBindings());
     }
 
-    @Override
-    protected void initEngine(GroovyScriptEngine engine, CompilerConfiguration config) {
+    @ApiStatus.OverrideOnly
+    protected void initEngine(CompilerConfiguration config) {
+        config.addCompilationCustomizers(this.importCustomizer);
         config.addCompilationCustomizers(new GroovyScriptCompiler());
         config.addCompilationCustomizers(new GroovyScriptEarlyCompiler());
     }
 
-    @Override
+    @ApiStatus.OverrideOnly
     protected void preRun() {
-        if (DELETE_CACHE_ON_RUN) deleteScriptCache();
+        if (CustomGroovyScriptEngine.DELETE_CACHE_ON_RUN) this.engine.deleteScriptCache();
         // first clear all added events
         GroovyEventManager.INSTANCE.reset();
         if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
@@ -342,17 +296,17 @@ public class GroovyScriptSandbox extends GroovySandbox {
             MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
         }
         GroovyLog.get().infoMC("Running scripts in loader '{}'", this.currentLoadStage);
+        //this.engine.prepareEngine(this.currentLoadStage);
         // and finally invoke pre script run event
         MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre(this.currentLoadStage));
     }
 
-    @Override
-    protected boolean shouldRunFile(File file) {
-        //GroovyLog.get().info(" - executing {}", file.toString());
+    @ApiStatus.OverrideOnly
+    protected boolean shouldRunFile(String file) {
         return true;
     }
 
-    @Override
+    @ApiStatus.OverrideOnly
     protected void postRun() {
         if (this.currentLoadStage == LoadStage.POST_INIT) {
             ReloadableRegistryManager.afterScriptRun();
@@ -363,34 +317,47 @@ public class GroovyScriptSandbox extends GroovySandbox {
         }
     }
 
-    @Override
-    public Collection<File> getClassFiles() {
-        return GroovyScript.getRunConfig().getClassFiles(this.scriptRoot, this.currentLoadStage.getName());
+    public File getScriptRoot() {
+        return SandboxData.getScriptFile();
     }
 
-    @Override
     public Collection<File> getScriptFiles() {
-        return GroovyScript.getRunConfig().getSortedFiles(this.scriptRoot, this.currentLoadStage.getName());
+        return GroovyScript.getRunConfig().getSortedFiles(getScriptRoot(), this.currentLoadStage.getName());
     }
 
-    public @Nullable LoadStage getCurrentLoader() {
+    public boolean isRunning() {
+        return this.running.get();
+    }
+
+    public Map<String, Object> getBindings() {
+        return bindings;
+    }
+
+    public ImportCustomizer getImportCustomizer() {
+        return importCustomizer;
+    }
+
+    public CustomGroovyScriptEngine getEngine() {
+        return engine;
+    }
+
+    public String getCurrentScript() {
+        return currentScript;
+    }
+
+    protected void setCurrentScript(String currentScript) {
+        this.currentScript = currentScript;
+    }
+
+    public LoadStage getCurrentLoader() {
         return currentLoadStage;
     }
 
-    public File getScriptRoot() {
-        return scriptRoot;
+    public long getLastCompileTime() {
+        return compileTime;
     }
 
-    @ApiStatus.Internal
-    public boolean deleteScriptCache() {
-        this.index.clear();
-        getClassLoader().clearCache();
-        try {
-            FileUtils.cleanDirectory(this.cacheRoot);
-            return true;
-        } catch (IOException e) {
-            GroovyScript.LOGGER.throwing(e);
-            return false;
-        }
+    public long getLastRunTime() {
+        return runTime;
     }
 }

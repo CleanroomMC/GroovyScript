@@ -1,18 +1,19 @@
 {
-  "packName": "PlaceHolder name",
-  "packId": "placeholdername",
+  "packName": "GroovyScript Dev",
+  "packId": "groovyscriptdev",
   "version": "1.0.0",
   "debug": true,
-  "classes": [
-    "classes/"
-  ],
   "loaders": {
     "preInit": [
+      "classes/",
       "preInit/"
     ],
-    "init": [],
+    "init": [
+      "init/"
+    ],
     "postInit": [
-      "postInit/"
+      "postInit/",
+      "recipes/"
     ]
   },
   "packmode": {

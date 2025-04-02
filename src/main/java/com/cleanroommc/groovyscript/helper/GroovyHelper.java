@@ -24,7 +24,8 @@ public class GroovyHelper {
     }
 
     public static boolean isReloading() {
-        return getLoadStage().isReloadable() && !ReloadableRegistryManager.isFirstLoad();
+        LoadStage loadStage = getLoadStage();
+        return loadStage != null && loadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad();
     }
 
     public static String getMinecraftVersion() {

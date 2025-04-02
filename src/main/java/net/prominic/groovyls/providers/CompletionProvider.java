@@ -19,11 +19,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 package net.prominic.groovyls.providers;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
 import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import groovy.lang.Script;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.FieldInfo;
 import io.github.classgraph.MethodInfo;
@@ -289,9 +291,9 @@ public class CompletionProvider extends DocProvider {
         if (classRange == null) return;
         String className = getMemberName(classNode.getUnresolvedName(), classRange, position);
         if (classNode.equals(parentClassNode.getUnresolvedSuperClass())) {
-            populateTypes(classNode, className, new HashSet<>(), true, false, false, items);
+            populateTypes(classNode, className, new ObjectOpenHashSet<>(), true, false, false, items);
         } else if (Arrays.asList(parentClassNode.getUnresolvedInterfaces()).contains(classNode)) {
-            populateTypes(classNode, className, new HashSet<>(), false, true, false, items);
+            populateTypes(classNode, className, new ObjectOpenHashSet<>(), false, true, false, items);
         }
     }
 
@@ -301,7 +303,7 @@ public class CompletionProvider extends DocProvider {
         Range typeRange = GroovyLSUtils.astNodeToRange(constructorCallExpr.getType());
         if (typeRange == null) return;
         String typeName = getMemberName(constructorCallExpr.getType().getNameWithoutPackage(), typeRange, position);
-        populateTypes(constructorCallExpr, typeName, new HashSet<>(), true, false, false, items);
+        populateTypes(constructorCallExpr, typeName, new ObjectOpenHashSet<>(), true, false, false, items);
     }
 
     private void populateItemsFromVariableExpression(VariableExpression varExpr, Position position, Completions items) {
@@ -319,6 +321,7 @@ public class CompletionProvider extends DocProvider {
             String name = p.getName();
             if (!p.isPublic() || existingNames.contains(name)) return null;
             existingNames.add(name);
+            if (p.getDeclaringClass().isDerivedFrom(ClassHelper.makeCached(Script.class)) && p.getName().equals("__$stMC")) return null;
             CompletionItem item = CompletionItemFactory.createCompletion(p, p.getName(), astContext);
             if (!p.isDynamicTyped()) {
                 var details = new CompletionItemLabelDetails();
@@ -331,6 +334,7 @@ public class CompletionProvider extends DocProvider {
             String name = f.getName();
             if (!f.isPublic() || existingNames.contains(name)) return null;
             existingNames.add(name);
+            if (f.getDeclaringClass().isDerivedFrom(ClassHelper.makeCached(Script.class)) && f.getName().equals("__$stMC")) return null;
             CompletionItem item = CompletionItemFactory.createCompletion(f, f.getName(), astContext);
             if (!f.isDynamicTyped()) {
                 var details = new CompletionItemLabelDetails();
@@ -346,6 +350,9 @@ public class CompletionProvider extends DocProvider {
             String name = getDescriptor(method, true, false, false);
             if (!method.isPublic() || existingNames.contains(name)) return null;
             existingNames.add(name);
+            if (method.getDeclaringClass().isDerivedFrom(ClassHelper.makeCached(Script.class))) {
+                if (method.getName().equals("$getLookup") || method.getName().equals("main")) return null;
+            }
             if (method.getDeclaringClass().isResolved() && (method.getModifiers() & GroovyASTUtils.EXPANSION_MARKER) == 0 && GroovyReflectionUtils.resolveMethodFromMethodNode(method, astContext) == null) {
                 return null;
             }
@@ -440,7 +447,9 @@ public class CompletionProvider extends DocProvider {
         }
         builder.append(")");
         if (!includeReturn) return builder.toString();
-        var ret = display ? node.getTypeSignatureOrTypeDescriptor().getResultType().toStringWithSimpleNames() : node.getTypeDescriptor().getResultType().toString();
+        var ret = display
+                ? node.getTypeSignatureOrTypeDescriptor().getResultType().toStringWithSimpleNames()
+                : node.getTypeDescriptor().getResultType().toString();
         if (!ret.equals("void")) {
             if (display) builder.append(" -> ");
             builder.append(ret);
@@ -449,7 +458,8 @@ public class CompletionProvider extends DocProvider {
     }
 
     public static StringBuilder appendParameter(MethodParameterInfo param, StringBuilder builder, boolean display, boolean maybeVarargs) {
-        builder.append(display ? param.getTypeSignatureOrTypeDescriptor().toStringWithSimpleNames() : param.getTypeDescriptor().toString()); // don't use generic types
+        builder.append(
+                display ? param.getTypeSignatureOrTypeDescriptor().toStringWithSimpleNames() : param.getTypeDescriptor().toString()); // don't use generic types
         if (maybeVarargs && builder.charAt(builder.length() - 1) == ']' && builder.charAt(builder.length() - 2) == '[') {
             builder.delete(builder.length() - 2, builder.length()).append("...");
         }
@@ -627,7 +637,14 @@ public class CompletionProvider extends DocProvider {
 
         ModuleNode enclosingModule = getModule();
         String enclosingPackageName = enclosingModule.getPackageName();
-        items.addAll(astContext.getVisitor().getClassNodes(), classNode -> {
+        List<ClassNode> classNodes = astContext.getVisitor().getClassNodes();
+        Set<ClassNode> all = new ObjectOpenHashSet<>();
+        all.addAll(classNodes);
+        for (Class<?> clz : GroovyScript.getSandbox().getEngine().getAllLoadedScriptClasses()) {
+            //if (Script.class.isAssignableFrom(clz)) continue;
+            all.add(ClassHelper.makeCached(clz));
+        }
+        items.addAll(all, classNode -> {
             if (!includeEnums && classNode.isEnum()) return null;
             if (!includeInterfaces && classNode.isInterface()) return null;
             if (!includeClasses && (!classNode.isInterface() && !classNode.isEnum())) return null;

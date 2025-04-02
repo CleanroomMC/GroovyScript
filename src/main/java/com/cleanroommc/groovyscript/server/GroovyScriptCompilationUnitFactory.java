@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.server;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptEarlyCompiler;
 import groovy.lang.GroovyClassLoader;
@@ -17,7 +16,6 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBase {
 
@@ -54,7 +52,7 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
             context = null; // actions on classes are going into classes only unit
         }
 
-        var unit = compilationUnitsByScript.computeIfAbsent(context, uri -> new GroovyLSCompilationUnit(getConfiguration(), null, getClassLoader(), languageServerContext));
+        var unit = compilationUnitsByScript.computeIfAbsent(context, uri -> new GroovyLSCompilationUnit(getConfiguration(), null, GroovyScript.getSandbox().getEngine().getClassLoader(), languageServerContext));
 
         var changedUris = languageServerContext.getFileContentsTracker().getChangedURIs();
 
@@ -74,11 +72,11 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
                 });
 
         // add all other classes too
-        getAllClasses()
+        /*getAllClasses()
                 .filter(path -> !languageServerContext.getFileContentsTracker().isOpen(path.toUri()))
                 .forEach(path -> {
                     addOpenFileToCompilationUnit(path.toUri(), languageServerContext.getFileContentsTracker().getContents(path.toUri()), unit);
-                });
+                });*/
 
         if (context != null) {
             var contents = languageServerContext.getFileContentsTracker().getContents(context);
@@ -91,19 +89,20 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
     }
 
     protected boolean isInClassesContext(URI uri) {
-        var file = Paths.get(uri).getParent();
+        return false;
+        //var file = Paths.get(uri).getParent();
 
-        return getAllClasses().anyMatch(file::startsWith);
+        //return getAllClasses().anyMatch(file::startsWith);
     }
 
-    protected Stream<Path> getAllClasses() {
+    /*protected Stream<Path> getAllClasses() {
         return LoadStage.getLoadStages()
                 .stream()
                 .map(LoadStage::getName)
                 .flatMap(loader -> GroovyScript.getRunConfig().getClassFiles(this.root, loader).stream())
                 .map(File::toPath)
                 .map(path -> GroovyScript.getScriptFile().toPath().resolve(path));
-    }
+    }*/
 
     protected void removeSources(GroovyLSCompilationUnit unit, Set<URI> urisToRemove) {
         List<SourceUnit> sourcesToRemove = new ArrayList<>();
@@ -114,7 +113,7 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
             }
         });
 
-        // if an URI has changed, we remove it from the compilation unit so
+        // if a URI has changed, we remove it from the compilation unit so
         // that a new version can be built from the updated source file
         unit.removeSources(sourcesToRemove);
     }

@@ -5,21 +5,31 @@ import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 class CompiledScript extends CompiledClass {
+
+    public static String classNameFromPath(String path) {
+        int i = path.lastIndexOf('.');
+        path = path.substring(0, i);
+        return path.replace('/', '.');
+    }
 
     final List<CompiledClass> innerClasses = new ArrayList<>();
     long lastEdited;
     List<String> preprocessors;
+    private boolean preprocessorCheckFailed;
+    private boolean requiresReload;
 
     public CompiledScript(String path, long lastEdited) {
-        this(path, null, lastEdited);
+        this(path, classNameFromPath(path), lastEdited);
     }
 
     public CompiledScript(String path, String name, long lastEdited) {
@@ -29,6 +39,12 @@ class CompiledScript extends CompiledClass {
 
     public boolean isClosure() {
         return lastEdited < 0;
+    }
+
+    @Override
+    public void onCompile(Class<?> clazz, String basePath) {
+        setRequiresReload(this.data == null);
+        super.onCompile(clazz, basePath);
     }
 
     public CompiledClass findInnerClass(String clazz) {
@@ -42,17 +58,17 @@ class CompiledScript extends CompiledClass {
         return comp;
     }
 
-    public void ensureLoaded(CachedClassLoader classLoader, String basePath) {
+    public void ensureLoaded(GroovyClassLoader classLoader, Map<String, CompiledClass> cache, String basePath) {
         for (CompiledClass comp : this.innerClasses) {
             if (comp.clazz == null) {
                 if (comp.readData(basePath)) {
-                    comp.ensureLoaded(classLoader, basePath);
+                    comp.ensureLoaded(classLoader, cache, basePath);
                 } else {
                     GroovyLog.get().error("Error loading inner class {} for class {}", comp.name, this.name);
                 }
             }
         }
-        super.ensureLoaded(classLoader, basePath);
+        super.ensureLoaded(classLoader, cache, basePath);
     }
 
     public @NotNull JsonObject toJson() {
@@ -109,10 +125,25 @@ class CompiledScript extends CompiledClass {
         }
     }
 
-    public boolean checkPreprocessors(File basePath) {
-        return this.preprocessors == null || this.preprocessors.isEmpty() || Preprocessor.validatePreprocessor(
-                new File(basePath, this.path),
-                this.preprocessors);
+    public boolean checkPreprocessorsFailed(File basePath) {
+        setPreprocessorCheckFailed(this.preprocessors != null && !this.preprocessors.isEmpty() && !Preprocessor.validatePreprocessor(new File(basePath, this.path), this.preprocessors));
+        return preprocessorCheckFailed();
+    }
+
+    public boolean requiresReload() {
+        return this.requiresReload;
+    }
+
+    public boolean preprocessorCheckFailed() {
+        return this.preprocessorCheckFailed;
+    }
+
+    protected void setRequiresReload(boolean requiresReload) {
+        this.requiresReload = requiresReload;
+    }
+
+    protected void setPreprocessorCheckFailed(boolean preprocessorCheckFailed) {
+        this.preprocessorCheckFailed = preprocessorCheckFailed;
     }
 
     @Override

@@ -1,12 +1,15 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.codehaus.groovy.runtime.InvokerHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Map;
 
 class CompiledClass {
 
@@ -29,12 +32,13 @@ class CompiledClass {
 
     public void onCompile(Class<?> clazz, String basePath) {
         this.clazz = clazz;
-        this.name = clazz.getName();
+        if (!this.name.equals(clazz.getName())) throw new IllegalArgumentException();
+        //this.name = clazz.getName();
         if (this.data == null) {
             GroovyLog.get().errorMC("The class doesnt seem to be compiled yet. (" + name + ")");
             return;
         }
-        if (!GroovyScriptSandbox.ENABLE_CACHE) return;
+        if (!CustomGroovyScriptEngine.ENABLE_CACHE) return;
         try {
             File file = getDataFile(basePath);
             file.getParentFile().mkdirs();
@@ -47,14 +51,15 @@ class CompiledClass {
         }
     }
 
-    protected void ensureLoaded(CachedClassLoader classLoader, String basePath) {
+    protected void ensureLoaded(GroovyClassLoader classLoader, Map<String, CompiledClass> cache, String basePath) {
         if (this.clazz == null) {
             this.clazz = classLoader.defineClass(this.name, this.data);
+            cache.put(this.name, this);
         }
     }
 
     public boolean readData(String basePath) {
-        if (this.data != null && GroovyScriptSandbox.ENABLE_CACHE) return true;
+        if (this.data != null && CustomGroovyScriptEngine.ENABLE_CACHE) return true;
         File file = getDataFile(basePath);
         if (!file.exists()) return false;
         try {
@@ -71,6 +76,11 @@ class CompiledClass {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        if (this.clazz != null) {
+            InvokerHelper.removeClass(this.clazz);
+            this.clazz = null;
+        }
+        this.data = null;
     }
 
     protected File getDataFile(String basePath) {
