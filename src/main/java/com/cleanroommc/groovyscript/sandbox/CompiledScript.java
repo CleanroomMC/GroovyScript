@@ -25,8 +25,8 @@ class CompiledScript extends CompiledClass {
     final List<CompiledClass> innerClasses = new ArrayList<>();
     long lastEdited;
     List<String> preprocessors;
-    boolean preprocessorCheckFailed;
-    boolean requiresReload;
+    private boolean preprocessorCheckFailed;
+    private boolean requiresReload;
 
     public CompiledScript(String path, long lastEdited) {
         this(path, classNameFromPath(path), lastEdited);
@@ -43,7 +43,7 @@ class CompiledScript extends CompiledClass {
 
     @Override
     public void onCompile(Class<?> clazz, String basePath) {
-        this.requiresReload = this.data == null;
+        setRequiresReload(this.data == null);
         super.onCompile(clazz, basePath);
     }
 
@@ -125,10 +125,25 @@ class CompiledScript extends CompiledClass {
         }
     }
 
-    public boolean checkPreprocessors(File basePath) {
-        return this.preprocessors == null || this.preprocessors.isEmpty() || Preprocessor.validatePreprocessor(
-                new File(basePath, this.path),
-                this.preprocessors);
+    public boolean checkPreprocessorsFailed(File basePath) {
+        setPreprocessorCheckFailed(this.preprocessors != null && !this.preprocessors.isEmpty() && !Preprocessor.validatePreprocessor(new File(basePath, this.path), this.preprocessors));
+        return preprocessorCheckFailed();
+    }
+
+    public boolean requiresReload() {
+        return this.requiresReload;
+    }
+
+    public boolean preprocessorCheckFailed() {
+        return this.preprocessorCheckFailed;
+    }
+
+    protected void setRequiresReload(boolean requiresReload) {
+        this.requiresReload = requiresReload;
+    }
+
+    protected void setPreprocessorCheckFailed(boolean preprocessorCheckFailed) {
+        this.preprocessorCheckFailed = preprocessorCheckFailed;
     }
 
     @Override

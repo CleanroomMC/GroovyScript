@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "placeholdername:items/prodigy_stick"
+    "layer0": "groovyscriptdev:items/clay_3"
   }
 }
