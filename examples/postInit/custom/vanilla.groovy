@@ -4,8 +4,6 @@
 import net.minecraftforge.event.entity.living.EnderTeleportEvent
 import net.minecraftforge.event.world.BlockEvent
 import net.minecraft.util.text.TextComponentString
-import classes.SimpleConversionRecipe
-import postInit.custom.normal_mode
 
 /*
 def ore_iron = ore('ingotIron')
