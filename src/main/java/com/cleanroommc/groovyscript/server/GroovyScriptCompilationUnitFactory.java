@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.server;
 
+import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptEarlyCompiler;
 import groovy.lang.GroovyClassLoader;
@@ -51,7 +52,7 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
             context = null; // actions on classes are going into classes only unit
         }
 
-        var unit = compilationUnitsByScript.computeIfAbsent(context, uri -> new GroovyLSCompilationUnit(getConfiguration(), null, getClassLoader(), languageServerContext));
+        var unit = compilationUnitsByScript.computeIfAbsent(context, uri -> new GroovyLSCompilationUnit(getConfiguration(), null, GroovyScript.getSandbox().getEngine().getClassLoader(), languageServerContext));
 
         var changedUris = languageServerContext.getFileContentsTracker().getChangedURIs();
 
@@ -112,7 +113,7 @@ public class GroovyScriptCompilationUnitFactory extends CompilationUnitFactoryBa
             }
         });
 
-        // if an URI has changed, we remove it from the compilation unit so
+        // if a URI has changed, we remove it from the compilation unit so
         // that a new version can be built from the updated source file
         unit.removeSources(sourcesToRemove);
     }

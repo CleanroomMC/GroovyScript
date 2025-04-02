@@ -238,7 +238,7 @@ public class GroovyScriptSandbox {
                 long t = System.currentTimeMillis();
                 this.engine.loadScript(compiledScript);
                 this.compileTime += System.currentTimeMillis() - t;
-                if (compiledScript.preprocessorCheckFailed) continue;
+                if (compiledScript.preprocessorCheckFailed()) continue;
                 if (compiledScript.clazz == null) {
                     GroovyLog.get().errorMC("Error loading script {}", compiledScript.path);
                     continue;
