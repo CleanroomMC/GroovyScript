@@ -31,10 +31,6 @@ public class RunConfig {
         json.addProperty("packId", "placeholdername");
         json.addProperty("version", "1.0.0");
         json.addProperty("debug", false);
-        //JsonObject classes = new JsonObject();
-        //JsonArray preInit = new JsonArray();
-        //classes.add("preInit", preInit);
-        //json.add("classes", classes);
         JsonObject loaders = new JsonObject();
         json.add("loaders", loaders);
         JsonArray preInit = new JsonArray();
@@ -109,7 +105,6 @@ public class RunConfig {
             throw new RuntimeException();
         }
         this.debug = JsonHelper.getBoolean(json, false, "debug");
-        //this.classes.clear();
         this.loaderPaths.clear();
         this.packmodeList.clear();
         this.packmodeSet.clear();
