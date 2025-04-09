@@ -51,7 +51,7 @@ public class MixinSandbox extends AbstractGroovySandbox {
 
         // called later than mixin booter, we can now try to compile groovy mixins
         // the groovy mixins need to be compiled to bytes manually first
-        /*Collection<String> groovyMixins = instance.collectCompiledMixins();
+        Collection<String> groovyMixins = instance.collectCompiledMixins();
         if (groovyMixins.isEmpty()) {
             LOG.info("No groovy mixins configured");
             return;
@@ -72,7 +72,7 @@ public class MixinSandbox extends AbstractGroovySandbox {
         }
         // inject loaded mixin classes into configuration
         mixinClasses.addAll(groovyMixins);
-        instance.getEngine().writeIndex();*/
+        instance.getEngine().writeIndex();
     }
 
     private static MixinSandbox instance;
