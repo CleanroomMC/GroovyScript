@@ -24,7 +24,17 @@ import java.util.List;
 public class GroovyCodeFactory {
 
     public static final String MC_CLASS = "net.minecraft.";
-    public static final boolean spongeForgeLoaded = Loader.isModLoaded("spongeforge");
+    public static final boolean spongeForgeLoaded;
+
+    static {
+        boolean loaded = false;
+        try {
+            Class.forName("org.spongepowered.api.Sponge", false, GroovyCodeFactory.class.getClassLoader());
+            loaded = true;
+        } catch (ClassNotFoundException ignored) {
+        }
+        spongeForgeLoaded = loaded;
+    }
 
     private GroovyCodeFactory() {}
 

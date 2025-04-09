@@ -4,16 +4,8 @@
   "version": "1.0.0",
   "debug": true,
   "loaders": {
-    "preInit": [
-      "classes/",
-      "preInit/"
-    ],
-    "init": [
-      "init/"
-    ],
     "postInit": [
-      "postInit/",
-      "recipes/"
+      "test/"
     ]
   },
   "packmode": {

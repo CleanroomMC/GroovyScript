@@ -6,6 +6,7 @@ import java.util.List;
 
 public enum LoadStage {
 
+    MIXIN("mixin", false, -1000000000),
     PRE_INIT("preInit", false, -1000000),
     INIT("init", false, -1000),
     POST_INIT("postInit", true, 0);
@@ -40,6 +41,10 @@ public enum LoadStage {
 
     public int getPriority() {
         return priority;
+    }
+
+    public boolean isMixin() {
+        return this == MIXIN;
     }
 
     @Override

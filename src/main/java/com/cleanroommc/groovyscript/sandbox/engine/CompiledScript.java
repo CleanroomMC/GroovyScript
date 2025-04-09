@@ -1,20 +1,24 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.engine;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.sandbox.Preprocessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class CompiledScript extends CompiledClass {
+@ApiStatus.Internal
+public class CompiledScript extends CompiledClass {
 
     public static String classNameFromPath(String path) {
         int i = path.lastIndexOf('.');
@@ -42,9 +46,9 @@ class CompiledScript extends CompiledClass {
     }
 
     @Override
-    public void onCompile(Class<?> clazz, String basePath) {
+    public void onCompile(byte @NotNull [] data, @Nullable Class<?> clazz, String basePath) {
+        super.onCompile(data, clazz, basePath);
         setRequiresReload(this.data == null);
-        super.onCompile(clazz, basePath);
     }
 
     public CompiledClass findInnerClass(String clazz) {
@@ -56,19 +60,6 @@ class CompiledScript extends CompiledClass {
         CompiledClass comp = new CompiledClass(this.path, clazz);
         this.innerClasses.add(comp);
         return comp;
-    }
-
-    public void ensureLoaded(GroovyClassLoader classLoader, Map<String, CompiledClass> cache, String basePath) {
-        for (CompiledClass comp : this.innerClasses) {
-            if (comp.clazz == null) {
-                if (comp.readData(basePath)) {
-                    comp.ensureLoaded(classLoader, cache, basePath);
-                } else {
-                    GroovyLog.get().error("Error loading inner class {} for class {}", comp.name, this.name);
-                }
-            }
-        }
-        super.ensureLoaded(classLoader, cache, basePath);
     }
 
     public @NotNull JsonObject toJson() {
@@ -123,6 +114,40 @@ class CompiledScript extends CompiledClass {
         for (CompiledClass cc : this.innerClasses) {
             cc.deleteCache(cachePath);
         }
+    }
+
+    @Override
+    protected void removeClass() {
+        super.removeClass();
+        for (CompiledClass cc : this.innerClasses) {
+            cc.removeClass();
+        }
+    }
+
+    public boolean checkRequiresReload(File file, long lastModified, String rootPath) {
+        // the file needs to be reparsed if:
+        // - caching is disabled
+        // - it wasn't parsed before
+        // - there is no class (mixins don't have classes)
+        // - the file was modified since the last parsing
+        setRequiresReload(!ScriptEngine.ENABLE_CACHE || !readData(rootPath) || isMissingAnyClass() || lastModified > this.lastEdited);
+        if (requiresReload()) {
+            removeClass();
+            // parse preprocessors if file was modified
+            if (this.preprocessors == null || lastModified > this.lastEdited) {
+                this.preprocessors = Preprocessor.parsePreprocessors(file);
+            }
+            this.lastEdited = lastModified;
+        }
+        return requiresReload();
+    }
+
+    public boolean isMissingAnyClass() {
+        if (!hasClass()) return true;
+        for (CompiledClass cc : this.innerClasses) {
+            if (!cc.hasClass()) return true;
+        }
+        return false;
     }
 
     public boolean checkPreprocessorsFailed(File basePath) {

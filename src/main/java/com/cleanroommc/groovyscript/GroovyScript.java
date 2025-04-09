@@ -114,6 +114,7 @@ public class GroovyScript {
         GroovyDeobfMapper.init();
         LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
+        ((GroovyLogImpl) GroovyLog.get()).setPassedEarly();
         GroovyScript.sandbox = new GroovyScriptSandbox();
         ModSupport.INSTANCE.setup(event.getASMHarvestedData());
 

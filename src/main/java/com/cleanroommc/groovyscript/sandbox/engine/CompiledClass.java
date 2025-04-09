@@ -1,9 +1,13 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.engine;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.sandbox.FileUtil;
 import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.codehaus.groovy.runtime.InvokerHelper;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,34 +15,34 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Map;
 
-class CompiledClass {
+@ApiStatus.Internal
+public class CompiledClass {
 
     public static final String CLASS_SUFFIX = ".clz";
 
     final String path;
-    String name;
+    final String name;
     byte[] data;
     Class<?> clazz;
+    final boolean mixin;
 
     public CompiledClass(String path, String name) {
         this.path = path;
         this.name = name;
+        this.mixin = name.startsWith("mixin");
     }
 
-    public void onCompile(byte[] data, Class<?> clazz, String basePath) {
+    public void onCompile(byte @NotNull [] data, @Nullable Class<?> clazz, String basePath) {
         this.data = data;
-        onCompile(clazz, basePath);
-    }
-
-    public void onCompile(Class<?> clazz, String basePath) {
         this.clazz = clazz;
-        if (!this.name.equals(clazz.getName())) throw new IllegalArgumentException();
-        //this.name = clazz.getName();
+        if (clazz != null && !this.name.equals(clazz.getName())) {
+            throw new IllegalArgumentException("Expected class name to be " + this.name + ", but was " + clazz.getName());
+        }
         if (this.data == null) {
             GroovyLog.get().errorMC("The class doesnt seem to be compiled yet. (" + name + ")");
             return;
         }
-        if (!CustomGroovyScriptEngine.ENABLE_CACHE) return;
+        if (!ScriptEngine.ENABLE_CACHE) return;
         try {
             File file = getDataFile(basePath);
             file.getParentFile().mkdirs();
@@ -51,15 +55,9 @@ class CompiledClass {
         }
     }
 
-    protected void ensureLoaded(GroovyClassLoader classLoader, Map<String, CompiledClass> cache, String basePath) {
-        if (this.clazz == null) {
-            this.clazz = classLoader.defineClass(this.name, this.data);
-            cache.put(this.name, this);
-        }
-    }
-
     public boolean readData(String basePath) {
-        if (this.data != null && CustomGroovyScriptEngine.ENABLE_CACHE) return true;
+        if (!ScriptEngine.ENABLE_CACHE) return false;
+        if (this.data != null) return true;
         File file = getDataFile(basePath);
         if (!file.exists()) return false;
         try {
@@ -76,11 +74,15 @@ class CompiledClass {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        removeClass();
+        this.data = null;
+    }
+
+    protected void removeClass() {
         if (this.clazz != null) {
             InvokerHelper.removeClass(this.clazz);
             this.clazz = null;
         }
-        this.data = null;
     }
 
     protected File getDataFile(String basePath) {
@@ -93,6 +95,26 @@ class CompiledClass {
 
     public String getPath() {
         return path;
+    }
+
+    public Class<?> getScriptClass() {
+        return clazz;
+    }
+
+    public boolean isMixin() {
+        return mixin;
+    }
+
+    public boolean hasData() {
+        return data != null;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public boolean hasClass() {
+        return isMixin() || this.clazz != null;
     }
 
     @Override

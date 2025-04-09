@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.engine;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
@@ -290,6 +290,11 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
         throw new UnsupportedOperationException();
     }
 
+    public interface ClassgenCallback {
+
+        void onGenerate(byte[] bytes, ClassNode classNode, Class<?> clz);
+    }
+
     public static class ClassCollector implements CompilationUnit.ClassgenCallback {
 
         private Class<?> generatedClass;
@@ -297,7 +302,7 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
         private final SourceUnit su;
         private final CompilationUnit unit;
         private final Collection<Class<?>> loadedClasses;
-        private BiConsumer<byte[], Class<?>> creatClassCallback;
+        private ClassgenCallback creatClassCallback;
 
         protected ClassCollector(GroovyScriptClassLoader cl, CompilationUnit unit, SourceUnit su) {
             this.cl = cl;
@@ -330,7 +335,7 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
             }
 
             if (this.creatClassCallback != null) {
-                this.creatClassCallback.accept(code, theClass);
+                this.creatClassCallback.onGenerate(code, classNode, theClass);
             }
             return theClass;
         }
@@ -349,7 +354,7 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
             return this.loadedClasses;
         }
 
-        public ClassCollector creatClassCallback(BiConsumer<byte[], Class<?>> creatClassCallback) {
+        public ClassCollector creatClassCallback(ClassgenCallback creatClassCallback) {
             this.creatClassCallback = creatClassCallback;
             return this;
         }

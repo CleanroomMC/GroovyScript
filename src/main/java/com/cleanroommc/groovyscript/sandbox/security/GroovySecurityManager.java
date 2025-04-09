@@ -63,7 +63,7 @@ public class GroovySecurityManager {
         banPackage("javax.net");
         banPackage("javax.security");
         banPackage("javax.script");
-        banPackage("org.spongepowered");
+        //banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
         banPackage("net.minecraftforge.gradle");
         banClasses(Runtime.class, ClassLoader.class, Scanner.class);
