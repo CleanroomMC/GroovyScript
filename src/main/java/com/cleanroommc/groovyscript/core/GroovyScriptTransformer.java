@@ -19,6 +19,9 @@ public class GroovyScriptTransformer implements IClassTransformer {
     @Override
     public byte[] transform(String name, String transformedName, byte[] bytes) {
         if (bytes == null) return null;
+        if (transformedName.contains("PlayerLoggedInEvent") || transformedName.endsWith("PlayerList") || transformedName.endsWith("EntityPlayerMP") || transformedName.endsWith("NetworkManager") || transformedName.endsWith("NetHandlerPlayServer") || transformedName.endsWith("TextComponentString")) {
+            GroovyScriptCore.LOG.info("Loading class {}", transformedName);
+        }
         switch (name) {
             case InvokerHelperVisitor.CLASS_NAME: {
                 ClassWriter classWriter = new ClassWriter(0);

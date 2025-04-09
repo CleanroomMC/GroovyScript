@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedField;
 import com.cleanroommc.groovyscript.sandbox.mapper.RemappedCachedMethod;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
@@ -24,7 +23,17 @@ import java.util.List;
 public class GroovyCodeFactory {
 
     public static final String MC_CLASS = "net.minecraft.";
-    public static final boolean spongeForgeLoaded = Loader.isModLoaded("spongeforge");
+    public static final boolean spongeForgeLoaded;
+
+    static {
+        boolean loaded = false;
+        try {
+            Class.forName("org.spongepowered.api.Sponge", false, GroovyCodeFactory.class.getClassLoader());
+            loaded = true;
+        } catch (ClassNotFoundException ignored) {
+        }
+        spongeForgeLoaded = loaded;
+    }
 
     private GroovyCodeFactory() {}
 
