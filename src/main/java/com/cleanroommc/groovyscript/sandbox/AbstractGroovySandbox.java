@@ -4,11 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.event.GroovyEventManager;
-import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
-import com.cleanroommc.groovyscript.event.ScriptRunEvent;
 import com.cleanroommc.groovyscript.helper.Alias;
-import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.engine.CompiledScript;
 import com.cleanroommc.groovyscript.sandbox.engine.ScriptEngine;
 import groovy.lang.Binding;
@@ -19,7 +15,6 @@ import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.minecraftforge.common.MinecraftForge;
 import org.apache.groovy.internal.util.UncheckedThrow;
 import org.codehaus.groovy.control.CompilerConfiguration;
 import org.codehaus.groovy.control.customizers.ImportCustomizer;
@@ -232,7 +227,7 @@ public abstract class AbstractGroovySandbox {
         }
     }
 
-    protected void loadScript(CompiledScript compiledScript, Binding binding, boolean run) throws Throwable{
+    protected void loadScript(CompiledScript compiledScript, Binding binding, boolean run) throws Throwable {
         long t = System.currentTimeMillis();
         this.engine.loadScript(compiledScript);
         this.compileTime += System.currentTimeMillis() - t;
@@ -280,18 +275,6 @@ public abstract class AbstractGroovySandbox {
     @ApiStatus.OverrideOnly
     protected void preRun() {
         if (ScriptEngine.DELETE_CACHE_ON_RUN) this.engine.deleteScriptCache();
-        // first clear all added events
-        GroovyEventManager.INSTANCE.reset();
-        if (this.currentLoadStage.isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
-            // if this is not the first time this load stage is executed, reload all virtual registries
-            ReloadableRegistryManager.onReload();
-            // invoke reload event
-            MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
-        }
-        GroovyLog.get().infoMC("Running scripts in loader '{}'", this.currentLoadStage);
-        // this.engine.prepareEngine(this.currentLoadStage);
-        // and finally invoke pre script run event
-        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre(this.currentLoadStage));
     }
 
     @ApiStatus.OverrideOnly
@@ -300,15 +283,7 @@ public abstract class AbstractGroovySandbox {
     }
 
     @ApiStatus.OverrideOnly
-    protected void postRun() {
-        if (this.currentLoadStage == LoadStage.POST_INIT) {
-            ReloadableRegistryManager.afterScriptRun();
-        }
-        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post(this.currentLoadStage));
-        if (this.currentLoadStage == LoadStage.POST_INIT && ReloadableRegistryManager.isFirstLoad()) {
-            ReloadableRegistryManager.setLoaded();
-        }
-    }
+    protected void postRun() {}
 
     public File getScriptRoot() {
         return getEngine().getScriptRoot();

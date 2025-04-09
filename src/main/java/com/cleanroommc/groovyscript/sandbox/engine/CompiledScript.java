@@ -1,12 +1,10 @@
 package com.cleanroommc.groovyscript.sandbox.engine;
 
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.sandbox.Preprocessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @ApiStatus.Internal
 public class CompiledScript extends CompiledClass {

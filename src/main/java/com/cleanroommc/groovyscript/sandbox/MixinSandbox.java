@@ -11,7 +11,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import groovy.lang.Binding;
-import groovy.lang.GroovyRuntimeException;
 import groovy.lang.Script;
 import groovyjarjarasm.asm.ClassVisitor;
 import groovyjarjarasm.asm.ClassWriter;
@@ -25,8 +24,6 @@ import org.codehaus.groovy.ast.ModuleNode;
 import org.codehaus.groovy.classgen.GeneratorContext;
 import org.codehaus.groovy.control.*;
 import org.codehaus.groovy.control.customizers.CompilationCustomizer;
-import org.codehaus.groovy.control.messages.ExceptionMessage;
-import org.codehaus.groovy.syntax.SyntaxException;
 import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfig;
@@ -106,15 +103,44 @@ public class MixinSandbox extends AbstractGroovySandbox {
 
     @Override
     protected void initConfig(CompilerConfiguration config) {
-        getImportCustomizer().addImports(Arrays.asList(Mixin.class, Inject.class, At.class, CallbackInfo.class, CallbackInfoReturnable.class, Coerce.class,
-                                                       Constant.class, Desc.class, Descriptors.class, Group.class, ModifyArg.class, ModifyArgs.class,
-                                                       ModifyConstant.class, ModifyVariable.class, Redirect.class, Slice.class, Surrogate.class, Final.class,
-                                                       Mutable.class, Overwrite.class, Pseudo.class, Shadow.class, Unique.class, SoftOverride.class,
-                                                       Implements.class, Interface.class, Intrinsic.class, WrapOperation.class, ModifyExpressionValue.class,
-                                                       ModifyReceiver.class, ModifyReturnValue.class, Local.class, Share.class)
-                                                 .stream()
-                                                 .map(Class::getName)
-                                                 .toArray(String[]::new));
+        getImportCustomizer().addImports(
+                Arrays.asList(
+                        Mixin.class,
+                        Inject.class,
+                        At.class,
+                        CallbackInfo.class,
+                        CallbackInfoReturnable.class,
+                        Coerce.class,
+                        Constant.class,
+                        Desc.class,
+                        Descriptors.class,
+                        Group.class,
+                        ModifyArg.class,
+                        ModifyArgs.class,
+                        ModifyConstant.class,
+                        ModifyVariable.class,
+                        Redirect.class,
+                        Slice.class,
+                        Surrogate.class,
+                        Final.class,
+                        Mutable.class,
+                        Overwrite.class,
+                        Pseudo.class,
+                        Shadow.class,
+                        Unique.class,
+                        SoftOverride.class,
+                        Implements.class,
+                        Interface.class,
+                        Intrinsic.class,
+                        WrapOperation.class,
+                        ModifyExpressionValue.class,
+                        ModifyReceiver.class,
+                        ModifyReturnValue.class,
+                        Local.class,
+                        Share.class)
+                        .stream()
+                        .map(Class::getName)
+                        .toArray(String[]::new));
         super.initConfig(config);
         config.addCompilationCustomizers(new CallbackInjector());
     }
@@ -132,6 +158,16 @@ public class MixinSandbox extends AbstractGroovySandbox {
 
     @Override
     protected void postRun() {}
+
+    @Override
+    protected void runScript(Script script) throws Throwable {
+        throw new UnsupportedOperationException("Mixin scripts can not be run!");
+    }
+
+    @Override
+    protected void runClass(Class<?> script) throws Throwable {
+        throw new UnsupportedOperationException("Mixin scripts can not be run!");
+    }
 
     private Collection<String> collectCompiledMixins() {
         List<String> mixinClasses = new ArrayList<>();
@@ -154,17 +190,8 @@ public class MixinSandbox extends AbstractGroovySandbox {
     @Override
     protected void loadScript(CompiledScript compiledScript, Binding binding, boolean run) {
         long t = System.currentTimeMillis();
-        //getEngine().loadScript(compiledScript);
+        getEngine().loadScript(compiledScript);
         this.compileTime += System.currentTimeMillis() - t;
-    }
-
-    private String toClassName(String path) {
-        int i = path.lastIndexOf('.');
-        if (i < 0) {
-            LOG.error("Path must end with '.groovy', but was '{}'", path);
-            return null;
-        }
-        return path.substring(0, i).replace('/', '.');
     }
 
     private class ClassGenerator implements CompilationUnit.ClassgenCallback {
@@ -193,75 +220,36 @@ public class MixinSandbox extends AbstractGroovySandbox {
 
         public void call(CompilationUnit cu, SourceUnit su, ClassNode classNode) throws CompilationFailedException {
             if (cu.getClassgenCallback() instanceof ClassGenerator) {
+                // this is a test to see if it is called multiple times on the same unit
                 GroovyLog.get().infoMC(" overwriting ClassGenerator with su {} and class {}", su.getName(), classNode.getName());
             }
             cu.setClassgenCallback(new ClassGenerator(su));
         }
 
         private void changeBugText(final GroovyBugError e, final SourceUnit context, CompilationUnit unit) {
-            e.setBugText("exception in phase '" + unit.getPhaseDescription() + "' in source unit '" + (context != null ? context.getName()
-                                                                                                                       : "?") + "' " + e.getBugText());
+            e.setBugText(
+                    "exception in phase '" + unit.getPhaseDescription() + "' in source unit '" + (context != null
+                            ? context.getName()
+                            : "?") + "' " + e.getBugText());
         }
 
         @Override
         public void call(SourceUnit source, GeneratorContext context, ClassNode classNode) throws CompilationFailedException {
+            // we cant use this since we need the compile unit
             throw new UnsupportedOperationException();
         }
 
         @Override
         public void doPhaseOperation(final CompilationUnit unit) throws CompilationFailedException {
+            // is all this looping really needed?
             for (ModuleNode module : unit.getAST().getModules()) {
                 for (ClassNode classNode : module.getClasses()) {
                     SourceUnit context = null;
-                    try {
-                        context = classNode.getModule().getContext();
-                        if (context == null || context.getPhase() < unit.getPhase() || (context.getPhase() == unit.getPhase() && !context.isPhaseComplete())) {
-                            call(unit, context, classNode);
-                        }
-                    } catch (CompilationFailedException e) {
-                        // fall through
-                    } catch (NullPointerException npe) {
-                        GroovyBugError gbe = new GroovyBugError("unexpected NullPointerException", npe);
-                        changeBugText(gbe, context, unit);
-                        throw gbe;
-                    } catch (GroovyBugError e) {
-                        changeBugText(e, context, unit);
-                        throw e;
-                    } catch (Exception | LinkageError e) {
-                        ErrorCollector errorCollector = null;
-                        // check for a nested compilation exception
-                        for (Throwable t = e.getCause(); t != e && t != null; t = t.getCause()) {
-                            if (t instanceof MultipleCompilationErrorsException) {
-                                errorCollector = ((MultipleCompilationErrorsException) t).getErrorCollector();
-                                break;
-                            }
-                        }
-
-                        if (errorCollector != null) {
-                            unit.getErrorCollector().addCollectorContents(errorCollector);
-                        } else {
-                            if (e instanceof GroovyRuntimeException) {
-                                GroovyRuntimeException gre = (GroovyRuntimeException) e;
-                                context = Optional.ofNullable(gre.getModule()).map(ModuleNode::getContext).orElse(context);
-                            }
-                            if (context != null) {
-                                if (e instanceof SyntaxException) {
-                                    unit.getErrorCollector().addError((SyntaxException) e, context);
-                                } else if (e.getCause() instanceof SyntaxException) {
-                                    unit.getErrorCollector().addError((SyntaxException) e.getCause(), context);
-                                } else {
-                                    unit.getErrorCollector().addException(e instanceof Exception ? (Exception) e : new RuntimeException(e), context);
-                                }
-                            } else {
-                                unit.getErrorCollector().addError(new ExceptionMessage(
-                                        e instanceof Exception ? (Exception) e : new RuntimeException(e), false, unit));
-                            }
-                        }
+                    context = classNode.getModule().getContext();
+                    if (context == null || context.getPhase() < unit.getPhase() || (context.getPhase() == unit.getPhase() && !context.isPhaseComplete())) {
+                        call(unit, context, classNode);
                     }
                 }
-            }
-            if (unit.getErrorCollector().hasErrors()) {
-                throw new MultipleCompilationErrorsException(unit.getErrorCollector());
             }
         }
     }

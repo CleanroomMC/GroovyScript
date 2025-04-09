@@ -1,8 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.engine;
 
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
-import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.codehaus.groovy.runtime.InvokerHelper;
 import org.jetbrains.annotations.ApiStatus;
@@ -13,7 +11,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Map;
 
 @ApiStatus.Internal
 public class CompiledClass {
@@ -37,10 +34,6 @@ public class CompiledClass {
         this.clazz = clazz;
         if (clazz != null && !this.name.equals(clazz.getName())) {
             throw new IllegalArgumentException("Expected class name to be " + this.name + ", but was " + clazz.getName());
-        }
-        if (this.data == null) {
-            GroovyLog.get().errorMC("The class doesnt seem to be compiled yet. (" + name + ")");
-            return;
         }
         if (!ScriptEngine.ENABLE_CACHE) return;
         try {

@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.sandbox.engine;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
 import groovy.lang.GroovyResourceLoader;
-import groovy.util.CharsetToolkit;
 import groovyjarjarasm.asm.ClassVisitor;
 import groovyjarjarasm.asm.ClassWriter;
 import net.minecraft.launchwrapper.Launch;
@@ -17,12 +16,12 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
 
@@ -50,9 +49,7 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
     private String initSourceEncoding(CompilerConfiguration config) {
         String sourceEncoding = config.getSourceEncoding();
         if (null == sourceEncoding) {
-            // Keep the same default source encoding with the one used by #parseClass(InputStream, String)
-            // TODO should we use org.codehaus.groovy.control.CompilerConfiguration.DEFAULT_SOURCE_ENCODING instead?
-            return CharsetToolkit.getDefaultSystemCharset().name();
+            return StandardCharsets.UTF_8.displayName();
         }
         return sourceEncoding;
     }

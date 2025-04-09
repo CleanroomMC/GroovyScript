@@ -9,7 +9,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import groovy.lang.GroovyCodeSource;
-import groovy.util.ResourceConnector;
 import groovy.util.ResourceException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.apache.commons.io.FileUtils;
@@ -38,7 +37,7 @@ import java.security.CodeSource;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class ScriptEngine implements ResourceConnector {
+public class ScriptEngine {
 
     /**
      * Changing this number will force the cache to be deleted and every script has to be recompiled.
@@ -340,6 +339,7 @@ public class ScriptEngine implements ResourceConnector {
      */
     @ApiStatus.Internal
     public void onCompileClass(@NotNull SourceUnit su, @NotNull ClassNode classNode, @Nullable Class<?> clazz, byte @NotNull [] code) {
+        // class is null for mixins
         String path = su.getName();
         String shortPath = FileUtil.relativize(this.scriptRoot.getPath(), path);
         String className = classNode.getName();
@@ -348,8 +348,7 @@ public class ScriptEngine implements ResourceConnector {
         // we need to find the source unit of the compiled class
         SourceUnit trueSource = su.getAST().getUnit().getScriptSourceLocation(mainClassName);
         String truePath = trueSource == null ? shortPath : FileUtil.relativize(this.scriptRoot.getPath(), trueSource.getName());
-        boolean inner = className.length() != mainClassName.length() ||
-                        (shortPath.equals(truePath) && su.getAST().getMainClassName() != null && !su.getAST().getMainClassName().equals(className));
+        boolean inner = className.length() != mainClassName.length() || (shortPath.equals(truePath) && su.getAST().getMainClassName() != null && !su.getAST().getMainClassName().equals(className));
 
         CompiledScript comp = this.index.computeIfAbsent(truePath, k -> new CompiledScript(k, inner ? -1 : 0));
         CompiledClass innerClass = comp;
@@ -377,12 +376,6 @@ public class ScriptEngine implements ResourceConnector {
         return c;
     }
 
-    public static boolean isInnerClass(String className) {
-        int i = className.lastIndexOf('.');
-        if (i < 0) i = 0;
-        return className.indexOf('$', i + 1) >= 0;
-    }
-
     private static String mainClassName(String className) {
         int i = className.lastIndexOf('.');
         if (i < 0) i = 0;
@@ -391,8 +384,7 @@ public class ScriptEngine implements ResourceConnector {
         return className.substring(0, i);
     }
 
-    @Override
-    public URLConnection getResourceConnection(String resourceName) throws ResourceException {
+    private URLConnection getResourceConnection(String resourceName) throws ResourceException {
         // Get the URLConnection
         URLConnection groovyScriptConn = null;
 
@@ -431,28 +423,11 @@ public class ScriptEngine implements ResourceConnector {
 
     private static URLConnection openConnection(URL scriptURL) throws IOException {
         URLConnection urlConnection = scriptURL.openConnection();
-        verifyInputStream(urlConnection);
-
-        return scriptURL.openConnection();
-    }
-
-    private static void forceClose(URLConnection urlConnection) {
-        if (urlConnection != null) {
-            // We need to get the input stream and close it to force the open
-            // file descriptor to be released. Otherwise, we will reach the limit
-            // for number of files open at one time.
-
-            try {
-                verifyInputStream(urlConnection);
-            } catch (Exception e) {
-                // Do nothing: We were not going to use it anyway.
-            }
-        }
-    }
-
-    private static void verifyInputStream(URLConnection urlConnection) throws IOException {
+        // verify connection
         try (InputStream in = urlConnection.getInputStream()) {
+            ;
         }
+        return scriptURL.openConnection();
     }
 
     private static class LocalData {

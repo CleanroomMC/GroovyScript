@@ -3,11 +3,15 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.event.GroovyEventManager;
+import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
+import com.cleanroommc.groovyscript.event.ScriptRunEvent;
 import com.cleanroommc.groovyscript.helper.GroovyHelper;
+import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.engine.ScriptEngine;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptEarlyCompiler;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
 import org.codehaus.groovy.control.CompilerConfiguration;
 
 public class GroovyScriptSandbox extends AbstractGroovySandbox {
@@ -63,5 +67,33 @@ public class GroovyScriptSandbox extends AbstractGroovySandbox {
     @Override
     public boolean canRunInStage(LoadStage stage) {
         return !stage.isMixin();
+    }
+
+    @Override
+    protected void preRun() {
+        super.preRun();
+        // first clear all added events
+        GroovyEventManager.INSTANCE.reset();
+        if (getCurrentLoader().isReloadable() && !ReloadableRegistryManager.isFirstLoad()) {
+            // if this is not the first time this load stage is executed, reload all virtual registries
+            ReloadableRegistryManager.onReload();
+            // invoke reload event
+            MinecraftForge.EVENT_BUS.post(new GroovyReloadEvent());
+        }
+        GroovyLog.get().infoMC("Running scripts in loader '{}'", getCurrentLoader());
+        // this.engine.prepareEngine(this.currentLoadStage);
+        // and finally invoke pre script run event
+        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Pre(getCurrentLoader()));
+    }
+
+    @Override
+    protected void postRun() {
+        if (getCurrentLoader() == LoadStage.POST_INIT) {
+            ReloadableRegistryManager.afterScriptRun();
+        }
+        MinecraftForge.EVENT_BUS.post(new ScriptRunEvent.Post(getCurrentLoader()));
+        if (getCurrentLoader() == LoadStage.POST_INIT && ReloadableRegistryManager.isFirstLoad()) {
+            ReloadableRegistryManager.setLoaded();
+        }
     }
 }
