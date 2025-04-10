@@ -25,6 +25,7 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
         });
         Set<String> aliasSet = new ObjectOpenHashSet<>();
         aliasSet.add("mc");
+        aliasSet.add("vanilla");
         aliasSet.add(modId);
         this.aliases = Collections.unmodifiableSet(aliasSet);
         ModSupport.INSTANCE.registerContainer(this);
