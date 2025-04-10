@@ -113,7 +113,7 @@ public class EventHandler {
         if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
             data = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         }
-        if (VanillaModule.player.testingStartingItems || !data.getBoolean(Player.GIVEN_ITEMS)) {
+        if (VanillaModule.player.isTestingStartingItems() || !data.getBoolean(Player.GIVEN_ITEMS)) {
             VanillaModule.player.addToInventory(event.player.inventory);
             data.setBoolean(Player.GIVEN_ITEMS, true);
             tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
