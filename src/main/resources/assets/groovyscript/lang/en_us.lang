@@ -130,6 +130,73 @@ groovyscript.wiki.not=not %s
 groovyscript.wiki.unique=%s
 groovyscript.wiki.and=and
 
+
+# Vanilla Minecraft
+groovyscript.wiki.minecraft.crafting.title=Crafting Table
+groovyscript.wiki.minecraft.crafting.description=A normal crafting recipe that takes place in the Vanilla Crafting Table, converting up to 9 items in a shapeless or specific shaped arrangement into an output itemstack.
+groovyscript.wiki.minecraft.crafting.note0=While shorthand methods to create recipes have been supplied, it is far easier to use the recipe builder.
+groovyscript.wiki.minecraft.crafting.note1=Fallback keys are global and apply to all classes using the matrix feature of `AbstractCraftingRecipeBuilder`.
+groovyscript.wiki.minecraft.crafting.note2=You can view recipe names in JEI/HEI by hovering over the output with `F3+h` mode enabled.
+groovyscript.wiki.minecraft.crafting.setFallback=Set the fallback character for matrices. This fallback is used when the recipe is created via matrix and the given key is not included as a key in the specific recipe builder
+groovyscript.wiki.minecraft.crafting.addShaped0=Adds a shaped recipe in the format `output`, `input`
+groovyscript.wiki.minecraft.crafting.addShaped1=Adds a shaped recipe in the format `name`, `output`, `input`
+groovyscript.wiki.minecraft.crafting.addShapeless0=Adds a shapeless recipe in the format `output`, `input`
+groovyscript.wiki.minecraft.crafting.addShapeless1=Adds a shapeless recipe in the format `name`, `output`, `input`
+groovyscript.wiki.minecraft.crafting.replaceShaped0=Adds a shaped recipe in the format `output`, `input` and removes the recipe matching the given output
+groovyscript.wiki.minecraft.crafting.replaceShaped1=Adds a shaped recipe in the format `name`, `output`, `input` and removes the recipe matching the given name
+groovyscript.wiki.minecraft.crafting.replaceShapeless0=Adds a shapeless recipe in the format `output`, `input` and removes the recipe matching the given output
+groovyscript.wiki.minecraft.crafting.replaceShapeless1=Adds a shapeless recipe in the format `name`, `output`, `input` and removes the recipe matching the given name
+
+groovyscript.wiki.minecraft.furnace.title=Furnace
+groovyscript.wiki.minecraft.furnace.description=Converts an input item into an output itemstack after a set amount of time, with the ability to give experience and using fuel to run.
+groovyscript.wiki.minecraft.furnace.add0=Adds a recipe in the format `input`, `output`
+groovyscript.wiki.minecraft.furnace.add1=Adds a recipe in the format `input`, `output`, `experience`
+groovyscript.wiki.minecraft.furnace.exp.value=Sets the experience rewarded for smelting the given input
+
+groovyscript.wiki.minecraft.ore_dict.title=Ore Dictionary
+groovyscript.wiki.minecraft.ore_dict.description=Manipulate the Ore Dictionary and what itemstacks are part of what oredicts.
+groovyscript.wiki.minecraft.ore_dict.add=Adds the given itemstack to the given oredict
+groovyscript.wiki.minecraft.ore_dict.remove=Removes the given itemstack from the given oredict
+groovyscript.wiki.minecraft.ore_dict.clear=Removes all itemstacks from the given oredict
+groovyscript.wiki.minecraft.ore_dict.exists=Returns true if the given oredict exists, although this does not check if the oredict contains entries
+groovyscript.wiki.minecraft.ore_dict.getItems=Returns a list of all itemstacks in the given oredict
+groovyscript.wiki.minecraft.ore_dict.removeAll=Removes all itemstacks from all oredicts
+
+groovyscript.wiki.minecraft.player.title=Starting Inventory
+groovyscript.wiki.minecraft.player.description=Sets the starting inventory of the player, including armor slots and offhand.
+groovyscript.wiki.minecraft.player.note0=No more than a total of 41 items can be inserted into the inventory.
+groovyscript.wiki.minecraft.player.note1=When testing the Starting Inventory items, use `setTestStartingItems(true)` to allow testing every time a player logs in instead of just the first.
+groovyscript.wiki.minecraft.player.addStartingItem0=Adds the given itemstack to the inventory list
+groovyscript.wiki.minecraft.player.addStartingItem1=Adds the given itemstack to a specific slot in the inventory list in the format `itemstack`, `slot`
+groovyscript.wiki.minecraft.player.setStartingItems=Removes all previously added inputs and sets the starting inventory in the format `isSlotSpecific`, `items`
+groovyscript.wiki.minecraft.player.setTestStartingItems=Sets if items given when joining the world regardless of if the flag has already been set
+groovyscript.wiki.minecraft.player.setReplaceDefaultInventory=Sets if the player inventory is cleared prior to giving the player these items
+
+groovyscript.wiki.minecraft.rarity.title=Rarity
+groovyscript.wiki.minecraft.rarity.description=Control the rarity of the item, which typically is the name color, to any standard Rarity or any TextFormatting code.
+groovyscript.wiki.minecraft.rarity.note=The default rarities are Common (White), Uncommon (Yellow), Rare (Aqua), and Epic (Light Purple)
+groovyscript.wiki.minecraft.rarity.set0=Sets the color of the given itemstack in the format `color`, `item`
+groovyscript.wiki.minecraft.rarity.set1=Sets the color of the given itemstack in the format `color`, `rarityName`, `item`
+groovyscript.wiki.minecraft.rarity.set2=Sets the color of the given itemstack in the format `rarity`, `item`
+
+groovyscript.wiki.minecraft.command.title=Custom Commands
+groovyscript.wiki.minecraft.command.description=Create custom commands, either generally or specifically for the client.
+groovyscript.wiki.minecraft.command.registerClientCommand0=Registers the given command to the client
+groovyscript.wiki.minecraft.command.registerClientCommand1=Registers the given command to the client in the format `name`, `usage`, `command`, with `command` being a Closure taking 3 parameters, `MinecraftServer server`, `ICommandSender sender`, and `String... args`
+groovyscript.wiki.minecraft.command.registerClientCommand2=Registers the given command to the client in the format `name`, `command`, with `command` being a Closure taking 3 parameters, `MinecraftServer server`, `ICommandSender sender`, and `String... args`
+groovyscript.wiki.minecraft.command.registerCommand0=Registers the given command
+groovyscript.wiki.minecraft.command.registerCommand1=Registers the given command in the format `name`, `usage`, `command`, with `command` being a Closure taking 3 parameters, `MinecraftServer server`, `ICommandSender sender`, and `String... args`
+groovyscript.wiki.minecraft.command.registerCommand2=Registers the given command in the format `name`, `command`, with `command` being a Closure taking 3 parameters, `MinecraftServer server`, `ICommandSender sender`, and `String... args`
+groovyscript.wiki.minecraft.command.registerCommand=Registers the given command to the given command handler, in the format `handler`, `command`
+
+groovyscript.wiki.minecraft.game_rule.title=Default GameRules
+groovyscript.wiki.minecraft.game_rule.description=Create or assign a default value to GameRules.
+groovyscript.wiki.minecraft.game_rule.note=GameRules are case-sensitive! Enable logging of new GameRules via `setWarnNewGameRule` to ensure you are modifying an existing GameRule and not creating a new and unused one!
+groovyscript.wiki.minecraft.game_rule.setWarnNewGameRule=Sets if creating new GameRules logs a warning. Enable it if you need to check spelling/capitalization. Disabled by default
+groovyscript.wiki.minecraft.game_rule.add=Adds a new entry in the format `name`, `value`, with `value` being a String that can represent a number (`-1`, `5`) or boolean (`true`, `false`)
+groovyscript.wiki.minecraft.game_rule.addMap=Adds a map of GameRule name to values
+
+
 # Actually Additions
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.title=Atomic Reconstructor
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.description=The Atomic Reconstructor is a block which uses energy to convert a block or item in front of it into other items.
