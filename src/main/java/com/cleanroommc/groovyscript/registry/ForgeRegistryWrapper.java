@@ -53,22 +53,26 @@ public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> extends Name
     @Override
     public void afterScriptLoad() {}
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.forgewrapper.add")
     public void add(T entry) {
         if (entry != null) {
             ReloadableRegistryManager.addRegistryEntry(this.registry, entry);
         }
     }
 
+    @MethodDescription(description = "groovyscript.wiki.forgewrapper.removeResource")
     public void remove(ResourceLocation loc) {
         Objects.requireNonNull(loc);
         ReloadableRegistryManager.removeRegistryEntry(this.registry, loc);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.forgewrapper.removeString")
     public void remove(String loc) {
         Objects.requireNonNull(loc);
         ReloadableRegistryManager.removeRegistryEntry(this.registry, loc);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.forgewrapper.remove")
     public boolean remove(T recipe) {
         if (recipe == null) return false;
         remove(recipe.getRegistryName());

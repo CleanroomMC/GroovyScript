@@ -96,6 +96,11 @@ groovyscript.wiki.recipe_builder.description=Create the Recipe Builder
 groovyscript.wiki.recipe_builder.register=First validates the builder, outputting errors to the log file if the validation failed, then registers the builder.
 groovyscript.wiki.recipe_builder.register_return=First validates the builder, returning `null` and outputting errors to the log file if the validation failed, then registers the builder and returns the registered object. (returns `null` or `%s`).
 
+groovyscript.wiki.forgewrapper.add=Adds the recipe
+groovyscript.wiki.forgewrapper.remove=Removes the recipe
+groovyscript.wiki.forgewrapper.removeResource=Removes the recipe with the given Resource Location
+groovyscript.wiki.forgewrapper.removeString=Removes the recipe with the given String as its Resource Location
+
 groovyscript.wiki.craftingrecipe.matrix.required=either the key-based matrix or the ingredient-based matrix can be defined, not both
 groovyscript.wiki.craftingrecipe.output.value=Sets the item output
 groovyscript.wiki.craftingrecipe.recipeFunction.value=Sets an operation that modifies the input items or output item
