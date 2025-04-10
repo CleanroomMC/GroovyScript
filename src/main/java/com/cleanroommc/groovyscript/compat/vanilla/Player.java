@@ -15,8 +15,8 @@ public class Player extends NamedRegistry implements IScriptReloadable {
 
     public static final String GIVEN_ITEMS = "GroovyScript:GivenItems";
 
-    public boolean testingStartingItems;
-    public boolean replaceDefaultInventory;
+    private boolean testingStartingItems;
+    private boolean replaceDefaultInventory;
 
     private final List<ItemStack> givenItemsAnySlot = new ArrayList<>();
 
@@ -97,6 +97,19 @@ public class Player extends NamedRegistry implements IScriptReloadable {
             givenItemsAnySlot.clear();
             givenItemsAnySlot.addAll(items.stream().filter(Objects::nonNull).collect(Collectors.toList()));
         }
+    }
+
+    public void setTestStartingItems(boolean value) {
+        testingStartingItems = value;
+    }
+
+    public void setReplaceDefaultInventory(boolean value) {
+        replaceDefaultInventory = value;
+    }
+
+    @GroovyBlacklist
+    public boolean isTestingStartingItems() {
+        return testingStartingItems;
     }
 
     @Override

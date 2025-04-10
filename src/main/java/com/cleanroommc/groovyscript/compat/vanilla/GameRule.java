@@ -17,7 +17,7 @@ public class GameRule extends NamedRegistry implements IScriptReloadable {
     private boolean warnNewGameRule;
 
     @GroovyBlacklist
-    public void setDefaultGameRules(GameRules gameRules) {
+    public void applyDefaultGameRules(GameRules gameRules) {
         defaultGameRules.forEach((k, v) -> {
             if (warnNewGameRule && !gameRules.hasRule(k)) GroovyLog.get().warn(LOG_MESSAGE, k);
             GroovyLog.get().debug("Setting the GameRule '{}' to the value '{}'", k, v);
