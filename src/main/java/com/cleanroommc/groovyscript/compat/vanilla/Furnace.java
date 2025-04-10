@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -15,16 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@RegistryDescription
 public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
+    @RecipeBuilderDescription(example = @Example(".input(ore('ingotGold')).output(item('minecraft:nether_star')).exp(0.5)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.furnace.add0", example = @Example(value = "ore('ingotIron'), item('minecraft:diamond')", commented = true))
     public void add(IIngredient input, ItemStack output) {
         add(input, output, 0.1f);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.furnace.add1", example = @Example("item('minecraft:nether_star'), item('minecraft:clay') * 64, 13"))
     public void add(IIngredient input, ItemStack output, float exp) {
         if (GroovyLog.msg("Error adding Minecraft Furnace recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input must not be empty")
@@ -64,6 +69,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         return trueInput;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:clay')"))
     public boolean removeByInput(ItemStack input) {
         return removeByInput(input, true);
     }
@@ -112,6 +118,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         return false;
     }
 
+    @MethodDescription(example = @Example("item('minecraft:brick')"))
     public boolean removeByOutput(IIngredient output) {
         return removeByOutput(output, true);
     }
@@ -158,6 +165,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         return true;
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Recipe> streamRecipes() {
         List<Recipe> recipes = new ArrayList<>();
         for (Map.Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
@@ -167,6 +175,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         return new SimpleObjectStream<>(recipes, false).setRemover(recipe -> remove(recipe, true));
     }
 
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         FurnaceRecipes.instance().getSmeltingList().entrySet().removeIf(entry -> {
             float exp = FurnaceRecipes.instance().getSmeltingExperience(entry.getValue());
@@ -183,10 +192,14 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         getBackupRecipes().forEach(recipe -> FurnaceRecipes.instance().addSmeltingRecipe(recipe.input, recipe.output, recipe.exp));
     }
 
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
 
+        @Property(comp = @Comp(gte = 0))
         private float exp = 0.1f;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder exp(float exp) {
             this.exp = exp;
             return this;
@@ -207,6 +220,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Recipe register() {
             if (!validate()) return null;
             Recipe recipe = null;
