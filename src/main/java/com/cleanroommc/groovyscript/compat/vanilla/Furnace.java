@@ -185,21 +185,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
     public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
 
-        private IIngredient input;
-        private ItemStack output;
         private float exp = 0.1f;
-
-        @Override
-        public RecipeBuilder input(IIngredient input) {
-            this.input = input;
-            return this;
-        }
-
-        @Override
-        public RecipeBuilder output(ItemStack output) {
-            this.output = output;
-            return this;
-        }
 
         public RecipeBuilder exp(float exp) {
             this.exp = exp;
@@ -213,8 +199,8 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            msg.add(IngredientHelper.isEmpty(input), () -> "Input must not be empty");
-            msg.add(IngredientHelper.isEmpty(output), () -> "Output must not be empty");
+            validateItems(msg, 1, 1, 1, 1);
+            validateFluids(msg);
             if (exp < 0) {
                 exp = 0.1f;
             }
@@ -224,8 +210,8 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         public @Nullable Recipe register() {
             if (!validate()) return null;
             Recipe recipe = null;
-            for (ItemStack itemStack : input.getMatchingStacks()) {
-                recipe = new Recipe(itemStack, output, exp);
+            for (ItemStack itemStack : input.get(0).getMatchingStacks()) {
+                recipe = new Recipe(itemStack, output.get(0), exp);
                 VanillaModule.furnace.add(recipe);
             }
             return recipe;
