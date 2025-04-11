@@ -15,6 +15,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
+import java.util.Collection;
+
 public interface ArcaneRecipeBuilder {
 
     @RecipeBuilderMethodDescription
@@ -22,6 +24,18 @@ public interface ArcaneRecipeBuilder {
 
     @RecipeBuilderMethodDescription(field = "aspects")
     ArcaneRecipeBuilder aspect(AspectStack aspect);
+
+    @RecipeBuilderMethodDescription(field = "aspects")
+    default ArcaneRecipeBuilder aspect(AspectStack... aspect) {
+        for (var entry : aspect) aspect(entry);
+        return this;
+    }
+
+    @RecipeBuilderMethodDescription(field = "aspects")
+    default ArcaneRecipeBuilder aspect(Collection<AspectStack> aspect) {
+        for (var entry : aspect) aspect(entry);
+        return this;
+    }
 
     @RecipeBuilderMethodDescription(field = "aspects")
     default ArcaneRecipeBuilder aspect(String tag) {
