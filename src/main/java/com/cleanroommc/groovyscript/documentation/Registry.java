@@ -81,10 +81,10 @@ public class Registry {
         if (description != null) {
             var override = description.override();
             for (var annotation : override.method()) {
-                methodSignatures.addAnnotation(methodSignatures.getMethod(annotation.method()), annotation);
+                methodSignatures.addAnnotation(annotation.method(), annotation);
             }
             for (var annotation : override.recipeBuilder()) {
-                methodSignatures.addAnnotation(methodSignatures.getMethod(annotation.method()), annotation);
+                methodSignatures.addAnnotation(annotation.method(), annotation);
             }
         }
         return methodSignatures;
@@ -95,7 +95,7 @@ public class Registry {
                 .sorted(
                         (left, right) -> ComparisonChain.start()
                                 .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
-                                .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
+                                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
                                 .compare(DescriptorHelper.simpleParameters(left.getMethod()), DescriptorHelper.simpleParameters(right.getMethod()), String::compareToIgnoreCase)
                                 .result())
                 .collect(Collectors.toList());
@@ -106,7 +106,7 @@ public class Registry {
                 .sorted(
                         (left, right) -> ComparisonChain.start()
                                 .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
-                                .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
+                                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
                                 .compare(DescriptorHelper.simpleParameters(left.getMethod()), DescriptorHelper.simpleParameters(right.getMethod()), String::compareToIgnoreCase)
                                 .result())
                 .collect(Collectors.toList());
@@ -158,7 +158,9 @@ public class Registry {
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.REMOVAL));
-        for (var method : recipeBuilderMethods) out.append(new Builder(method.getMethod(), method.getAnnotation(), reference, baseTranslationKey).builderExampleFile()).append("\n");
+        for (var method : recipeBuilderMethods) {
+            out.append(new Builder(method.getMethod(), method.getAnnotation(), reference, baseTranslationKey).builderExampleFile()).append("\n");
+        }
         if (!recipeBuilderMethods.isEmpty()) out.append("\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
         out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
@@ -340,8 +342,8 @@ public class Registry {
 
     public String methodDescription(DescriptorHelper.MethodAnnotation<MethodDescription> method) {
         String desc = method.getAnnotation().description();
-        String registryDefault = String.format("%s.%s", baseTranslationKey, method.getMethod().getName());
-        String globalDefault = String.format("groovyscript.wiki.%s", method.getMethod().getName());
+        String registryDefault = String.format("%s.%s", baseTranslationKey, method.getName());
+        String globalDefault = String.format("groovyscript.wiki.%s", method.getName());
         // If `desc` isn't defined, check the `registryDefault` key. If it exists, use it.
         // Then, check the `globalDefault` key. If it exists use it. Otherwise, we want to still use the `registryDefault` for logging a missing key.
         String lang = desc.isEmpty()
@@ -371,7 +373,7 @@ public class Registry {
         for (Example example : sortExamples(getExamples(method))) {
             if (example.commented()) out.append("// ");
             if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
-            out.append(reference).append(".").append(method.getMethod().getName());
+            out.append(reference).append(".").append(method.getName());
             if (example.value().isEmpty()) out.append("()");
             else out.append("(").append(example.value()).append(")");
             out.append("\n");

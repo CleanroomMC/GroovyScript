@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
  *     </li>
  *     <li>
  *         {@link ElementType#METHOD}: Marks the field targeted by {@link #property()} within the class the attached method returns with this {@link Property}.
- *         Can only be attached via being inside {@link RecipeBuilderDescription#requirement()}.
+ *         Can be attached via being inside {@link RecipeBuilderOverride#requirement()}.
  *     </li>
  * </ul>
  * <p>
@@ -219,7 +219,7 @@ public @interface Property {
      * Wrapper to allow repeatable instances of {@link Property}.
      * If more than one {@link Property} is applied to anywhere other than a class, it will generate an error.
      * For a given Field. only a single {@link Property} should be attached,
-     * and for a given Method, all {@link Property} annotations should be placed inside {@link RecipeBuilderDescription#requirement()}
+     * and for a given Method, all {@link Property} annotations should be placed inside {@link RecipeBuilderOverride#requirement()}
      *
      * @see Property
      */

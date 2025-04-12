@@ -4,7 +4,6 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,10 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -48,6 +44,17 @@ public class DescriptorHelper {
         DEFAULT_EXCLUSION = m -> m.isBridge() || !Modifier.isPublic(m.getModifiers()) || objectMethods.contains(m) || m.isAnnotationPresent(GroovyBlacklist.class);
         // Pattern captures the final valid class
         CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z_$][a-zA-Z\\d_$]*\\.)+([a-zA-Z_$][a-zA-Z\\d_$]*)");
+    }
+
+    /**
+     * A short signature of the method where the type of each parameter
+     * only uses the class name and the return type is omitted.
+     *
+     * @param method the method to parse
+     * @return a short and compact method signature, omitting the return type
+     */
+    public static String shortSignature(Method method) {
+        return method.getName() + "(" + simpleParameters(method) + ")";
     }
 
     /**
@@ -147,7 +154,7 @@ public class DescriptorHelper {
         private static final Function<String, List<String>> DESCRIPTOR_LIST = k -> new ArrayList<>();
         private static final Function<Class<? extends Annotation>, List<MethodAnnotation<?>>> ANNOTATION_LIST = k -> new ArrayList<>();
 
-        private final List<Method> validMethods = new ObjectArrayList<>();
+        private final Set<Method> validMethods = new ObjectOpenHashSet<>();
         private final Map<String, Method> descriptorToMethod = new Object2ObjectOpenHashMap<>();
         private final Map<String, Method> nameToMethod = new Object2ObjectOpenHashMap<>();
         private final Map<Class<? extends Annotation>, List<MethodAnnotation<?>>> annotationToMethods = new Object2ObjectOpenHashMap<>();
@@ -193,18 +200,38 @@ public class DescriptorHelper {
         }
 
         /**
+         * @return the class being examined
+         */
+        public Class<?> getClazz() {
+            return clazz;
+        }
+
+        /**
          * Adds the given method and annotation to the relevant map.
          * Can be called outside this method to support overrides.
          */
         public void addAnnotation(Method method, Annotation annotation) {
+            if (method == null || annotation == null) {
+                GroovyLog.msg("Could not add the method '{}' and annotation '{}' to the list due to one of them being null!", method, annotation)
+                        .error()
+                        .post();
+                return;
+            }
             annotationToMethods.computeIfAbsent(annotation.annotationType(), ANNOTATION_LIST)
                     .add(new MethodAnnotation<>(method, annotation));
         }
 
         /**
+         * @see #addAnnotation(Method, Annotation)
+         */
+        public void addAnnotation(String method, Annotation annotation) {
+            addAnnotation(getMethod(method), annotation);
+        }
+
+        /**
          * @return all methods that pass the exclusion filter
          */
-        public List<Method> getValidMethods() {
+        public Set<Method> getValidMethods() {
             return validMethods;
         }
 
@@ -257,6 +284,10 @@ public class DescriptorHelper {
 
         public Method getMethod() {
             return method;
+        }
+
+        public String getName() {
+            return method.getName();
         }
 
         public A getAnnotation() {
