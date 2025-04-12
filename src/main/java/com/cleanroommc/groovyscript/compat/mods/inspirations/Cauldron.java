@@ -41,7 +41,7 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
         return false;
     }
 
-    @RecipeBuilderDescription(example = @Example(".standard().input(item('minecraft:gold_ingot')).fluidInput(fluid('lava')).output(item('minecraft:clay')).boiling().sound(sound('minecraft:block.anvil.destroy')).levels(3)"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".standard().input(item('minecraft:gold_ingot')).fluidInput(fluid('lava')).output(item('minecraft:clay')).boiling().sound(sound('minecraft:block.anvil.destroy')).levels(3)"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "type"),
             @Property(property = "input"),
             @Property(property = "output"),
@@ -53,80 +53,80 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
             @Property(property = "boiling"),
             @Property(property = "levels"),
             @Property(property = "sound")
-    })
+    }))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidInput(fluid('lava')).levels(3).sound(sound('minecraft:block.anvil.destroy'))"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).fluidInput(fluid('lava')).levels(3).sound(sound('minecraft:block.anvil.destroy'))"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "input"),
             @Property(property = "output"),
             @Property(property = "fluidInput"),
             @Property(property = "boiling"),
             @Property(property = "levels"),
             @Property(property = "sound")
-    })
+    }))
     public RecipeBuilder recipeBuilderStandard() {
         return new RecipeBuilder().standard();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone:3')).fluidInput(fluid('water')).fluidOutput(fluid('milk')).levels(2)"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone:3')).fluidInput(fluid('water')).fluidOutput(fluid('milk')).levels(2)"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "input"),
             @Property(property = "fluidInput"),
             @Property(property = "fluidOutput"),
             @Property(property = "boiling"),
             @Property(property = "levels"),
             @Property(property = "sound")
-    })
+    }))
     public RecipeBuilder recipeBuilderTransform() {
         return new RecipeBuilder().transform();
     }
 
-    @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).fluidInput(fluid('milk'), fluid('lava'))"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".output(item('minecraft:clay')).fluidInput(fluid('milk'), fluid('lava'))"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "fluidInput", comp = @Comp(eq = 2)),
             @Property(property = "output")
-    })
+    }))
     public RecipeBuilder recipeBuilderMix() {
         return new RecipeBuilder().mix();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).fluidInput(fluid('milk')).sound(sound('minecraft:block.anvil.destroy'))"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).fluidInput(fluid('milk')).sound(sound('minecraft:block.anvil.destroy'))"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "input"),
             @Property(property = "output"),
             @Property(property = "fluidInput"),
             @Property(property = "boiling"),
             @Property(property = "sound")
-    })
+    }))
     public RecipeBuilder recipeBuilderFill() {
         return new RecipeBuilder().fill();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).outputPotion(potionType('minecraft:strength'))"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).outputPotion(potionType('minecraft:strength'))"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "input"),
             @Property(property = "inputPotion"),
             @Property(property = "outputPotion")
-    })
+    }))
     public RecipeBuilder recipeBuilderBrewing() {
         return new RecipeBuilder().brewing();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).levels(2)"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).inputPotion(potionType('minecraft:fire_resistance')).levels(2)"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "input"),
             @Property(property = "output"),
             @Property(property = "inputPotion", comp = @Comp(gte = 0, lte = 1)),
             @Property(property = "boiling"),
             @Property(property = "levels")
-    })
+    }))
     public RecipeBuilder recipeBuilderPotion() {
         return new RecipeBuilder().potion();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).dye('blue').levels(2)"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_block')).output(item('minecraft:diamond_block')).dye('blue').levels(2)"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "input"),
             @Property(property = "output"),
             @Property(property = "dye"),
             @Property(property = "levels")
-    })
+    }))
     public RecipeBuilder recipeBuilderDye() {
         return new RecipeBuilder().dye();
     }

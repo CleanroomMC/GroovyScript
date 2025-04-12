@@ -41,7 +41,7 @@ public class RitualWrapper extends ForgeRegistryWrapper<Ritual> {
     //  ... which would merge them somehow. need to figure that out.
     //  applies, inspirations.Cauldron, ID.*, and any new places.
 
-    @RecipeBuilderDescription(example = @Example(".ritualCreateItem().input(item('minecraft:stone') * 5, item('minecraft:diamond'), item('minecraft:clay')).output(item('minecraft:clay')).translationKey('groovyscript.demo_output').name('groovyscript:custom_name')"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".ritualCreateItem().input(item('minecraft:stone') * 5, item('minecraft:diamond'), item('minecraft:clay')).output(item('minecraft:clay')).translationKey('groovyscript.demo_output').name('groovyscript:custom_name')"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "output"),
             @Property(property = "entity"),
             @Property(property = "time"),
@@ -49,61 +49,61 @@ public class RitualWrapper extends ForgeRegistryWrapper<Ritual> {
             @Property(property = "command"),
             @Property(property = "onActivate"),
             @Property(property = "ritualType"),
-    })
+    }))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone'), item('minecraft:stone'), item('minecraft:clay')).translationKey('groovyscript.demo_arena').entity(entity('minecraft:chicken'))"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone'), item('minecraft:stone'), item('minecraft:clay')).translationKey('groovyscript.demo_arena').entity(entity('minecraft:chicken'))"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.ARENA"),
             @Property(property = "entity")
-    })
+    }))
     public RecipeBuilder recipeBuilderArena() {
         return new RecipeBuilder().ritualArena();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:clay')).translationKey('groovyscript.demo_command').command('say hi', 'give @p minecraft:coal 5')"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:clay')).translationKey('groovyscript.demo_command').command('say hi', 'give @p minecraft:coal 5')"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.COMMAND"),
             @Property(property = "command")
-    })
+    }))
     public RecipeBuilder recipeBuilderCommand() {
         return new RecipeBuilder().ritualCommand();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond')).translationKey('groovyscript.demo_create_item').output(item('minecraft:diamond'))"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:diamond')).translationKey('groovyscript.demo_create_item').output(item('minecraft:diamond'))"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.CREATE_ITEM"),
             @Property(property = "output")
-    })
+    }))
     public RecipeBuilder recipeBuilderCreateItem() {
         return new RecipeBuilder().ritualCreateItem();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_dragon_breath')"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_dragon_breath')"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.DRAGON_BREATH"),
-    })
+    }))
     public RecipeBuilder recipeBuilderDragonBreath() {
         return new RecipeBuilder().ritualDragonBreath();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_dungeon')"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_dungeon')"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.DUNGEON"),
-    })
+    }))
     public RecipeBuilder recipeBuilderDungeon() {
         return new RecipeBuilder().ritualDungeon();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_summon').entity(entity('minecraft:chicken'))"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:stone'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_summon').entity(entity('minecraft:chicken'))"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.SUMMON"),
             @Property(property = "entity")
-    })
+    }))
     public RecipeBuilder recipeBuilderSummon() {
         return new RecipeBuilder().ritualSummon();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_time').time(5000)"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:clay'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_time').time(5000)"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.TIME"),
             @Property(property = "time")
-    })
+    }))
     public RecipeBuilder recipeBuilderTime() {
         return new RecipeBuilder().ritualTime();
     }
@@ -112,18 +112,18 @@ public class RitualWrapper extends ForgeRegistryWrapper<Ritual> {
             @Example(".input(item('minecraft:diamond'), item('minecraft:gold_ingot'), item('minecraft:clay')).translationKey('groovyscript.demo_weather_clear').weatherClear()"),
             @Example(".input(item('minecraft:gold_ingot'), item('minecraft:diamond'), item('minecraft:clay')).translationKey('groovyscript.demo_weather_rain').weatherRain()"),
             @Example(".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:gold_ingot')).translationKey('groovyscript.demo_weather_thunder').weatherThunder()")
-    }, requirement = {
+    }, override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.WEATHER"),
             @Property(property = "weatherType")
-    })
+    }))
     public RecipeBuilder recipeBuilderWeather() {
         return new RecipeBuilder().ritualWeather();
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_custom').onActivate({ World world, BlockPos blockPos, EntityPlayer player, ItemStack... itemStacks -> { log.info blockPos } })"), requirement = {
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond'), item('minecraft:diamond'), item('minecraft:clay'), item('minecraft:clay')).translationKey('groovyscript.demo_custom').onActivate({ World world, BlockPos blockPos, EntityPlayer player, ItemStack... itemStacks -> { log.info blockPos } })"), override = @RecipeBuilderOverride(requirement = {
             @Property(property = "ritualType", defaultValue = "RitualType.CUSTOM"),
             @Property(property = "onActivate")
-    })
+    }))
     public RecipeBuilder recipeBuilderCustom() {
         return new RecipeBuilder().ritualCustom();
     }
