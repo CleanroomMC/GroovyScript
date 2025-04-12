@@ -87,6 +87,12 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
 
         @Override
         @RecipeBuilderMethodDescription(field = "probabilityGroup")
+        public RecipeBuilder output(ItemStack probabilityOutputs) {
+            return this.probabilityOutput(100, probabilityOutputs);
+        }
+
+        @Override
+        @RecipeBuilderMethodDescription(field = "probabilityGroup")
         public RecipeBuilder output(ItemStack... probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
