@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
  *     bridge, non-public, Object, or methods annotated with {@link com.cleanroommc.groovyscript.api.GroovyBlacklist},
  *     the target may be the method name.
  *     Otherwise, the target must be the name and full descriptor of the method.</li>
- *     <li>{@link #field()} is an array that defaults to {@link Method#getName()} if not overridden, and indicates the target field(s) that the method modifies.</li>
+ *     <li>{@link #field()} is an array that defaults to {@link Method#getName() Method#getName()} if not overridden, and indicates the target field(s) that the method modifies.</li>
  *     <li>{@link #priority()} is an integer that influences the sorting of the {@link RecipeBuilderMethodDescription} relative to other {@link RecipeBuilderMethodDescription}s.</li>
  * </ul>
  */
@@ -51,7 +51,7 @@ public @interface RecipeBuilderMethodDescription {
 
     /**
      * Priority of the method, relative to other {@link RecipeBuilderMethodDescription}s modifying the shared {@link Property}.
-     * Priorities sort entries such that lowest is first, then by the length of {@link Method#getName()}, then by {@link String#compareToIgnoreCase} of {@link Method#getName()}.
+     * Priorities sort entries such that lowest is first, then by the length of {@link Method#getName() Method#getName()}, then by {@link String#compareToIgnoreCase} of {@link Method#getName() Method#getName()}.
      *
      * @return the method priority
      */
