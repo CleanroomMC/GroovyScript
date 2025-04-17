@@ -29,7 +29,11 @@ public class Exporter {
         Set<INamed> registries = new HashSet<>();
         for (INamed named : mod.get().getRegistries()) {
             var annotation = named.getClass().getAnnotation(RegistryDescription.class);
-            if (annotation != null) {
+            if (annotation == null) {
+                GroovyLog.msg("Potential class {} was skipped due to not being annotated with @RegistryDescription. This may be intentional!", named.getClass())
+                        .debug()
+                        .post();
+            } else {
                 registries.add(named);
             }
         }
@@ -120,7 +124,11 @@ public class Exporter {
         Set<INamed> registries = new HashSet<>();
         for (INamed named : mod.get().getRegistries()) {
             var annotation = named.getClass().getAnnotation(RegistryDescription.class);
-            if (annotation != null) {
+            if (annotation == null) {
+                GroovyLog.msg("Potential class {} was skipped due to not being annotated with @RegistryDescription. This may be intentional!", named.getClass())
+                        .debug()
+                        .post();
+            } else {
                 if (annotation.location().equals(target)) {
                     registries.add(named);
                 }
