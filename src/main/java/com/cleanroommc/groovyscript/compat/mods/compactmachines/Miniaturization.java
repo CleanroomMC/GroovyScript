@@ -140,7 +140,7 @@ public class Miniaturization extends StandardListRegistry<MultiblockRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "ticks")
         public RecipeBuilder duration(int duration) {
             return ticks(duration);
         }
