@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.documentation;
+package com.cleanroommc.groovyscript.documentation.helper;
 
 public class GenerationFlags {
 

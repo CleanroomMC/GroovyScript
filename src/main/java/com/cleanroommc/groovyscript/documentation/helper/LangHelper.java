@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.documentation;
+package com.cleanroommc.groovyscript.documentation.helper;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import it.unimi.dsi.fastutil.chars.CharOpenHashSet;

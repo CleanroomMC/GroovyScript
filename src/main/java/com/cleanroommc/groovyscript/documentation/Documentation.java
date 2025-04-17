@@ -7,6 +7,8 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import com.cleanroommc.groovyscript.documentation.format.OutputFormat;
+import com.cleanroommc.groovyscript.documentation.helper.GenerationFlags;
+import com.cleanroommc.groovyscript.documentation.helper.LangHelper;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;

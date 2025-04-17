@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.documentation.descriptor;
+package com.cleanroommc.groovyscript.documentation.helper.descriptor;
 
 import com.github.bsideup.jabel.Desugar;
 

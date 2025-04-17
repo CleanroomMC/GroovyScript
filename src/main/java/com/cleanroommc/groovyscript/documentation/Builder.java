@@ -2,8 +2,12 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.documentation.descriptor.DescriptorHelper;
-import com.cleanroommc.groovyscript.documentation.descriptor.MethodAnnotation;
+import com.cleanroommc.groovyscript.documentation.helper.AdmonitionBuilder;
+import com.cleanroommc.groovyscript.documentation.helper.CodeBlockBuilder;
+import com.cleanroommc.groovyscript.documentation.helper.descriptor.DescriptorHelper;
+import com.cleanroommc.groovyscript.documentation.helper.descriptor.MethodAnnotation;
+import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
+import com.cleanroommc.groovyscript.documentation.helper.LangHelper;
 import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
 import net.minecraft.client.resources.I18n;

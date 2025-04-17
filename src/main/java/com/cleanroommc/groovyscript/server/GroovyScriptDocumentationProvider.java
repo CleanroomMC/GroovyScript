@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.Registry;
-import com.cleanroommc.groovyscript.documentation.descriptor.MethodAnnotation;
+import com.cleanroommc.groovyscript.documentation.helper.descriptor.MethodAnnotation;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.documentation.IDocumentationProvider;
 import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;

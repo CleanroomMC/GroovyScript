@@ -1,9 +1,10 @@
-package com.cleanroommc.groovyscript.documentation;
+package com.cleanroommc.groovyscript.documentation.helper;
 
 import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.documentation.descriptor.DescriptorHelper;
-import com.cleanroommc.groovyscript.documentation.descriptor.MethodAnnotation;
+import com.cleanroommc.groovyscript.documentation.Builder;
+import com.cleanroommc.groovyscript.documentation.helper.descriptor.DescriptorHelper;
+import com.cleanroommc.groovyscript.documentation.helper.descriptor.MethodAnnotation;
 import com.google.common.collect.ComparisonChain;
 
 import java.lang.reflect.Method;

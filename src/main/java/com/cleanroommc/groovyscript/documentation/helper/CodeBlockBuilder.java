@@ -1,5 +1,6 @@
-package com.cleanroommc.groovyscript.documentation;
+package com.cleanroommc.groovyscript.documentation.helper;
 
+import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import org.apache.commons.lang3.StringUtils;
 
