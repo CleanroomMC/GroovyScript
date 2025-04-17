@@ -81,7 +81,7 @@ public class CodeBlockBuilder {
 
         if (!annotations.isEmpty()) out.add("");
 
-        if (Documentation.DEFAULT_FORMAT.usesFocusInCodeBlocks()) {
+        if (format.usesFocusInCodeBlocks()) {
             int i = 0;
             for (int x = 0; x < out.size(); x++) {
                 Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(out.get(x));

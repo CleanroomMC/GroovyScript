@@ -43,7 +43,7 @@ public class Documentation {
 
                 for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                     if (!mod.isLoaded()) continue;
-                    Exporter.generateExamples(stage.getName(), mod);
+                    Exporter.generateExamples(DEFAULT_FORMAT, stage.getName(), mod);
                 }
             }
         } catch (IOException e) {
@@ -59,7 +59,7 @@ public class Documentation {
                 if (!mod.isLoaded()) continue;
                 File target = new File(WIKI, mod.getModId());
                 if (target.exists() || Files.createDirectories(target.toPath()) != null) {
-                    Exporter.generateWiki(target, mod);
+                    Exporter.generateWiki(DEFAULT_FORMAT, target, mod);
                 } else {
                     GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
                 }

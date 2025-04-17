@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
 
@@ -22,7 +23,7 @@ public class Exporter {
     private static final String NAV_FILE_NAME = "!navigation.md";
     private static final String PRINT_MOD_DETECTED = "log.info 'mod \\'%s\\' detected, running script'";
 
-    public static void generateWiki(File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+    public static void generateWiki(IFormat format, File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
         List<INamed> registries = mod.get()
@@ -58,7 +59,7 @@ public class Exporter {
         StringBuilder index = new StringBuilder()
                 .append("---")
                 .append("\n")
-                .append(Documentation.DEFAULT_FORMAT.removeTableOfContentsText())
+                .append(format.removeTableOfContentsText())
                 .append("\n") // Removes the table of contents from the sidebar of indexes.
                 .append("---")
                 .append("\n\n\n")
@@ -94,7 +95,7 @@ public class Exporter {
             GroovyScript.LOGGER.throwing(e);
         }
 
-        if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
+        if (format.requiresNavFile()) {
             try {
                 File file = new File(folder, NAV_FILE_NAME);
                 Files.write(file.toPath(), navigation.toString().getBytes());
@@ -104,7 +105,7 @@ public class Exporter {
         }
     }
 
-    public static void generateExamples(String target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+    public static void generateExamples(IFormat format, String target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         StringBuilder header = new StringBuilder();
         StringBuilder body = new StringBuilder();
 
