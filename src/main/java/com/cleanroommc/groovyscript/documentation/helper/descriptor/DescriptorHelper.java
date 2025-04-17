@@ -143,6 +143,7 @@ public class DescriptorHelper {
 
     /**
      * Obtains the standard default value of a field for its class.
+     * The {@code double}, {@code float}, and {@code long} classes have their types attached.
      *
      * @param clazz the class to get the default value of
      * @return the default value of the provided class
@@ -154,7 +155,7 @@ public class DescriptorHelper {
         if (clazz.equals(double.class)) return "0.0d";
         if (clazz.equals(float.class)) return "0.0f";
         if (clazz.equals(int.class)) return "0";
-        if (clazz.equals(long.class)) return "0";
+        if (clazz.equals(long.class)) return "0L";
         if (clazz.equals(short.class)) return "0";
         return "null";
     }
