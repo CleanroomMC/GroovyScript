@@ -158,7 +158,7 @@ public class DescriptorHelper {
         private final Map<String, Method> descriptorToMethod = new Object2ObjectOpenHashMap<>();
         private final Map<String, Method> nameToMethod = new Object2ObjectOpenHashMap<>();
         private final Map<Class<? extends Annotation>, List<MethodAnnotation<?>>> annotationToMethods = new Object2ObjectOpenHashMap<>();
-        private final Map<String, List<String>> duplicateMethodNames = new Object2ObjectOpenHashMap<>();
+        private final Map<String, List<String>> nameToSignatures = new Object2ObjectOpenHashMap<>();
         private final Class<?> clazz;
 
         public OfClass(Class<?> clazz, Predicate<Method> exclude) {
@@ -184,19 +184,16 @@ public class DescriptorHelper {
             var name = method.getName();
             var descriptor = DescriptorHelper.getDescriptor(method);
             descriptorToMethod.put(descriptor, method);
-            // if the method name a duplicate, add further descriptors to the duplicate list
-            if (duplicateMethodNames.containsKey(name)) {
-                duplicateMethodNames.get(name).add(descriptor);
-                return;
-            }
-            // otherwise, check if the method name is already set, and remove it and mark it invalid if it is
-            if (nameToMethod.containsKey(name)) {
-                var list = duplicateMethodNames.computeIfAbsent(name, DESCRIPTOR_LIST);
-                list.add(descriptor);
-                list.add(DescriptorHelper.getDescriptor(nameToMethod.remove(name)));
-            } else {
+            var list = nameToSignatures.computeIfAbsent(name, DESCRIPTOR_LIST);
+            if (list.isEmpty()) {
+                // if the list is empty, then there are no methods with the same name yet and the method should be added to the simple name->method map
                 nameToMethod.put(name, method);
+            } else {
+                // if there are methods with the same name, make sure to remove the method from the simple name->method map
+                nameToMethod.remove(name);
             }
+            // add the descriptor to the name->descriptor map, ensuring the list will not be empty in the future
+            list.add(descriptor);
         }
 
         /**
@@ -256,9 +253,10 @@ public class DescriptorHelper {
         public @Nullable Method getMethod(@NotNull String target) {
             var output = descriptorToMethod.get(target);
             if (output != null) return output;
-            if (duplicateMethodNames.containsKey(target)) {
+            var methodSignatures = nameToSignatures.get(target);
+            if (methodSignatures.size() > 1) {
                 GroovyLog.msg("The target '{}' is a duplicate name, use one of the following descriptors instead", target)
-                        .add("'" + String.join("', '", duplicateMethodNames.get(target)) + "'")
+                        .add("'" + String.join("', '", methodSignatures) + "'")
                         .warn()
                         .post();
             }
