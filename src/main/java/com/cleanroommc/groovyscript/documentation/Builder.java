@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -32,20 +33,20 @@ public class Builder {
         }
     };
 
-    private final String reference;
+    private final String location;
     private final Method builderMethod;
     private final RecipeBuilderDescription annotation;
     private final Map<String, FieldDocumentation> fields;
     private final Map<String, List<DescriptorHelper.MethodAnnotation<RecipeBuilderMethodDescription>>> methods;
     private final List<DescriptorHelper.MethodAnnotation<RecipeBuilderRegistrationMethod>> registrationMethods;
 
-    public Builder(Method builderMethod, RecipeBuilderDescription annotation, String reference, String baseTranslationKey) {
+    public Builder(Method builderMethod, RecipeBuilderDescription annotation, String location) {
         this.builderMethod = builderMethod;
-        this.reference = reference;
+        this.location = location;
         this.annotation = annotation;
         Class<?> builderClass = annotation.clazz() == void.class ? builderMethod.getReturnType() : annotation.clazz();
         var methodSignatures = generateOfClass(builderClass, annotation);
-        this.fields = gatherFields(builderClass, annotation, baseTranslationKey);
+        this.fields = gatherFields(builderClass, annotation, Registry.BASE_LANG_LOCATION + "." + location);
         this.methods = gatherMethods(methodSignatures, fields);
         this.registrationMethods = gatherRegistrationMethods(methodSignatures);
     }
@@ -264,7 +265,7 @@ public class Builder {
                 .result();
     }
 
-    public String builderAdmonition() {
+    public String builderExampleAdmonition() {
         if (annotation.example().length == 0) return "";
         return new AdmonitionBuilder()
                 .note(new CodeBlockBuilder().line(builder(false).split("\n")).annotation(annotations()).generate())
@@ -298,28 +299,32 @@ public class Builder {
 
         methods.keySet().forEach(target -> {
             if (fields.containsKey(target)) return;
-            GroovyLog.get().warn("Couldn't find field '{}' referenced in a method used for recipe builder '{}'", target, reference);
+            GroovyLog.get().warn("Couldn't find field '{}' referenced in a method used for recipe builder '{}'", target, location);
         });
 
         if (fields.values().stream().anyMatch(FieldDocumentation::isUsed)) {
             out.append(documentFields());
         } else {
-            GroovyLog.get().warn("Couldn't find any fields being used for recipe builder '{}'", reference);
+            GroovyLog.get().warn("Couldn't find any fields being used for recipe builder '{}'", location);
         }
 
+        return out.toString();
+    }
+
+    public String documentRegistration() {
+        StringBuilder out = new StringBuilder();
         if (registrationMethods.isEmpty()) {
-            GroovyLog.get().warn("Couldn't find any registration methods for recipe builder '{}'", reference);
+            GroovyLog.get().warn("Couldn't find any registration methods for recipe builder '{}'", location);
         } else {
             for (var registerMethod : registrationMethods) {
                 out.append("- ");
                 String returnType = registerMethod.getMethod().getAnnotatedReturnType().getType().getTypeName();
-                if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.register"));
-                else out.append(I18n.format("groovyscript.wiki.register_return", returnType));
+                if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.recipe_builder.register"));
+                else out.append(I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
                 out.append("\n\n");
                 out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.getName())).indentation(1).toString());
             }
         }
-
         return out.toString();
     }
 
@@ -353,7 +358,7 @@ public class Builder {
                     var recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
 
                     if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
-                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), reference);
+                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location);
                     } else {
                         var lines = recipeBuilderMethods.stream()
                                 .sorted(Builder::compareRecipeBuilderMethod)
@@ -367,8 +372,63 @@ public class Builder {
         return out;
     }
 
+    public String generateAdmonition() {
+        var admonition = new AdmonitionBuilder();
+        admonition.type(Admonition.Type.ABSTRACT).hasTitle(true).title(title());
+
+        // the --- creates a page break indicator, which is used to separate blocks - but it should only do so for blocks that exist.
+        Consumer<String> addBlock = block -> {
+            if (!block.isEmpty()) admonition.note("\n").note("---").note("\n").note(block.split("\n"));
+        };
+
+        addBlock.accept(creationMethod());
+        addBlock.accept(documentMethods());
+        addBlock.accept(documentRegistration());
+        addBlock.accept(builderExampleAdmonition());
+        admonition.note("\n");
+        return admonition.generate();
+    }
+
+    public boolean hasComplexMethod() {
+        return builderMethod.getParameterTypes().length != 0;
+    }
+
+    private String title() {
+        String lang = annotation.title();
+        String registryDefault = String.format("%s.%s.%s.title", Registry.BASE_LANG_LOCATION, location, builderMethod.getName());
+        String globalDefault = String.format("%s.recipe_builder.title", Registry.BASE_LANG_LOCATION);
+
+        if (lang.isEmpty()) {
+            if (I18n.hasKey(registryDefault)) lang = registryDefault;
+            else lang = globalDefault;
+        }
+
+        return LangHelper.translate(lang);
+    }
+
+    public String creationMethod() {
+        StringBuilder out = new StringBuilder();
+        String lang = annotation.description();
+        String registryDefault = String.format("%s.%s.%s.description", Registry.BASE_LANG_LOCATION, location, builderMethod.getName());
+        String globalDefault = String.format("%s.recipe_builder.description", Registry.BASE_LANG_LOCATION);
+
+        if (lang.isEmpty()) {
+            // If the method is complex, we want to require defining the key via the annotation or as the registryDefault.
+            if (I18n.hasKey(registryDefault) || hasComplexMethod()) lang = registryDefault;
+            else lang = globalDefault;
+        }
+
+        var example = Registry.BASE_ACCESS_COMPAT + "." + location + "." + DescriptorHelper.shortSignature(builderMethod);
+
+        out.append("- ").append(LangHelper.ensurePeriod(LangHelper.translate(lang))).append("\n\n");
+        out.append(new CodeBlockBuilder().line(example).indentation(1).toString());
+        return out.toString();
+    }
+
     private String createBuilder(Example example, boolean canBeCommented) {
         StringBuilder out = new StringBuilder();
+        var methodLocation = Registry.BASE_ACCESS_COMPAT + "." + location + "." + builderMethod.getName();
+        var error = GroovyLog.msg("Error creating example for " + methodLocation).error();
 
         var prependComment = canBeCommented && example.commented();
 
@@ -376,11 +436,30 @@ public class Builder {
 
         if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
 
-        out.append(reference).append(".").append(builderMethod.getName()).append("()");
 
-        if (!example.value().isEmpty() || !registrationMethods.isEmpty()) out.append("\n");
+        out.append(methodLocation);
 
-        out.append(String.join("", getOutputs(generateParts(example.value()))));
+        var exampleText = String.join("", getOutputs(generateParts(example.value())));
+
+        if (exampleText.isEmpty()) {
+            out.append("()").append("\n");
+        } else {
+            if (hasComplexMethod()) {
+                if (!example.value().startsWith("(")) {
+                    error.add("provided example for a recipe builder with parameters did not begin with a '('").post();
+                    return "";
+                }
+                // trim to remove the starting indent so the builder method doesn't have 4 spaces between start
+                out.append(exampleText.trim()).append("\n");
+            } else {
+                if (!example.value().startsWith(".")) {
+                    error.add("provided example for a recipe builder without parameters did not begin with a '.'").post();
+                    return "";
+                }
+                out.append("()").append("\n").append(exampleText);
+            }
+        }
+
 
         if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName()));
 

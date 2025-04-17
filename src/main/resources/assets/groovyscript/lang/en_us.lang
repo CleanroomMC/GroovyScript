@@ -90,8 +90,11 @@ groovyscript.wiki.input.value=Sets the item inputs of the recipe
 groovyscript.wiki.output.value=Sets the item outputs of the recipe
 groovyscript.wiki.fluidInput.value=Sets the fluid inputs of the recipe
 groovyscript.wiki.fluidOutput.value=Sets the fluid outputs of the recipe
-groovyscript.wiki.register=First validates the builder, outputting errors to the log file if the validation failed, then registers the builder.
-groovyscript.wiki.register_return=First validates the builder, returning `null` and outputting errors to the log file if the validation failed, then registers the builder and returns the registered object. (returns `null` or `%s`).
+
+groovyscript.wiki.recipe_builder.title=Recipe Builder
+groovyscript.wiki.recipe_builder.description=Create the Recipe Builder
+groovyscript.wiki.recipe_builder.register=First validates the builder, outputting errors to the log file if the validation failed, then registers the builder.
+groovyscript.wiki.recipe_builder.register_return=First validates the builder, returning `null` and outputting errors to the log file if the validation failed, then registers the builder and returns the registered object. (returns `null` or `%s`).
 
 groovyscript.wiki.craftingrecipe.matrix.required=either the key-based matrix or the ingredient-based matrix can be defined, not both
 groovyscript.wiki.craftingrecipe.output.value=Sets the item output

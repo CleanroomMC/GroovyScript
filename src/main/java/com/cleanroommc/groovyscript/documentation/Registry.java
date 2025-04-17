@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.documentation;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
@@ -19,7 +20,10 @@ import java.util.stream.Stream;
 
 public class Registry {
 
+    public static final String BASE_LANG_LOCATION = "groovyscript.wiki";
+    public static final String BASE_ACCESS_COMPAT = "mods";
     private static final Pattern PERIOD_END_PATTERN = Pattern.compile("\\.$");
+
     private final GroovyContainer<? extends GroovyPropertyContainer> mod;
     private final INamed registry;
     private final String baseTranslationKey;
@@ -27,15 +31,16 @@ public class Registry {
     private final Class<?> registryClass;
     private final RegistryDescription description;
     private final Map<String, String> types;
-    private final List<DescriptorHelper.MethodAnnotation<RecipeBuilderDescription>> recipeBuilderMethods;
+    private final List<Builder> recipeBuilders;
     private final EnumMap<MethodDescription.Type, List<DescriptorHelper.MethodAnnotation<MethodDescription>>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports = new ArrayList<>();
 
     public Registry(GroovyContainer<? extends GroovyPropertyContainer> mod, INamed registry) {
         this.mod = mod;
         this.registry = registry;
-        this.baseTranslationKey = String.format("groovyscript.wiki.%s.%s", mod.getModId(), registry.getName());
-        this.reference = String.format("mods.%s.%s", mod.getModId(), registry.getName());
+        var location = mod.getModId() + "." + registry.getName();
+        this.baseTranslationKey = BASE_LANG_LOCATION + "." + location;
+        this.reference = BASE_ACCESS_COMPAT + "." + location;
         this.registryClass = registry.getClass();
         this.description = registryClass.getAnnotation(RegistryDescription.class);
         this.types = generateTypes(registryClass);
@@ -53,8 +58,10 @@ public class Registry {
             methods.get(entry.getAnnotation().type()).add(entry);
             addImports(entry.getAnnotation().example());
         }
-
-        this.recipeBuilderMethods = sortGrSRecipeBuilderDescriptionMethods(recipeBuilderMethods);
+        this.recipeBuilders = sortGrSRecipeBuilderDescriptionMethods(recipeBuilderMethods)
+                .stream()
+                .map(x -> new Builder(x.getMethod(), x.getAnnotation(), location))
+                .collect(Collectors.toList());
         methods.forEach((k, v) -> this.methods.put(k, sortGrSMethodDescriptionMethods(v)));
     }
 
@@ -158,10 +165,10 @@ public class Registry {
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.REMOVAL));
-        for (var method : recipeBuilderMethods) {
-            out.append(new Builder(method.getMethod(), method.getAnnotation(), reference, baseTranslationKey).builderExampleFile()).append("\n");
+        if (!recipeBuilders.isEmpty()) {
+            for (var builder : recipeBuilders) out.append(builder.builderExampleFile()).append("\n");
+            out.append("\n");
         }
-        if (!recipeBuilderMethods.isEmpty()) out.append("\n");
         out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
         out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
         return out.toString();
@@ -229,7 +236,7 @@ public class Registry {
 
         List<String> packages = mod.getAliases()
                 .stream()
-                .flatMap(modID -> registry.getAliases().stream().map(alias -> String.format("mods.%s.%s", modID, alias)))
+                .flatMap(modID -> registry.getAliases().stream().map(alias -> String.format("%s.%s.%s", Registry.BASE_ACCESS_COMPAT, modID, alias)))
                 .collect(Collectors.toList());
 
         int target = packages.indexOf(reference);
@@ -257,19 +264,10 @@ public class Registry {
                 .append(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder()))
                 .append("\n\n");
 
-        for (int i = 0; i < recipeBuilderMethods.size(); i++) {
-            Builder builder = new Builder(recipeBuilderMethods.get(i).getMethod(), recipeBuilderMethods.get(i).getAnnotation(), reference, baseTranslationKey);
-            out.append(
-                    new AdmonitionBuilder()
-                            .type(Admonition.Type.ABSTRACT)
-                            .hasTitle(true)
-                            .title(methodExample(recipeBuilderMethods.get(i).getMethod()))
-                            .note(builder.documentMethods().split("\n"))
-                            .note("\n")
-                            .note(builder.builderAdmonition().split("\n"))
-                            .note("\n")
-                            .generate());
-            if (i < recipeBuilderMethods.size() - 1) out.append("\n\n");
+        int size = recipeBuilders.size();
+        for (int i = 0; i < size; i++) {
+            out.append(recipeBuilders.get(i).generateAdmonition());
+            if (i < size - 1) out.append("\n\n");
         }
         return out.toString();
     }
@@ -285,12 +283,12 @@ public class Registry {
         if (!methods.get(MethodDescription.Type.VALUE).isEmpty()) {
             out.append("## ").append(I18n.format("groovyscript.wiki.editing_values")).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.VALUE))).append("\n");
         }
-        if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilderMethods.isEmpty()) {
+        if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilders.isEmpty()) {
             out.append("## ").append(LangHelper.translate(description.category().adding())).append("\n\n");
             if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
                 out.append(documentMethods(methods.get(MethodDescription.Type.ADDITION))).append("\n");
             }
-            if (!recipeBuilderMethods.isEmpty()) {
+            if (!recipeBuilders.isEmpty()) {
                 out.append(recipeBuilder()).append("\n\n");
             }
         }
@@ -341,14 +339,14 @@ public class Registry {
     }
 
     public String methodDescription(DescriptorHelper.MethodAnnotation<MethodDescription> method) {
-        String desc = method.getAnnotation().description();
+        String lang = method.getAnnotation().description();
         String registryDefault = String.format("%s.%s", baseTranslationKey, method.getName());
-        String globalDefault = String.format("groovyscript.wiki.%s", method.getName());
-        // If `desc` isn't defined, check the `registryDefault` key. If it exists, use it.
-        // Then, check the `globalDefault` key. If it exists use it. Otherwise, we want to still use the `registryDefault` for logging a missing key.
-        String lang = desc.isEmpty()
-                ? I18n.hasKey(registryDefault) || !I18n.hasKey(globalDefault) ? registryDefault : globalDefault
-                : desc;
+        String globalDefault = String.format("%s.%s", Registry.BASE_LANG_LOCATION, method.getName());
+        if (lang.isEmpty()) {
+            // If the `globalDefault` is not defined, we always want to use `registryDefault` for logging the missing key.
+            if (I18n.hasKey(registryDefault) || !I18n.hasKey(globalDefault)) lang = registryDefault;
+            else lang = globalDefault;
+        }
 
         return String.format(
                 "- %s:\n\n%s",
