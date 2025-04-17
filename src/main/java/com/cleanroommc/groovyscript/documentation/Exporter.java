@@ -7,21 +7,21 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.resources.I18n;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Exporter {
 
     private static final String INDEX_FILE_NAME = "index.md";
     private static final String NAV_FILE_NAME = "!navigation.md";
     private static final String PRINT_MOD_DETECTED = "log.info 'mod \\'%s\\' detected, running script'";
+
+    private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
     public static void generateWiki(IFormat format, File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
@@ -30,9 +30,7 @@ public class Exporter {
         for (INamed named : mod.get().getRegistries()) {
             var annotation = named.getClass().getAnnotation(RegistryDescription.class);
             if (annotation == null) {
-                GroovyLog.msg("Potential class {} was skipped due to not being annotated with @RegistryDescription. This may be intentional!", named.getClass())
-                        .debug()
-                        .post();
+                SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
             } else {
                 registries.add(named);
             }
@@ -125,9 +123,7 @@ public class Exporter {
         for (INamed named : mod.get().getRegistries()) {
             var annotation = named.getClass().getAnnotation(RegistryDescription.class);
             if (annotation == null) {
-                GroovyLog.msg("Potential class {} was skipped due to not being annotated with @RegistryDescription. This may be intentional!", named.getClass())
-                        .debug()
-                        .post();
+                SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
             } else {
                 if (annotation.location().equals(target)) {
                     registries.add(named);
@@ -161,5 +157,13 @@ public class Exporter {
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
+    }
+
+    public static void logSkippedClasses() {
+        if (SKIPPED_CLASSES.isEmpty()) return;
+        GroovyLog.Msg log = GroovyLog.msg("Skipped documenting the following potentially valid locations (this may be the correct behavior!)");
+        SKIPPED_CLASSES.forEach((key, value) -> log.add(key + ": " + value.getName()));
+        log.debug().post();
+        SKIPPED_CLASSES.clear();
     }
 }

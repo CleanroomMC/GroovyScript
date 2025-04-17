@@ -49,7 +49,7 @@ public class Documentation {
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
-        LangHelper.logAnyMissingKeys();
+        logMissing();
     }
 
     public static void generateWiki() {
@@ -67,6 +67,11 @@ public class Documentation {
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
+        logMissing();
+    }
+
+    private static void logMissing() {
         LangHelper.logAnyMissingKeys();
+        Exporter.logSkippedClasses();
     }
 }
