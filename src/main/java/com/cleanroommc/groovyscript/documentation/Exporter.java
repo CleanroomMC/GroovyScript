@@ -7,15 +7,15 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
-import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class Exporter {
 
@@ -26,32 +26,29 @@ public class Exporter {
     public static void generateWiki(IFormat format, File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
-        List<INamed> registries = mod.get()
-                .getRegistries()
-                .stream()
-                .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
-                .distinct()
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
-                                .compare(left.getName(), right.getName())
-                                .result())
-                .collect(Collectors.toList());
+        Set<INamed> registries = new HashSet<>();
+        for (INamed named : mod.get().getRegistries()) {
+            var annotation = named.getClass().getAnnotation(RegistryDescription.class);
+            if (annotation != null) {
+                registries.add(named);
+            }
+        }
 
         if (registries.isEmpty()) return;
 
-        for (INamed registry : registries) {
-            Registry example = new Registry(mod, registry);
-
-            String location = String.format("%s.md", registry.getName());
-            fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
-            try {
-                File file = new File(folder, location);
-                Files.write(file.toPath(), example.documentationBlock().trim().concat("\n").getBytes());
-            } catch (IOException e) {
-                GroovyScript.LOGGER.throwing(e);
-            }
-        }
+        registries.stream()
+                .sorted(ComparisonHelper::iNamed)
+                .forEach(registry -> {
+                    Registry example = new Registry(mod, registry);
+                    String location = String.format("%s.md", registry.getName());
+                    fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
+                    try {
+                        File file = new File(folder, location);
+                        Files.write(file.toPath(), example.documentationBlock().trim().concat("\n").getBytes());
+                    } catch (IOException e) {
+                        GroovyScript.LOGGER.throwing(e);
+                    }
+                });
 
         // TODO add bracket handlers
         //  maybe also add commands?
@@ -120,27 +117,26 @@ public class Exporter {
                 .append("\n");
 
         // Iterate through every registry of the mod once, in alphabetical order.
-        List<INamed> registries = mod.get()
-                .getRegistries()
-                .stream()
-                .distinct()
-                .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
-                .filter(x -> x.getClass().getAnnotation(RegistryDescription.class).location().equals(target))
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
-                                .compare(left.getName(), right.getName())
-                                .result())
-                .collect(Collectors.toList());
+        Set<INamed> registries = new HashSet<>();
+        for (INamed named : mod.get().getRegistries()) {
+            var annotation = named.getClass().getAnnotation(RegistryDescription.class);
+            if (annotation != null) {
+                if (annotation.location().equals(target)) {
+                    registries.add(named);
+                }
+            }
+        }
 
         if (registries.isEmpty()) return;
 
-        for (INamed registry : registries) {
-            GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
-            Registry example = new Registry(mod, registry);
-            imports.addAll(example.getImports());
-            body.append(example.exampleBlock());
-        }
+        registries.stream()
+                .sorted(ComparisonHelper::iNamed)
+                .forEach(registry -> {
+                    GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
+                    Registry example = new Registry(mod, registry);
+                    imports.addAll(example.getImports());
+                    body.append(example.exampleBlock());
+                });
 
         if (!imports.isEmpty()) header.append("\n");
         imports.stream().distinct().sorted().forEach(i -> header.append("import ").append(i).append("\n"));

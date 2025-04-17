@@ -7,7 +7,6 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.documentation.descriptor.DescriptorHelper;
 import com.cleanroommc.groovyscript.documentation.descriptor.MethodAnnotation;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
-import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -32,7 +31,7 @@ public class Registry {
     private final RegistryDescription description;
     private final Map<String, String> types;
     private final List<Builder> recipeBuilders;
-    private final EnumMap<MethodDescription.Type, List<MethodAnnotation<MethodDescription>>> methods = new EnumMap<>(MethodDescription.Type.class);
+    private final EnumMap<MethodDescription.Type, List<MethodAnnotation<MethodDescription>>> methods;
     private final List<String> imports = new ArrayList<>();
 
     public Registry(GroovyContainer<? extends GroovyPropertyContainer> mod, INamed registry) {
@@ -47,8 +46,8 @@ public class Registry {
         var methodSignatures = generateOfClass(registryClass);
 
         List<MethodAnnotation<RecipeBuilderDescription>> recipeBuilderMethods = new ArrayList<>();
-        Map<MethodDescription.Type, List<MethodAnnotation<MethodDescription>>> methods = new EnumMap<>(MethodDescription.Type.class);
-        for (MethodDescription.Type value : MethodDescription.Type.values()) methods.put(value, new ArrayList<>());
+        this.methods = new EnumMap<>(MethodDescription.Type.class);
+        for (MethodDescription.Type value : MethodDescription.Type.values()) this.methods.put(value, new ArrayList<>());
 
         for (var entry : methodSignatures.getMethods(RecipeBuilderDescription.class)) {
             recipeBuilderMethods.add(entry);
@@ -58,11 +57,12 @@ public class Registry {
             methods.get(entry.annotation().type()).add(entry);
             addImports(entry.annotation().example());
         }
-        this.recipeBuilders = sortGrSRecipeBuilderDescriptionMethods(recipeBuilderMethods)
+        this.recipeBuilders = recipeBuilderMethods
                 .stream()
+                .sorted(ComparisonHelper::recipeBuilder)
                 .map(x -> new Builder(x.method(), x.annotation(), location))
                 .collect(Collectors.toList());
-        methods.forEach((k, v) -> this.methods.put(k, sortGrSMethodDescriptionMethods(v)));
+        methods.values().forEach(value -> value.sort(ComparisonHelper::method));
     }
 
     /**
@@ -97,49 +97,8 @@ public class Registry {
         return methodSignatures;
     }
 
-    private static List<MethodAnnotation<RecipeBuilderDescription>> sortGrSRecipeBuilderDescriptionMethods(List<MethodAnnotation<RecipeBuilderDescription>> methods) {
-        return methods.stream()
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.annotation().priority(), right.annotation().priority())
-                                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                                .compare(DescriptorHelper.simpleParameters(left.method()), DescriptorHelper.simpleParameters(right.method()), String::compareToIgnoreCase)
-                                .result())
-                .collect(Collectors.toList());
-    }
-
-    private static List<MethodAnnotation<MethodDescription>> sortGrSMethodDescriptionMethods(List<MethodAnnotation<MethodDescription>> methods) {
-        return methods.stream()
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.annotation().priority(), right.annotation().priority())
-                                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                                .compare(DescriptorHelper.simpleParameters(left.method()), DescriptorHelper.simpleParameters(right.method()), String::compareToIgnoreCase)
-                                .result())
-                .collect(Collectors.toList());
-    }
-
-    private static List<Example> getExamples(MethodAnnotation<MethodDescription> method) {
-        return new ArrayList<>(Arrays.asList(method.annotation().example()));
-    }
-
-    private static List<Example> sortExamples(List<Example> examples) {
-        examples.sort(
-                (left, right) -> ComparisonChain.start()
-                        .compare(left.priority(), right.priority())
-                        .compareFalseFirst(left.commented(), right.commented())
-                        .compare(left.value().length(), right.value().length())
-                        .compare(left.value(), right.value())
-                        .result());
-        return examples;
-    }
-
-    private void addImports(Example example) {
-        Collections.addAll(imports, example.imports());
-    }
-
     private void addImports(Example... examples) {
-        for (var example : examples) addImports(example);
+        for (var example : examples) Collections.addAll(imports, example.imports());
     }
 
     public List<String> getImports() {
@@ -368,14 +327,16 @@ public class Registry {
 
     private String examples(MethodAnnotation<MethodDescription> method) {
         StringBuilder out = new StringBuilder();
-        for (Example example : sortExamples(getExamples(method))) {
-            if (example.commented()) out.append("// ");
-            if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
-            out.append(reference).append(".").append(method.getName());
-            if (example.value().isEmpty()) out.append("()");
-            else out.append("(").append(example.value()).append(")");
-            out.append("\n");
-        }
+        Arrays.stream(method.annotation().example())
+                .sorted(ComparisonHelper::example)
+                .forEach(example -> {
+                    if (example.commented()) out.append("// ");
+                    if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
+                    out.append(reference).append(".").append(method.method().getName());
+                    if (example.value().isEmpty()) out.append("()");
+                    else out.append("(").append(example.value()).append(")");
+                    out.append("\n");
+                });
         return out.toString();
     }
 }

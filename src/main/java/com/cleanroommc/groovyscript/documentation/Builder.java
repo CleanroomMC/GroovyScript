@@ -4,7 +4,6 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.documentation.descriptor.DescriptorHelper;
 import com.cleanroommc.groovyscript.documentation.descriptor.MethodAnnotation;
-import com.google.common.collect.ComparisonChain;
 import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
 import net.minecraft.client.resources.I18n;
@@ -92,7 +91,7 @@ public class Builder {
                         return false;
                     }))
                     .flatMap(x -> x)
-                    .sorted((left, right) -> ComparisonChain.start().compare(left.hierarchy(), right.hierarchy()).result())
+                    .sorted(ComparisonHelper::property)
                     .collect(Collectors.toList());
 
             if (!annotations.isEmpty()) {
@@ -126,35 +125,17 @@ public class Builder {
                 }
             }
         }
-
-        fieldToModifyingMethods.forEach(
-                (key, value) -> value.sort(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.annotation().priority(), right.annotation().priority())
-                                .compare(left.getName().length(), right.getName().length())
-                                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                                .result()));
-
+        fieldToModifyingMethods.values().forEach(value -> value.sort(ComparisonHelper::recipeBuilderMethod));
         return fieldToModifyingMethods;
     }
 
     private static List<MethodAnnotation<RecipeBuilderRegistrationMethod>> gatherRegistrationMethods(DescriptorHelper.OfClass methodSignatures) {
         return methodSignatures.getMethods(RecipeBuilderRegistrationMethod.class)
                 .stream()
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.annotation().hierarchy(), right.annotation().hierarchy())
-                                // Specifically de-prioritize Object classes
-                                .compareFalseFirst(left.method().getReturnType() == Object.class, right.method().getReturnType() == Object.class)
-                                .result())
+                .sorted(ComparisonHelper::recipeBuilderRegistrationHierarchy)
                 // Ensure only the first method with a given name is used
-                .filter(distinctByKey(MethodAnnotation::getName))
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.annotation().priority(), right.annotation().priority())
-                                .compare(left.getName().length(), right.getName().length())
-                                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                                .result())
+                .filter(distinctByKey(x -> x.method().getName()))
+                .sorted(ComparisonHelper::recipeBuilderRegistration)
                 .collect(Collectors.toList());
     }
 
@@ -252,20 +233,6 @@ public class Builder {
         return output;
     }
 
-    private static int compareRecipeBuilderMethod(MethodAnnotation<RecipeBuilderMethodDescription> left, MethodAnnotation<RecipeBuilderMethodDescription> right) {
-        String leftSignature = DescriptorHelper.shortSignature(left.method());
-        String rightSignature = DescriptorHelper.shortSignature(right.method());
-        String leftPart = leftSignature.substring(0, leftSignature.indexOf("("));
-        String rightPart = rightSignature.substring(0, rightSignature.indexOf("("));
-        return ComparisonChain.start()
-                .compare(left.annotation().priority(), right.annotation().priority())
-                .compare(leftPart.length(), rightPart.length())
-                .compare(leftPart, rightPart, String::compareToIgnoreCase)
-                .compare(leftSignature.length(), rightSignature.length())
-                .compare(leftSignature, rightSignature, String::compareToIgnoreCase)
-                .result();
-    }
-
     public String builderExampleAdmonition() {
         if (annotation.example().length == 0) return "";
         return new AdmonitionBuilder()
@@ -333,7 +300,7 @@ public class Builder {
         StringBuilder out = new StringBuilder();
         fields.values()
                 .stream()
-                .sorted()
+                .sorted(ComparisonHelper::field)
                 .filter(FieldDocumentation::isUsed)
                 .forEach(fieldDocumentation -> {
 
@@ -362,7 +329,7 @@ public class Builder {
                         GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location);
                     } else {
                         var lines = recipeBuilderMethods.stream()
-                                .sorted(Builder::compareRecipeBuilderMethod)
+                                .sorted(ComparisonHelper::recipeBuilderMethod)
                                 .map(MethodAnnotation::method)
                                 .map(DescriptorHelper::shortSignature)
                                 .distinct()
@@ -469,7 +436,7 @@ public class Builder {
         return exampleMethod + "\n";
     }
 
-    private static class FieldDocumentation implements Comparable<FieldDocumentation> {
+    public static class FieldDocumentation {
 
         private static final Function<List<String>, String> SERIAL_COMMA_LIST = list -> {
             int last = list.size() - 1;
@@ -558,7 +525,7 @@ public class Builder {
                 return "";
             }
             return Arrays.stream(comparison.get())
-                    .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
+                    .sorted(ComparisonHelper::comp)
                     .map(x -> LangHelper.translate(x.type().getKey(), x.value()))
                     .collect(Collectors.joining(String.format(" %s ", I18n.format("groovyscript.wiki.and"))));
         }
@@ -591,15 +558,6 @@ public class Builder {
 
         public String getDescription() {
             return "- " + getFieldTypeInlineCode() + LangHelper.ensurePeriod(LangHelper.translate(getLangKey()));
-        }
-
-        @Override
-        public int compareTo(@NotNull FieldDocumentation comp) {
-            return ComparisonChain.start()
-                    .compare(this.priority(), comp.priority())
-                    .compare(this.getField().getName().length(), comp.getField().getName().length())
-                    .compare(this.getField().getName(), comp.getField().getName(), String::compareToIgnoreCase)
-                    .result();
         }
     }
 }
