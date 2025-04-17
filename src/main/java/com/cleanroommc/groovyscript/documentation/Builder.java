@@ -2,7 +2,8 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.helper.DescriptorHelper;
+import com.cleanroommc.groovyscript.documentation.descriptor.DescriptorHelper;
+import com.cleanroommc.groovyscript.documentation.descriptor.MethodAnnotation;
 import com.google.common.collect.ComparisonChain;
 import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
@@ -37,8 +38,8 @@ public class Builder {
     private final Method builderMethod;
     private final RecipeBuilderDescription annotation;
     private final Map<String, FieldDocumentation> fields;
-    private final Map<String, List<DescriptorHelper.MethodAnnotation<RecipeBuilderMethodDescription>>> methods;
-    private final List<DescriptorHelper.MethodAnnotation<RecipeBuilderRegistrationMethod>> registrationMethods;
+    private final Map<String, List<MethodAnnotation<RecipeBuilderMethodDescription>>> methods;
+    private final List<MethodAnnotation<RecipeBuilderRegistrationMethod>> registrationMethods;
 
     public Builder(Method builderMethod, RecipeBuilderDescription annotation, String location) {
         this.builderMethod = builderMethod;
@@ -78,18 +79,18 @@ public class Builder {
         List<Field> allFields = getAllFields(builderClass);
         for (Field field : allFields) {
             List<Property> annotations = Stream.of(
-                            // (deprecated) Attached to the builder method's requirements field, an uncommon location for specific overrides
-                            Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
-                            // Attached to the builder method's override of the requirements field, an uncommon location for specific overrides
-                            Arrays.stream(annotation.override().requirement()).filter(r -> r.property().equals(field.getName())),
-                            // Attached to the class or any parent classes, to create/override requirements set in the parent
-                            getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
-                            // Attached to the field, the typical place for property information to be created
-                            Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
-                                if (r.property().isEmpty() || r.property().equals(field.getName())) return true;
-                                GroovyLog.get().warn("Property Annotation had element property '{}' set to a value that wasn't empty or equal to field '{}' in class '{}'.", r.property(), field, builderClass);
-                                return false;
-                            }))
+                    // (deprecated) Attached to the builder method's requirements field, an uncommon location for specific overrides
+                    Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
+                    // Attached to the builder method's override of the requirements field, an uncommon location for specific overrides
+                    Arrays.stream(annotation.override().requirement()).filter(r -> r.property().equals(field.getName())),
+                    // Attached to the class or any parent classes, to create/override requirements set in the parent
+                    getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
+                    // Attached to the field, the typical place for property information to be created
+                    Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
+                        if (r.property().isEmpty() || r.property().equals(field.getName())) return true;
+                        GroovyLog.get().warn("Property Annotation had element property '{}' set to a value that wasn't empty or equal to field '{}' in class '{}'.", r.property(), field, builderClass);
+                        return false;
+                    }))
                     .flatMap(x -> x)
                     .sorted((left, right) -> ComparisonChain.start().compare(left.hierarchy(), right.hierarchy()).result())
                     .collect(Collectors.toList());
@@ -102,8 +103,8 @@ public class Builder {
         return fields;
     }
 
-    private static Map<String, List<DescriptorHelper.MethodAnnotation<RecipeBuilderMethodDescription>>> gatherMethods(DescriptorHelper.OfClass methodSignatures, Map<String, FieldDocumentation> fields) {
-        Map<String, List<DescriptorHelper.MethodAnnotation<RecipeBuilderMethodDescription>>> fieldToModifyingMethods = new HashMap<>();
+    private static Map<String, List<MethodAnnotation<RecipeBuilderMethodDescription>>> gatherMethods(DescriptorHelper.OfClass methodSignatures, Map<String, FieldDocumentation> fields) {
+        Map<String, List<MethodAnnotation<RecipeBuilderMethodDescription>>> fieldToModifyingMethods = new HashMap<>();
 
         BiPredicate<Method, String> isDocumented = (method, fieldName) -> {
             if (method.getDeclaringClass() == methodSignatures.getClazz()) return true;
@@ -112,14 +113,14 @@ public class Builder {
         };
 
         for (var method : methodSignatures.getMethods(RecipeBuilderMethodDescription.class)) {
-            if (method.getAnnotation().field().length == 0) {
+            if (method.annotation().field().length == 0) {
                 var field = method.getName();
-                if (isDocumented.test(method.getMethod(), field)) {
+                if (isDocumented.test(method.method(), field)) {
                     fieldToModifyingMethods.computeIfAbsent(field, k -> new ArrayList<>()).add(method);
                 }
             } else {
-                for (var field : method.getAnnotation().field()) {
-                    if (isDocumented.test(method.getMethod(), field)) {
+                for (var field : method.annotation().field()) {
+                    if (isDocumented.test(method.method(), field)) {
                         fieldToModifyingMethods.computeIfAbsent(field, k -> new ArrayList<>()).add(method);
                     }
                 }
@@ -129,7 +130,7 @@ public class Builder {
         fieldToModifyingMethods.forEach(
                 (key, value) -> value.sort(
                         (left, right) -> ComparisonChain.start()
-                                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
+                                .compare(left.annotation().priority(), right.annotation().priority())
                                 .compare(left.getName().length(), right.getName().length())
                                 .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
                                 .result()));
@@ -137,20 +138,20 @@ public class Builder {
         return fieldToModifyingMethods;
     }
 
-    private static List<DescriptorHelper.MethodAnnotation<RecipeBuilderRegistrationMethod>> gatherRegistrationMethods(DescriptorHelper.OfClass methodSignatures) {
+    private static List<MethodAnnotation<RecipeBuilderRegistrationMethod>> gatherRegistrationMethods(DescriptorHelper.OfClass methodSignatures) {
         return methodSignatures.getMethods(RecipeBuilderRegistrationMethod.class)
                 .stream()
                 .sorted(
                         (left, right) -> ComparisonChain.start()
-                                .compare(left.getAnnotation().hierarchy(), right.getAnnotation().hierarchy())
+                                .compare(left.annotation().hierarchy(), right.annotation().hierarchy())
                                 // Specifically de-prioritize Object classes
-                                .compareFalseFirst(left.getMethod().getReturnType() == Object.class, right.getMethod().getReturnType() == Object.class)
+                                .compareFalseFirst(left.method().getReturnType() == Object.class, right.method().getReturnType() == Object.class)
                                 .result())
                 // Ensure only the first method with a given name is used
-                .filter(distinctByKey(DescriptorHelper.MethodAnnotation::getName))
+                .filter(distinctByKey(MethodAnnotation::getName))
                 .sorted(
                         (left, right) -> ComparisonChain.start()
-                                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
+                                .compare(left.annotation().priority(), right.annotation().priority())
                                 .compare(left.getName().length(), right.getName().length())
                                 .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
                                 .result())
@@ -251,13 +252,13 @@ public class Builder {
         return output;
     }
 
-    private static int compareRecipeBuilderMethod(DescriptorHelper.MethodAnnotation<RecipeBuilderMethodDescription> left, DescriptorHelper.MethodAnnotation<RecipeBuilderMethodDescription> right) {
-        String leftSignature = DescriptorHelper.shortSignature(left.getMethod());
-        String rightSignature = DescriptorHelper.shortSignature(right.getMethod());
+    private static int compareRecipeBuilderMethod(MethodAnnotation<RecipeBuilderMethodDescription> left, MethodAnnotation<RecipeBuilderMethodDescription> right) {
+        String leftSignature = DescriptorHelper.shortSignature(left.method());
+        String rightSignature = DescriptorHelper.shortSignature(right.method());
         String leftPart = leftSignature.substring(0, leftSignature.indexOf("("));
         String rightPart = rightSignature.substring(0, rightSignature.indexOf("("));
         return ComparisonChain.start()
-                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
+                .compare(left.annotation().priority(), right.annotation().priority())
                 .compare(leftPart.length(), rightPart.length())
                 .compare(leftPart, rightPart, String::compareToIgnoreCase)
                 .compare(leftSignature.length(), rightSignature.length())
@@ -318,7 +319,7 @@ public class Builder {
         } else {
             for (var registerMethod : registrationMethods) {
                 out.append("- ");
-                String returnType = registerMethod.getMethod().getAnnotatedReturnType().getType().getTypeName();
+                String returnType = registerMethod.method().getAnnotatedReturnType().getType().getTypeName();
                 if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.recipe_builder.register"));
                 else out.append(I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
                 out.append("\n\n");
@@ -362,7 +363,7 @@ public class Builder {
                     } else {
                         var lines = recipeBuilderMethods.stream()
                                 .sorted(Builder::compareRecipeBuilderMethod)
-                                .map(DescriptorHelper.MethodAnnotation::getMethod)
+                                .map(MethodAnnotation::method)
                                 .map(DescriptorHelper::shortSignature)
                                 .distinct()
                                 .collect(Collectors.toList());

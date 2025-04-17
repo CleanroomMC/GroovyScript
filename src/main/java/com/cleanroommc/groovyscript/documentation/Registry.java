@@ -1,12 +1,12 @@
 package com.cleanroommc.groovyscript.documentation;
 
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.documentation.descriptor.DescriptorHelper;
+import com.cleanroommc.groovyscript.documentation.descriptor.MethodAnnotation;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
-import com.cleanroommc.groovyscript.helper.DescriptorHelper;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.text.WordUtils;
@@ -32,7 +32,7 @@ public class Registry {
     private final RegistryDescription description;
     private final Map<String, String> types;
     private final List<Builder> recipeBuilders;
-    private final EnumMap<MethodDescription.Type, List<DescriptorHelper.MethodAnnotation<MethodDescription>>> methods = new EnumMap<>(MethodDescription.Type.class);
+    private final EnumMap<MethodDescription.Type, List<MethodAnnotation<MethodDescription>>> methods = new EnumMap<>(MethodDescription.Type.class);
     private final List<String> imports = new ArrayList<>();
 
     public Registry(GroovyContainer<? extends GroovyPropertyContainer> mod, INamed registry) {
@@ -46,21 +46,21 @@ public class Registry {
         this.types = generateTypes(registryClass);
         var methodSignatures = generateOfClass(registryClass);
 
-        List<DescriptorHelper.MethodAnnotation<RecipeBuilderDescription>> recipeBuilderMethods = new ArrayList<>();
-        Map<MethodDescription.Type, List<DescriptorHelper.MethodAnnotation<MethodDescription>>> methods = new EnumMap<>(MethodDescription.Type.class);
+        List<MethodAnnotation<RecipeBuilderDescription>> recipeBuilderMethods = new ArrayList<>();
+        Map<MethodDescription.Type, List<MethodAnnotation<MethodDescription>>> methods = new EnumMap<>(MethodDescription.Type.class);
         for (MethodDescription.Type value : MethodDescription.Type.values()) methods.put(value, new ArrayList<>());
 
         for (var entry : methodSignatures.getMethods(RecipeBuilderDescription.class)) {
             recipeBuilderMethods.add(entry);
-            addImports(entry.getAnnotation().example());
+            addImports(entry.annotation().example());
         }
         for (var entry : methodSignatures.getMethods(MethodDescription.class)) {
-            methods.get(entry.getAnnotation().type()).add(entry);
-            addImports(entry.getAnnotation().example());
+            methods.get(entry.annotation().type()).add(entry);
+            addImports(entry.annotation().example());
         }
         this.recipeBuilders = sortGrSRecipeBuilderDescriptionMethods(recipeBuilderMethods)
                 .stream()
-                .map(x -> new Builder(x.getMethod(), x.getAnnotation(), location))
+                .map(x -> new Builder(x.method(), x.annotation(), location))
                 .collect(Collectors.toList());
         methods.forEach((k, v) -> this.methods.put(k, sortGrSMethodDescriptionMethods(v)));
     }
@@ -97,30 +97,30 @@ public class Registry {
         return methodSignatures;
     }
 
-    private static List<DescriptorHelper.MethodAnnotation<RecipeBuilderDescription>> sortGrSRecipeBuilderDescriptionMethods(List<DescriptorHelper.MethodAnnotation<RecipeBuilderDescription>> methods) {
+    private static List<MethodAnnotation<RecipeBuilderDescription>> sortGrSRecipeBuilderDescriptionMethods(List<MethodAnnotation<RecipeBuilderDescription>> methods) {
         return methods.stream()
                 .sorted(
                         (left, right) -> ComparisonChain.start()
-                                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
+                                .compare(left.annotation().priority(), right.annotation().priority())
                                 .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                                .compare(DescriptorHelper.simpleParameters(left.getMethod()), DescriptorHelper.simpleParameters(right.getMethod()), String::compareToIgnoreCase)
+                                .compare(DescriptorHelper.simpleParameters(left.method()), DescriptorHelper.simpleParameters(right.method()), String::compareToIgnoreCase)
                                 .result())
                 .collect(Collectors.toList());
     }
 
-    private static List<DescriptorHelper.MethodAnnotation<MethodDescription>> sortGrSMethodDescriptionMethods(List<DescriptorHelper.MethodAnnotation<MethodDescription>> methods) {
+    private static List<MethodAnnotation<MethodDescription>> sortGrSMethodDescriptionMethods(List<MethodAnnotation<MethodDescription>> methods) {
         return methods.stream()
                 .sorted(
                         (left, right) -> ComparisonChain.start()
-                                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
+                                .compare(left.annotation().priority(), right.annotation().priority())
                                 .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                                .compare(DescriptorHelper.simpleParameters(left.getMethod()), DescriptorHelper.simpleParameters(right.getMethod()), String::compareToIgnoreCase)
+                                .compare(DescriptorHelper.simpleParameters(left.method()), DescriptorHelper.simpleParameters(right.method()), String::compareToIgnoreCase)
                                 .result())
                 .collect(Collectors.toList());
     }
 
-    private static List<Example> getExamples(DescriptorHelper.MethodAnnotation<MethodDescription> method) {
-        return new ArrayList<>(Arrays.asList(method.getAnnotation().example()));
+    private static List<Example> getExamples(MethodAnnotation<MethodDescription> method) {
+        return new ArrayList<>(Arrays.asList(method.annotation().example()));
     }
 
     private static List<Example> sortExamples(List<Example> examples) {
@@ -303,23 +303,23 @@ public class Registry {
         return out.toString();
     }
 
-    public String documentMethods(List<DescriptorHelper.MethodAnnotation<MethodDescription>> methods) {
+    public String documentMethods(List<MethodAnnotation<MethodDescription>> methods) {
         return documentMethods(methods, false);
     }
 
-    public String documentMethods(List<DescriptorHelper.MethodAnnotation<MethodDescription>> methods, boolean preventExamples) {
+    public String documentMethods(List<MethodAnnotation<MethodDescription>> methods, boolean preventExamples) {
         StringBuilder out = new StringBuilder();
         List<String> exampleLines = new ArrayList<>();
         List<String> annotations = new ArrayList<>();
 
-        for (DescriptorHelper.MethodAnnotation<MethodDescription> method : methods) {
+        for (MethodAnnotation<MethodDescription> method : methods) {
             out.append(methodDescription(method));
-            if (method.getAnnotation().example().length > 0 && Arrays.stream(method.getAnnotation().example()).anyMatch(x -> !x.value().isEmpty())) {
-                exampleLines.addAll(Arrays.stream(method.getAnnotation().example()).flatMap(example -> Stream.of(methodExample(method.getMethod(), example.value()))).collect(Collectors.toList()));
-            } else if (method.getMethod().getParameterTypes().length == 0) {
-                exampleLines.add(methodExample(method.getMethod()));
+            if (method.annotation().example().length > 0 && Arrays.stream(method.annotation().example()).anyMatch(x -> !x.value().isEmpty())) {
+                exampleLines.addAll(Arrays.stream(method.annotation().example()).flatMap(example -> Stream.of(methodExample(method.method(), example.value()))).collect(Collectors.toList()));
+            } else if (method.method().getParameterTypes().length == 0) {
+                exampleLines.add(methodExample(method.method()));
             }
-            Arrays.stream(method.getAnnotation().example()).map(Example::annotations).flatMap(Arrays::stream).forEach(annotations::add);
+            Arrays.stream(method.annotation().example()).map(Example::annotations).flatMap(Arrays::stream).forEach(annotations::add);
         }
 
         if (!exampleLines.isEmpty() && !preventExamples) {
@@ -338,8 +338,8 @@ public class Registry {
         return out.toString();
     }
 
-    public String methodDescription(DescriptorHelper.MethodAnnotation<MethodDescription> method) {
-        String lang = method.getAnnotation().description();
+    public String methodDescription(MethodAnnotation<MethodDescription> method) {
+        String lang = method.annotation().description();
         String registryDefault = String.format("%s.%s", baseTranslationKey, method.getName());
         String globalDefault = String.format("%s.%s", Registry.BASE_LANG_LOCATION, method.getName());
         if (lang.isEmpty()) {
@@ -352,7 +352,7 @@ public class Registry {
                 "- %s:\n\n%s",
                 PERIOD_END_PATTERN.matcher(LangHelper.translate(lang)).replaceAll(""),
                 new CodeBlockBuilder()
-                        .line(methodExample(method.getMethod(), DescriptorHelper.simpleParameters(method.getMethod(), types)))
+                        .line(methodExample(method.method(), DescriptorHelper.simpleParameters(method.method(), types)))
                         .indentation(1)
                         .toString());
     }
@@ -366,7 +366,7 @@ public class Registry {
         return String.format("%s.%s()", reference, method.getName());
     }
 
-    private String examples(DescriptorHelper.MethodAnnotation<MethodDescription> method) {
+    private String examples(MethodAnnotation<MethodDescription> method) {
         StringBuilder out = new StringBuilder();
         for (Example example : sortExamples(getExamples(method))) {
             if (example.commented()) out.append("// ");

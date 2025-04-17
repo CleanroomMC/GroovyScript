@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescript
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.Registry;
-import com.cleanroommc.groovyscript.helper.DescriptorHelper;
+import com.cleanroommc.groovyscript.documentation.descriptor.MethodAnnotation;
 import net.prominic.groovyls.compiler.ast.ASTContext;
 import net.prominic.groovyls.compiler.documentation.IDocumentationProvider;
 import net.prominic.groovyls.compiler.util.GroovyReflectionUtils;
@@ -36,7 +36,7 @@ public class GroovyScriptDocumentationProvider implements IDocumentationProvider
 
                     if (method != null && method.isAnnotationPresent(MethodDescription.class)) {
                         return new Registry(groovyContainer, methodRegistry.get())
-                                .methodDescription(new DescriptorHelper.MethodAnnotation<>(method, method.getAnnotation(MethodDescription.class)));
+                                .methodDescription(new MethodAnnotation<>(method, method.getAnnotation(MethodDescription.class)));
                     }
                 }
 

@@ -1,4 +1,4 @@
-package com.cleanroommc.groovyscript.helper;
+package com.cleanroommc.groovyscript.documentation.descriptor;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
@@ -267,29 +267,6 @@ public class DescriptorHelper {
                         .post();
             }
             return output;
-        }
-    }
-
-    public static class MethodAnnotation<A extends Annotation> {
-
-        private final Method method;
-        private final A annotation;
-
-        public MethodAnnotation(Method method, A annotation) {
-            this.method = method;
-            this.annotation = annotation;
-        }
-
-        public Method getMethod() {
-            return method;
-        }
-
-        public String getName() {
-            return method.getName();
-        }
-
-        public A getAnnotation() {
-            return annotation;
         }
     }
 }
