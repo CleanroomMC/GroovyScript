@@ -246,6 +246,7 @@ public class Builder {
                 .generate();
     }
 
+    @SuppressWarnings("StringBufferMayBeStringBuilder")
     public String builderExampleFile() {
         Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(builder(true));
         StringBuffer sb = new StringBuffer();

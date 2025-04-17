@@ -72,6 +72,7 @@ public class CodeBlockBuilder {
         return generate(Documentation.DEFAULT_FORMAT);
     }
 
+    @SuppressWarnings("StringBufferMayBeStringBuilder")
     public List<String> generate(IFormat format) {
         List<String> out = new ArrayList<>();
         String indent = StringUtils.repeat("    ", indentation);
