@@ -105,7 +105,7 @@ public class Exporter {
         }
     }
 
-    public static void generateExamples(IFormat format, String target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+    public static void generateExamples(String target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         StringBuilder header = new StringBuilder();
         StringBuilder body = new StringBuilder();
 

@@ -45,7 +45,7 @@ public class Documentation {
 
                 for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                     if (!mod.isLoaded()) continue;
-                    Exporter.generateExamples(DEFAULT_FORMAT, stage.getName(), mod);
+                    Exporter.generateExamples(stage.getName(), mod);
                 }
             }
         } catch (IOException e) {
