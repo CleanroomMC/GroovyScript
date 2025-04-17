@@ -38,22 +38,22 @@ public class Fountain extends StandardListRegistry<FluidRarityRegistry.FluidRari
         }
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add0", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(FluidStack fluid, int rarity, int guaranteedAmt, int addRand) {
         this.add(fluid.getFluid(), rarity, guaranteedAmt, addRand);
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.add1", type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(Fluid fluid, int rarity, int guaranteedAmt, int addRand) {
         this.add(FluidRarityEntryAccessor.createFluidRarityEntry(fluid, rarity, guaranteedAmt, addRand));
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove0", example = @Example("fluid('lava')"))
+    @MethodDescription(example = @Example("fluid('lava')"))
     public void remove(FluidStack entry) {
         this.remove(entry.getFluid());
     }
 
-    @MethodDescription(description = "groovyscript.wiki.astralsorcery.fountain.remove1")
+    @MethodDescription
     public void remove(Fluid entry) {
         getRecipes().removeIf(fluidRarityEntry -> {
             if (fluidRarityEntry.fluid != null && fluidRarityEntry.fluid.equals(entry)) {
