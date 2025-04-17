@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.documentation.Documentation;
 
 /**
  * Parses a class and converts it into a relative link to a website.
- * By default, converts files to a location on CleanroomMC's Groovyscript repository and uses Groovyscript's version,
+ * By default, converts files to a location on the CleanroomMC Groovyscript repository and uses GroovyScript's version,
  * but can be completely overwritten to link to anywhere.
  * <br>
  * An addon should replace {@link #domain()} and {@link #version()} with a link to their own repo, e.g.

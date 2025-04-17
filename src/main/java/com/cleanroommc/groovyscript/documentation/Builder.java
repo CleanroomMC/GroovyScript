@@ -178,7 +178,7 @@ public class Builder {
     /**
      * Converts a single string into an array of strings.
      * Groups of code surrounded by square braces (`[]`) or single quotes (`''`) are split onto separate lines.
-     * Otherwise, each line starts with a period (`.`) provided that it is not contained within any special zones (comment, string, brackets, etc)
+     * Otherwise, each line starts with a period (`.`) provided that it is not contained within any special zones (comment, string, brackets, etc.)
      */
     private static List<String> generateParts(String content) {
         List<String> parts = new ArrayList<>();
