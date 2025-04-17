@@ -44,6 +44,11 @@ public class Stonecutter extends StandardListRegistry<SimpleRecipe> {
     public static class RecipeBuilder extends AbstractRecipeBuilder<SimpleRecipe> {
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding FutureMC Stonecutter recipe";
         }
