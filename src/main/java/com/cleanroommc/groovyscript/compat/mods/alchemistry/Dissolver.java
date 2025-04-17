@@ -51,7 +51,6 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<DissolverRecipe> {
 
         @Property(comp = @Comp(gte = 1))
