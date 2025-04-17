@@ -2235,7 +2235,7 @@ groovyscript.wiki.roots.pacifist.removeByEntity=Removes the Pacifist entry for t
 groovyscript.wiki.roots.pacifist.removeByName=Removes the Pacifist entry with the given name
 
 groovyscript.wiki.roots.predicates.title=Predicates
-groovyscript.wiki.roots.predicates.description=Predicates are used in Transmution and RunicShearBlock. They either match all blockstates of a block, or all blockstates that have the given properties that match the input blockstate.
+groovyscript.wiki.roots.predicates.description=Predicates are used in Transmutation and RunicShearBlock. They either match all blockstates of a block, or all blockstates that have the given properties that match the input blockstate.
 groovyscript.wiki.roots.predicates.stateBuilder.title=State Builder
 groovyscript.wiki.roots.predicates.stateBuilder.description=Create a builder for custom State Predicates for other Roots methods
 groovyscript.wiki.roots.predicates.below.value=Sets if the predicate checks the block below for validation
