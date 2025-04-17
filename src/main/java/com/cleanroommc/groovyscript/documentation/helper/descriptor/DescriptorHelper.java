@@ -2,9 +2,7 @@ package com.cleanroommc.groovyscript.documentation.helper.descriptor;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +19,7 @@ public class DescriptorHelper {
     /**
      * Holds a mapping from Java type names to native type codes.
      */
-    private static final Object2ObjectMap<Class<?>, String> PRIMITIVE_TO_TERM;
+    private static final Object2CharMap<Class<?>> PRIMITIVE_TO_TERM;
     /**
      * Blocks checking of methods that are a bridge, not public, from Object, or annotated with {@link GroovyBlacklist}.
      */
@@ -29,17 +27,16 @@ public class DescriptorHelper {
     private static final Pattern CLASS_NAME_PATTERN;
 
     static {
-        // Note: better to be String than a char here because we always have to convert to a String right away
-        PRIMITIVE_TO_TERM = new Object2ObjectOpenHashMap<>();
-        PRIMITIVE_TO_TERM.put(byte.class, "B");
-        PRIMITIVE_TO_TERM.put(char.class, "C");
-        PRIMITIVE_TO_TERM.put(short.class, "S");
-        PRIMITIVE_TO_TERM.put(int.class, "I");
-        PRIMITIVE_TO_TERM.put(long.class, "J");
-        PRIMITIVE_TO_TERM.put(float.class, "F");
-        PRIMITIVE_TO_TERM.put(double.class, "D");
-        PRIMITIVE_TO_TERM.put(void.class, "V");
-        PRIMITIVE_TO_TERM.put(boolean.class, "Z");
+        PRIMITIVE_TO_TERM = new Object2CharOpenHashMap<>();
+        PRIMITIVE_TO_TERM.put(byte.class, 'B');
+        PRIMITIVE_TO_TERM.put(char.class, 'C');
+        PRIMITIVE_TO_TERM.put(short.class, 'S');
+        PRIMITIVE_TO_TERM.put(int.class, 'I');
+        PRIMITIVE_TO_TERM.put(long.class, 'J');
+        PRIMITIVE_TO_TERM.put(float.class, 'F');
+        PRIMITIVE_TO_TERM.put(double.class, 'D');
+        PRIMITIVE_TO_TERM.put(void.class, 'V');
+        PRIMITIVE_TO_TERM.put(boolean.class, 'Z');
         var objectMethods = new ObjectOpenHashSet<>(Object.class.getMethods());
         DEFAULT_EXCLUSION = m -> m.isBridge() || !Modifier.isPublic(m.getModifiers()) || objectMethods.contains(m) || m.isAnnotationPresent(GroovyBlacklist.class);
         // Pattern captures the final valid class
@@ -54,7 +51,7 @@ public class DescriptorHelper {
      * @return a short and compact method signature, omitting the return type
      */
     public static String shortSignature(Method method) {
-        return method.getName() + "(" + simpleParameters(method) + ")";
+        return method.getName() + '(' + simpleParameters(method) + ')';
     }
 
     /**
@@ -136,9 +133,9 @@ public class DescriptorHelper {
      * @return the descriptor string of the target class
      */
     private static String getDescriptor(Class<?> clazz) {
-        if (clazz.isArray()) return "[" + getDescriptor(clazz.getComponentType());
-        if (clazz.isPrimitive()) return PRIMITIVE_TO_TERM.get(clazz);
-        return "L" + clazz.getName().replace('.', '/') + ";";
+        if (clazz.isArray()) return '[' + getDescriptor(clazz.getComponentType());
+        if (clazz.isPrimitive()) return String.valueOf(PRIMITIVE_TO_TERM.getChar(clazz));
+        return 'L' + clazz.getName().replace('.', '/') + ';';
     }
 
     /**
@@ -151,15 +148,12 @@ public class DescriptorHelper {
 
     public static class OfClass {
 
-        private static final Function<String, List<String>> DESCRIPTOR_LIST = k -> new ArrayList<>();
-        private static final Function<Class<? extends Annotation>, List<MethodAnnotation<?>>> ANNOTATION_LIST = k -> new ArrayList<>();
-
+        private final Class<?> clazz;
         private final Set<Method> validMethods = new ObjectOpenHashSet<>();
         private final Map<String, Method> descriptorToMethod = new Object2ObjectOpenHashMap<>();
         private final Map<String, Method> nameToMethod = new Object2ObjectOpenHashMap<>();
         private final Map<Class<? extends Annotation>, List<MethodAnnotation<?>>> annotationToMethods = new Object2ObjectOpenHashMap<>();
         private final Map<String, List<String>> nameToSignatures = new Object2ObjectOpenHashMap<>();
-        private final Class<?> clazz;
 
         public OfClass(Class<?> clazz, Predicate<Method> exclude) {
             this.clazz = clazz;
@@ -184,7 +178,7 @@ public class DescriptorHelper {
             var name = method.getName();
             var descriptor = DescriptorHelper.getDescriptor(method);
             descriptorToMethod.put(descriptor, method);
-            var list = nameToSignatures.computeIfAbsent(name, DESCRIPTOR_LIST);
+            var list = nameToSignatures.computeIfAbsent(name, k -> new ArrayList<>());
             if (list.isEmpty()) {
                 // if the list is empty, then there are no methods with the same name yet and the method should be added to the simple name->method map
                 nameToMethod.put(name, method);
@@ -214,7 +208,7 @@ public class DescriptorHelper {
                         .post();
                 return;
             }
-            annotationToMethods.computeIfAbsent(annotation.annotationType(), ANNOTATION_LIST)
+            annotationToMethods.computeIfAbsent(annotation.annotationType(), k -> new ArrayList<>())
                     .add(new MethodAnnotation<>(method, annotation));
         }
 
