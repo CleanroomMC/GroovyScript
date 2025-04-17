@@ -2,7 +2,10 @@ package com.cleanroommc.groovyscript.documentation.helper.descriptor;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.Object2CharMap;
+import it.unimi.dsi.fastutil.objects.Object2CharOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -136,6 +139,24 @@ public class DescriptorHelper {
         if (clazz.isArray()) return '[' + getDescriptor(clazz.getComponentType());
         if (clazz.isPrimitive()) return String.valueOf(PRIMITIVE_TO_TERM.getChar(clazz));
         return 'L' + clazz.getName().replace('.', '/') + ';';
+    }
+
+    /**
+     * Obtains the standard default value of a field for its class.
+     *
+     * @param clazz the class to get the default value of
+     * @return the default value of the provided class
+     */
+    public static String defaultValueConverter(Class<?> clazz) {
+        if (clazz.equals(boolean.class)) return "false";
+        if (clazz.equals(byte.class)) return "0";
+        if (clazz.equals(char.class)) return "\u0000";
+        if (clazz.equals(double.class)) return "0.0d";
+        if (clazz.equals(float.class)) return "0.0f";
+        if (clazz.equals(int.class)) return "0";
+        if (clazz.equals(long.class)) return "0";
+        if (clazz.equals(short.class)) return "0";
+        return "null";
     }
 
     /**

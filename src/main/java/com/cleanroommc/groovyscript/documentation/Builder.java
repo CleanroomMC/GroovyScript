@@ -160,22 +160,6 @@ public class Builder {
     }
 
     /**
-     * Obtains the normal default value of a class, and allows for properties to avoid having to state the default value unless it is explicitly changed.
-     */
-    private static String defaultValueConverter(Class<?> clazz) {
-        if (clazz.equals(Boolean.class) || clazz.equals(boolean.class)) return "false";
-        if (clazz.equals(Byte.class) || clazz.equals(byte.class)) return "0";
-        if (clazz.equals(Character.class) || clazz.equals(char.class)) return "\u0000";
-        if (clazz.equals(Double.class) || clazz.equals(double.class)) return "0.0d";
-        if (clazz.equals(Float.class) || clazz.equals(float.class)) return "0.0f";
-        if (clazz.equals(Integer.class) || clazz.equals(int.class)) return "0";
-        if (clazz.equals(Long.class) || clazz.equals(long.class)) return "0";
-        if (clazz.equals(Short.class) || clazz.equals(short.class)) return "0";
-        if (clazz.equals(String.class)) return "";
-        return "null";
-    }
-
-    /**
      * Converts a single string into an array of strings.
      * Groups of code surrounded by square braces (`[]`) or single quotes (`''`) are split onto separate lines.
      * Otherwise, each line starts with a period (`.`) provided that it is not contained within any special zones (comment, string, brackets, etc.)
@@ -504,7 +488,7 @@ public class Builder {
                     .filter(x -> !x.defaultValue().isEmpty())
                     .findFirst()
                     .map(Property::defaultValue)
-                    .orElse(defaultValueConverter(getField().getType()));
+                    .orElse(DescriptorHelper.defaultValueConverter(getField().getType()));
         }
 
         public String getValue() {
