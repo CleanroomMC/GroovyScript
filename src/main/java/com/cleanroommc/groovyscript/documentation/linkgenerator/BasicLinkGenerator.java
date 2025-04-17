@@ -15,6 +15,15 @@ import com.cleanroommc.groovyscript.documentation.Documentation;
  */
 public class BasicLinkGenerator implements ILinkGenerator {
 
+    /**
+     * Ensure that the domain and path are separated by a {@code /} so the url isn't invalid due a missing slash.
+     * (this was a common issue).
+     */
+    private static String ensureSlash(String input) {
+        if (input.charAt(input.length() - 1) == '/') return input;
+        return input + '/';
+    }
+
     @Override
     public String id() {
         return GroovyScript.ID;
@@ -46,6 +55,6 @@ public class BasicLinkGenerator implements ILinkGenerator {
 
     @Override
     public String convert(String location) {
-        return domain() + path() + trimmedLocation(location) + extension();
+        return ensureSlash(domain()) + ensureSlash(path()) + trimmedLocation(location) + extension();
     }
 }
