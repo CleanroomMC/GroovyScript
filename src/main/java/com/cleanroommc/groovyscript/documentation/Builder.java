@@ -113,7 +113,7 @@ public class Builder {
 
         for (var method : methodSignatures.getMethods(RecipeBuilderMethodDescription.class)) {
             if (method.annotation().field().length == 0) {
-                var field = method.getName();
+                var field = method.method().getName();
                 if (isDocumented.test(method.method(), field)) {
                     fieldToModifyingMethods.computeIfAbsent(field, k -> new ArrayList<>()).add(method);
                 }
@@ -290,7 +290,7 @@ public class Builder {
                 if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.recipe_builder.register"));
                 else out.append(I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
                 out.append("\n\n");
-                out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.getName())).indentation(1).toString());
+                out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.method().getName())).indentation(1).toString());
             }
         }
         return out.toString();
@@ -429,7 +429,7 @@ public class Builder {
         }
 
 
-        if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName()));
+        if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).method().getName()));
 
         var exampleMethod = prependComment ? out.toString().replace("\n", "\n//") : out.toString();
 

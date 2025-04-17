@@ -8,7 +8,4 @@ import java.lang.reflect.Method;
 @Desugar
 public record MethodAnnotation<A extends Annotation> (Method method, A annotation) {
 
-    public String getName() {
-        return method.getName();
-    }
 }
