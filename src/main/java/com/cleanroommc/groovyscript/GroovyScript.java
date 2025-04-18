@@ -74,7 +74,7 @@ import java.util.Random;
         modid = GroovyScript.ID,
         name = GroovyScript.NAME,
         version = GroovyScript.VERSION,
-        dependencies = "after:mixinbooter@[8.0,);",
+        dependencies = "after:mixinbooter@[8.0,);after:extendedcrafting@[1.6.0,);",
         guiFactory = "com.cleanroommc.groovyscript.DisabledConfigGui")
 @Mod.EventBusSubscriber(modid = GroovyScript.ID)
 public class GroovyScript {
