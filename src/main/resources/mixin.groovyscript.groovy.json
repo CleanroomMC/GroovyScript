@@ -1,0 +1,21 @@
+{
+  "package": "com.cleanroommc.groovyscript.core.mixin.groovy",
+  "refmap": "mixins.groovyscript.refmap.json",
+  "target": "@env(PREINIT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "priority": -100000000,
+  "mixinPriority": -100000000,
+  "required": true,
+  "mixins": [
+    "AsmDecompilerMixin",
+    "ClosureMixin",
+    "CompUnitClassGenMixin",
+    "Java8Mixin",
+    "MetaClassImplMixin",
+    "ModuleNodeAccessor",
+    "ModuleNodeMixin"
+  ],
+  "client": [
+  ]
+}

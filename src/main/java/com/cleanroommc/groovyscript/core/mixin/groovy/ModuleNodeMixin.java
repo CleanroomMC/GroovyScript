@@ -38,6 +38,7 @@ public abstract class ModuleNodeMixin {
             // inject correct package declaration into script
             String packageName = rel.substring(0, i).replace('/', '.') + '.';
             this.packageNode = new PackageNode(packageName);
+            this.packageNode.setSynthetic(true);
         }
     }
 
