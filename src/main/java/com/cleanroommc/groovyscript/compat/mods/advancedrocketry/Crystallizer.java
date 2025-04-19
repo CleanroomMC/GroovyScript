@@ -1,13 +1,17 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileCrystallizer;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
+@RegistryDescription(
+        admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
+        override = @MethodOverride(method = {
+                @MethodDescription(method = "removeByOutput", example = @Example("item('libvulpes:productgem')")),
+                @MethodDescription(method = "removeByInput", example = @Example("item('libvulpes:productingot', 3)"))
+        }))
 public class Crystallizer extends BaseRegistry {
 
     @RecipeBuilderDescription(
@@ -19,18 +23,6 @@ public class Crystallizer extends BaseRegistry {
     @Override
     protected Class<? extends TileMultiblockMachine> getMachineClass() {
         return TileCrystallizer.class;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('libvulpes:productgem')"))
-    public boolean removeByOutput(IIngredient output) {
-        return super.removeByOutput(output);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('libvulpes:productingot', 3)"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
     }
 
     @Property(property = "input", comp = @Comp(lte = 4, unique = "groovyscript.wiki.advancedrocketry.input.required"))

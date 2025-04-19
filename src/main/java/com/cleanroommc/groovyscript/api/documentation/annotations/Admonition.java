@@ -18,7 +18,7 @@ public @interface Admonition {
      * The localization key for the admonition description, should be in the format of
      * <br>
      * <code>
-     * groovyscript.wiki.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() VirtualizedRegistry#getName()}.note{index of note in array}
+     * groovyscript.wiki.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() {name}}.note{index}
      * </code>
      *
      * @return localization key for the admonition description

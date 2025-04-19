@@ -1,5 +1,6 @@
-package com.cleanroommc.groovyscript.documentation;
+package com.cleanroommc.groovyscript.documentation.helper;
 
+import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import org.apache.commons.lang3.StringUtils;
 
@@ -71,6 +72,7 @@ public class CodeBlockBuilder {
         return generate(Documentation.DEFAULT_FORMAT);
     }
 
+    @SuppressWarnings("StringBufferMayBeStringBuilder")
     public List<String> generate(IFormat format) {
         List<String> out = new ArrayList<>();
         String indent = StringUtils.repeat("    ", indentation);
@@ -81,7 +83,7 @@ public class CodeBlockBuilder {
 
         if (!annotations.isEmpty()) out.add("");
 
-        if (Documentation.DEFAULT_FORMAT.usesFocusInCodeBlocks()) {
+        if (format.usesFocusInCodeBlocks()) {
             int i = 0;
             for (int x = 0; x < out.size(); x++) {
                 Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(out.get(x));

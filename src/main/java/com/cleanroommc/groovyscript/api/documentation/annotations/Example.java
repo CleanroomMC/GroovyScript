@@ -27,10 +27,15 @@ import java.lang.annotation.Target;
 public @interface Example {
 
     /**
-     * For recipe builders, this will be a string that is a valid one-line series of methods to create a Recipe Builder that will
+     * For basic recipe builders, this will be a string that is a valid one-line series of methods to create a Recipe Builder that will
      * pass the {@link com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder#validate() IRecipeBuilder#validate()} check and be successfully registered.
-     * <br>
-     * For methods, this should be exclusive the parameters of the method. e.g. {@code "item('minecraft:clay')"}<br>
+     * {@code ".do('thing').and('other')"}
+     * <p>
+     * For complex recipe builders, those that have one or more parameters, in the creation method,
+     * the above is true after an initial segment for the creation. {@code "('init').do('thing').and('other')"}
+     * <p>
+     * For methods, this should be exclusive the parameters of the method. e.g. {@code "item('minecraft:clay')"}
+     * <p>
      * Any comments for the wiki should be marked by
      * <code>
      * /*()*{@literal /}

@@ -2,7 +2,12 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.google.common.collect.ComparisonChain;
+import com.cleanroommc.groovyscript.documentation.helper.AdmonitionBuilder;
+import com.cleanroommc.groovyscript.documentation.helper.CodeBlockBuilder;
+import com.cleanroommc.groovyscript.documentation.helper.descriptor.DescriptorHelper;
+import com.cleanroommc.groovyscript.documentation.helper.descriptor.MethodAnnotation;
+import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
+import com.cleanroommc.groovyscript.documentation.helper.LangHelper;
 import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
 import net.minecraft.client.resources.I18n;
@@ -13,6 +18,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -30,21 +37,36 @@ public class Builder {
         }
     };
 
-    private final String reference;
+    private final String location;
     private final Method builderMethod;
     private final RecipeBuilderDescription annotation;
     private final Map<String, FieldDocumentation> fields;
-    private final Map<String, List<RecipeBuilderMethod>> methods;
-    private final List<Method> registrationMethods;
+    private final Map<String, List<MethodAnnotation<RecipeBuilderMethodDescription>>> methods;
+    private final List<MethodAnnotation<RecipeBuilderRegistrationMethod>> registrationMethods;
 
-    public Builder(Method builderMethod, String reference, String baseTranslationKey) {
+    public Builder(Method builderMethod, RecipeBuilderDescription annotation, String location) {
         this.builderMethod = builderMethod;
-        this.reference = reference;
-        this.annotation = builderMethod.getAnnotation(RecipeBuilderDescription.class);
-        Class<?> builderClass = builderMethod.getReturnType();
-        this.fields = gatherFields(builderClass, annotation, baseTranslationKey);
-        this.methods = gatherMethods(builderClass, fields);
-        this.registrationMethods = gatherRegistrationMethods(builderClass);
+        this.location = location;
+        this.annotation = annotation;
+        Class<?> builderClass = annotation.clazz() == void.class ? builderMethod.getReturnType() : annotation.clazz();
+        var methodSignatures = generateOfClass(builderClass, annotation);
+        this.fields = gatherFields(builderClass, annotation, Registry.BASE_LANG_LOCATION + "." + location);
+        this.methods = gatherMethods(methodSignatures, fields);
+        this.registrationMethods = gatherRegistrationMethods(methodSignatures);
+    }
+
+    private static DescriptorHelper.OfClass generateOfClass(Class<?> clazz, RecipeBuilderDescription annotation) {
+        var methodSignatures = DescriptorHelper.generateOfClass(clazz);
+        if (annotation != null) {
+            var override = annotation.override();
+            for (var entry : override.method()) {
+                methodSignatures.addAnnotation(entry.method(), entry);
+            }
+            for (var entry : override.register()) {
+                methodSignatures.addAnnotation(entry.method(), entry);
+            }
+        }
+        return methodSignatures;
     }
 
     private static List<Property> getPropertyAnnotationsFromClassRecursive(Class<?> clazz) {
@@ -60,8 +82,10 @@ public class Builder {
         List<Field> allFields = getAllFields(builderClass);
         for (Field field : allFields) {
             List<Property> annotations = Stream.of(
-                    // Attached to the builder method's requirements field, an uncommon location for specific overrides
+                    // (deprecated) Attached to the builder method's requirements field, an uncommon location for specific overrides
                     Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
+                    // Attached to the builder method's override of the requirements field, an uncommon location for specific overrides
+                    Arrays.stream(annotation.override().requirement()).filter(r -> r.property().equals(field.getName())),
                     // Attached to the class or any parent classes, to create/override requirements set in the parent
                     getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
                     // Attached to the field, the typical place for property information to be created
@@ -71,7 +95,7 @@ public class Builder {
                         return false;
                     }))
                     .flatMap(x -> x)
-                    .sorted((left, right) -> ComparisonChain.start().compare(left.hierarchy(), right.hierarchy()).result())
+                    .sorted(ComparisonHelper::property)
                     .collect(Collectors.toList());
 
             if (!annotations.isEmpty()) {
@@ -82,47 +106,40 @@ public class Builder {
         return fields;
     }
 
-    private static Map<String, List<RecipeBuilderMethod>> gatherMethods(Class<?> builderClass, Map<String, FieldDocumentation> fields) {
-        Map<String, List<RecipeBuilderMethod>> fieldToModifyingMethods = new HashMap<>();
-        for (Method method : builderClass.getMethods()) {
-            if (!method.isAnnotationPresent(RecipeBuilderMethodDescription.class)) continue;
-            RecipeBuilderMethod pair = new RecipeBuilderMethod(method);
-            for (String target : pair.targetFields()) {
-                if (fields.get(target) != null && fields.get(target).isIgnoringInheritedMethods() && !Arrays.asList(builderClass.getDeclaredMethods()).contains(method)) {
-                    continue;
+    private static Map<String, List<MethodAnnotation<RecipeBuilderMethodDescription>>> gatherMethods(DescriptorHelper.OfClass methodSignatures, Map<String, FieldDocumentation> fields) {
+        Map<String, List<MethodAnnotation<RecipeBuilderMethodDescription>>> fieldToModifyingMethods = new HashMap<>();
+
+        BiPredicate<Method, String> isDocumented = (method, fieldName) -> {
+            if (method.getDeclaringClass() == methodSignatures.getClazz()) return true;
+            var field = fields.get(fieldName);
+            return field == null || !field.isIgnoringInheritedMethods();
+        };
+
+        for (var method : methodSignatures.getMethods(RecipeBuilderMethodDescription.class)) {
+            if (method.annotation().field().length == 0) {
+                var field = method.method().getName();
+                if (isDocumented.test(method.method(), field)) {
+                    fieldToModifyingMethods.computeIfAbsent(field, k -> new ArrayList<>()).add(method);
                 }
-                fieldToModifyingMethods.computeIfAbsent(target, k -> new ArrayList<>()).add(pair);
+            } else {
+                for (var field : method.annotation().field()) {
+                    if (isDocumented.test(method.method(), field)) {
+                        fieldToModifyingMethods.computeIfAbsent(field, k -> new ArrayList<>()).add(method);
+                    }
+                }
             }
         }
-
-        fieldToModifyingMethods.forEach(
-                (key, value) -> value.sort(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.getAnnotation().priority(), right.getAnnotation().priority())
-                                .compare(left.getMethod().getName().length(), right.getMethod().getName().length())
-                                .compare(left.getMethod().getName(), right.getMethod().getName(), String::compareToIgnoreCase)
-                                .result()));
-
+        fieldToModifyingMethods.values().forEach(value -> value.sort(ComparisonHelper::recipeBuilderMethod));
         return fieldToModifyingMethods;
     }
 
-    private static List<Method> gatherRegistrationMethods(Class<?> builderClass) {
-        return Arrays.stream(builderClass.getMethods())
-                .filter(x -> x.isAnnotationPresent(RecipeBuilderRegistrationMethod.class))
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy(), right.getAnnotation(RecipeBuilderRegistrationMethod.class).hierarchy())
-                                // Specifically de-prioritize Object classes
-                                .compareFalseFirst(left.getReturnType() == Object.class, right.getReturnType() == Object.class)
-                                .result())
+    private static List<MethodAnnotation<RecipeBuilderRegistrationMethod>> gatherRegistrationMethods(DescriptorHelper.OfClass methodSignatures) {
+        return methodSignatures.getMethods(RecipeBuilderRegistrationMethod.class)
+                .stream()
+                .sorted(ComparisonHelper::recipeBuilderRegistrationHierarchy)
                 // Ensure only the first method with a given name is used
-                .filter(distinctByKey(Method::getName))
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.getAnnotation(RecipeBuilderRegistrationMethod.class).priority(), right.getAnnotation(RecipeBuilderRegistrationMethod.class).priority())
-                                .compare(left.getName().length(), right.getName().length())
-                                .compare(left.getName(), right.getName(), String::compareToIgnoreCase)
-                                .result())
+                .filter(distinctByKey(x -> x.method().getName()))
+                .sorted(ComparisonHelper::recipeBuilderRegistration)
                 .collect(Collectors.toList());
     }
 
@@ -143,25 +160,9 @@ public class Builder {
     }
 
     /**
-     * Obtains the normal default value of a class, and allows for properties to avoid having to state the default value unless it is explicitly changed.
-     */
-    private static String defaultValueConverter(Class<?> clazz) {
-        if (clazz.equals(Boolean.class) || clazz.equals(boolean.class)) return "false";
-        if (clazz.equals(Byte.class) || clazz.equals(byte.class)) return "0";
-        if (clazz.equals(Character.class) || clazz.equals(char.class)) return "\u0000";
-        if (clazz.equals(Double.class) || clazz.equals(double.class)) return "0.0d";
-        if (clazz.equals(Float.class) || clazz.equals(float.class)) return "0.0f";
-        if (clazz.equals(Integer.class) || clazz.equals(int.class)) return "0";
-        if (clazz.equals(Long.class) || clazz.equals(long.class)) return "0";
-        if (clazz.equals(Short.class) || clazz.equals(short.class)) return "0";
-        if (clazz.equals(String.class)) return "";
-        return "null";
-    }
-
-    /**
      * Converts a single string into an array of strings.
      * Groups of code surrounded by square braces (`[]`) or single quotes (`''`) are split onto separate lines.
-     * Otherwise, each line starts with a period (`.`) provided that it is not contained within any special zones (comment, string, brackets, etc)
+     * Otherwise, each line starts with a period (`.`) provided that it is not contained within any special zones (comment, string, brackets, etc.)
      */
     private static List<String> generateParts(String content) {
         List<String> parts = new ArrayList<>();
@@ -220,7 +221,7 @@ public class Builder {
         return output;
     }
 
-    public String builderAdmonition() {
+    public String builderExampleAdmonition() {
         if (annotation.example().length == 0) return "";
         return new AdmonitionBuilder()
                 .note(new CodeBlockBuilder().line(builder(false).split("\n")).annotation(annotations()).generate())
@@ -229,6 +230,7 @@ public class Builder {
                 .generate();
     }
 
+    @SuppressWarnings("StringBufferMayBeStringBuilder")
     public String builderExampleFile() {
         Matcher matcher = Documentation.ANNOTATION_COMMENT_LOCATION.matcher(builder(true));
         StringBuffer sb = new StringBuffer();
@@ -246,7 +248,7 @@ public class Builder {
     }
 
     public List<String> annotations() {
-        return Arrays.stream(annotation.example()).flatMap(example -> Arrays.stream(example.annotations())).map(Documentation::translate).collect(Collectors.toList());
+        return Arrays.stream(annotation.example()).flatMap(example -> Arrays.stream(example.annotations())).map(LangHelper::translate).collect(Collectors.toList());
     }
 
     public String documentMethods() {
@@ -254,28 +256,32 @@ public class Builder {
 
         methods.keySet().forEach(target -> {
             if (fields.containsKey(target)) return;
-            GroovyLog.get().warn("Couldn't find field '{}' referenced in a method used for recipe builder '{}'", target, reference);
+            GroovyLog.get().warn("Couldn't find field '{}' referenced in a method used for recipe builder '{}'", target, location);
         });
 
         if (fields.values().stream().anyMatch(FieldDocumentation::isUsed)) {
             out.append(documentFields());
         } else {
-            GroovyLog.get().warn("Couldn't find any fields being used for recipe builder '{}'", reference);
+            GroovyLog.get().warn("Couldn't find any fields being used for recipe builder '{}'", location);
         }
 
+        return out.toString();
+    }
+
+    public String documentRegistration() {
+        StringBuilder out = new StringBuilder();
         if (registrationMethods.isEmpty()) {
-            GroovyLog.get().warn("Couldn't find any registration methods for recipe builder '{}'", reference);
+            GroovyLog.get().warn("Couldn't find any registration methods for recipe builder '{}'", location);
         } else {
-            for (Method registerMethod : registrationMethods) {
+            for (var registerMethod : registrationMethods) {
                 out.append("- ");
-                String returnType = registerMethod.getAnnotatedReturnType().getType().getTypeName();
-                if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.register"));
-                else out.append(I18n.format("groovyscript.wiki.register_return", returnType));
+                String returnType = registerMethod.method().getAnnotatedReturnType().getType().getTypeName();
+                if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.recipe_builder.register"));
+                else out.append(I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
                 out.append("\n\n");
-                out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.getName())).indentation(1).toString());
+                out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.method().getName())).indentation(1).toString());
             }
         }
-
         return out.toString();
     }
 
@@ -283,7 +289,7 @@ public class Builder {
         StringBuilder out = new StringBuilder();
         fields.values()
                 .stream()
-                .sorted()
+                .sorted(ComparisonHelper::field)
                 .filter(FieldDocumentation::isUsed)
                 .forEach(fieldDocumentation -> {
 
@@ -306,28 +312,80 @@ public class Builder {
 
                     out.append("\n\n");
 
-                    List<RecipeBuilderMethod> recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
+                    var recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
 
                     if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
-                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), reference);
+                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location);
                     } else {
-                        out.append(
-                                new CodeBlockBuilder()
-                                        .line(
-                                                recipeBuilderMethods.stream()
-                                                        .sorted()
-                                                        .map(RecipeBuilderMethod::shortMethodSignature)
-                                                        .distinct()
-                                                        .collect(Collectors.toList()))
-                                        .indentation(1)
-                                        .toString());
+                        var lines = recipeBuilderMethods.stream()
+                                .sorted(ComparisonHelper::recipeBuilderMethod)
+                                .map(MethodAnnotation::method)
+                                .map(DescriptorHelper::shortSignature)
+                                .distinct()
+                                .collect(Collectors.toList());
+                        out.append(new CodeBlockBuilder().line(lines).indentation(1).toString());
                     }
                 });
         return out;
     }
 
+    public String generateAdmonition() {
+        var admonition = new AdmonitionBuilder();
+        admonition.type(Admonition.Type.ABSTRACT).hasTitle(true).title(title());
+
+        // the --- creates a page break indicator, which is used to separate blocks - but it should only do so for blocks that exist.
+        Consumer<String> addBlock = block -> {
+            if (!block.isEmpty()) admonition.note("\n").note("---").note("\n").note(block.split("\n"));
+        };
+
+        addBlock.accept(creationMethod());
+        addBlock.accept(documentMethods());
+        addBlock.accept(documentRegistration());
+        addBlock.accept(builderExampleAdmonition());
+        admonition.note("\n");
+        return admonition.generate();
+    }
+
+    public boolean hasComplexMethod() {
+        return builderMethod.getParameterTypes().length != 0;
+    }
+
+    private String title() {
+        String lang = annotation.title();
+        String registryDefault = String.format("%s.%s.%s.title", Registry.BASE_LANG_LOCATION, location, builderMethod.getName());
+        String globalDefault = String.format("%s.recipe_builder.title", Registry.BASE_LANG_LOCATION);
+
+        if (lang.isEmpty()) {
+            if (I18n.hasKey(registryDefault)) lang = registryDefault;
+            else lang = globalDefault;
+        }
+
+        return LangHelper.translate(lang);
+    }
+
+    public String creationMethod() {
+        StringBuilder out = new StringBuilder();
+        String lang = annotation.description();
+        String registryDefault = String.format("%s.%s.%s.description", Registry.BASE_LANG_LOCATION, location, builderMethod.getName());
+        String globalDefault = String.format("%s.recipe_builder.description", Registry.BASE_LANG_LOCATION);
+
+        if (lang.isEmpty()) {
+            // If the method is complex, we want to require defining the key via the annotation or as the registryDefault.
+            if (I18n.hasKey(registryDefault) || hasComplexMethod()) lang = registryDefault;
+            else lang = globalDefault;
+        }
+
+        var example = Registry.BASE_ACCESS_COMPAT + "." + location + "." + DescriptorHelper.shortSignature(builderMethod);
+
+        out.append("- ").append(LangHelper.ensurePeriod(LangHelper.translate(lang))).append("\n\n");
+        out.append(new CodeBlockBuilder().line(example).indentation(1).toString());
+        return out.toString();
+    }
+
     private String createBuilder(Example example, boolean canBeCommented) {
         StringBuilder out = new StringBuilder();
+        var methodLocation = Registry.BASE_ACCESS_COMPAT + "." + location + "." + builderMethod.getName();
+        var error = GroovyLog.msg("Error creating example for " + methodLocation).error();
 
         var prependComment = canBeCommented && example.commented();
 
@@ -335,20 +393,39 @@ public class Builder {
 
         if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
 
-        out.append(reference).append(".").append(builderMethod.getName()).append("()");
 
-        if (!example.value().isEmpty() || !registrationMethods.isEmpty()) out.append("\n");
+        out.append(methodLocation);
 
-        out.append(String.join("", getOutputs(generateParts(example.value()))));
+        var exampleText = String.join("", getOutputs(generateParts(example.value())));
 
-        if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).getName()));
+        if (exampleText.isEmpty()) {
+            out.append("()").append("\n");
+        } else {
+            if (hasComplexMethod()) {
+                if (!example.value().startsWith("(")) {
+                    error.add("provided example for a recipe builder with parameters did not begin with a '('").post();
+                    return "";
+                }
+                // trim to remove the starting indent so the builder method doesn't have 4 spaces between start
+                out.append(exampleText.trim()).append("\n");
+            } else {
+                if (!example.value().startsWith(".")) {
+                    error.add("provided example for a recipe builder without parameters did not begin with a '.'").post();
+                    return "";
+                }
+                out.append("()").append("\n").append(exampleText);
+            }
+        }
+
+
+        if (!registrationMethods.isEmpty()) out.append("    .").append(String.format("%s()", registrationMethods.get(0).method().getName()));
 
         var exampleMethod = prependComment ? out.toString().replace("\n", "\n//") : out.toString();
 
         return exampleMethod + "\n";
     }
 
-    private static class FieldDocumentation implements Comparable<FieldDocumentation> {
+    public static class FieldDocumentation {
 
         private static final Function<List<String>, String> SERIAL_COMMA_LIST = list -> {
             int last = list.size() - 1;
@@ -371,14 +448,14 @@ public class Builder {
         }
 
         private static String parseComparisonRequirements(Comp comp, EnumSet<Comp.Type> usedTypes) {
-            return usedTypes.stream().sorted().map(type -> Documentation.translate(type.getKey(), switch (type) {
+            return usedTypes.stream().sorted().map(type -> LangHelper.translate(type.getKey(), switch (type) {
                 case GT -> comp.gt();
                 case GTE -> comp.gte();
                 case EQ -> comp.eq();
                 case LTE -> comp.lte();
                 case LT -> comp.lt();
                 case NOT -> comp.not();
-                case UNI -> Documentation.translate(comp.unique());
+                case UNI -> LangHelper.translate(comp.unique());
             })).collect(Collectors.collectingAndThen(Collectors.toList(), SERIAL_COMMA_LIST));
         }
 
@@ -411,7 +488,7 @@ public class Builder {
                     .filter(x -> !x.defaultValue().isEmpty())
                     .findFirst()
                     .map(Property::defaultValue)
-                    .orElse(defaultValueConverter(getField().getType()));
+                    .orElse(DescriptorHelper.defaultValueConverter(getField().getType()));
         }
 
         public String getValue() {
@@ -437,8 +514,8 @@ public class Builder {
                 return "";
             }
             return Arrays.stream(comparison.get())
-                    .sorted((left, right) -> ComparisonChain.start().compare(left.type(), right.type()).result())
-                    .map(x -> Documentation.translate(x.type().getKey(), x.value()))
+                    .sorted(ComparisonHelper::comp)
+                    .map(x -> LangHelper.translate(x.type().getKey(), x.value()))
                     .collect(Collectors.joining(String.format(" %s ", I18n.format("groovyscript.wiki.and"))));
         }
 
@@ -451,7 +528,7 @@ public class Builder {
                     .map(Property::requirement)
                     .filter(x -> !x.isEmpty())
                     .findFirst()
-                    .map(Documentation::translate)
+                    .map(LangHelper::translate)
                     .orElse("");
         }
 
@@ -464,64 +541,12 @@ public class Builder {
         }
 
         private String getFieldTypeInlineCode() {
-            //return "`#!groovy " + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
-            return "`" + Exporter.simpleSignature(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+            //return "`#!groovy " + DescriptorHelper.simpleTypeName(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
+            return "`" + DescriptorHelper.simpleTypeName(getField().getAnnotatedType().getType().getTypeName()) + "`. ";
         }
 
         public String getDescription() {
-            return "- " + getFieldTypeInlineCode() + Documentation.ensurePeriod(Documentation.translate(getLangKey()));
-        }
-
-        @Override
-        public int compareTo(@NotNull FieldDocumentation comp) {
-            return ComparisonChain.start()
-                    .compare(this.priority(), comp.priority())
-                    .compare(this.getField().getName().length(), comp.getField().getName().length())
-                    .compare(this.getField().getName(), comp.getField().getName(), String::compareToIgnoreCase)
-                    .result();
-        }
-    }
-
-
-    private static class RecipeBuilderMethod implements Comparable<RecipeBuilderMethod> {
-
-        private final Method method;
-        private final RecipeBuilderMethodDescription annotation;
-
-        public RecipeBuilderMethod(Method method) {
-            this.method = method;
-            this.annotation = method.getAnnotation(RecipeBuilderMethodDescription.class);
-        }
-
-        public Method getMethod() {
-            return method;
-        }
-
-        public RecipeBuilderMethodDescription getAnnotation() {
-            return annotation;
-        }
-
-        public List<String> targetFields() {
-            return getAnnotation().field().length == 0 ? Collections.singletonList(getMethod().getName()) : Arrays.asList(getAnnotation().field());
-        }
-
-        public String shortMethodSignature() {
-            return String.format("%s(%s)", getMethod().getName(), Exporter.simpleSignature(getMethod()));
-        }
-
-        @Override
-        public int compareTo(@NotNull RecipeBuilderMethod comp) {
-            String thisSignature = this.shortMethodSignature();
-            String compSignature = comp.shortMethodSignature();
-            String thisPart = thisSignature.substring(0, thisSignature.indexOf("("));
-            String compPart = compSignature.substring(0, compSignature.indexOf("("));
-            return ComparisonChain.start()
-                    .compare(this.getAnnotation().priority(), comp.getAnnotation().priority())
-                    .compare(thisPart.length(), compPart.length())
-                    .compare(thisPart, compPart, String::compareToIgnoreCase)
-                    .compare(thisSignature.length(), compSignature.length())
-                    .compare(thisSignature, compSignature, String::compareToIgnoreCase)
-                    .result();
+            return "- " + getFieldTypeInlineCode() + LangHelper.ensurePeriod(LangHelper.translate(getLangKey()));
         }
     }
 }

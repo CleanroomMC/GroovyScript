@@ -11,7 +11,7 @@ import reborncore.api.recipe.RecipeHandler;
 import techreborn.api.Reference;
 import techreborn.api.recipe.machines.IndustrialSawmillRecipe;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "removeByOutput", example = @Example("item('minecraft:planks:4')"))))
 public class IndustrialSawmill extends AbstractGenericTechRebornRegistry {
 
     @RecipeBuilderDescription(example = {
@@ -43,12 +43,6 @@ public class IndustrialSawmill extends AbstractGenericTechRebornRegistry {
             }
             return false;
         });
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:planks:4')"))
-    public void removeByOutput(IIngredient output) {
-        super.removeByOutput(output);
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

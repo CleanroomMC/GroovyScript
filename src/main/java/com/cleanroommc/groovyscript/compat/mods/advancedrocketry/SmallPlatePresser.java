@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import net.minecraft.item.ItemBlock;
@@ -9,7 +8,10 @@ import zmaster587.advancedRocketry.block.BlockSmallPlatePress;
 
 import java.util.Arrays;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = {
+        @MethodDescription(method = "removeByOutput", example = @Example("item('libvulpes:productplate', 2)")),
+        @MethodDescription(method = "removeByInput", example = @Example("item('minecraft:iron_block')"))
+}))
 public class SmallPlatePresser extends BaseRegistry {
 
     @RecipeBuilderDescription(
@@ -21,18 +23,6 @@ public class SmallPlatePresser extends BaseRegistry {
     @Override
     protected Class<?> getMachineClass() {
         return BlockSmallPlatePress.class;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('libvulpes:productplate', 2)"))
-    public boolean removeByOutput(IIngredient output) {
-        return super.removeByOutput(output);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:iron_block')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
     }
 
     @Property(property = "input", comp = @Comp(eq = 1, unique = "groovyscript.wiki.advancedrocketry.input.block"))

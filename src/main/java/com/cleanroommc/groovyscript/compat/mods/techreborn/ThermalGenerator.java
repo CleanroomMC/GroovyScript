@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.techreborn;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -10,7 +9,7 @@ import reborncore.api.praescriptum.fuels.Fuel;
 import reborncore.api.praescriptum.fuels.FuelHandler;
 import techreborn.api.recipe.Fuels;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "removeByInput", example = @Example("fluid('lava')"))))
 public class ThermalGenerator extends AbstractGeneratorRegistry {
 
     @RecipeBuilderDescription(example = {
@@ -24,12 +23,6 @@ public class ThermalGenerator extends AbstractGeneratorRegistry {
     @Override
     public FuelHandler handler() {
         return Fuels.thermalGenerator;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("fluid('lava')"))
-    public void removeByInput(IIngredient input) {
-        super.removeByInput(input);
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 1))

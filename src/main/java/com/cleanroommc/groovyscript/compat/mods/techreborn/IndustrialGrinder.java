@@ -11,7 +11,7 @@ import reborncore.api.recipe.RecipeHandler;
 import techreborn.api.Reference;
 import techreborn.api.recipe.machines.IndustrialGrinderRecipe;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "removeByOutput", example = @Example("item('techreborn:dust:53')"))))
 public class IndustrialGrinder extends AbstractGenericTechRebornRegistry {
 
     @RecipeBuilderDescription(example = {
@@ -43,12 +43,6 @@ public class IndustrialGrinder extends AbstractGenericTechRebornRegistry {
             }
             return false;
         });
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('techreborn:dust:53')"))
-    public void removeByOutput(IIngredient output) {
-        super.removeByOutput(output);
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))

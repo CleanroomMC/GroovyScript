@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.techreborn;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import techreborn.api.Reference;
 import techreborn.api.recipe.machines.ScrapboxRecipe;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "removeByOutput", example = @Example("item('minecraft:diamond')"))))
 public class Scrapbox extends AbstractGenericTechRebornRegistry {
 
     @RecipeBuilderDescription(example = {
@@ -23,12 +22,6 @@ public class Scrapbox extends AbstractGenericTechRebornRegistry {
     @Override
     public String reference() {
         return Reference.SCRAPBOX_RECIPE;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:diamond')"))
-    public void removeByOutput(IIngredient output) {
-        super.removeByOutput(output);
     }
 
     @Property(property = "output", comp = @Comp(eq = 1))

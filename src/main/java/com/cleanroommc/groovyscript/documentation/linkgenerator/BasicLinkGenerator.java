@@ -6,7 +6,7 @@ import com.cleanroommc.groovyscript.documentation.Documentation;
 
 /**
  * Parses a class and converts it into a relative link to a website.
- * By default, converts files to a location on CleanroomMC's Groovyscript repository and uses Groovyscript's version,
+ * By default, converts files to a location on the CleanroomMC Groovyscript repository and uses GroovyScript's version,
  * but can be completely overwritten to link to anywhere.
  * <br>
  * An addon should replace {@link #domain()} and {@link #version()} with a link to their own repo, e.g.
@@ -14,6 +14,15 @@ import com.cleanroommc.groovyscript.documentation.Documentation;
  * and the version of the addon.
  */
 public class BasicLinkGenerator implements ILinkGenerator {
+
+    /**
+     * Ensure that the domain and path are separated by a {@code /} so the url isn't invalid due a missing slash.
+     * (this was a common issue).
+     */
+    private static String ensureSlash(String input) {
+        if (input.charAt(input.length() - 1) == '/') return input;
+        return input + '/';
+    }
 
     @Override
     public String id() {
@@ -46,6 +55,6 @@ public class BasicLinkGenerator implements ILinkGenerator {
 
     @Override
     public String convert(String location) {
-        return domain() + path() + trimmedLocation(location) + extension();
+        return ensureSlash(domain()) + ensureSlash(path()) + trimmedLocation(location) + extension();
     }
 }

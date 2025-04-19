@@ -6,88 +6,52 @@ import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
-import com.google.common.collect.ComparisonChain;
+import com.cleanroommc.groovyscript.documentation.format.IFormat;
+import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.resources.I18n;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.AnnotatedType;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class Exporter {
 
     private static final String INDEX_FILE_NAME = "index.md";
     private static final String NAV_FILE_NAME = "!navigation.md";
     private static final String PRINT_MOD_DETECTED = "log.info 'mod \\'%s\\' detected, running script'";
-    private static final Pattern CLASS_NAME_PATTERN = Pattern.compile("(?>\\b)(?>[a-zA-Z0-9_]+\\.)+([a-zA-Z0-9_$]+)");
 
-    public static String simpleSignature(Method method) {
-        return adjustVarArgs(method, signature(method, Exporter::simpleSignature));
-    }
+    private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
-    public static String simpleSignature(Method method, Map<String, String> types) {
-        return adjustVarArgs(method, signature(method, param -> Exporter.simpleSignature(types.getOrDefault(param, param))));
-    }
-
-    private static String signature(Method method, Function<String, String> parseParameterFunction) {
-        return Arrays.stream(method.getAnnotatedParameterTypes())
-                .map(AnnotatedType::getType)
-                .map(Type::getTypeName)
-                .map(parseParameterFunction)
-                .collect(Collectors.joining(", "));
-    }
-
-    public static String simpleSignature(String name) {
-        return CLASS_NAME_PATTERN.matcher(name).replaceAll("$1").replaceAll("\\$", ".");
-    }
-
-    private static String adjustVarArgs(Method method, String signature) {
-        return method.isVarArgs() ? convertVarArgs(signature) : signature;
-    }
-
-    private static String convertVarArgs(String name) {
-        return name.substring(0, name.lastIndexOf("[]")) + "..." + name.substring(name.lastIndexOf("[]") + 2);
-    }
-
-
-    public static void generateWiki(File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+    public static void generateWiki(IFormat format, File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
-        List<INamed> registries = mod.get()
-                .getRegistries()
-                .stream()
-                .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
-                .distinct()
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
-                                .compare(left.getName(), right.getName())
-                                .result())
-                .collect(Collectors.toList());
+        Set<INamed> registries = new HashSet<>();
+        for (INamed named : mod.get().getRegistries()) {
+            var annotation = named.getClass().getAnnotation(RegistryDescription.class);
+            if (annotation == null) {
+                SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
+            } else {
+                registries.add(named);
+            }
+        }
 
         if (registries.isEmpty()) return;
 
-        for (INamed registry : registries) {
-            Registry example = new Registry(mod, registry);
-
-            String location = String.format("%s.md", registry.getName());
-            fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
-            try {
-                File file = new File(folder, location);
-                Files.write(file.toPath(), example.documentationBlock().trim().concat("\n").getBytes());
-            } catch (IOException e) {
-                GroovyScript.LOGGER.throwing(e);
-            }
-        }
+        registries.stream()
+                .sorted(ComparisonHelper::iNamed)
+                .forEach(registry -> {
+                    Registry example = new Registry(mod, registry);
+                    String location = String.format("%s.md", registry.getName());
+                    fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
+                    try {
+                        File file = new File(folder, location);
+                        Files.write(file.toPath(), example.documentationBlock().trim().concat("\n").getBytes());
+                    } catch (IOException e) {
+                        GroovyScript.LOGGER.throwing(e);
+                    }
+                });
 
         // TODO add bracket handlers
         //  maybe also add commands?
@@ -95,7 +59,7 @@ public class Exporter {
         StringBuilder index = new StringBuilder()
                 .append("---")
                 .append("\n")
-                .append(Documentation.DEFAULT_FORMAT.removeTableOfContentsText())
+                .append(format.removeTableOfContentsText())
                 .append("\n") // Removes the table of contents from the sidebar of indexes.
                 .append("---")
                 .append("\n\n\n")
@@ -131,7 +95,7 @@ public class Exporter {
             GroovyScript.LOGGER.throwing(e);
         }
 
-        if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
+        if (format.requiresNavFile()) {
             try {
                 File file = new File(folder, NAV_FILE_NAME);
                 Files.write(file.toPath(), navigation.toString().getBytes());
@@ -156,27 +120,28 @@ public class Exporter {
                 .append("\n");
 
         // Iterate through every registry of the mod once, in alphabetical order.
-        List<INamed> registries = mod.get()
-                .getRegistries()
-                .stream()
-                .distinct()
-                .filter(x -> x.getClass().isAnnotationPresent(RegistryDescription.class))
-                .filter(x -> x.getClass().getAnnotation(RegistryDescription.class).location().equals(target))
-                .sorted(
-                        (left, right) -> ComparisonChain.start()
-                                .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
-                                .compare(left.getName(), right.getName())
-                                .result())
-                .collect(Collectors.toList());
+        Set<INamed> registries = new HashSet<>();
+        for (INamed named : mod.get().getRegistries()) {
+            var annotation = named.getClass().getAnnotation(RegistryDescription.class);
+            if (annotation == null) {
+                SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
+            } else {
+                if (annotation.location().equals(target)) {
+                    registries.add(named);
+                }
+            }
+        }
 
         if (registries.isEmpty()) return;
 
-        for (INamed registry : registries) {
-            GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
-            Registry example = new Registry(mod, registry);
-            imports.addAll(example.getImports());
-            body.append(example.exampleBlock());
-        }
+        registries.stream()
+                .sorted(ComparisonHelper::iNamed)
+                .forEach(registry -> {
+                    GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
+                    Registry example = new Registry(mod, registry);
+                    imports.addAll(example.getImports());
+                    body.append(example.exampleBlock());
+                });
 
         if (!imports.isEmpty()) header.append("\n");
         imports.stream().distinct().sorted().forEach(i -> header.append("import ").append(i).append("\n"));
@@ -193,5 +158,13 @@ public class Exporter {
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
+    }
+
+    public static void logSkippedClasses() {
+        if (SKIPPED_CLASSES.isEmpty()) return;
+        GroovyLog.Msg log = GroovyLog.msg("Skipped documenting the following potentially valid locations (this may be the correct behavior!)");
+        SKIPPED_CLASSES.forEach((key, value) -> log.add(key + ": " + value.getName()));
+        log.debug().post();
+        SKIPPED_CLASSES.clear();
     }
 }

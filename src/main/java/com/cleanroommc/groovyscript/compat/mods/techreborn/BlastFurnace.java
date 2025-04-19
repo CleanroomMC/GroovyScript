@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.techreborn;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -10,7 +9,12 @@ import org.jetbrains.annotations.Nullable;
 import techreborn.api.Reference;
 import techreborn.api.recipe.machines.BlastFurnaceRecipe;
 
-@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.techreborn.blast_furnace.note0", type = Admonition.Type.INFO))
+@RegistryDescription(
+        admonition = @Admonition(value = "groovyscript.wiki.techreborn.blast_furnace.note0", type = Admonition.Type.INFO),
+        override = @MethodOverride(method = {
+                @MethodDescription(method = "removeByInput", example = @Example("item('techreborn:dust:1')")),
+                @MethodDescription(method = "removeByOutput", example = @Example("item('techreborn:ingot:12')"))
+        }))
 public class BlastFurnace extends AbstractGenericTechRebornRegistry {
 
     @RecipeBuilderDescription(example = {
@@ -24,18 +28,6 @@ public class BlastFurnace extends AbstractGenericTechRebornRegistry {
     @Override
     public String reference() {
         return Reference.BLAST_FURNACE_RECIPE;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('techreborn:dust:1')"))
-    public void removeByInput(IIngredient input) {
-        super.removeByInput(input);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('techreborn:ingot:12')"))
-    public void removeByOutput(IIngredient output) {
-        super.removeByOutput(output);
     }
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 2))
@@ -83,7 +75,16 @@ public class BlastFurnace extends AbstractGenericTechRebornRegistry {
         public @Nullable BlastFurnaceRecipe register() {
             if (!validate()) return null;
             ItemStack output2 = output.size() >= 2 ? output.get(1) : null;
-            BlastFurnaceRecipe recipe = new BlastFurnaceRecipe(Helper.getStackFromIIngredient(input.get(0)), input.size() == 2 ? Helper.getStackFromIIngredient(input.get(1)) : null, output.get(0), output2, time, perTick, neededHeat);
+            BlastFurnaceRecipe recipe = new BlastFurnaceRecipe(
+                    Helper.getStackFromIIngredient(input.get(0)),
+                    input.size() == 2
+                            ? Helper.getStackFromIIngredient(input.get(1))
+                            : null,
+                    output.get(0),
+                    output2,
+                    time,
+                    perTick,
+                    neededHeat);
             ModSupport.TECH_REBORN.get().blastFurnace.add(recipe);
             return recipe;
         }

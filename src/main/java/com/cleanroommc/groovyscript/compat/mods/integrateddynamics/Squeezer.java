@@ -33,7 +33,7 @@ public class Squeezer extends StandardListRegistry<IRecipe<IngredientRecipeCompo
             @Example(".input(item('minecraft:clay')).output(item('minecraft:clay_ball'), 1F).output(item('minecraft:clay_ball') * 2, 0.7F).output(item('minecraft:clay_ball') * 10, 0.2F).fluidOutput(fluid('lava') * 2000).mechanical().duration(5)"),
             @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay'), 0.5F)"),
             @Example(".input(item('minecraft:diamond')).fluidOutput(fluid('lava') * 10)")
-    }, requirement = @Property(property = "basic", defaultValue = "true"))
+    }, override = @RecipeBuilderOverride(requirement = @Property(property = "basic", defaultValue = "true")))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder().basic();
     }
