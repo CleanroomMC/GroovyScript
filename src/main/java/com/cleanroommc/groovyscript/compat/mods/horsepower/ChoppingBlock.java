@@ -101,7 +101,10 @@ public class ChoppingBlock extends StandardListRegistry<ChoppingBlockRecipe> {
             return this;
         }
 
-        // todo this can only handle an input with a size of 1, should validate that here
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
 
         @Override
         public String getErrorMsg() {

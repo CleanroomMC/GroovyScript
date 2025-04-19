@@ -53,6 +53,11 @@ public class Campfire extends StandardListRegistry<CampfireRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding FutureMC Campfire recipe";
         }
