@@ -10,13 +10,12 @@ import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
 import com.cleanroommc.groovyscript.event.ScriptRunEvent;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.GroovyHelper;
+import com.cleanroommc.groovyscript.helper.MetaClassExpansion;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptEarlyCompiler;
-import groovy.lang.Binding;
-import groovy.lang.Closure;
-import groovy.lang.GroovyRuntimeException;
-import groovy.lang.Script;
+import groovy.lang.*;
 import groovy.util.ResourceException;
 import groovy.util.ScriptException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -59,6 +58,8 @@ public class GroovyScriptSandbox {
         registerBinding("Mods", ModSupport.INSTANCE);
         registerBinding("Log", GroovyLog.get());
         registerBinding("EventManager", GroovyEventManager.INSTANCE);
+
+        ExpansionHelper.mixinClass(MetaClass.class, MetaClassExpansion.class);
 
         getImportCustomizer().addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         getImportCustomizer().addImports(
