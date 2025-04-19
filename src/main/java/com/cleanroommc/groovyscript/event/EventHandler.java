@@ -33,6 +33,7 @@ import net.minecraftforge.client.event.ClientChatEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.RegistryEvent;
@@ -81,7 +82,9 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void createSpawnPosition(WorldEvent.CreateSpawnPosition event) {
-        VanillaModule.gameRule.setDefaultGameRules(event.getWorld().getGameRules());
+        // only want to execute this for the overworld
+        var target = DimensionManager.getWorld(0);
+        if (event.getWorld() == target) VanillaModule.gameRule.applyDefaultGameRules(event.getWorld().getGameRules());
     }
 
     @SubscribeEvent
@@ -110,7 +113,7 @@ public class EventHandler {
         if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
             data = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         }
-        if (VanillaModule.player.testingStartingItems || !data.getBoolean(Player.GIVEN_ITEMS)) {
+        if (VanillaModule.player.isTestingStartingItems() || !data.getBoolean(Player.GIVEN_ITEMS)) {
             VanillaModule.player.addToInventory(event.player.inventory);
             data.setBoolean(Player.GIVEN_ITEMS, true);
             tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
