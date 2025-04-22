@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.compat.mods.jei;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.compat.vanilla.command.infoparser.GenericInfoParser;
 import com.cleanroommc.groovyscript.core.mixin.jei.ModRegistryAccessor;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
 import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +38,11 @@ public class InfoParserTab extends GenericInfoParser<IRecipeCategory> {
     @Override
     @SuppressWarnings("rawtypes")
     public void parse(InfoParserPackage info) {
+        // only runs client-side
+        if (!FMLCommonHandler.instance().getSide().isClient()) {
+            GroovyLog.get().debug("Attempted to check the JEI tab via info parser server-side");
+            return;
+        }
         if (info.getStack().isEmpty()) return;
 
         // this gets all categories the item appears on - and there isn't any inbuilt method to get *just* catalysts.
