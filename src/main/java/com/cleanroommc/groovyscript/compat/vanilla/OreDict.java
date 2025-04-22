@@ -2,12 +2,16 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
+import com.cleanroommc.groovyscript.helper.ingredient.OrIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -18,6 +22,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class OreDict extends VirtualizedRegistry<OreDictEntry> {
@@ -149,5 +154,30 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
                 remove(name, stack);
             }
         }
+    }
+
+    @MethodDescription(type = MethodDescription.Type.QUERY)
+    public SimpleObjectStream<String> streamOreNames() {
+        return new SimpleObjectStream<>(OreDictionaryAccessor.getIdToName()).setRemover(this::removeAll);
+    }
+
+    @MethodDescription(type = MethodDescription.Type.QUERY, example = @Example("'ingot.*'"))
+    public IIngredient getOres(String pattern) {
+        return getOres(Pattern.compile(pattern));
+    }
+
+    @MethodDescription(type = MethodDescription.Type.QUERY, example = {
+            @Example("~/.*Gold/"),
+            @Example("~/.*or.*/"),
+            @Example("~/.*/"),
+    })
+    public IIngredient getOres(Pattern pattern) {
+        var ingredient = new OrIngredient();
+        for (var ore : OreDictionaryAccessor.getIdToName()) {
+            if (pattern.matcher(ore).matches()) {
+                ingredient.or(new OreDictIngredient(ore));
+            }
+        }
+        return ingredient;
     }
 }
