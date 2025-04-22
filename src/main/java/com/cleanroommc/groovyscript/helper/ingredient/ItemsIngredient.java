@@ -85,11 +85,6 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
         return false;
     }
 
-    // protected since modifying un-copied stack directly can result in unexpected results
-    protected List<ItemStack> getItemStacks() {
-        return Collections.unmodifiableList(this.itemStacks);
-    }
-
     @Override
     public @NotNull Iterator<ItemStack> iterator() {
         return new AbstractIterator<>() {
