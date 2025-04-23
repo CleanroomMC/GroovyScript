@@ -16,7 +16,8 @@ public interface InfoParser {
     /**
      * Priority of the parser for determining the order they are logged in chat,
      * with lowest being first and highest being last.
-     * The is 100, and {@link com.cleanroommc.groovyscript.compat.vanilla.command.infoparser.InfoParserItem#priority()} is set to 1.
+     * The default for {@link com.cleanroommc.groovyscript.compat.vanilla.command.infoparser.GenericInfoParser GenericInfoParser} 100,
+     * and {@link com.cleanroommc.groovyscript.compat.vanilla.command.infoparser.InfoParserItem#priority() InfoParserItem.priority()} is set to 1.
      *
      * @return the priority of the Parser
      */
