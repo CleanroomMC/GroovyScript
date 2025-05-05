@@ -91,7 +91,7 @@ public class AsmDecompileHelper {
     }
 
     /**
-     * Finds decompiled class bytes via forge class loader.
+     * Old way of finding classes. This does read java classes and causes a crash on java 24.
      */
     public static @Nullable ClassStub legacyFindDecompiledClass(String className, URL resource) {
         SoftReference<ClassStub> ref = stubCache.get(className);
