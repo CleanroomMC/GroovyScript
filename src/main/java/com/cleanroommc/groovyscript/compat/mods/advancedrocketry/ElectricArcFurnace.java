@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileElectricArcFurnace;
@@ -12,7 +11,10 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.input_slots", type = Admonition.Type.WARNING),
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.hatch_count_11", type = Admonition.Type.INFO),
-})
+}, override = @MethodOverride(method = {
+        @MethodDescription(method = "removeByOutput", example = @Example("item('libvulpes:productingot', 3)")),
+        @MethodDescription(method = "removeByInput", example = @Example("item('minecraft:iron_ingot')"))
+}))
 public class ElectricArcFurnace extends BaseRegistry {
 
     @RecipeBuilderDescription(
@@ -24,18 +26,6 @@ public class ElectricArcFurnace extends BaseRegistry {
     @Override
     protected Class<? extends TileMultiblockMachine> getMachineClass() {
         return TileElectricArcFurnace.class;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('libvulpes:productingot', 3)"))
-    public boolean removeByOutput(IIngredient output) {
-        return super.removeByOutput(output);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:iron_ingot')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
     }
 
     @Property(property = "input", comp = @Comp(unique = "groovyscript.wiki.advancedrocketry.input.required"))

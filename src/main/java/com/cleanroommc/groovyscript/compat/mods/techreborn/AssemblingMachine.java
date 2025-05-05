@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.techreborn;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -12,7 +11,10 @@ import techreborn.api.recipe.Recipes;
 
 import java.util.stream.Collectors;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = {
+        @MethodDescription(method = "removeByInput", example = @Example("item('techreborn:plates:35')")),
+        @MethodDescription(method = "removeByOutput", example = @Example("item('techreborn:part:29')"))
+}))
 public class AssemblingMachine extends AbstractPraescriptumRegistry {
 
     @RecipeBuilderDescription(example = {
@@ -26,18 +28,6 @@ public class AssemblingMachine extends AbstractPraescriptumRegistry {
     @Override
     public RecipeHandler handler() {
         return Recipes.assemblingMachine;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('techreborn:plates:35')"))
-    public void removeByInput(IIngredient input) {
-        super.removeByInput(input);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('techreborn:part:29')"))
-    public void removeByOutput(IIngredient output) {
-        super.removeByOutput(output);
     }
 
     @Property(property = "input", comp = @Comp(eq = 2))

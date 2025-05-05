@@ -208,8 +208,8 @@ mods.roots.pacifist.recipeBuilder()
 
 
 // Predicates:
-// Predicates are used in Transmution and RunicShearBlock. They either match all blockstates of a block, or all blockstates
-// that have the given properties that match the input blockstate.
+// Predicates are used in Transmutation and RunicShearBlock. They either match all blockstates of a block, or all
+// blockstates that have the given properties that match the input blockstate.
 
 mods.roots.predicates.stateBuilder()
     .blockstate(blockstate('minecraft:red_flower'))

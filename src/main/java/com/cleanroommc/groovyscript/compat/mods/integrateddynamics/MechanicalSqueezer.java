@@ -21,7 +21,7 @@ public class MechanicalSqueezer extends StandardListRegistry<IRecipe<IngredientR
         return Configs.isEnabled(BlockMechanicalSqueezerConfig.class);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay') * 16, 0.9F)"), requirement = @Property(property = "mechanical", defaultValue = "true"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay') * 16, 0.9F)"), override = @RecipeBuilderOverride(requirement = @Property(property = "mechanical", defaultValue = "true")))
     public Squeezer.RecipeBuilder recipeBuilder() {
         return new Squeezer.RecipeBuilder().mechanical();
     }

@@ -20,7 +20,7 @@ public class MechanicalDryingBasin extends StandardListRegistry<IRecipe<Ingredie
         return Configs.isEnabled(BlockMechanicalDryingBasinConfig.class);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('water') * 50).fluidOutput(fluid('lava') * 20000).duration(300)"), requirement = @Property(property = "mechanical", defaultValue = "true"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('water') * 50).fluidOutput(fluid('lava') * 20000).duration(300)"), override = @RecipeBuilderOverride(requirement = @Property(property = "mechanical", defaultValue = "true")))
     public DryingBasin.RecipeBuilder recipeBuilder() {
         return new DryingBasin.RecipeBuilder().mechanical();
     }

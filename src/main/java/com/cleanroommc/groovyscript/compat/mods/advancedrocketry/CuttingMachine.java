@@ -1,13 +1,17 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileCuttingMachine;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
+@RegistryDescription(
+        admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
+        override = @MethodOverride(method = {
+                @MethodDescription(method = "removeByOutput", example = @Example("item('minecraft:planks', 1)")),
+                @MethodDescription(method = "removeByInput", example = @Example("item('advancedrocketry:alienwood')"))
+        }))
 public class CuttingMachine extends BaseRegistry {
 
     @RecipeBuilderDescription(
@@ -19,18 +23,6 @@ public class CuttingMachine extends BaseRegistry {
     @Override
     protected Class<? extends TileMultiblockMachine> getMachineClass() {
         return TileCuttingMachine.class;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:planks', 1)"))
-    public boolean removeByOutput(IIngredient output) {
-        return super.removeByOutput(output);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('advancedrocketry:alienwood')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
     }
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 4))

@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileCentrifuge;
@@ -10,7 +9,7 @@ import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 @RegistryDescription(admonition = {
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
         @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.output_slots", type = Admonition.Type.WARNING),
-})
+}, override = @MethodOverride(method = @MethodDescription(method = "removeByInput", example = @Example("fluid('enrichedlava')"))))
 public class Centrifuge extends BaseRegistry {
 
     @RecipeBuilderDescription(
@@ -22,12 +21,6 @@ public class Centrifuge extends BaseRegistry {
     @Override
     protected Class<? extends TileMultiblockMachine> getMachineClass() {
         return TileCentrifuge.class;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("fluid('enrichedlava')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 1))
