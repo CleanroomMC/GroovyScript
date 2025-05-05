@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -13,6 +14,10 @@ import java.util.List;
 public class InfoParserItem extends GenericInfoParser<ItemStack> {
 
     public static final InfoParserItem instance = new InfoParserItem();
+
+    private static void copyToClipboard(String text) {
+        GuiScreen.setClipboardString(text);
+    }
 
     @Override
     public int priority() {
@@ -39,7 +44,8 @@ public class InfoParserItem extends GenericInfoParser<ItemStack> {
         if (entries.hasNext()) {
             ItemStack entry = entries.next();
             messages.add(information(entry, prettyNbt));
-            GuiScreen.setClipboardString(copyText(entry, prettyNbt));
+            // can only copy to clipboard if a client is running this
+            if (FMLCommonHandler.instance().getSide().isClient()) copyToClipboard(copyText(entry, false));
         }
         while (entries.hasNext()) {
             messages.add(information(entries.next(), prettyNbt));
