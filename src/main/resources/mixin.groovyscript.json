@@ -23,6 +23,7 @@
     "TileEntityPistonMixin",
     "VillagerProfessionAccessor",
     "groovy.AsmDecompilerMixin",
+    "groovy.ClassNodeResolverMixin",
     "groovy.ClosureMixin",
     "groovy.CompUnitClassGenMixin",
     "groovy.Java8Mixin",

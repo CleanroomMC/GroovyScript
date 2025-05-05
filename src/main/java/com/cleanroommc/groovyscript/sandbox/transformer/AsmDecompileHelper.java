@@ -1,21 +1,34 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
+import groovy.lang.GroovyRuntimeException;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.codehaus.groovy.ast.decompiled.ClassStub;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
+import org.codehaus.groovy.util.URLStreams;
+import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.*;
 import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.ClassNode;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 
 public class AsmDecompileHelper {
 
@@ -25,6 +38,8 @@ public class AsmDecompileHelper {
     private static Class<?> decompilerClass;
     private static Constructor<?> decompilerConstructor;
     private static Field resultField;
+
+    private static final Map<URI, SoftReference<ClassStub>> stubCache = new Object2ObjectOpenHashMap<>();
 
     static {
         transformerExceptions.add("javax.");
@@ -50,6 +65,67 @@ public class AsmDecompileHelper {
             resultField.setAccessible(true);
         }
         return (ClassStub) resultField.get(classVisitor);
+    }
+
+    public static @Nullable ClassStub findDecompiledClass(String className) {
+        ClassStub stub = null;
+        try {
+            // TODO consider transformer exclusions
+            byte[] bytes = Launch.classLoader.getClassBytes(className);
+            if (bytes == null) return null;
+            bytes = transform(className, bytes);
+            GroovyLog.get().info("Reading class file {} with version {}", className, readClassVersion(bytes));
+            groovyjarjarasm.asm.ClassReader classReader = new groovyjarjarasm.asm.ClassReader(bytes);
+            groovyjarjarasm.asm.ClassVisitor decompiler = makeGroovyDecompiler();
+            classReader.accept(decompiler, ClassReader.SKIP_FRAMES);
+            stub = AsmDecompileHelper.getDecompiledClass(decompiler);
+        } catch (IOException e) {
+            return null;
+        } catch (NoSuchFieldException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+        return stub;
+    }
+
+    public static @Nullable ClassStub legacyFindDecompiledClass(String className, URL resource) {
+        URI uri;
+        try {
+            uri = resource.toURI();
+        } catch (URISyntaxException e) {
+            throw new GroovyRuntimeException(e);
+        }
+        SoftReference<ClassStub> ref = stubCache.get(uri);
+        ClassStub stub = (ref != null ? ref.get() : null);
+        if (stub == null) {
+            try (InputStream stream = new BufferedInputStream(URLStreams.openUncachedStream(resource))) {
+                ClassReader classReader = new ClassReader(stream);
+                ClassNode classNode = new ClassNode();
+                classReader.accept(classNode, 0);
+                ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+                classNode.accept(writer);
+                byte[] bytes = writer.toByteArray();
+                if (!AsmDecompileHelper.remove(classNode.visibleAnnotations, AsmDecompileHelper.SIDE)) {
+                    bytes = AsmDecompileHelper.transform(classNode.name, bytes);
+                }
+                GroovyLog.get().info("Reading class file {} with version {}", className, readClassVersion(bytes));
+                // now decompile the class normally
+                groovyjarjarasm.asm.ClassReader classReader2 = new groovyjarjarasm.asm.ClassReader(bytes);
+                groovyjarjarasm.asm.ClassVisitor decompiler = AsmDecompileHelper.makeGroovyDecompiler();
+                classReader2.accept(decompiler, ClassReader.SKIP_FRAMES);
+                stub = AsmDecompileHelper.getDecompiledClass(decompiler);
+                stubCache.put(uri, new SoftReference<>(stub));
+            } catch (IOException |
+                     ClassNotFoundException |
+                     NoSuchFieldException |
+                     NoSuchMethodException |
+                     IllegalAccessException |
+                     InvocationTargetException |
+                     InstantiationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return stub;
     }
 
     public static byte[] transform(String className, byte[] bytes) {
@@ -90,12 +166,14 @@ public class AsmDecompileHelper {
         return false;
     }
 
-    public static class DecompileVisitor extends ClassVisitor {
+    public static short readClassVersion(byte[] classBytes) {
+        int offset = 6;
+        return (short) ((classBytes[offset] & 255) << 8 | classBytes[offset + 1] & 255);
+    }
 
-        private ClassStub result;
-
-        public DecompileVisitor() {
-            super(Opcodes.ASM5);
-        }
+    public static void writeClassVersion(byte[] classBytes, short version) {
+        int offset = 6;
+        classBytes[offset] = (byte) ((version >> 8) & 255);
+        classBytes[offset + 1] = (byte) (version & 255);
     }
 }

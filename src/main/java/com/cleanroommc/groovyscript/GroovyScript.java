@@ -101,7 +101,7 @@ public class GroovyScript {
 
     @Mod.EventHandler
     public void onConstruction(FMLConstructionEvent event) {
-        JavaVersionCheck.validateJavaVersion(event.getSide());
+        //JavaVersionCheck.validateJavaVersion(event.getSide());
         if (!SandboxData.isInitialised()) {
             LOGGER.throwing(new IllegalStateException("Sandbox data should have been initialised by now, but isn't! Trying to initialize again."));
             SandboxData.initialize((File) FMLInjectionData.data()[6], LOGGER);
