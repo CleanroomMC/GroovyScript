@@ -56,6 +56,11 @@ public class Anvil extends StandardListRegistry<AnvilRecipe> {
         }
 
         @Override
+        protected int getMaxItemInput() {
+            return 1;
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Random Things Anvil recipe";
         }
