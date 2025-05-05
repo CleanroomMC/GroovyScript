@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import java.net.URL;
-
-
 @Mixin(value = ClassNodeResolver.class, remap = false)
 public abstract class ClassNodeResolverMixin {
 
@@ -31,7 +28,7 @@ public abstract class ClassNodeResolverMixin {
 
     /**
      * @author brachy
-     * @reason bad
+     * @reason properly find classes
      */
     @Overwrite
     private ClassNodeResolver.LookupResult findDecompiled(final String name, final CompilationUnit compilationUnit, final GroovyClassLoader loader) {
@@ -41,11 +38,6 @@ public abstract class ClassNodeResolverMixin {
         }
 
         DecompiledClassNode asmClass = null;
-        /*URL resource = loader.getResource(name.replace('.', '/') + ".class");
-        ClassStub stub = null;
-        if (resource != null) {
-            stub = AsmDecompileHelper.legacyFindDecompiledClass(name, resource);
-        }*/
         ClassStub stub = AsmDecompileHelper.findDecompiledClass(name);
         if (stub != null) {
             asmClass = new DecompiledClassNode(stub, new AsmReferenceResolver((ClassNodeResolver) (Object) this, compilationUnit));

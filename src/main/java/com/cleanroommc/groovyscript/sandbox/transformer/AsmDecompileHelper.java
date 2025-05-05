@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
-import com.cleanroommc.groovyscript.api.GroovyLog;
-import groovy.lang.GroovyRuntimeException;
+import com.cleanroommc.groovyscript.helper.ReflectionHelper;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
@@ -22,8 +21,6 @@ import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +36,7 @@ public class AsmDecompileHelper {
     private static Constructor<?> decompilerConstructor;
     private static Field resultField;
 
-    private static final Map<URI, SoftReference<ClassStub>> stubCache = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, SoftReference<ClassStub>> stubCache = new Object2ObjectOpenHashMap<>();
 
     static {
         transformerExceptions.add("javax.");
@@ -67,6 +64,11 @@ public class AsmDecompileHelper {
         return (ClassStub) resultField.get(classVisitor);
     }
 
+    /**
+     * Finds decompiled class bytes via forge class loader.
+     * This magically fixes the "class version 68" error. Which was caused by loading java classes on java > 23.
+     * This will return null for java classes.
+     */
     public static @Nullable ClassStub findDecompiledClass(String className) {
         ClassStub stub = null;
         try {
@@ -74,7 +76,7 @@ public class AsmDecompileHelper {
             byte[] bytes = Launch.classLoader.getClassBytes(className);
             if (bytes == null) return null;
             bytes = transform(className, bytes);
-            GroovyLog.get().info("Reading class file {} with version {}", className, readClassVersion(bytes));
+            //GroovyLog.get().info("Reading class file {} with version {}", className, readClassVersion(bytes));
             groovyjarjarasm.asm.ClassReader classReader = new groovyjarjarasm.asm.ClassReader(bytes);
             groovyjarjarasm.asm.ClassVisitor decompiler = makeGroovyDecompiler();
             classReader.accept(decompiler, ClassReader.SKIP_FRAMES);
@@ -88,14 +90,11 @@ public class AsmDecompileHelper {
         return stub;
     }
 
+    /**
+     * Finds decompiled class bytes via forge class loader.
+     */
     public static @Nullable ClassStub legacyFindDecompiledClass(String className, URL resource) {
-        URI uri;
-        try {
-            uri = resource.toURI();
-        } catch (URISyntaxException e) {
-            throw new GroovyRuntimeException(e);
-        }
-        SoftReference<ClassStub> ref = stubCache.get(uri);
+        SoftReference<ClassStub> ref = stubCache.get(className);
         ClassStub stub = (ref != null ? ref.get() : null);
         if (stub == null) {
             try (InputStream stream = new BufferedInputStream(URLStreams.openUncachedStream(resource))) {
@@ -108,13 +107,13 @@ public class AsmDecompileHelper {
                 if (!AsmDecompileHelper.remove(classNode.visibleAnnotations, AsmDecompileHelper.SIDE)) {
                     bytes = AsmDecompileHelper.transform(classNode.name, bytes);
                 }
-                GroovyLog.get().info("Reading class file {} with version {}", className, readClassVersion(bytes));
+                //GroovyLog.get().info("Reading class file {} with version {}", className, readClassVersion(bytes));
                 // now decompile the class normally
                 groovyjarjarasm.asm.ClassReader classReader2 = new groovyjarjarasm.asm.ClassReader(bytes);
                 groovyjarjarasm.asm.ClassVisitor decompiler = AsmDecompileHelper.makeGroovyDecompiler();
                 classReader2.accept(decompiler, ClassReader.SKIP_FRAMES);
                 stub = AsmDecompileHelper.getDecompiledClass(decompiler);
-                stubCache.put(uri, new SoftReference<>(stub));
+                stubCache.put(className, new SoftReference<>(stub));
             } catch (IOException |
                      ClassNotFoundException |
                      NoSuchFieldException |
