@@ -14,6 +14,7 @@ public class AsmDecompilerMixin {
 
     @Inject(method = "parseClass", at = @At("HEAD"))
     private static void parseClass(URL url, CallbackInfoReturnable<ClassStub> cir) {
+        // redirected in ClassNodeResolverMixin
         throw new UnsupportedOperationException();
     }
 }
