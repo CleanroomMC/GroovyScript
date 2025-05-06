@@ -13,6 +13,8 @@ mods.minecraft.command.registerCommand('groovy_test', { server, sender, args -> 
 // A normal crafting recipe that takes place in the Vanilla Crafting Table, converting up to 9 items in a shapeless or
 // specific shaped arrangement into an output itemstack.
 
+mods.minecraft.crafting.remove(resource('minecraft:stonebrick'))
+mods.minecraft.crafting.remove('minecraft:mossy_stonebrick')
 mods.minecraft.crafting.removeByOutput(item('minecraft:gold_ingot'))
 // mods.minecraft.crafting.removeAll()
 

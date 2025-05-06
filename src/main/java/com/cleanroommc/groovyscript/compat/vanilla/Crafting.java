@@ -20,7 +20,10 @@ import java.util.List;
         @Admonition(type = Admonition.Type.TIP, value = "groovyscript.wiki.minecraft.crafting.note0"),
         @Admonition(type = Admonition.Type.NOTE, value = "groovyscript.wiki.minecraft.crafting.note1"),
         @Admonition(type = Admonition.Type.TIP, value = "groovyscript.wiki.minecraft.crafting.note2"),
-})
+}, override = @MethodOverride(method = {
+        @MethodDescription(method = "remove(Lnet/minecraft/util/ResourceLocation;)V", example = @Example("resource('minecraft:stonebrick')")),
+        @MethodDescription(method = "remove(Ljava/lang/String;)V", example = @Example("'minecraft:mossy_stonebrick'")),
+}))
 public class Crafting extends ForgeRegistryWrapper<IRecipe> {
 
     private static final Char2ObjectOpenHashMap<IIngredient> fallbackChars = new Char2ObjectOpenHashMap<>();
