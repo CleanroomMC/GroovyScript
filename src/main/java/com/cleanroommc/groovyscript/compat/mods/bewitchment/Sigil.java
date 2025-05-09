@@ -7,15 +7,15 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "remove(Lnet/minecraft/util/ResourceLocation;)V", example = @Example("resource('bewitchment:mending')"))))
 public class Sigil extends ForgeRegistryWrapper<SigilRecipe> {
 
     public Sigil() {
@@ -27,9 +27,19 @@ public class Sigil extends ForgeRegistryWrapper<SigilRecipe> {
         return new RecipeBuilder();
     }
 
-    public void removeByOutput(ItemStack output) {
-        this.getRegistry().getValuesCollection().forEach(recipe -> {
-            if (recipe.output.isItemEqual(output)) {
+    @MethodDescription(example = @Example("item('bewitchment:bottle_of_blood')"))
+    public void removeByInput(IIngredient input) {
+        getRegistry().forEach(recipe -> {
+            if (recipe.input.stream().map(Ingredient::getMatchingStacks).flatMap(Arrays::stream).anyMatch(input)) {
+                remove(recipe);
+            }
+        });
+    }
+
+    @MethodDescription(example = @Example("item('bewitchment:sigil_disorientation')"))
+    public void removeByOutput(IIngredient output) {
+        getRegistry().forEach(recipe -> {
+            if (output.test(recipe.output)) {
                 remove(recipe);
             }
         });
@@ -47,7 +57,7 @@ public class Sigil extends ForgeRegistryWrapper<SigilRecipe> {
 
         @Override
         public String getRecipeNamePrefix() {
-            return "sigil_recipe";
+            return "groovyscript_sigil_recipe_";
         }
 
         @Override

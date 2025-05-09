@@ -18,14 +18,24 @@ public class Oven extends ForgeRegistryWrapper<OvenRecipe> {
         super(GameRegistry.findRegistry(OvenRecipe.class));
     }
 
-    @RecipeBuilderDescription
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).requiresJar(false).byproduct(item('minecraft:gold_nugget')).byproductChance(0.2f)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(example = @Example("item('minecraft:sapling')"))
+    public void removeByInput(IIngredient input) {
+        getRegistry().forEach(recipe -> {
+            if (input.test(recipe.input)) {
+                remove(recipe);
+            }
+        });
+    }
+
+    @MethodDescription(example = {@Example("item('bewitchment:garlic_grilled')"), @Example("item('bewitchment:tallow')")})
     public void removeByOutput(IIngredient output) {
         getRegistry().forEach(recipe -> {
-            if (output.test(recipe.output)) {
+            if (output.test(recipe.output) || output.test(recipe.byproduct)) {
                 remove(recipe);
             }
         });
@@ -68,7 +78,12 @@ public class Oven extends ForgeRegistryWrapper<OvenRecipe> {
 
         @Override
         public String getRecipeNamePrefix() {
-            return "oven_recipe";
+            return "groovyscript_oven_recipe_";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

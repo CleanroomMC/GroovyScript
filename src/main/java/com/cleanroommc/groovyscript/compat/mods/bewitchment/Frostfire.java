@@ -10,6 +10,8 @@ import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 @RegistryDescription
 public class Frostfire extends ForgeRegistryWrapper<FrostfireRecipe> {
 
@@ -17,13 +19,23 @@ public class Frostfire extends ForgeRegistryWrapper<FrostfireRecipe> {
         super(GameRegistry.findRegistry(FrostfireRecipe.class));
     }
 
-    @RecipeBuilderDescription
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:water_bucket')).output(item('minecraft:ice'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(example = @Example("item('minecraft:iron_ore')"))
+    public void removeByInput(IIngredient input) {
+        getRegistry().forEach(recipe -> {
+            if (Arrays.stream(recipe.input.getMatchingStacks()).anyMatch(input)) {
+                remove(recipe);
+            }
+        });
+    }
+
+    @MethodDescription(example = @Example(value = "item('bewitchment:cold_iron_ingot')", commented = true))
     public void removeByOutput(IIngredient output) {
-        this.getRegistry().getValuesCollection().forEach(recipe -> {
+        getRegistry().forEach(recipe -> {
             if (output.test(recipe.output)) {
                 remove(recipe);
             }
@@ -42,7 +54,15 @@ public class Frostfire extends ForgeRegistryWrapper<FrostfireRecipe> {
 
         @Override
         public String getRecipeNamePrefix() {
-            return "frostfire_recipe";
+            return "groovyscript_frostfire_";
+        }
+
+        /**
+         * {@link com.bewitchment.common.block.tile.entity.TileEntityFrostfire TileEntityFrostfire} does {@code shrink(1)}
+         */
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

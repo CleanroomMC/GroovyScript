@@ -11,19 +11,38 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "remove(Lnet/minecraft/util/ResourceLocation;)V", example = @Example("resource('bewitchment:cobweb')"))))
 public class SpinningWheel extends ForgeRegistryWrapper<SpinningWheelRecipe> {
 
     public SpinningWheel() {
         super(GameRegistry.findRegistry(SpinningWheelRecipe.class));
     }
 
-    @RecipeBuilderDescription
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:string'), item('minecraft:string'), item('minecraft:string'), item('minecraft:string')).output(item('minecraft:gold_ingot') * 4, item('minecraft:web'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(example = @Example("item('minecraft:string')"))
+    public void removeByInput(IIngredient input) {
+        getRegistry().forEach(recipe -> {
+            if (recipe.input.stream().map(Ingredient::getMatchingStacks).flatMap(Arrays::stream).anyMatch(input)) {
+                remove(recipe);
+            }
+        });
+    }
+
+    @MethodDescription(example = @Example("item('bewitchment:spirit_string')"))
+    public void removeByOutput(IIngredient output) {
+        getRegistry().forEach(recipe -> {
+            if (recipe.output.stream().anyMatch(output)) {
+                remove(recipe);
+            }
+        });
     }
 
     @Property(property = "name")
@@ -38,7 +57,12 @@ public class SpinningWheel extends ForgeRegistryWrapper<SpinningWheelRecipe> {
 
         @Override
         public String getRecipeNamePrefix() {
-            return "spinning_wheel_recipe";
+            return "groovyscript_spinning_wheel_recipe_";
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override

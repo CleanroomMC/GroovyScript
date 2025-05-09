@@ -11,19 +11,38 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "remove(Lnet/minecraft/util/ResourceLocation;)V", example = @Example("resource('bewitchment:bottled_frostfire')"))))
 public class Distillery extends ForgeRegistryWrapper<DistilleryRecipe> {
 
     public Distillery() {
         super(GameRegistry.findRegistry(DistilleryRecipe.class));
     }
 
-    @RecipeBuilderDescription
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:glass_bottle')).input(item('minecraft:snow')).input(item('bewitchment:cleansing_balm')).input(item('bewitchment:fiery_unguent')).output(item('bewitchment:bottled_frostfire')).output(item('bewitchment:empty_jar') * 2)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
+    }
+
+    @MethodDescription(example = @Example("item('bewitchment:perpetual_ice')"))
+    public void removeByInput(IIngredient input) {
+        getRegistry().forEach(recipe -> {
+            if (recipe.input.stream().map(Ingredient::getMatchingStacks).flatMap(Arrays::stream).anyMatch(input)) {
+                remove(recipe);
+            }
+        });
+    }
+
+    @MethodDescription(example = @Example("item('bewitchment:demonic_elixir')"))
+    public void removeByOutput(IIngredient output) {
+        getRegistry().forEach(recipe -> {
+            if (recipe.output.stream().anyMatch(output)) {
+                remove(recipe);
+            }
+        });
     }
 
     @Property(property = "name")
@@ -38,7 +57,7 @@ public class Distillery extends ForgeRegistryWrapper<DistilleryRecipe> {
 
         @Override
         public String getRecipeNamePrefix() {
-            return "distillery_recipe";
+            return "groovyscript_distillery_recipe_";
         }
 
         @Override
@@ -46,6 +65,11 @@ public class Distillery extends ForgeRegistryWrapper<DistilleryRecipe> {
             validateItems(msg, 1, 6, 1, 6);
             validateFluids(msg);
             validateName();
+        }
+
+        @Override
+        protected int getMaxItemInput() {
+            return 1;
         }
 
         @Override
