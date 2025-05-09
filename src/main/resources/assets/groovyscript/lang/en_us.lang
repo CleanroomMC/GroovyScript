@@ -79,7 +79,9 @@ groovyscript.wiki.required_mods.desc=This compat requires the following mods to 
 groovyscript.wiki.not_fully_documented=This compat is not fully documented. Some or all of its features are not present on the wiki. View the source code to gain an accurate understanding of the compat.
 groovyscript.wiki.add_to_list=Add the given recipe to the recipe list
 groovyscript.wiki.remove_from_list=Removes the given recipe from the recipe list
-
+groovyscript.wiki.add_to_forge_registry=Add the given recipe to the forge registry
+groovyscript.wiki.remove_resource_from_forge_registry=Removes the given ResourceLocation entry from the forge registry
+groovyscript.wiki.remove_from_forge_registry=Removes the given recipe from the forge registry
 
 groovyscript.wiki.requires=Requires %s.
 groovyscript.wiki.default=(Default `%s`).
