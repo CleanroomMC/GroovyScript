@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -171,6 +172,10 @@ public class GroovyScriptCodeConverter {
 
     public static String asGroovyCode(Entity entity, boolean colored) {
         return formatResourceLocation("entity", EntityList.getKey(entity), colored);
+    }
+
+    public static String asGroovyCode(EntityEntry entity, boolean colored) {
+        return formatForgeRegistryImpl("entity", entity, colored);
     }
 
     public static String asGroovyCode(CreativeTabs tab, boolean colored) {
