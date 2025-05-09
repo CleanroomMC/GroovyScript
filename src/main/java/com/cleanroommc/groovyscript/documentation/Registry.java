@@ -11,6 +11,7 @@ import com.cleanroommc.groovyscript.documentation.helper.LangHelper;
 import com.cleanroommc.groovyscript.documentation.helper.descriptor.DescriptorHelper;
 import com.cleanroommc.groovyscript.documentation.helper.descriptor.MethodAnnotation;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -274,9 +275,13 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         List<String> exampleLines = new ArrayList<>();
         List<String> annotations = new ArrayList<>();
+        Set<Method> describedMethods = new ObjectOpenHashSet<>();
 
         for (MethodAnnotation<MethodDescription> method : methods) {
-            out.append(methodDescription(method));
+            // only add the method description if it is the first for the targeted method
+            if (describedMethods.add(method.method())) {
+                out.append(methodDescription(method));
+            }
             if (method.annotation().example().length > 0 && Arrays.stream(method.annotation().example()).anyMatch(x -> !x.value().isEmpty())) {
                 exampleLines.addAll(Arrays.stream(method.annotation().example()).flatMap(example -> Stream.of(methodExample(method.method(), example.value()))).collect(Collectors.toList()));
             } else if (method.method().getParameterTypes().length == 0) {
