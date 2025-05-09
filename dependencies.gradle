@@ -50,7 +50,7 @@ final def mod_dependencies = [
         'better-with-addons-268326:2899407'                   : [project.debug_better_with_addons],
         'bwm-core-294335:2624990'                             : [project.debug_better_with_addons, project.debug_better_with_mods],
         'bwm-suite-246760:3289033'                            : [project.debug_better_with_addons, project.debug_better_with_mods],
-        'bewitchment-legacy-285439:3256343'                   : [project.debug_bewitchment],
+        'bewitchment-legacy-285439:6379256'                   : [project.debug_bewitchment],
         'blood-arsenal-228823:2904183'                        : [project.debug_blood_arsenal],
         'blood-magic-224791:2822288'                          : [project.debug_blood_arsenal, project.debug_blood_magic],
         'guide-api-228832:2645992'                            : [project.debug_blood_arsenal, project.debug_blood_magic, project.debug_woot],
