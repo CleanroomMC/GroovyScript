@@ -2,8 +2,6 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: rustic
 
-import net.minecraft.potion.PotionEffect
-
 log.info 'mod \'rustic\' detected, running script'
 
 // Alchemy Condenser:
