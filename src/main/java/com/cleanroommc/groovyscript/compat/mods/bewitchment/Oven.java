@@ -32,7 +32,9 @@ public class Oven extends ForgeRegistryWrapper<OvenRecipe> {
         });
     }
 
-    @MethodDescription(example = {@Example("item('bewitchment:garlic_grilled')"), @Example("item('bewitchment:tallow')")})
+    @MethodDescription(example = {
+            @Example("item('bewitchment:garlic_grilled')"), @Example("item('bewitchment:tallow')")
+    })
     public void removeByOutput(IIngredient output) {
         getRegistry().forEach(recipe -> {
             if (output.test(recipe.output) || output.test(recipe.byproduct)) {

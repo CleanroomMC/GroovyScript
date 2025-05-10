@@ -131,6 +131,7 @@ public class AltarUpgrades extends VirtualizedRegistry<Map.Entry<Predicate<Block
         placedItem.getInventories()[0].insertItem(0, stack, false);
         //noinspection DataFlowIssue
         return remove(new BlockWorldState(null, null, false) {
+
             @Override
             public @NotNull IBlockState getBlockState() {
                 return ModObjects.placed_item.getDefaultState();
@@ -147,6 +148,7 @@ public class AltarUpgrades extends VirtualizedRegistry<Map.Entry<Predicate<Block
     public boolean remove(IBlockState state) {
         //noinspection DataFlowIssue
         return remove(new BlockWorldState(null, null, false) {
+
             @Override
             public @NotNull IBlockState getBlockState() {
                 return state;

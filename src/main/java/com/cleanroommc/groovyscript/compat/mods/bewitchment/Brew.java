@@ -125,5 +125,4 @@ public class Brew extends ForgeRegistryWrapper<com.bewitchment.api.registry.Brew
             return recipe;
         }
     }
-
 }

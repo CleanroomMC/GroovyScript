@@ -180,5 +180,4 @@ public class Ritual extends ForgeRegistryWrapper<com.bewitchment.api.registry.Ri
             return recipe;
         }
     }
-
 }
