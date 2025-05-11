@@ -7,9 +7,11 @@ import com.cleanroommc.groovyscript.sandbox.engine.ScriptEngine;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.*;
 import groovy.lang.Binding;
 import groovy.lang.Script;
 import groovyjarjarasm.asm.ClassVisitor;
@@ -27,9 +29,12 @@ import org.codehaus.groovy.control.customizers.CompilationCustomizer;
 import org.jetbrains.annotations.ApiStatus;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfig;
+import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.Cancellable;
 import org.spongepowered.asm.mixin.transformer.Config;
 
 import java.io.File;
@@ -137,7 +142,19 @@ public class MixinSandbox extends AbstractGroovySandbox {
                         ModifyReceiver.class,
                         ModifyReturnValue.class,
                         Local.class,
-                        Share.class)
+                        Share.class,
+                        LocalRef.class,
+                        LocalIntRef.class,
+                        LocalLongRef.class,
+                        LocalFloatRef.class,
+                        LocalDoubleRef.class,
+                        LocalBooleanRef.class,
+                        LocalByteRef.class,
+                        LocalShortRef.class,
+                        Cancellable.class,
+                        Invoker.class,
+                        Accessor.class,
+                        WrapMethod.class)
                         .stream()
                         .map(Class::getName)
                         .toArray(String[]::new));
