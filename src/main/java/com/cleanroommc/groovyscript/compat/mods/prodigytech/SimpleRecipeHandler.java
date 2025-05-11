@@ -77,7 +77,7 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
         }
     }
 
-    @RegistryDescription
+    @RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "removeByInput", example = @Example("item('minecraft:gravel')"))))
     public static class RotaryGrinder extends SimpleRecipeHandler {
 
         RotaryGrinder() {
@@ -88,15 +88,9 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
         protected int getDefaultTime() {
             return Config.rotaryGrinderProcessTime;
         }
-
-        @Override
-        @MethodDescription(example = @Example("item('minecraft:gravel')"))
-        public boolean removeByInput(IIngredient input) {
-            return super.removeByInput(input);
-        }
     }
 
-    @RegistryDescription
+    @RegistryDescription(override = @MethodOverride(method = @MethodDescription(method = "removeByInput", example = @Example("item('minecraft:gravel')"))))
     public static class MagneticReassembler extends SimpleRecipeHandler {
 
         MagneticReassembler() {
@@ -106,12 +100,6 @@ public abstract class SimpleRecipeHandler extends SimpleRecipeHandlerAbstract<Si
         @Override
         protected int getDefaultTime() {
             return Config.magneticReassemblerProcessTime;
-        }
-
-        @Override
-        @MethodDescription(example = @Example("item('minecraft:gravel')"))
-        public boolean removeByInput(IIngredient input) {
-            return super.removeByInput(input);
         }
     }
 }

@@ -185,12 +185,6 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
                 cls = recompile(source, name);
             } catch (IOException ioe) {
                 last = new ClassNotFoundException("IOException while opening groovy source: " + name, ioe);
-            } finally {
-                if (cls == null) {
-                    removeClassCacheEntry(name);
-                } else {
-                    setClassCacheEntry(cls);
-                }
             }
         }
 

@@ -1,21 +1,26 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.codehaus.groovy.ast.decompiled.ClassStub;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Opcodes;
+import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 
+import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 
 public class AsmDecompileHelper {
 
@@ -25,6 +30,8 @@ public class AsmDecompileHelper {
     private static Class<?> decompilerClass;
     private static Constructor<?> decompilerConstructor;
     private static Field resultField;
+
+    private static final Map<String, SoftReference<ClassStub>> stubCache = new Object2ObjectOpenHashMap<>();
 
     static {
         transformerExceptions.add("javax.");
@@ -50,6 +57,34 @@ public class AsmDecompileHelper {
             resultField.setAccessible(true);
         }
         return (ClassStub) resultField.get(classVisitor);
+    }
+
+    /**
+     * Finds decompiled class bytes via forge class loader.
+     * This magically fixes the "class version 68" error. Which was caused by loading java classes on java > 23.
+     * This will return null for java classes.
+     */
+    public static @Nullable ClassStub findDecompiledClass(String className) {
+        SoftReference<ClassStub> ref = stubCache.get(className);
+        ClassStub stub = ref == null ? null : ref.get();
+        if (stub != null) return stub;
+        try {
+            // TODO consider transformer exclusions
+            byte[] bytes = Launch.classLoader.getClassBytes(className);
+            if (bytes == null) return null;
+            bytes = transform(className, bytes);
+            groovyjarjarasm.asm.ClassReader classReader = new groovyjarjarasm.asm.ClassReader(bytes);
+            groovyjarjarasm.asm.ClassVisitor decompiler = makeGroovyDecompiler();
+            classReader.accept(decompiler, ClassReader.SKIP_FRAMES);
+            stub = AsmDecompileHelper.getDecompiledClass(decompiler);
+            stubCache.put(className, new SoftReference<>(stub));
+        } catch (IOException e) {
+            return null;
+        } catch (NoSuchFieldException | ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException |
+                 NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+        return stub;
     }
 
     public static byte[] transform(String className, byte[] bytes) {
@@ -90,12 +125,14 @@ public class AsmDecompileHelper {
         return false;
     }
 
-    public static class DecompileVisitor extends ClassVisitor {
+    public static short readClassVersion(byte[] classBytes) {
+        int offset = 6;
+        return (short) ((classBytes[offset] & 255) << 8 | classBytes[offset + 1] & 255);
+    }
 
-        private ClassStub result;
-
-        public DecompileVisitor() {
-            super(Opcodes.ASM5);
-        }
+    public static void writeClassVersion(byte[] classBytes, short version) {
+        int offset = 6;
+        classBytes[offset] = (byte) ((version >> 8) & 255);
+        classBytes[offset + 1] = (byte) (version & 255);
     }
 }

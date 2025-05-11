@@ -1,13 +1,17 @@
 package com.cleanroommc.groovyscript.compat.mods.advancedrocketry;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import zmaster587.advancedRocketry.tile.multiblock.machine.TileElectrolyser;
 import zmaster587.libVulpes.tile.multiblock.TileMultiblockMachine;
 
-@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING))
+@RegistryDescription(
+        admonition = @Admonition(value = "groovyscript.wiki.advancedrocketry.admonition.weights", type = Admonition.Type.WARNING),
+        override = @MethodOverride(method = {
+                @MethodDescription(method = "removeByOutput", example = @Example(value = "fluid('oxygen')", commented = true)),
+                @MethodDescription(method = "removeByInput", example = @Example("fluid('water')"))
+        }))
 public class Electrolyser extends BaseRegistry {
 
     @RecipeBuilderDescription(
@@ -19,18 +23,6 @@ public class Electrolyser extends BaseRegistry {
     @Override
     protected Class<? extends TileMultiblockMachine> getMachineClass() {
         return TileElectrolyser.class;
-    }
-
-    @Override
-    @MethodDescription(example = @Example(value = "fluid('oxygen')", commented = true))
-    public boolean removeByOutput(IIngredient output) {
-        return super.removeByOutput(output);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("fluid('water')"))
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
     }
 
     @Property(property = "fluidInput", comp = @Comp(eq = 1))

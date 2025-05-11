@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.techreborn;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -10,7 +9,10 @@ import org.jetbrains.annotations.Nullable;
 import techreborn.api.Reference;
 import techreborn.api.recipe.machines.ImplosionCompressorRecipe;
 
-@RegistryDescription
+@RegistryDescription(override = @MethodOverride(method = {
+        @MethodDescription(method = "removeByInput", example = @Example("item('techreborn:ingot:22')")),
+        @MethodDescription(method = "removeByOutput", example = @Example("item('minecraft:diamond')"))
+}))
 public class ImplosionCompressor extends AbstractGenericTechRebornRegistry {
 
     @RecipeBuilderDescription(example = {
@@ -24,18 +26,6 @@ public class ImplosionCompressor extends AbstractGenericTechRebornRegistry {
     @Override
     public String reference() {
         return Reference.IMPLOSION_COMPRESSOR_RECIPE;
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('techreborn:ingot:22')"))
-    public void removeByInput(IIngredient input) {
-        super.removeByInput(input);
-    }
-
-    @Override
-    @MethodDescription(example = @Example("item('minecraft:diamond')"))
-    public void removeByOutput(IIngredient output) {
-        super.removeByOutput(output);
     }
 
     @Property(property = "input", comp = @Comp(gte = 1, lte = 2))

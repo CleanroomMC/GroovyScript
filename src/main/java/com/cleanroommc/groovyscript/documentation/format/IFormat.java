@@ -50,7 +50,7 @@ public interface IFormat {
     boolean hasTitleTemplate();
 
     /**
-     * @return if admonitions allow additional indentation within the block or if doing so will break the markdown parser
+     * @return if admonitions allow additional indentation within the block or if doing so will break the Markdown parser
      */
     boolean allowsIndentation();
 

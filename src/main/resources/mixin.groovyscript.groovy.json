@@ -9,6 +9,7 @@
   "required": true,
   "mixins": [
     "AsmDecompilerMixin",
+    "ClassNodeResolverMixin",
     "ClosureMixin",
     "CompUnitClassGenMixin",
     "Java8Mixin",

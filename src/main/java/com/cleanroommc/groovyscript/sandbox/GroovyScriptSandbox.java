@@ -6,10 +6,13 @@ import com.cleanroommc.groovyscript.event.GroovyEventManager;
 import com.cleanroommc.groovyscript.event.GroovyReloadEvent;
 import com.cleanroommc.groovyscript.event.ScriptRunEvent;
 import com.cleanroommc.groovyscript.helper.GroovyHelper;
+import com.cleanroommc.groovyscript.helper.MetaClassExpansion;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
+import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.sandbox.engine.ScriptEngine;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptCompiler;
 import com.cleanroommc.groovyscript.sandbox.transformer.GroovyScriptEarlyCompiler;
+import groovy.lang.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.MinecraftForge;
 import org.codehaus.groovy.control.CompilerConfiguration;
@@ -26,6 +29,8 @@ public class GroovyScriptSandbox extends AbstractGroovySandbox {
         registerGlobal("Mods", ModSupport.INSTANCE);
         registerGlobal("Log", GroovyLog.get());
         registerGlobal("EventManager", GroovyEventManager.INSTANCE);
+
+        ExpansionHelper.mixinClass(MetaClass.class, MetaClassExpansion.class);
 
         getImportCustomizer().addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         getImportCustomizer().addImports(
