@@ -4,8 +4,8 @@
   "target": "@env(PREINIT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
-  "priority": -100000000,
-  "mixinPriority": -100000000,
+  "priority": 100000000,
+  "mixinPriority": 100000000,
   "required": true,
   "mixins": [
     "AsmDecompilerMixin",
