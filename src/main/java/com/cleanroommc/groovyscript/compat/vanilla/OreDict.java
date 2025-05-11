@@ -2,6 +2,9 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,6 +19,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.ArrayList;
 import java.util.List;
 
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class OreDict extends VirtualizedRegistry<OreDictEntry> {
 
     public OreDict() {
@@ -30,14 +34,20 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         restoreFromBackup().forEach(entry -> OreDictionary.registerOre(entry.name, entry.stack));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(String name, Item item) {
         add(name, new ItemStack(item));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(String name, Block block) {
         add(name, new ItemStack(block));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {
+            @Example("'ingotGold', item('minecraft:nether_star')"),
+            @Example("'netherStar', item('minecraft:gold_ingot')")
+    })
     public void add(String name, ItemStack stack) {
         if (GroovyLog.msg("Error adding ore dictionary entry")
                 .add(StringUtils.isEmpty(name), () -> "Name must not be empty")
@@ -55,6 +65,7 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         OreDictionary.registerOre(entry.name, entry.stack);
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public List<ItemStack> getItems(String name) {
         return new ArrayList<>(OreDictionary.getOres(name, false));
     }
@@ -64,6 +75,7 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         return getItems(name);
     }
 
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public boolean exists(String name) {
         return OreDictionary.doesOreNameExist(name);
     }
@@ -73,6 +85,7 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         return OreDictionary.doesOreNameExist(name);
     }
 
+    @MethodDescription(example = @Example("'netherStar', item('minecraft:nether_star')"))
     public boolean remove(String name, ItemStack stack) {
         if (GroovyLog.msg("Error removing ore dictionary entry")
                 .add(StringUtils.isEmpty(name), () -> "Name must not be empty")
@@ -111,10 +124,12 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         return false;
     }
 
+    @MethodDescription(example = @Example(value = "'plankWood'", commented = true))
     public boolean clear(String name) {
         return removeAll(name);
     }
 
+    @MethodDescription(example = @Example(value = "'ingotIron'", commented = true), description = "groovyscript.wiki.minecraft.ore_dict.clear")
     public boolean removeAll(String name) {
         List<ItemStack> list = getItems(name);
         if (GroovyLog.msg("Error removing from OreDictionary entry")
@@ -127,6 +142,7 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         return true;
     }
 
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public void removeAll() {
         for (String name : OreDictionary.getOreNames()) {
             for (ItemStack stack : getItems(name)) {

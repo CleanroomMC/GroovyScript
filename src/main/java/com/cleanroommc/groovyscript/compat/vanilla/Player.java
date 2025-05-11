@@ -3,6 +3,10 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -11,16 +15,17 @@ import net.minecraft.item.ItemStack;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES, admonition = {
+        @Admonition(type = Admonition.Type.WARNING, value = "groovyscript.wiki.minecraft.player.note0"),
+        @Admonition(type = Admonition.Type.TIP, value = "groovyscript.wiki.minecraft.player.note1")
+})
 public class Player extends NamedRegistry implements IScriptReloadable {
 
     public static final String GIVEN_ITEMS = "GroovyScript:GivenItems";
-
-    public boolean testingStartingItems;
-    public boolean replaceDefaultInventory;
-
     private final List<ItemStack> givenItemsAnySlot = new ArrayList<>();
-
     private final Map<Integer, ItemStack> givenItemsSlots = new Int2ObjectOpenHashMap<>();
+    private boolean testingStartingItems;
+    private boolean replaceDefaultInventory;
 
     @GroovyBlacklist
     public void addToInventory(InventoryPlayer playerInv) {
@@ -42,10 +47,18 @@ public class Player extends NamedRegistry implements IScriptReloadable {
         givenItemsAnySlot.stream().map(ItemStack::copy).forEach(playerInv::addItemStackToInventory);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.player.addStartingItem0", example = {
+            @Example("item('minecraft:clay_ball')"),
+            @Example("item('minecraft:gold_ingot')"),
+            @Example("item('minecraft:diamond')"),
+            @Example("item('minecraft:nether_star')"),
+            @Example("item('minecraft:water_bucket')"),
+    })
     public void addStartingItem(ItemStack item) {
         this.addStartingItem(item, -1);
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.player.addStartingItem1")
     public void addStartingItem(ItemStack item, int slot) {
         if (slot > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
@@ -65,6 +78,7 @@ public class Player extends NamedRegistry implements IScriptReloadable {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("true, item('minecraft:clay').withNbt([display:[Name:'Hotbar']]), null, null, null, null, null, null, null, null, item('minecraft:clay').withNbt([display:[Name:'Top row of inventory']]), null, null, null, null, null, null, null, null, item('minecraft:clay').withNbt([display:[Name:'Middle row of inventory']]), null, null, null, null, null, null, null, null, item('minecraft:clay').withNbt([display:[Name:'Bottom row of inventory']]), null, null, null, null, null, null, null, null, item('minecraft:diamond_boots'), item('minecraft:diamond_leggings'), item('minecraft:diamond_chestplate'), item('minecraft:diamond_helmet'), item('minecraft:clay').withNbt([display:[Name:'Offhand']])"))
     public void setStartingItems(boolean isSlotSpecific, ItemStack... items) {
         if (items.length > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
@@ -82,6 +96,7 @@ public class Player extends NamedRegistry implements IScriptReloadable {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void setStartingItems(boolean isSlotSpecific, List<ItemStack> items) {
         if (items.size() > 41) {
             GroovyLog.msg("Warning: assigning items to a player's inventory slot greater than 41 may cause some items to not be received by the player.")
@@ -97,6 +112,21 @@ public class Player extends NamedRegistry implements IScriptReloadable {
             givenItemsAnySlot.clear();
             givenItemsAnySlot.addAll(items.stream().filter(Objects::nonNull).collect(Collectors.toList()));
         }
+    }
+
+    @MethodDescription(type = MethodDescription.Type.VALUE, example = @Example("true"))
+    public void setTestStartingItems(boolean value) {
+        testingStartingItems = value;
+    }
+
+    @MethodDescription(type = MethodDescription.Type.VALUE, example = @Example("true"))
+    public void setReplaceDefaultInventory(boolean value) {
+        replaceDefaultInventory = value;
+    }
+
+    @GroovyBlacklist
+    public boolean isTestingStartingItems() {
+        return testingStartingItems;
     }
 
     @Override
