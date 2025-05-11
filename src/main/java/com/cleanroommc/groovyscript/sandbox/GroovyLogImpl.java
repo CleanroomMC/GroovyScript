@@ -6,12 +6,13 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.intellij.lang.annotations.Flow;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,12 +40,17 @@ public class GroovyLogImpl implements GroovyLog {
     private PrintWriter printWriter;
     private final DateFormat timeFormat = new SimpleDateFormat("[HH:mm:ss]");
     private List<String> errors = new ArrayList<>();
+    private boolean passedEarly = false;
 
     private GroovyLogImpl() {
-        File minecraftHome = (File) FMLInjectionData.data()[6];
-        File logFile = new File(minecraftHome, "logs" + File.separator + getLogFileName());
+        File logFile = new File(SandboxData.getMinecraftHome(), "logs" + File.separator + getLogFileName());
         this.logFilePath = logFile.toPath();
         this.printWriter = setupLog(logFile);
+    }
+
+    @ApiStatus.Internal
+    public void setPassedEarly() {
+        this.passedEarly = true;
     }
 
     public void cleanLog() {
@@ -299,7 +305,15 @@ public class GroovyLogImpl implements GroovyLog {
     }
 
     private String formatLine(String level, String msg) {
-        return timeFormat.format(new Date()) + (FMLCommonHandler.instance().getEffectiveSide().isClient() ? " [CLIENT/" : " [SERVER/") + level + "]" + " [" + getSource() + "]: " + msg;
+        return timeFormat.format(new Date()) + " [" + getSide() + "/" + level + "]" + " [" + getSource() + "]: " + msg;
+    }
+
+    private String getSide() {
+        // if we load FMLCommonHandler to early it will cause class loading issues with other classes
+        // guess how long it took to figure this out
+        // if we are in early stage use fallback side which is available early, but might be inaccurate
+        Side side = this.passedEarly ? FMLCommonHandler.instance().getEffectiveSide() : FMLLaunchHandler.side();
+        return side.isClient() ? "CLIENT" : "SERVER";
     }
 
     private String getSource() {
