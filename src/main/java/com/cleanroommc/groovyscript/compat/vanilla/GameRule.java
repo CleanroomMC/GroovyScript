@@ -13,7 +13,7 @@ import net.minecraft.world.GameRules;
 
 import java.util.Map;
 
-@RegistryDescription(category = RegistryDescription.Category.ENTRIES, admonition= @Admonition(value = "groovyscript.wiki.minecraft.game_rule.note", type = Admonition.Type.WARNING))
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES, admonition = @Admonition(value = "groovyscript.wiki.minecraft.game_rule.note", type = Admonition.Type.WARNING))
 public class GameRule extends NamedRegistry implements IScriptReloadable {
 
     private static final String LOG_MESSAGE = "Could not find an already existing rule with the name {}. This may be intentional! If it is, you can disable this via `gameRule.setWarnNewGameRule(false)`";
