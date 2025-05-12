@@ -259,7 +259,7 @@ public class RunConfig {
     public Collection<File> getSortedFiles(File root, String loader) {
         List<String> paths = loaderPaths.get(loader);
         if (paths == null || paths.isEmpty()) return Collections.emptyList();
-        return SandboxData.getSortedFilesOf(root, paths);
+        return SandboxData.getSortedFilesOf(root, paths, isDebug());
     }
 
     private static String sanitizePath(String path) {

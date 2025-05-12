@@ -184,13 +184,13 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         List<CompiledScript> scripts = new ArrayList<>(files.size());
         for (File file : files) {
             CompiledScript cs = checkScriptLoadability(file);
-            if (!cs.preprocessorCheckFailed()) scripts.add(cs);
+            if (cs != null && !cs.preprocessorCheckFailed()) scripts.add(cs);
         }
         return scripts;
     }
 
     void loadScript(CompiledScript script) {
-        if (script.requiresReload() && !script.preprocessorCheckFailed()) {
+        if (script != null && script.requiresReload() && !script.preprocessorCheckFailed()) {
             Class<?> clazz = loadScriptClassInternal(new File(script.path), true);
             script.setRequiresReload(false);
             if (script.clazz == null) {
@@ -207,10 +207,13 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         return compiledScript;
     }
 
-    @NotNull
     CompiledScript checkScriptLoadability(File file) {
         String relativeFileName = FileUtil.relativize(this.scriptRoot.getPath(), file.getPath());
-        File relativeFile = new File(relativeFileName);
+        if (!FileUtil.validateScriptPath(relativeFileName)) {
+            // skip
+            return null;
+        }
+        // File relativeFile = new File(relativeFileName);
         long lastModified = file.lastModified();
         CompiledScript comp = this.index.get(relativeFileName);
 
@@ -294,8 +297,11 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
 
     private @Nullable Class<?> parseDynamicScript(File file, boolean isFileRelative) {
         if (isFileRelative) {
-            file = findScriptFile(file.getPath());
-            if (file == null) return null;
+            File absoutefile = findScriptFile(file.getPath());
+            if (absoutefile == null)  {
+                throw new IllegalArgumentException("Now file was found for '" + file.getPath() + "'");
+            }
+            file = absoutefile;
         }
         Class<?> clazz = null;
         try {
@@ -488,14 +494,16 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
                     File scriptFile = CustomGroovyScriptEngine.this.findScriptFileOfClass(name);
                     if (scriptFile != null) {
                         CompiledScript result = checkScriptLoadability(scriptFile);
-                        if (result.requiresReload() || result.clazz == null) {
-                            try {
-                                return new LookupResult(compilationUnit.addSource(scriptFile.toURI().toURL()), null);
-                            } catch (MalformedURLException e) {
-                                throw new RuntimeException(e);
+                        if (result != null) {
+                            if (result.requiresReload() || result.clazz == null) {
+                                try {
+                                    return new LookupResult(compilationUnit.addSource(scriptFile.toURI().toURL()), null);
+                                } catch (MalformedURLException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            } else {
+                                return new LookupResult(null, ClassHelper.make(result.clazz));
                             }
-                        } else {
-                            return new LookupResult(null, ClassHelper.make(result.clazz));
                         }
                     }
                     return super.findClassNode(origName, compilationUnit);

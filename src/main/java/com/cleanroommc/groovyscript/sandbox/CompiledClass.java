@@ -16,7 +16,7 @@ class CompiledClass {
     public static final String CLASS_SUFFIX = ".clz";
 
     final String path;
-    String name;
+    final String name;
     byte[] data;
     Class<?> clazz;
 
