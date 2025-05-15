@@ -8,7 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
     }
 
     @Override
-    public List<String> getOreDicts() {
+    public @UnmodifiableView Collection<String> getOreDicts() {
         return ImmutableList.of(getOreDict());
     }
 

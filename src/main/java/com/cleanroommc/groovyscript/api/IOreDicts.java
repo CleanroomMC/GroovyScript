@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.api;
 
-import java.util.List;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Collection;
 
 /**
  * Indicates something that represents one or more oredicts, typically an {@link IIngredient}.
@@ -13,7 +15,8 @@ public interface IOreDicts {
     //  and surrounding code changed appropriately.
 
     /**
-     * @return a list of oredict strings
+     * @return a collection of oredict strings
      */
-    List<String> getOreDicts();
+    @UnmodifiableView
+    Collection<String> getOreDicts();
 }
