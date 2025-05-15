@@ -3,9 +3,9 @@ package com.cleanroommc.groovyscript.api;
 import java.util.List;
 
 /**
- * Indicates that the IIngredient represents one or more oredicts.
+ * Indicates something that represents one or more oredicts, typically an {@link IIngredient}.
  */
-public interface IOreDicts extends IIngredient {
+public interface IOreDicts {
     // TODO
     //  There are a large number of places currently in the GroovyScript codebase
     //  that check if something is "instanceof OreDictIngredient".
