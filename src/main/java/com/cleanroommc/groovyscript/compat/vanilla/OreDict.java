@@ -26,8 +26,6 @@ import java.util.regex.Pattern;
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class OreDict extends VirtualizedRegistry<OreDictEntry> {
 
-    private static final Pattern WILDCARD = Pattern.compile("\\*");
-
     public OreDict() {
         super(Alias.generateOfClass(OreDict.class).andGenerate("OreDictionary"));
     }
@@ -164,7 +162,7 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY, example = @Example("'ingot*'"))
     public IIngredient getOres(String pattern) {
-        return getOres(Pattern.compile(WILDCARD.matcher(pattern).replaceAll(".*")));
+        return new OreDictMatcherIngredient(pattern);
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY, example = {

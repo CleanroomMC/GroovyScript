@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IOreDicts;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.item.ItemStack;
@@ -16,10 +15,16 @@ import java.util.regex.Pattern;
 
 public class OreDictMatcherIngredient extends IngredientBase implements IOreDicts {
 
+    private static final Pattern WILDCARD = Pattern.compile("\\*");
+
     private final Collection<String> oreDicts;
     private final ItemStackList itemStacks;
     private final Pattern pattern;
     private int amount = 1;
+
+    public OreDictMatcherIngredient(String pattern) {
+        this(Pattern.compile(WILDCARD.matcher(pattern).replaceAll(".*")));
+    }
 
     public OreDictMatcherIngredient(Pattern pattern) {
         this.pattern = pattern;
