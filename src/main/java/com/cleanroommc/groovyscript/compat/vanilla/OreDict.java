@@ -10,8 +10,7 @@ import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.ingredient.OrIngredient;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictMatcherIngredient;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -26,6 +25,8 @@ import java.util.regex.Pattern;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class OreDict extends VirtualizedRegistry<OreDictEntry> {
+
+    private static final Pattern WILDCARD = Pattern.compile("\\*");
 
     public OreDict() {
         super(Alias.generateOfClass(OreDict.class).andGenerate("OreDictionary"));
@@ -161,9 +162,9 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
         return new SimpleObjectStream<>(OreDictionaryAccessor.getIdToName()).setRemover(this::removeAll);
     }
 
-    @MethodDescription(type = MethodDescription.Type.QUERY, example = @Example("'ingot.*'"))
+    @MethodDescription(type = MethodDescription.Type.QUERY, example = @Example("'ingot*'"))
     public IIngredient getOres(String pattern) {
-        return getOres(Pattern.compile(pattern));
+        return getOres(Pattern.compile(WILDCARD.matcher(pattern).replaceAll(".*")));
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY, example = {
@@ -172,12 +173,6 @@ public class OreDict extends VirtualizedRegistry<OreDictEntry> {
             @Example("~/.*/"),
     })
     public IIngredient getOres(Pattern pattern) {
-        var ingredient = new OrIngredient();
-        for (var ore : OreDictionaryAccessor.getIdToName()) {
-            if (pattern.matcher(ore).matches()) {
-                ingredient.or(new OreDictIngredient(ore));
-            }
-        }
-        return ingredient;
+        return new OreDictMatcherIngredient(pattern);
     }
 }
