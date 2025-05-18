@@ -1429,7 +1429,7 @@ groovyscript.wiki.futuremc.campfire.description=Converts an input itemstack into
 groovyscript.wiki.futuremc.campfire.duration.value=Sets the time in ticks the takes to process
 
 groovyscript.wiki.futuremc.composter.title=Composter
-groovyscript.wiki.futuremc.composter.description=Converts input items into a chance to get a layer of compost, with 7 layers providing a single bonemeal
+groovyscript.wiki.futuremc.composter.description=Converts input items into a chance to get a layer of compost, with 8 layers providing a single bonemeal
 groovyscript.wiki.futuremc.composter.add=Adds entries in the format `ingredient`, `chance`
 groovyscript.wiki.futuremc.composter.remove=Removes an entry with the same Ingredient
 groovyscript.wiki.futuremc.composter.rarity.value=Sets the chance the recipe has to provide a layer of compost

@@ -43,7 +43,7 @@ mods.futuremc.campfire.recipeBuilder()
 
 
 // Composter:
-// Converts input items into a chance to get a layer of compost, with 7 layers providing a single bonemeal.
+// Converts input items into a chance to get a layer of compost, with 8 layers providing a single bonemeal.
 
 mods.futuremc.composter.removeByInput(item('minecraft:cactus'))
 // mods.futuremc.composter.removeAll()
