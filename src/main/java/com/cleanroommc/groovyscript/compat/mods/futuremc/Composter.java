@@ -9,6 +9,8 @@ import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import it.unimi.dsi.fastutil.objects.Object2ByteMap;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
@@ -83,6 +85,8 @@ public class Composter extends VirtualizedRegistry<Map.Entry<Ingredient, Byte>> 
     @Property(property = "input", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<Pair<Ingredient, Byte>> {
 
+        private static final ItemStack BONE_MEAL = new ItemStack(Items.DYE, 1, 15);
+
         @Property(comp = @Comp(gte = 0, lte = 100))
         private int chance;
 
@@ -106,6 +110,7 @@ public class Composter extends VirtualizedRegistry<Map.Entry<Ingredient, Byte>> 
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg);
+            if (!input.isEmpty()) msg.add(input.get(0).test(BONE_MEAL), "the input item cannot match bonemeal, yet it was {}", input.get(0));
             msg.add(chance < 0 || chance > 100, "chance must be greater than or equal to 0 and less than or equal to 100, yet it was {}", chance);
         }
 
