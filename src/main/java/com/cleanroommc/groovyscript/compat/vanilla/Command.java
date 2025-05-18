@@ -4,6 +4,9 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
+import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.command.SimpleCommand;
 import com.cleanroommc.groovyscript.core.mixin.CommandHandlerAccessor;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
@@ -20,6 +23,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
+@RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class Command extends NamedRegistry implements IScriptReloadable {
 
     private final List<ICommand> serverCommands = new ArrayList<>();
@@ -27,6 +31,7 @@ public class Command extends NamedRegistry implements IScriptReloadable {
     private final AbstractReloadableStorage<ICommand> clientReloadableCommands = new AbstractReloadableStorage<>();
     private boolean serverStarted = false;
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.command.registerCommand0")
     public void registerCommand(ICommand command) {
         if (GroovyScript.getSandbox().isRunning() && GroovyScript.getSandbox().getCurrentLoader().isReloadable()) {
             this.serverReloadableCommands.addScripted(command);
@@ -38,6 +43,7 @@ public class Command extends NamedRegistry implements IScriptReloadable {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.command.registerClientCommand0")
     public void registerClientCommand(ICommand command) {
         if (FMLCommonHandler.instance().getSide().isServer()) return;
 
@@ -46,22 +52,27 @@ public class Command extends NamedRegistry implements IScriptReloadable {
         }
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.command.registerCommand1")
     public void registerCommand(String name, String usage, SimpleCommand.ICommand command) {
         registerCommand(new SimpleCommand(name, usage, command));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.command.registerCommand2", example = @Example("'groovy_test', { server, sender, args -> sender.sendMessage('Hello from GroovyScript')}"))
     public void registerCommand(String name, SimpleCommand.ICommand command) {
         registerCommand(new SimpleCommand(name, "/" + name, command));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.command.registerClientCommand1")
     public void registerClientCommand(String name, String usage, SimpleCommand.ICommand command) {
         registerClientCommand(new SimpleCommand(name, usage, command));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.command.registerClientCommand2")
     public void registerClientCommand(String name, SimpleCommand.ICommand command) {
         registerClientCommand(new SimpleCommand(name, "/" + name, command));
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.command.registerCommand")
     public boolean registerCommand(CommandHandler handler, ICommand command) {
         if (handler.getCommands().containsKey(command.getName())) {
             GroovyLog.get().error("Error registering command '/{}', because a command with that name already exists", command.getName());

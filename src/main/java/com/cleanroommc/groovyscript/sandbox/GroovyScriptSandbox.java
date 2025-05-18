@@ -235,6 +235,7 @@ public class GroovyScriptSandbox {
     }
 
     protected void loadScripts(Binding binding, Set<String> executedClasses, boolean run) {
+        FileUtil.cleanScriptPathWarnedCache();
         for (CompiledScript compiledScript : this.engine.findScripts(getScriptFiles())) {
             if (!executedClasses.contains(compiledScript.path)) {
                 long t = System.currentTimeMillis();
