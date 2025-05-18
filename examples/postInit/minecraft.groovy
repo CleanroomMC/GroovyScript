@@ -206,7 +206,7 @@ mods.minecraft.player.addStartingItem(item('minecraft:water_bucket'))
 mods.minecraft.player.setStartingItems(true, item('minecraft:clay').withNbt([display:[Name:'Hotbar']]), null, null, null, null, null, null, null, null, item('minecraft:clay').withNbt([display:[Name:'Top row of inventory']]), null, null, null, null, null, null, null, null, item('minecraft:clay').withNbt([display:[Name:'Middle row of inventory']]), null, null, null, null, null, null, null, null, item('minecraft:clay').withNbt([display:[Name:'Bottom row of inventory']]), null, null, null, null, null, null, null, null, item('minecraft:diamond_boots'), item('minecraft:diamond_leggings'), item('minecraft:diamond_chestplate'), item('minecraft:diamond_helmet'), item('minecraft:clay').withNbt([display:[Name:'Offhand']]))
 
 mods.minecraft.player.setReplaceDefaultInventory(true)
-mods.minecraft.player.setTestStartingItems(true)
+// mods.minecraft.player.setTestStartingItems(true)
 
 // Rarity:
 // Control the rarity of the item, which typically is the name color, to any standard Rarity or any TextFormatting code.
