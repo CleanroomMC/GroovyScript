@@ -206,3 +206,4 @@ mods.thebetweenlands.steeping_pot.recipeBuilder()
 
 
 mods.thebetweenlands.steeping_pot.addAcceptedItem(item('minecraft:gold_block'))
+
