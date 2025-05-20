@@ -45,7 +45,7 @@ public class InfoParserItem extends GenericInfoParser<ItemStack> {
             ItemStack entry = entries.next();
             messages.add(information(entry, prettyNbt));
             // can only copy to clipboard if a client is running this
-            if (FMLCommonHandler.instance().getSide().isClient()) copyToClipboard(copyText(entry, false));
+            if (FMLCommonHandler.instance().getSide().isClient()) copyToClipboard(text(entry, false, prettyNbt));
         }
         while (entries.hasNext()) {
             messages.add(information(entries.next(), prettyNbt));
