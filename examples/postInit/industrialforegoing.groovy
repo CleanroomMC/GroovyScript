@@ -2,8 +2,6 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: industrialforegoing
 
-import net.minecraft.potion.PotionEffect
-
 log.info 'mod \'industrialforegoing\' detected, running script'
 
 // Bioreactor:
