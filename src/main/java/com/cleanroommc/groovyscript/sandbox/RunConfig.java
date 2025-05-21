@@ -29,6 +29,7 @@ public class RunConfig {
         JsonObject json = new JsonObject();
         json.addProperty("packName", "PlaceHolder name");
         json.addProperty("packId", "placeholdername");
+        json.addProperty("author", "Placeholder author");
         json.addProperty("version", "1.0.0");
         json.addProperty("debug", false);
         JsonObject loaders = new JsonObject();
@@ -61,6 +62,7 @@ public class RunConfig {
 
     private final String packName;
     private final String packId;
+    private final String packAuthor;
     private final String version;
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
     private final List<String> packmodeList = new ArrayList<>();
@@ -85,16 +87,19 @@ public class RunConfig {
     public RunConfig(JsonObject json) {
         String name = JsonHelper.getString(json, "", "packName", "name");
         String id = JsonHelper.getString(json, "", "packId", "id");
+        String author = JsonHelper.getString(json, "", "packAuthor", "author");
         Pattern idPattern = Pattern.compile("[a-z_]+");
         this.invalidPackId = id.isEmpty() || !idPattern.matcher(id).matches();
         if (name.isEmpty() && !this.invalidPackId) {
             name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, id).replace('_', ' ');
         }
         this.packName = name;
+        this.packAuthor = author;
         this.packId = id;
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
         modMetadata.modId = this.packId;
         modMetadata.name = this.packName;
+        modMetadata.credits = this.packAuthor;
         modMetadata.version = this.version;
         modMetadata.parent = GroovyScript.ID;
     }
