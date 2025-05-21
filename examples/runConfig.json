@@ -1,6 +1,7 @@
 {
   "packName": "GroovyScript Dev",
   "packId": "groovyscriptdev",
+  "author": "Placeholder author",
   "version": "1.0.0",
   "debug": true,
   "loaders": {
