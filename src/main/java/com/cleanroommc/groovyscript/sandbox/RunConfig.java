@@ -99,7 +99,7 @@ public class RunConfig {
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
         modMetadata.modId = this.packId;
         modMetadata.name = this.packName;
-        modMetadata.credits = this.packAuthor;
+        modMetadata.authorList = Collections.singletonList(this.packAuthor);
         modMetadata.version = this.version;
         modMetadata.parent = GroovyScript.ID;
     }
