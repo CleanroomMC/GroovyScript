@@ -15,6 +15,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModMetadata;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -29,6 +30,7 @@ public class RunConfig {
         JsonObject json = new JsonObject();
         json.addProperty("packName", "PlaceHolder name");
         json.addProperty("packId", "placeholdername");
+        json.addProperty("author", "Placeholder, author");
         json.addProperty("version", "1.0.0");
         json.addProperty("debug", false);
         JsonObject loaders = new JsonObject();
@@ -61,6 +63,7 @@ public class RunConfig {
 
     private final String packName;
     private final String packId;
+    private final String packAuthor;
     private final String version;
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
     private final List<String> packmodeList = new ArrayList<>();
@@ -91,12 +94,19 @@ public class RunConfig {
             name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, id).replace('_', ' ');
         }
         this.packName = name;
+        this.packAuthor = JsonHelper.getString(json, "", "packAuthor", "author");
         this.packId = id;
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
         modMetadata.modId = this.packId;
         modMetadata.name = this.packName;
         modMetadata.version = this.version;
         modMetadata.parent = GroovyScript.ID;
+        modMetadata.authorList.addAll(
+                Arrays.stream(StringUtils.split(this.packAuthor, ","))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .collect(Collectors.toList())
+        );
     }
 
     @ApiStatus.Internal
