@@ -1,22 +1,28 @@
 {
-  "packName": "PlaceHolder name",
-  "packId": "placeholdername",
-  "author": "Placeholder, author",
+  "packName": "GroovyScript Dev",
+  "packId": "groovyscriptdev",
+  "author": "GroovyScript, Dev, Author",
   "version": "1.0.0",
-  "debug": false,
+  "debug": true,
   "loaders": {
     "preInit": [
       "classes/",
       "preInit/"
     ],
+    "init": [
+      "init/"
+    ],
     "postInit": [
-      "postInit/"
+      "postInit/",
+      "recipes/"
     ]
   },
   "packmode": {
-    "values": [],
-    "default": "",
-    "_comment": "By default the packmode is not synced with the packmode mod. You can enable integration, but you can no longer change packmode on the fly.",
+    "values": [
+      "normal",
+      "hard"
+    ],
+    "default": "normal",
     "integratePackmodeMod": false
   }
 }
