@@ -107,7 +107,7 @@ class ItemDebugStick extends GroovyItem {
      * ensure that the debug stick cannot mine blocks in survival
      */
     float getDestroySpeed(ItemStack stack, IBlockState state) {
-        return 0.0F;
+        0.0f
     }
 
     /**
