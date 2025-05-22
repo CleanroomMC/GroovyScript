@@ -20,3 +20,9 @@ enchantment.level.17=XVII
 enchantment.level.18=XVIII
 enchantment.level.19=XIX
 enchantment.level.20=XX
+
+# Debug Stick Information
+item.groovyscriptdev.debug_stick.name=Debug Stick
+item.groovyscriptdev.debug_stick.empty=%s has no properties
+item.groovyscriptdev.debug_stick.update="%s" to %s
+item.groovyscriptdev.debug_stick.select=selected "%s" (%s)
