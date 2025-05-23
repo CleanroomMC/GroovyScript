@@ -12,6 +12,7 @@ import com.cleanroommc.groovyscript.compat.mods.alchemistry.Alchemistry;
 import com.cleanroommc.groovyscript.compat.mods.appliedenergistics2.AppliedEnergistics2;
 import com.cleanroommc.groovyscript.compat.mods.arcanearchives.ArcaneArchives;
 import com.cleanroommc.groovyscript.compat.mods.arcaneworld.ArcaneWorld;
+import com.cleanroommc.groovyscript.compat.mods.armorplus.ArmorPlus;
 import com.cleanroommc.groovyscript.compat.mods.astralsorcery.AstralSorcery;
 import com.cleanroommc.groovyscript.compat.mods.atum.Atum;
 import com.cleanroommc.groovyscript.compat.mods.avaritia.Avaritia;
@@ -101,6 +102,7 @@ public class ModSupport {
     public static final GroovyContainer<AppliedEnergistics2> APPLIED_ENERGISTICS_2 = new InternalModContainer<>("appliedenergistics2", "Applied Energistics 2", AppliedEnergistics2::new, "ae2");
     public static final GroovyContainer<ArcaneArchives> ARCANE_ARCHIVES = new InternalModContainer<>("arcanearchives", "Arcane Archives", ArcaneArchives::new);
     public static final GroovyContainer<ArcaneWorld> ARCANE_WORLD = new InternalModContainer<>("arcaneworld", "Arcane World", ArcaneWorld::new);
+    public static final GroovyContainer<ArmorPlus> ARMOR_PLUS = new InternalModContainer<>("armorplus", "Armor Plus", ArmorPlus::new);
     public static final GroovyContainer<AstralSorcery> ASTRAL_SORCERY = new InternalModContainer<>("astralsorcery", "Astral Sorcery", AstralSorcery::new, "astral");
     public static final GroovyContainer<Atum> ATUM = new InternalModContainer<>("atum", "Atum 2", Atum::new);
     public static final GroovyContainer<Avaritia> AVARITIA = new InternalModContainer<>("avaritia", "Avaritia", Avaritia::new);

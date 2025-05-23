@@ -414,6 +414,26 @@ groovyscript.wiki.arcanearchives.gem_cutting_table.description=Converts any numb
 groovyscript.wiki.arcanearchives.gem_cutting_table.note0=While more than 8 items can function as the input of a Stygian Iron Anvil recipe, only the first 8 are shown in JEI.
 
 
+# Armor Plus
+groovyscript.wiki.armorplus.champion_bench.title=Champion Bench
+groovyscript.wiki.armorplus.champion_bench.description=A normal crafting recipe, but with a 9x9 grid and in the Champion Bench.
+#A 9x9 crafting grid capable of everything the vanilla crafting grid can do, but in the Champion Bench
+
+groovyscript.wiki.armorplus.high_tech_bench.title=High-Tech Bench
+groovyscript.wiki.armorplus.high_tech_bench.description=A normal crafting recipe, but with a 5x5 grid and in the High-Tech Bench
+
+groovyscript.wiki.armorplus.lava_infuser.title=Lava Infuser
+groovyscript.wiki.armorplus.lava_infuser.description=Convert input itemstack to output itemstack over a second, with the ability to reward a configurable amount of experience based on the output itemstack. Consumes lava at a rate of 1 bucket per 10 seconds.
+groovyscript.wiki.armorplus.lava_infuser.experience.value=Sets the experience provided by the output
+groovyscript.wiki.armorplus.lava_infuser.note0=Experience provided is based on the output itemstack. Experience is a fallback value, only used if the itemstack provides no experience when smelting.
+
+groovyscript.wiki.armorplus.ultimate_bench.title=Ultimate Bench
+groovyscript.wiki.armorplus.ultimate_bench.description=A normal crafting recipe, but with a 7x7 grid and in the Ultimate Bench
+
+groovyscript.wiki.armorplus.work_bench.title=WorkBench
+groovyscript.wiki.armorplus.work_bench.description=A normal crafting recipe, but with a 3x3 grid and in the WorkBench
+
+
 # Arcane World
 groovyscript.wiki.arcaneworld.ritual.title=Ritual
 groovyscript.wiki.arcaneworld.ritual.description=Converts up to 5 input itemstacks into a wide number of possible effects, including spawning entities, opening a portal to a dungeon dimension to fight a mob, awarding an output itemstack, running commands, and even entirely customized effects.
