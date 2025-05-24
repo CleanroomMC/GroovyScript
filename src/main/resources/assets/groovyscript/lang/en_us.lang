@@ -160,6 +160,8 @@ groovyscript.wiki.minecraft.ore_dict.remove=Removes the given itemstack from the
 groovyscript.wiki.minecraft.ore_dict.clear=Removes all itemstacks from the given oredict
 groovyscript.wiki.minecraft.ore_dict.exists=Returns true if the given oredict exists, although this does not check if the oredict contains entries
 groovyscript.wiki.minecraft.ore_dict.getItems=Returns a list of all itemstacks in the given oredict
+groovyscript.wiki.minecraft.ore_dict.getOres=Returns an IIngredient containing all items for all matching oredicts at the time it is called
+groovyscript.wiki.minecraft.ore_dict.streamOreNames=Iterates through every registered oredict, with the ability to clear all items from each one
 groovyscript.wiki.minecraft.ore_dict.removeAll=Removes all itemstacks from all oredicts
 
 groovyscript.wiki.minecraft.player.title=Starting Inventory

@@ -2,14 +2,11 @@ package com.cleanroommc.groovyscript.mapper;
 
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IObjectParser;
-import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
@@ -85,7 +82,7 @@ public class ObjectMapperManager {
                 .docOfType("resource location")
                 .register();
         ObjectMapper.builder("ore", IIngredient.class)
-                .parser((s, args) -> s.contains(WILDCARD) ? Result.some(new OreDictWildcardIngredient(s)) : Result.some(new OreDictIngredient(s)))
+                .parser(ObjectMappers::parseOreDict)
                 .completerOfNames(OreDictionaryAccessor::getIdToName)
                 .docOfType("ore dict entry")
                 .textureBinder(TextureBinder.ofArray(IIngredient::getMatchingStacks, TextureBinder.ofItem()))
