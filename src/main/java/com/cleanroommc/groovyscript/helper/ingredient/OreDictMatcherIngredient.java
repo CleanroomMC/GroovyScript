@@ -107,5 +107,4 @@ public class OreDictMatcherIngredient extends IngredientBase implements IOreDict
         generate();
         return this;
     }
-
 }

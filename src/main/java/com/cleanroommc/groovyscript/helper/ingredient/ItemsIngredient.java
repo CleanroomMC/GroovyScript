@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 public class ItemsIngredient extends IngredientBase implements Iterable<ItemStack> {
 
