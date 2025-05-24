@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.IOreDicts;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
-import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -28,20 +27,28 @@ public class OreDictMatcherIngredient extends IngredientBase implements IOreDict
 
     public OreDictMatcherIngredient(Pattern pattern) {
         this.pattern = pattern;
-        var set = new ObjectOpenHashSet<String>();
-        var stacks = new ItemStackList();
+        this.oreDicts = new ObjectOpenHashSet<>();
+        this.itemStacks = new ItemStackList();
+        generate();
+    }
+
+    private OreDictMatcherIngredient(Pattern pattern, Collection<String> oreDicts, ItemStackList itemStacks) {
+        this.pattern = pattern;
+        this.oreDicts = new ObjectOpenHashSet<>(oreDicts);
+        this.itemStacks = new ItemStackList(itemStacks);
+    }
+
+    private void generate() {
         for (var ore : OreDictionaryAccessor.getIdToName()) {
-            if (pattern.matcher(ore).matches() && set.add(ore)) {
-                stacks.addAll(OreDictionary.getOres(ore));
+            if (pattern.matcher(ore).matches() && oreDicts.add(ore)) {
+                itemStacks.addAll(OreDictionary.getOres(ore));
             }
         }
-        oreDicts = ImmutableSet.copyOf(set);
-        itemStacks = stacks;
     }
 
     @Override
     public IIngredient exactCopy() {
-        var ingredient = new OreDictMatcherIngredient(pattern);
+        var ingredient = new OreDictMatcherIngredient(pattern, oreDicts, itemStacks);
         ingredient.amount = amount;
         ingredient.transformer = transformer;
         ingredient.matchCondition = matchCondition;
