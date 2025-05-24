@@ -101,4 +101,11 @@ public class OreDictMatcherIngredient extends IngredientBase implements IOreDict
         return oreDicts;
     }
 
+    public OreDictMatcherIngredient regenerate() {
+        oreDicts.clear();
+        itemStacks.clear();
+        generate();
+        return this;
+    }
+
 }
