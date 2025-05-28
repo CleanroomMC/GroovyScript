@@ -66,6 +66,7 @@ final def mod_dependencies = [
         'brandons_core-231382:3408276'                        : [project.debug_draconic_evolution],
         'draconic_evolution-223565:3431261'                   : [project.debug_draconic_evolution],
         'redstone_flux-270789:2920436'                        : [project.debug_draconic_evolution, project.debug_thermal],
+        'the-erebus-220698:3211974'                           : [project.debug_erebus],
         'essentialcraft-4-unofficial-254817:5416404'          : [project.debug_essentialcraft_4],
         'dummycore-unofficial-266491:2611426'                 : [project.debug_essentialcraft_4],
         'cyclops-core-232758:3159497'                         : [project.debug_evilcraft, project.debug_integrated_dynamics],
