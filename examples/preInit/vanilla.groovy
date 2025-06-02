@@ -16,19 +16,17 @@ import net.minecraft.world.IBlockAccess
 // '[itemname].png.mcmeta' to create an animated file.
 // A file will be created in 'assets/groovyscriptdev/models/item/' called '[itemname].json' and point to this location in textures.
 
-def HOAU = content.createItem('heartofauniverse') // Set item name at 'item.[itemname].name=[desired name]'
-    .setRarity(EnumRarity.EPIC) // Optional IRarity, sets the default text formatting (default none)
-    .setMaxStackSize(1) // Optional int, sets the max stack size (default 64)
-// Note: by not running '.register()' this item will not be created yet. This is done so we can set the creative tab correctly.
-
 // Create the creative tab, using the not-yet-registered item
-def tab = content.createCreativeTab('groovyscript.example_creative_tab', HOAU)
+def tab = content.createCreativeTab('groovyscript.example_creative_tab', _ -> item('groovyscriptdev:heartofauniverse'))
 
 // When registering items, this will add them to the given creative tab without having to manually do so.
 content.setDefaultCreativeTab(tab)
 
-// Now, we register to HOAU item.
-HOAU.register()
+// create the creative tab
+content.createItem('heartofauniverse') // Set item name at 'item.[itemname].name=[desired name]'
+    .setRarity(EnumRarity.EPIC) // Optional IRarity, sets the default text formatting (default none)
+    .setMaxStackSize(1) // Optional int, sets the max stack size (default 64)
+    .register()
 
 
 // Create an item at the location 'groovyscriptdev:clay_2'
