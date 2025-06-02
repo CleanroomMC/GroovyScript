@@ -79,6 +79,8 @@ mods.immersiveengineering.blueprint_crafting.recipeBuilder()
     .register()
 
 
+mods.immersiveengineering.blueprint_crafting.streamRecipesByCategory('molds')
+
 // Bottling Machine:
 // Converts an input itemstack and fluidstack into an output itemstack.
 

@@ -195,6 +195,11 @@ mods.minecraft.ore_dict.remove('netherStar', item('minecraft:nether_star'))
 mods.minecraft.ore_dict.add('ingotGold', item('minecraft:nether_star'))
 mods.minecraft.ore_dict.add('netherStar', item('minecraft:gold_ingot'))
 
+mods.minecraft.ore_dict.getOres(~/.*/)
+mods.minecraft.ore_dict.getOres(~/.*Gold/)
+mods.minecraft.ore_dict.getOres(~/.*or.*/)
+mods.minecraft.ore_dict.getOres('ingot*')
+
 // Starting Inventory:
 // Sets the starting inventory of the player, including armor slots and offhand.
 
