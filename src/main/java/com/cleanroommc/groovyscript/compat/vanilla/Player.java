@@ -114,7 +114,7 @@ public class Player extends NamedRegistry implements IScriptReloadable {
         }
     }
 
-    @MethodDescription(type = MethodDescription.Type.VALUE, example = @Example("true"))
+    @MethodDescription(type = MethodDescription.Type.VALUE, example = @Example(value = "true", commented = true))
     public void setTestStartingItems(boolean value) {
         testingStartingItems = value;
     }
