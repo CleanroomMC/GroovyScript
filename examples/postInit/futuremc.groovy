@@ -42,6 +42,23 @@ mods.futuremc.campfire.recipeBuilder()
     .register()
 
 
+// Composter:
+// Converts input items into a chance to get a layer of compost, with 8 layers providing a single bonemeal.
+
+mods.futuremc.composter.removeByInput(item('minecraft:cactus'))
+// mods.futuremc.composter.removeAll()
+
+mods.futuremc.composter.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .chance(100)
+    .register()
+
+mods.futuremc.composter.recipeBuilder()
+    .input(item('minecraft:gold_ingot'))
+    .chance(30)
+    .register()
+
+
 // Smithing:
 // Converts two input itemstacks into an output output itemstack in the Smithing Table.
 
