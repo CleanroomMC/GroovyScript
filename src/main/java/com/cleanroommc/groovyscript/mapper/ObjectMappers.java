@@ -202,21 +202,28 @@ public class ObjectMappers {
 
     private static Map<String, Material> materials;
 
-    public static Result<Material> parseBlockMaterial(String mainArg, Object... args) {
-        if (materials == null) {
-            materials = new Object2ObjectOpenHashMap<>();
-            for (Field field : Material.class.getFields()) {
-                if ((field.getModifiers() & Modifier.STATIC) != 0 && field.getType() == Material.class) {
-                    try {
-                        Material material = (Material) field.get(null);
-                        materials.put(field.getName(), material);
-                        materials.put(field.getName().toLowerCase(Locale.ROOT), material);
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
+    private static void generateMaterials() {
+        if (materials != null) return;
+        materials = new Object2ObjectOpenHashMap<>();
+        for (Field field : Material.class.getFields()) {
+            if ((field.getModifiers() & Modifier.STATIC) != 0 && field.getType() == Material.class) {
+                try {
+                    Material material = (Material) field.get(null);
+                    materials.put(field.getName(), material);
+                    materials.put(field.getName().toLowerCase(Locale.ROOT), material);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
                 }
             }
         }
+    }
+
+    public static Collection<String> getMaterialNames() {
+        return materials.keySet();
+    }
+
+    public static Result<Material> parseBlockMaterial(String mainArg, Object... args) {
+        generateMaterials();
         Material material = materials.get(mainArg);
         return material == null ? Result.error() : Result.some(material);
     }
