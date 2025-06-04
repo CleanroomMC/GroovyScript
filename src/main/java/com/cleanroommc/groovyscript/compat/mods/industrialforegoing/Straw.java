@@ -22,7 +22,7 @@ public class Straw extends ForgeRegistryWrapper<StrawHandler> {
         super(IFRegistries.STRAW_HANDLER_REGISTRY);
     }
 
-    @RecipeBuilderDescription(example = @Example(value = ".fluidInput(fluid('if.pink_slime')).effect(new PotionEffect(potion('minecraft:strength'), 1800, 3))", imports = "net.minecraft.potion.PotionEffect"))
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('if.pink_slime')).effect(new PotionEffect(potion('minecraft:strength'), 1800, 3))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

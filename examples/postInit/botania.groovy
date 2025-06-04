@@ -2,7 +2,6 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: botania
 
-import net.minecraft.potion.PotionEffect
 import net.minecraft.util.text.TextFormatting
 
 log.info 'mod \'botania\' detected, running script'
