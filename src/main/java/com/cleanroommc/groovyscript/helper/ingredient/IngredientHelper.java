@@ -98,7 +98,7 @@ public class IngredientHelper {
     public static @NotNull List<List<Object>> cartesianProductOres(@NotNull List<IIngredient> inputs) {
         List<List<?>> entries = new ArrayList<>();
         for (var input : inputs) {
-            if (input instanceof IOreDicts ore) entries.add(ore.getOreDicts());
+            if (input instanceof IOreDicts ore) entries.add(new ArrayList<>(ore.getOreDicts()));
             else entries.add(Arrays.asList(input.getMatchingStacks()));
         }
         return Lists.cartesianProduct(entries);
