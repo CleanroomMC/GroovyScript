@@ -63,8 +63,8 @@ public class RunConfig {
 
     private final String packName;
     private final String packId;
-    private final String packAuthor;
     private final String version;
+    private final List<String> packAuthors;
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
     private final List<String> packmodeList = new ArrayList<>();
     private final Set<String> packmodeSet = new ObjectOpenHashSet<>();
@@ -94,19 +94,36 @@ public class RunConfig {
             name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, id).replace('_', ' ');
         }
         this.packName = name;
-        this.packAuthor = JsonHelper.getString(json, "", "packAuthor", "author");
         this.packId = id;
         this.version = JsonHelper.getString(json, "1.0.0", "version", "ver");
+        JsonElement authors = null;
+        if (json.has("author")) authors = json.get("author");
+        else if (json.has("packAuthors")) authors = json.get("packAuthors");
+        if (authors != null) {
+            List<String> packAuthors = new ArrayList<>();
+            if (authors.isJsonPrimitive()) {
+                // author list in a single string separated by a comma
+                packAuthors.addAll(Arrays.stream(StringUtils.split(authors.getAsString(), ","))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .collect(Collectors.toList()));
+            } else if (authors.isJsonArray()) {
+                // authors in a json list, each entry is an author
+                for (JsonElement author : authors.getAsJsonArray()) {
+                    if (author.isJsonPrimitive()) {
+                        packAuthors.add(author.getAsString());
+                    }
+                }
+            }
+            this.packAuthors = Collections.unmodifiableList(packAuthors);
+        } else {
+            this.packAuthors = Collections.emptyList();
+        }
         modMetadata.modId = this.packId;
         modMetadata.name = this.packName;
         modMetadata.version = this.version;
         modMetadata.parent = GroovyScript.ID;
-        modMetadata.authorList.addAll(
-                Arrays.stream(StringUtils.split(this.packAuthor, ","))
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .collect(Collectors.toList())
-        );
+        modMetadata.authorList.addAll(this.packAuthors);
     }
 
     @ApiStatus.Internal
@@ -221,6 +238,10 @@ public class RunConfig {
 
     public String getVersion() {
         return version;
+    }
+
+    public List<String> getPackAuthors() {
+        return packAuthors;
     }
 
     public boolean isDebug() {
