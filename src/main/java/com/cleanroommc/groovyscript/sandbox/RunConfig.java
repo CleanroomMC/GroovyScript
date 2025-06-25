@@ -103,10 +103,11 @@ public class RunConfig {
             List<String> packAuthors = new ArrayList<>();
             if (authors.isJsonPrimitive()) {
                 // author list in a single string separated by a comma
-                packAuthors.addAll(Arrays.stream(StringUtils.split(authors.getAsString(), ","))
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .collect(Collectors.toList()));
+                packAuthors.addAll(
+                        Arrays.stream(StringUtils.split(authors.getAsString(), ","))
+                                .map(String::trim)
+                                .filter(s -> !s.isEmpty())
+                                .collect(Collectors.toList()));
             } else if (authors.isJsonArray()) {
                 // authors in a json list, each entry is an author
                 for (JsonElement author : authors.getAsJsonArray()) {
