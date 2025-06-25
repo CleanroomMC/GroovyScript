@@ -1430,6 +1430,12 @@ groovyscript.wiki.futuremc.campfire.title=Campfire
 groovyscript.wiki.futuremc.campfire.description=Converts an input itemstack into an output itemstack when placed on the Campfire.
 groovyscript.wiki.futuremc.campfire.duration.value=Sets the time in ticks the takes to process
 
+groovyscript.wiki.futuremc.composter.title=Composter
+groovyscript.wiki.futuremc.composter.description=Converts input items into a chance to get a layer of compost, with 8 layers providing a single bonemeal
+groovyscript.wiki.futuremc.composter.add=Adds entries in the format `ingredient`, `chance`
+groovyscript.wiki.futuremc.composter.remove=Removes an entry with the same Ingredient
+groovyscript.wiki.futuremc.composter.rarity.value=Sets the chance the recipe has to provide a layer of compost
+
 groovyscript.wiki.futuremc.smithing.title=Smithing
 groovyscript.wiki.futuremc.smithing.description=Converts two input itemstacks into an output output itemstack in the Smithing Table.
 groovyscript.wiki.futuremc.smithing.note0=Crafting with stackable items may require picking up and placing an input to allow crafting the recipe again.
