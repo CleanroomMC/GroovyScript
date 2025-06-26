@@ -20,7 +20,7 @@ import java.util.List;
 )
 public class Brew extends VirtualizedRegistry<vazkii.botania.api.brew.Brew> {
 
-    @RecipeBuilderDescription(example = @Example(value = ".key('groovy_example_brew').name('Groovy Brew').color(0x00FFFF).cost(100).effect(new PotionEffect(potion('minecraft:strength'), 1800, 3), new PotionEffect(potion('minecraft:speed'), 1800, 2), new PotionEffect(potion('minecraft:weakness'), 3600, 1)).incense(true).bloodPendant(true)", imports = "net.minecraft.potion.PotionEffect"))
+    @RecipeBuilderDescription(example = @Example(".key('groovy_example_brew').name('Groovy Brew').color(0x00FFFF).cost(100).effect(new PotionEffect(potion('minecraft:strength'), 1800, 3), new PotionEffect(potion('minecraft:speed'), 1800, 2), new PotionEffect(potion('minecraft:weakness'), 3600, 1)).incense(true).bloodPendant(true)"))
     public BrewBuilder brewBuilder() {
         return new BrewBuilder();
     }

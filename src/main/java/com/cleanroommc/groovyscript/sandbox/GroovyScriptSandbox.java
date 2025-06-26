@@ -82,6 +82,7 @@ public class GroovyScriptSandbox {
                 "net.minecraft.item.ItemStack",
                 "net.minecraft.nbt.NBTTagCompound",
                 "net.minecraft.nbt.NBTTagList",
+                "net.minecraft.potion.PotionEffect",
                 "net.minecraft.tileentity.TileEntity",
                 "net.minecraft.util.math.BlockPos",
                 "net.minecraft.util.DamageSource",
