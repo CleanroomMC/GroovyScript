@@ -13,6 +13,7 @@ import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.ExpandoMetaClass;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
@@ -115,6 +116,11 @@ public class ObjectMapperManager {
                 .defaultValue(() -> Blocks.AIR)
                 .docOfType("block")
                 .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
+                .register();
+        ObjectMapper.builder("material", Material.class)
+                .parser(ObjectMappers::parseBlockMaterial)
+                .completerOfNames(ObjectMappers::getMaterialNames)
+                .docOfType("block material")
                 .register();
         /*ObjectMapper.builder("blockstate", IBlockState.class)
                 .parser(ObjectMappers::parseBlockState)
