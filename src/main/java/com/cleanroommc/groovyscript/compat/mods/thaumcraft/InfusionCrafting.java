@@ -9,7 +9,6 @@ import com.cleanroommc.groovyscript.compat.mods.thaumcraft.aspect.AspectStack;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
-import com.cleanroommc.groovyscript.helper.recipe.RecipeName;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -127,6 +126,9 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         }
     }
 
+    @Property(property = "input", comp = @Comp(gte = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<InfusionRecipe> {
 
         @Property(comp = @Comp(not = "null"))
@@ -137,6 +139,11 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
         private final AspectList aspects = new AspectList();
         @Property
         private int instability;
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "infusion_matrix_recipe";
+        }
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder mainInput(IIngredient ingredient) {
@@ -204,7 +211,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
 
         @Override
         public void validate(GroovyLog.Msg msg) {
-            validateItems(msg, 1, 100, 1, 1);
+            validateItems(msg, 1, Integer.MAX_VALUE, 1, 1);
             msg.add(IngredientHelper.isEmpty(mainInput), () -> "Main Input must not be empty");
             // More than 1 item cannot be placed
             validateStackSize(msg, 1, "mainInput", mainInput);
@@ -214,6 +221,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
             if (instability < 0) {
                 instability = 0;
             }
+            validateName();
         }
 
         @Override
@@ -223,7 +231,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
 
             Object[] inputs = this.input.stream().map(IIngredient::toMcIngredient).toArray();
             InfusionRecipe recipe = new InfusionRecipe(researchKey, output.get(0), instability, aspects, mainInput.toMcIngredient(), inputs);
-            ModSupport.THAUMCRAFT.get().infusionCrafting.add(RecipeName.generateRl("infusion_matrix_recipe"), recipe);
+            ModSupport.THAUMCRAFT.get().infusionCrafting.add(super.name, recipe);
             return recipe;
         }
     }
