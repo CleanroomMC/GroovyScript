@@ -24,6 +24,7 @@ public class VanillaModule extends GroovyPropertyContainer {
     public static final InWorldCrafting inWorldCrafting = new InWorldCrafting();
     public static final Command command = new Command();
     public static final GameRule gameRule = new GameRule();
+    public static final Falling falling = new Falling();
 
     private VanillaModule() {}
 
@@ -42,6 +43,7 @@ public class VanillaModule extends GroovyPropertyContainer {
         GroovyScript.getSandbox().registerBinding(inWorldCrafting);
         GroovyScript.getSandbox().registerBinding(command);
         GroovyScript.getSandbox().registerBinding(gameRule);
+        GroovyScript.getSandbox().registerBinding(falling);
 
         ExpansionHelper.mixinClass(ItemStack.class, ItemStackExpansion.class);
         ExpansionHelper.mixinClass(ICommandSender.class, CommandSenderExpansion.class);

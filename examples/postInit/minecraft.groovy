@@ -219,3 +219,4 @@ mods.minecraft.player.setReplaceDefaultInventory(true)
 mods.minecraft.rarity.set(textformat('AQUA'), item('minecraft:diamond'))
 mods.minecraft.rarity.set(textformat('RESET'), item('minecraft:enchanted_book'))
 
+mods.minecraft.falling.enable(blockstate('minecraft:diamond_block'))
