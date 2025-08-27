@@ -56,6 +56,20 @@ public interface GroovyLog {
     }
 
     /**
+     * Allows Groovy to use {@code log('text')} to print an info message by using Groovy's call operator overloading.
+     */
+    default void call(String msg, Object... args) {
+        info(msg, args);
+    }
+
+    /**
+     * Allows Groovy to use {@code log('text')} to print an info message by using Groovy's call operator overloading.
+     */
+    default void call(Object obj) {
+        info(obj);
+    }
+
+    /**
      * Determines whether debug messages should be ignored.
      *
      * @return true if messages on debug level should be logged
