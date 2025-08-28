@@ -35,7 +35,6 @@ public class VanillaModule extends GroovyPropertyContainer {
         globalBindings.add(crafting);
         globalBindings.add(furnace);
         globalBindings.add(oreDict);
-        globalBindings.add(player);
         globalBindings.add(content);
         globalBindings.add(inWorldCrafting);
     }
