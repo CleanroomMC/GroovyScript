@@ -57,6 +57,10 @@ public interface GroovyLog {
 
     /**
      * Allows Groovy to use {@code log('text')} to print an info message by using Groovy's call operator overloading.
+     * <p>
+     * Should be avoided in Java code.
+     *
+     * @see #info(String, Object...)
      */
     default void call(String msg, Object... args) {
         info(msg, args);
@@ -64,6 +68,10 @@ public interface GroovyLog {
 
     /**
      * Allows Groovy to use {@code log('text')} to print an info message by using Groovy's call operator overloading.
+     * <p>
+     * Should be avoided in Java code.
+     *
+     * @see #info(Object)
      */
     default void call(Object obj) {
         info(obj);
