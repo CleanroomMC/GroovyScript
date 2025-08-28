@@ -45,6 +45,16 @@ public class VanillaModule extends GroovyPropertyContainer {
         globalBindings.add(gameRule);
     }
 
+    public void addProperty(INamed property, boolean addGlobalBinding) {
+        addProperty(property);
+        globalBindings.add(property);
+    }
+
+    @Override
+    public void addProperty(INamed property) {
+        super.addProperty(property);
+    }
+
     @Override
     public void initialize(GroovyContainer<?> owner) {
         GroovyScript.getSandbox().registerBinding("Minecraft", this);
