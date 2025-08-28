@@ -45,14 +45,24 @@ public class VanillaModule extends GroovyPropertyContainer {
         globalBindings.add(gameRule);
     }
 
+    /**
+     * Add the given property to the vanilla container.
+     * Useful for mods which add additional support to a vanilla feature,
+     * such as enchanting or brewing.
+     * <p>
+     * In some specific situations the property is important enough
+     * that it should be registered as a global binding.
+     * While this can be done by calling
+     * {@link com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox#registerBinding(INamed) GroovyScriptSandbox#registerBinding}
+     * directly, for vanilla properties a boolean exists as a shorthand.
+     *
+     * @param property         the property being added to the vanilla container
+     * @param addGlobalBinding if the property will be registered as a global binding. Typically {@code false}.
+     * @see com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox#registerBinding(INamed) GroovyScriptSandbox#registerBinding
+     */
     public void addProperty(INamed property, boolean addGlobalBinding) {
         addProperty(property);
         if (addGlobalBinding) globalBindings.add(property);
-    }
-
-    @Override
-    public void addProperty(INamed property) {
-        super.addProperty(property);
     }
 
     @Override
