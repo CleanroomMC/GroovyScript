@@ -21,7 +21,10 @@ import java.util.Collection;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,
-        admonition = @Admonition(value = "groovyscript.wiki.chisel.carving.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD),
+        admonition = {
+                @Admonition(value = "groovyscript.wiki.chisel.carving.note0", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD),
+                @Admonition(value = "groovyscript.wiki.chisel.carving.note1", type = Admonition.Type.BUG, format = Admonition.Format.STANDARD)
+        },
         isFullyDocumented = false // TODO fully document Chisel Carving
 )
 public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
