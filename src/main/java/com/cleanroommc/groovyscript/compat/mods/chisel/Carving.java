@@ -98,6 +98,8 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
                     .add("instead, edit the oredict via `oredict.remove('{}', {})`", groupName, GroovyScriptCodeConverter.asGroovyCode(item, false, false))
                     .error()
                     .post();
+        } catch (NullPointerException e) {
+            GroovyLog.get().exception("An exception occurred with chisel carving - possibly due to some other mod doing registry replacement.", e);
         }
     }
 
