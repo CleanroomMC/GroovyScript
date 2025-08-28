@@ -1,9 +1,11 @@
 package com.cleanroommc.groovyscript.helper.ingredient;
 
+import com.cleanroommc.groovyscript.api.IIngredient;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class FluidStackList extends ArrayList<FluidStack> {
 
@@ -42,5 +44,10 @@ public class FluidStackList extends ArrayList<FluidStack> {
                 set(i, itemStack.copy());
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<IIngredient> asIIngredientList() {
+        return (List<IIngredient>) (Object) this;
     }
 }
