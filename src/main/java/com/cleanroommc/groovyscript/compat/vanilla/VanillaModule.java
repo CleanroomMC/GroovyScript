@@ -47,7 +47,7 @@ public class VanillaModule extends GroovyPropertyContainer {
 
     public void addProperty(INamed property, boolean addGlobalBinding) {
         addProperty(property);
-        globalBindings.add(property);
+        if (addGlobalBinding) globalBindings.add(property);
     }
 
     @Override
