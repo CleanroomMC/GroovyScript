@@ -32,17 +32,12 @@ public class VanillaModule extends GroovyPropertyContainer {
     private final List<INamed> globalBindings = new ArrayList<>();
 
     private VanillaModule() {
-        // maybe remove some of these as globals?
         globalBindings.add(crafting);
         globalBindings.add(furnace);
-        globalBindings.add(loot);
         globalBindings.add(oreDict);
         globalBindings.add(player);
         globalBindings.add(content);
-        globalBindings.add(rarity);
         globalBindings.add(inWorldCrafting);
-        globalBindings.add(command);
-        globalBindings.add(gameRule);
     }
 
     /**
