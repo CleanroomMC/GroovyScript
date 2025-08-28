@@ -119,7 +119,7 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
     @GroovyBlacklist
     protected void handleReplace() {
         if (replace == 1) {
-            VanillaModule.crafting.removeByOutput(IngredientHelper.toIIngredient(output), false);
+            VanillaModule.INSTANCE.crafting.removeByOutput(IngredientHelper.toIIngredient(output), false);
         } else if (replace == 2) {
             if (name == null) {
                 GroovyLog.msg("Error replacing Minecraft Crafting recipe")

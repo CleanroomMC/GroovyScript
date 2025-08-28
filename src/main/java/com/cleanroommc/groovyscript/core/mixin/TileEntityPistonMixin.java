@@ -61,7 +61,7 @@ public abstract class TileEntityPistonMixin {
         Entity entity = list1.get(index);
         if (entity.getPushReaction() == EnumPushReaction.IGNORE) return;
         if (checkRecipes.get() && index < tryRecipesUntil.get() && entity instanceof EntityItem entityItem) {
-            VanillaModule.inWorldCrafting.pistonPush.findAndRunRecipe(entityItem1 -> {
+            VanillaModule.INSTANCE.inWorldCrafting.pistonPush.findAndRunRecipe(entityItem1 -> {
                 entityItem1.getEntityWorld().spawnEntity(entityItem1);
                 list1.add(entityItem1);
             }, entityItem, pushingAgainst.get());

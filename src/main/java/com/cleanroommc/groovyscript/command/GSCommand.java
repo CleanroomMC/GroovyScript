@@ -61,7 +61,7 @@ public class GSCommand extends CommandTreeBase {
         addSubcommand(new InfoSelfCommand());
 
         addSubcommand(new SimpleCommand("applyDefaultGameRules", (server, sender, args) -> {
-            VanillaModule.gameRule.applyDefaultGameRules(Objects.requireNonNull(server.getServer()).getWorld(0).getGameRules());
+            VanillaModule.INSTANCE.gameRule.applyDefaultGameRules(Objects.requireNonNull(server.getServer()).getWorld(0).getGameRules());
             sender.sendMessage(new TextComponentString("Applied the default GameRules to the current world."));
         }));
 

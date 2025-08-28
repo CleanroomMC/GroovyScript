@@ -110,7 +110,7 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
         public @Nullable Burning.BurningRecipe register() {
             if (!validate()) return null;
             BurningRecipe burningRecipe = new BurningRecipe(this.input.get(0), this.output.get(0), this.ticks, this.startCondition);
-            VanillaModule.inWorldCrafting.burning.add(burningRecipe);
+            VanillaModule.INSTANCE.inWorldCrafting.burning.add(burningRecipe);
             return burningRecipe;
         }
     }

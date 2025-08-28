@@ -8,16 +8,16 @@ import net.minecraft.util.text.TextFormatting;
 public class ItemStackExpansion {
 
     public static ItemStack setRarity(ItemStack self, TextFormatting color) {
-        VanillaModule.rarity.set(color, self);
+        VanillaModule.INSTANCE.rarity.set(color, self);
         return self;
     }
 
     public static void addOreDict(ItemStack self, OreDictIngredient ingredient) {
-        VanillaModule.oreDict.add(ingredient.getOreDict(), self);
+        VanillaModule.INSTANCE.oreDict.add(ingredient.getOreDict(), self);
     }
 
     public static void removeOreDict(ItemStack self, OreDictIngredient ingredient) {
-        VanillaModule.oreDict.remove(ingredient.getOreDict(), self);
+        VanillaModule.INSTANCE.oreDict.remove(ingredient.getOreDict(), self);
     }
 
     public static boolean leftShift(ItemStack self, IIngredient ingredient) {

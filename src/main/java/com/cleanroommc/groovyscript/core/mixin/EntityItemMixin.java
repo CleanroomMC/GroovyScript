@@ -34,7 +34,7 @@ public abstract class EntityItemMixin extends Entity {
             }
 
             if (((EntityAccessor) thisEntity).getFire() > 0) {
-                VanillaModule.inWorldCrafting.burning.updateRecipeProgress(thisEntity);
+                VanillaModule.INSTANCE.inWorldCrafting.burning.updateRecipeProgress(thisEntity);
                 ci.cancel();
             } else if (Burning.removeBurningItem(thisEntity)) {
                 thisEntity.setEntityInvulnerable(false);

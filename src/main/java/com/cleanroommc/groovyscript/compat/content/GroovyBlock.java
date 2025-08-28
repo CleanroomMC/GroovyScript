@@ -98,8 +98,8 @@ public class GroovyBlock extends Block {
         setHardness(2.0F);
         setResistance(10.0F);
         setSoundType(SoundType.STONE);
-        if (VanillaModule.content.getDefaultTab() != null) {
-            setCreativeTab(VanillaModule.content.getDefaultTab());
+        if (VanillaModule.INSTANCE.content.getDefaultTab() != null) {
+            setCreativeTab(VanillaModule.INSTANCE.content.getDefaultTab());
         }
     }
 

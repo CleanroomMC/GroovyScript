@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.vanilla;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.compat.content.Content;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.InWorldCrafting;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
@@ -10,38 +11,62 @@ import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VanillaModule extends GroovyPropertyContainer {
 
     public static final VanillaModule INSTANCE = new VanillaModule();
 
-    public static final Crafting crafting = new Crafting();
-    public static final Furnace furnace = new Furnace();
-    public static final Loot loot = new Loot();
-    public static final OreDict oreDict = new OreDict();
-    public static final Player player = new Player();
-    public static final Content content = new Content();
-    public static final Rarity rarity = new Rarity();
-    public static final InWorldCrafting inWorldCrafting = new InWorldCrafting();
-    public static final Command command = new Command();
-    public static final GameRule gameRule = new GameRule();
+    public final Crafting crafting = new Crafting();
+    public final Furnace furnace = new Furnace();
+    public final Loot loot = new Loot();
+    public final OreDict oreDict = new OreDict();
+    public final Player player = new Player();
+    public final Content content = new Content();
+    public final Rarity rarity = new Rarity();
+    public final InWorldCrafting inWorldCrafting = new InWorldCrafting();
+    public final Command command = new Command();
+    public final GameRule gameRule = new GameRule();
 
-    private VanillaModule() {}
+    private final List<INamed> globalBindings = new ArrayList<>();
+
+    private VanillaModule() {
+        globalBindings.add(crafting);
+        globalBindings.add(furnace);
+        globalBindings.add(oreDict);
+        globalBindings.add(content);
+        globalBindings.add(inWorldCrafting);
+    }
+
+    /**
+     * Add the given property to the vanilla container.
+     * Useful for mods which add additional support to a vanilla feature,
+     * such as enchanting or brewing.
+     * <p>
+     * In some specific situations the property is important enough
+     * that it should be registered as a global binding.
+     * While this can be done by calling
+     * {@link com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox#registerBinding(INamed) GroovyScriptSandbox#registerBinding}
+     * directly, for vanilla properties a boolean exists as a shorthand.
+     *
+     * @param property         the property being added to the vanilla container
+     * @param addGlobalBinding if the property will be registered as a global binding. Typically {@code false}.
+     * @see com.cleanroommc.groovyscript.sandbox.GroovyScriptSandbox#registerBinding(INamed) GroovyScriptSandbox#registerBinding
+     */
+    public void addProperty(INamed property, boolean addGlobalBinding) {
+        addProperty(property);
+        if (addGlobalBinding) globalBindings.add(property);
+    }
 
     @Override
     public void initialize(GroovyContainer<?> owner) {
         GroovyScript.getSandbox().registerBinding("Minecraft", this);
         GroovyScript.getSandbox().registerBinding("Vanilla", this);
-        // maybe remove some of these as globals?
-        GroovyScript.getSandbox().registerBinding(crafting);
-        GroovyScript.getSandbox().registerBinding(furnace);
-        GroovyScript.getSandbox().registerBinding(loot);
-        GroovyScript.getSandbox().registerBinding(oreDict);
-        GroovyScript.getSandbox().registerBinding(player);
-        GroovyScript.getSandbox().registerBinding(content);
-        GroovyScript.getSandbox().registerBinding(rarity);
-        GroovyScript.getSandbox().registerBinding(inWorldCrafting);
-        GroovyScript.getSandbox().registerBinding(command);
-        GroovyScript.getSandbox().registerBinding(gameRule);
+
+        for (INamed registry : globalBindings) {
+            GroovyScript.getSandbox().registerBinding(registry);
+        }
 
         ExpansionHelper.mixinClass(ItemStack.class, ItemStackExpansion.class);
         ExpansionHelper.mixinClass(ICommandSender.class, CommandSenderExpansion.class);

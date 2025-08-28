@@ -15,6 +15,6 @@ public class ItemMixin {
 
     @Inject(method = "getForgeRarity", at = @At("HEAD"), cancellable = true, remap = false)
     private void prioritzeGSRarities(ItemStack stack, CallbackInfoReturnable<IRarity> cir) {
-        cir.setReturnValue(VanillaModule.rarity.check(stack));
+        cir.setReturnValue(VanillaModule.INSTANCE.rarity.check(stack));
     }
 }

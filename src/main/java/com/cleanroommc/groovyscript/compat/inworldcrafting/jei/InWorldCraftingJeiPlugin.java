@@ -38,8 +38,8 @@ public class InWorldCraftingJeiPlugin {
         List<FluidRecipeCategory.RecipeWrapper> recipeWrappers = new ArrayList<>();
         FluidRecipe.forEach(fluidRecipe -> recipeWrappers.add(new FluidRecipeCategory.RecipeWrapper(fluidRecipe)));
         registry.addRecipes(recipeWrappers, FluidRecipeCategory.UID);
-        registry.addRecipes(VanillaModule.inWorldCrafting.explosion.getRecipeWrappers(), ExplosionRecipeCategory.UID);
-        registry.addRecipes(VanillaModule.inWorldCrafting.burning.getRecipeWrappers(), BurningRecipeCategory.UID);
-        registry.addRecipes(VanillaModule.inWorldCrafting.pistonPush.getRecipeWrappers(), PistonPushRecipeCategory.UID);
+        registry.addRecipes(VanillaModule.INSTANCE.inWorldCrafting.explosion.getRecipeWrappers(), ExplosionRecipeCategory.UID);
+        registry.addRecipes(VanillaModule.INSTANCE.inWorldCrafting.burning.getRecipeWrappers(), BurningRecipeCategory.UID);
+        registry.addRecipes(VanillaModule.INSTANCE.inWorldCrafting.pistonPush.getRecipeWrappers(), PistonPushRecipeCategory.UID);
     }
 }

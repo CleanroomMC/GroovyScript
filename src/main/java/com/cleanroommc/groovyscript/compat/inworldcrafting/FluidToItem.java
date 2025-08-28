@@ -157,7 +157,7 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
                     this.afterRecipe,
                     this.output.get(0),
                     this.fluidConsumptionChance);
-            VanillaModule.inWorldCrafting.fluidToItem.add(recipe);
+            VanillaModule.INSTANCE.inWorldCrafting.fluidToItem.add(recipe);
             return recipe;
         }
     }

@@ -188,7 +188,7 @@ public class Ingredient extends VirtualizedRegistry<Void> {
             return;
         }
         hide(ingredient);
-        VanillaModule.crafting.removeByOutput(ingredient, false);
+        VanillaModule.INSTANCE.crafting.removeByOutput(ingredient, false);
     }
 
     @MethodDescription
