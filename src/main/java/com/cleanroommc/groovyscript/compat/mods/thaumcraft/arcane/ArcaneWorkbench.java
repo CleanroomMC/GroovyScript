@@ -32,7 +32,7 @@ public class ArcaneWorkbench extends NamedRegistry {
 
     @MethodDescription(example = @Example("item('thaumcraft:mechanism_simple')"))
     public void removeByOutput(IIngredient output) {
-        VanillaModule.crafting.removeByOutput(output, true);
+        VanillaModule.INSTANCE.crafting.removeByOutput(output, true);
     }
 
     @RecipeBuilderDescription(example = {
