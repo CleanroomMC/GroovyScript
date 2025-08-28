@@ -33,7 +33,7 @@ public class Alchemy extends StandardListRegistry<ICondenserRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:stone'), item('minecraft:gold_ingot')).output(item('minecraft:clay') * 4).time(20)"),
-            @Example(value = ".input(item('minecraft:stone'), item('minecraft:gold_ingot'), item('minecraft:diamond')).bottle(item('minecraft:torch')).advanced().effect(new PotionEffect(potion('minecraft:night_vision'), 3600, 1))", imports = "net.minecraft.potion.PotionEffect"),
+            @Example(".input(item('minecraft:stone'), item('minecraft:gold_ingot'), item('minecraft:diamond')).bottle(item('minecraft:torch')).advanced().effect(new PotionEffect(potion('minecraft:night_vision'), 3600, 1))"),
             @Example(".input(item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone')).modifier(item('minecraft:clay')).fluidInput(fluid('lava') * 500).advanced().output(item('minecraft:diamond'))"),
             @Example(".input(item('minecraft:cobblestone'), item('minecraft:cobblestone')).fluidInput(fluid('lava') * 25).bottle(item('minecraft:bucket')).output(item('minecraft:lava_bucket'))")
     })
