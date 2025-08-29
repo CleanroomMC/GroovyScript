@@ -26,6 +26,7 @@ class ExtensionStatusBarProvider implements Disposable {
 
 	constructor() {
 		this.statusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, Number.MIN_VALUE);
+		this.statusBarItem.command = "groovyscript.reconnect";
 	}
 
 	public startUp(): void {
