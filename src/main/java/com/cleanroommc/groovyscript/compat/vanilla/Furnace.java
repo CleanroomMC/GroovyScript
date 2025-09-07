@@ -214,13 +214,10 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     @GroovyBlacklist
     @Override
     public void onReload() {
-        getScriptedRecipes().forEach(recipe -> {
-            remove(recipe, false);
-        });
-        getBackupRecipes().forEach(recipe -> {
-            FurnaceRecipes.instance().addSmeltingRecipe(recipe.input, recipe.output, recipe.exp);
-            CustomFurnaceManager.TIME_MAP.put(recipe.output, recipe.time);
-        });
+        // since time is entirely custom, it can be cleared directly
+        CustomFurnaceManager.TIME_MAP.clear();
+        getScriptedRecipes().forEach(recipe -> remove(recipe, false));
+        getBackupRecipes().forEach(recipe -> FurnaceRecipes.instance().addSmeltingRecipe(recipe.input, recipe.output, recipe.exp));
         CustomFurnaceManager.FUEL_TRANSFORMERS.addAll(conversionStorage.restoreFromBackup());
         CustomFurnaceManager.FUEL_TRANSFORMERS.removeAll(conversionStorage.removeScripted());
     }
