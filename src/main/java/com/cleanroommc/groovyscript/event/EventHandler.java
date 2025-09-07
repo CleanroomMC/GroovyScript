@@ -106,7 +106,10 @@ public class EventHandler {
                 NetworkHandler.sendToPlayer(new SReloadScripts(null, true, true), (EntityPlayerMP) event.player);
             }
         }
+    }
 
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void playerLoginStarterItems(PlayerEvent.PlayerLoggedInEvent event) {
         // give starter items to player
         NBTTagCompound tag = event.player.getEntityData();
         NBTTagCompound data = new NBTTagCompound();
