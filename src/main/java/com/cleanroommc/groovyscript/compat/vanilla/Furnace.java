@@ -61,10 +61,10 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
     @GroovyBlacklist
     private ItemStack findTrueInput(ItemStack input) {
-        ItemStack trueInput = FurnaceRecipeManager.inputMap.get(input);
+        ItemStack trueInput = FurnaceRecipeManager.INPUT_SET.get(input);
         if (trueInput == null && input.getMetadata() != Short.MAX_VALUE) {
             input = new ItemStack(input.getItem(), input.getCount(), Short.MAX_VALUE);
-            trueInput = FurnaceRecipeManager.inputMap.get(input);
+            trueInput = FurnaceRecipeManager.INPUT_SET.get(input);
         }
         return trueInput;
     }

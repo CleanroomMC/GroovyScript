@@ -13,6 +13,6 @@ public abstract class FurnaceRecipeMixin {
 
     @Inject(method = "addSmeltingRecipe", at = @At("RETURN"))
     public void addRecipe(ItemStack input, ItemStack stack, float experience, CallbackInfo ci) {
-        FurnaceRecipeManager.inputMap.add(input);
+        FurnaceRecipeManager.INPUT_SET.add(input);
     }
 }
