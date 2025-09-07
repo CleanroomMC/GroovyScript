@@ -148,10 +148,16 @@ groovyscript.wiki.minecraft.crafting.replaceShapeless0=Adds a shapeless recipe i
 groovyscript.wiki.minecraft.crafting.replaceShapeless1=Adds a shapeless recipe in the format `name`, `output`, `input` and removes the recipe matching the given name
 
 groovyscript.wiki.minecraft.furnace.title=Furnace
-groovyscript.wiki.minecraft.furnace.description=Converts an input item into an output itemstack after a set amount of time, with the ability to give experience and using fuel to run.
+groovyscript.wiki.minecraft.furnace.description=Converts an input item into an output itemstack after a configurable amount of time, with the ability to give experience and using fuel to run. Can also convert the item in the fuel slot.
+groovyscript.wiki.minecraft.furnace.note0=Fuel Conversion Recipes may not function as desired in all furnaces - only the vanilla furnace has specific support. By default the only recipe reproduces the vanilla behavior of a wet sponge converting an empty bucket into a water bucket.
 groovyscript.wiki.minecraft.furnace.add0=Adds a recipe in the format `input`, `output`
 groovyscript.wiki.minecraft.furnace.add1=Adds a recipe in the format `input`, `output`, `experience`
+groovyscript.wiki.minecraft.furnace.add2=Adds a recipe in the format `input`, `output`, `experience`, `time`
 groovyscript.wiki.minecraft.furnace.exp.value=Sets the experience rewarded for smelting the given input
+groovyscript.wiki.minecraft.furnace.time.value=Sets the time in ticks the recipe takes
+groovyscript.wiki.minecraft.furnace.addFuelConversion=Add a conversion recipe in the format `smelted`, `fuel`, with `fuel` using an IIngredient transformer
+groovyscript.wiki.minecraft.furnace.removeFuelConversionBySmelted=Removes all conversion recipes with the given smelted item
+groovyscript.wiki.minecraft.furnace.removeAllFuelConversions=Removes all conversion recipes
 
 groovyscript.wiki.minecraft.ore_dict.title=Ore Dictionary
 groovyscript.wiki.minecraft.ore_dict.description=Manipulate the Ore Dictionary and what itemstacks are part of what oredicts.

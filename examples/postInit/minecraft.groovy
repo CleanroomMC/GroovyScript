@@ -159,12 +159,14 @@ mods.minecraft.crafting.shapelessBuilder()
 // mods.minecraft.crafting.replaceShapeless('minecraft:pink_dye_from_pink_tulp', item('minecraft:clay'), [item('minecraft:nether_star')])
 
 // Furnace:
-// Converts an input item into an output itemstack after a set amount of time, with the ability to give experience and
-// using fuel to run.
+// Converts an input item into an output itemstack after a configurable amount of time, with the ability to give experience
+// and using fuel to run. Can also convert the item in the fuel slot.
 
 mods.minecraft.furnace.removeByInput(item('minecraft:clay'))
 mods.minecraft.furnace.removeByOutput(item('minecraft:brick'))
+mods.minecraft.furnace.removeFuelConversionBySmelted(item('minecraft:sponge', 1))
 // mods.minecraft.furnace.removeAll()
+// mods.minecraft.furnace.removeAllFuelConversions()
 
 mods.minecraft.furnace.recipeBuilder()
     .input(ore('ingotGold'))
@@ -175,6 +177,8 @@ mods.minecraft.furnace.recipeBuilder()
 
 // mods.minecraft.furnace.add(ore('ingotIron'), item('minecraft:diamond'))
 mods.minecraft.furnace.add(item('minecraft:nether_star'), item('minecraft:clay') * 64, 13)
+mods.minecraft.furnace.add(item('minecraft:diamond'), item('minecraft:clay'), 2, 50)
+mods.minecraft.furnace.addFuelConversion(item('minecraft:diamond'), item('minecraft:bucket').transform(item('minecraft:lava_bucket')))
 
 // Default GameRules:
 // Create or assign a default value to GameRules.

@@ -22,6 +22,7 @@
     "SlotCraftingAccess",
     "TileEntityPistonMixin",
     "VillagerProfessionAccessor",
+    "furnace.TileEntityFurnaceMixin",
     "groovy.AsmDecompilerMixin",
     "groovy.ClassNodeResolverMixin",
     "groovy.ClosureMixin",
