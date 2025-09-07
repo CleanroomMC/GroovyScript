@@ -229,9 +229,9 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<Recipe> {
 
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0), defaultValue = "0.1f")
         private float exp = EXPERIENCE_DEFAULT;
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gte = 1), defaultValue = "200")
         private int time = TIME_DEFAULT;
 
         @RecipeBuilderMethodDescription
