@@ -301,14 +301,6 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
             this.time = time;
         }
 
-        private static Recipe of(ItemStack input) {
-            ItemStack output = FurnaceRecipes.instance().getSmeltingList().get(input);
-            float exp = FurnaceRecipes.instance().getSmeltingExperience(output);
-            int time = CustomFurnaceManager.TIME_MAP.getInt(output);
-            if (time <= 0) time = TIME_DEFAULT;
-            return new Recipe(input, output, exp, time);
-        }
-
         private static Recipe of(ItemStack input, ItemStack output) {
             float exp = FurnaceRecipes.instance().getSmeltingExperience(output);
             int time = CustomFurnaceManager.TIME_MAP.getInt(output);
