@@ -85,6 +85,6 @@ public class SmelteryFuel extends VirtualizedRegistry<SmelteryFuelRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<SmelteryFuelRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
+        return new SimpleObjectStream<>(getAllRecipes(), false).setRemover(this::remove);
     }
 }

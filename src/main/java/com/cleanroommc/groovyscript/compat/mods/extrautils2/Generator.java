@@ -152,7 +152,7 @@ public class Generator extends VirtualizedRegistry<Pair<Machine, IMachineRecipe>
                 list.add(Pair.of(generator, recipe));
             }
         }
-        return new SimpleObjectStream<>(list).setRemover(x -> x.getKey().recipes_registry.removeRecipe(x.getValue()));
+        return new SimpleObjectStream<>(list, false).setRemover(x -> x.getKey().recipes_registry.removeRecipe(x.getValue()));
     }
 
     @MethodDescription(description = "groovyscript.wiki.extrautils2.generator.removeByGenerator")

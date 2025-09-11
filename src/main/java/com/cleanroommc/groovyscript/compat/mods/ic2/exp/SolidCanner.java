@@ -57,7 +57,7 @@ public class SolidCanner extends VirtualizedRegistry<MachineRecipe<ICannerBottle
     }
 
     public SimpleObjectStream<MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack>> streamRecipes() {
-        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
+        return new SimpleObjectStream<>(asList(), false).setRemover(this::remove);
     }
 
     public boolean remove(MachineRecipe<ICannerBottleRecipeManager.Input, ItemStack> recipe) {

@@ -53,7 +53,7 @@ public class Compressor extends VirtualizedRegistry<MachineRecipe<IRecipeInput, 
     }
 
     public SimpleObjectStream<MachineRecipe<IRecipeInput, Collection<ItemStack>>> streamRecipes() {
-        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
+        return new SimpleObjectStream<>(asList(), false).setRemover(this::remove);
     }
 
     public boolean remove(MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {

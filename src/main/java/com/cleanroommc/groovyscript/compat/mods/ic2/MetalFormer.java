@@ -39,11 +39,11 @@ public class MetalFormer extends VirtualizedRegistry<MetalFormer.MetalFormerReci
     }
 
     public SimpleObjectStream<MachineRecipe<IRecipeInput, Collection<ItemStack>>> streamRecipes() {
-        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
+        return new SimpleObjectStream<>(asList(), false).setRemover(this::remove);
     }
 
     public SimpleObjectStream<MachineRecipe<IRecipeInput, Collection<ItemStack>>> streamRecipes(int type) {
-        return new SimpleObjectStream<>(asList(type)).setRemover(r -> this.remove(type, r));
+        return new SimpleObjectStream<>(asList(type), false).setRemover(r -> this.remove(type, r));
     }
 
     public boolean remove(int type, MachineRecipe<IRecipeInput, Collection<ItemStack>> recipe) {

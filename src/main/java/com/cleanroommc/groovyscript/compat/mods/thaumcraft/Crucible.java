@@ -107,7 +107,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, IThaumcraftRecipe>> streamRecipes() {
         List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof CrucibleRecipe).collect(Collectors.toList());
-        return new SimpleObjectStream<>(recipes)
+        return new SimpleObjectStream<>(recipes, false)
                 .setRemover(x -> remove((CrucibleRecipe) x));
     }
 

@@ -137,7 +137,7 @@ public class Extruder extends VirtualizedRegistry<Pair<Boolean, ExtruderRecipe>>
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<ExtruderRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Booleans.asList(true, false).stream().map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()))
+        return new SimpleObjectStream<>(Booleans.asList(true, false).stream().map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()), false)
                 .setRemover(this::remove);
     }
 

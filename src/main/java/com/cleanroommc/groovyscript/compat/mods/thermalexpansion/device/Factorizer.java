@@ -121,7 +121,7 @@ public class Factorizer extends VirtualizedRegistry<Pair<Boolean, FactorizerMana
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<FactorizerManager.FactorizerRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Booleans.asList(true, false).stream().map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()))
+        return new SimpleObjectStream<>(Booleans.asList(true, false).stream().map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()), false)
                 .setRemover(this::remove);
     }
 
