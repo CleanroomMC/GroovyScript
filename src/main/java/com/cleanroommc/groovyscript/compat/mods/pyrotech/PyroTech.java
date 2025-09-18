@@ -1,22 +1,51 @@
 package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.codetaylor.mc.pyrotech.ModPyrotechConfig;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
+
+import java.util.function.Supplier;
 
 public class PyroTech extends GroovyPropertyContainer {
 
-    public static final Barrel barrel = new Barrel();
-    public static final Campfire campfire = new Campfire();
-    public static final StoneOven stoneOven = new StoneOven();
-    public static final BrickOven brickOven = new BrickOven();
-    public static final ChoppingBlock choppingBlock = new ChoppingBlock();
-    public static final CompactingBin compactingBin = new CompactingBin();
-    public static final CompostBin compostBin = new CompostBin();
-    public static final CrudeDryingRack crudeDryingRack = new CrudeDryingRack();
-    public static final DryingRack dryingRack = new DryingRack();
-    public static final PitKiln pitKiln = new PitKiln();
-    public static final StoneKiln stoneKiln = new StoneKiln();
-    public static final BrickKiln brickKiln = new BrickKiln();
-    public static final Anvil anvil = new Anvil();
-    public static final SoakingPot soakingPot = new SoakingPot();
-    public static final TanningRack tanningRack = new TanningRack();
+    public final Barrel barrel;
+    public final Campfire campfire;
+    public final StoneOven stoneOven;
+    public final BrickOven brickOven;
+    public final ChoppingBlock choppingBlock;
+    public final CompactingBin compactingBin;
+    public final CompostBin compostBin;
+    public final CrudeDryingRack crudeDryingRack;
+    public final DryingRack dryingRack;
+    public final PitKiln pitKiln;
+    public final StoneKiln stoneKiln;
+    public final BrickKiln brickKiln;
+    public final Anvil anvil;
+    public final SoakingPot soakingPot;
+    public final TanningRack tanningRack;
+
+    public PyroTech() {
+        this.barrel = register(ModuleTechBasic.MODULE_ID, Barrel::new);
+        this.campfire = register(ModuleTechBasic.MODULE_ID, Campfire::new);
+        this.stoneOven = register(ModuleTechMachine.MODULE_ID, StoneOven::new);
+        this.brickOven = register(ModuleTechMachine.MODULE_ID, BrickOven::new);
+        this.choppingBlock = register(ModuleTechBasic.MODULE_ID, ChoppingBlock::new);
+        this.compactingBin = register(ModuleTechBasic.MODULE_ID, CompactingBin::new);
+        this.compostBin = register(ModuleTechBasic.MODULE_ID, CompostBin::new);
+        this.crudeDryingRack = register(ModuleTechBasic.MODULE_ID, CrudeDryingRack::new);
+        this.dryingRack = register(ModuleTechBasic.MODULE_ID, DryingRack::new);
+        this.pitKiln = register(ModuleTechBasic.MODULE_ID, PitKiln::new);
+        this.stoneKiln = register(ModuleTechMachine.MODULE_ID, StoneKiln::new);
+        this.brickKiln = register(ModuleTechMachine.MODULE_ID, BrickKiln::new);
+        this.anvil = register(ModuleTechBasic.MODULE_ID, Anvil::new);
+        this.soakingPot = register(ModuleTechBasic.MODULE_ID, SoakingPot::new);
+        this.tanningRack = register(ModuleTechBasic.MODULE_ID, TanningRack::new);
+    }
+
+    private static <T> T register(String moduleName, Supplier<T> supplier) {
+        Boolean bool = ModPyrotechConfig.MODULES.get(moduleName);
+        if (bool != null && bool) return supplier.get();
+        return null;
+    }
 }

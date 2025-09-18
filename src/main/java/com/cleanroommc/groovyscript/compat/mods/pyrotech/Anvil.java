@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -152,7 +153,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
             if (!validate()) return null;
 
             AnvilRecipe recipe = new AnvilRecipe(output.get(0), input.get(0).toMcIngredient(), hits, type, tier).setRegistryName(super.name);
-            PyroTech.anvil.add(recipe);
+            ModSupport.PYROTECH.get().anvil.add(recipe);
             return recipe;
         }
     }

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -108,12 +109,12 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
                 for (ItemStack i : in) {
                     ResourceLocation rl = new ResourceLocation(super.name.getNamespace(), super.name.getPath() + "_" + (j++));
                     CompostBinRecipe recipe = new CompostBinRecipe(output.get(0), i, compostValue).setRegistryName(rl);
-                    PyroTech.compostBin.add(recipe);
+                    ModSupport.PYROTECH.get().compostBin.add(recipe);
                 }
                 return null;
             }
             CompostBinRecipe recipe = new CompostBinRecipe(output.get(0), in[0], compostValue).setRegistryName(super.name);
-            PyroTech.compostBin.add(recipe);
+            ModSupport.PYROTECH.get().compostBin.add(recipe);
             return recipe;
         }
     }

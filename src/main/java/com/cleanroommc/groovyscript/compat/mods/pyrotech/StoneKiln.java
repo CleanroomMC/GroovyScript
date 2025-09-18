@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -131,7 +132,7 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
         public @Nullable StoneKilnRecipe register() {
             if (!validate()) return null;
             StoneKilnRecipe recipe = new StoneKilnRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
-            PyroTech.stoneKiln.add(recipe);
+            ModSupport.PYROTECH.get().stoneKiln.add(recipe);
             return recipe;
         }
     }

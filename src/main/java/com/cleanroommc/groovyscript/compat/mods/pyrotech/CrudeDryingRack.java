@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -102,7 +103,7 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
         public @Nullable CrudeDryingRackRecipe register() {
             if (!validate()) return null;
             CrudeDryingRackRecipe recipe = new CrudeDryingRackRecipe(output.get(0), input.get(0).toMcIngredient(), dryTime).setRegistryName(super.name);
-            PyroTech.crudeDryingRack.add(recipe);
+            ModSupport.PYROTECH.get().crudeDryingRack.add(recipe);
             return recipe;
         }
     }

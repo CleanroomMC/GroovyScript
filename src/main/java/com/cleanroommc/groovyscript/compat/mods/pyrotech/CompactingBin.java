@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -96,7 +97,7 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         public @Nullable CompactingBinRecipe register() {
             if (!validate()) return null;
             CompactingBinRecipe recipe = new CompactingBinRecipe(output.get(0), input.get(0).toMcIngredient(), toolUses).setRegistryName(super.name);
-            PyroTech.compactingBin.add(recipe);
+            ModSupport.PYROTECH.get().compactingBin.add(recipe);
             return recipe;
         }
     }

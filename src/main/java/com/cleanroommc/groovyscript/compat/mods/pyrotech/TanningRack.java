@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -112,7 +113,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         public @Nullable TanningRackRecipe register() {
             if (!validate()) return null;
             TanningRackRecipe recipe = new TanningRackRecipe(output.get(0), input.get(0).toMcIngredient(), failureItem, dryTime).setRegistryName(super.name);
-            PyroTech.tanningRack.add(recipe);
+            ModSupport.PYROTECH.get().tanningRack.add(recipe);
             return recipe;
         }
     }

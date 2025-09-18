@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -101,7 +102,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         public @Nullable CampfireRecipe register() {
             if (!validate()) return null;
             CampfireRecipe recipe = new CampfireRecipe(output.get(0), input.get(0).toMcIngredient(), duration).setRegistryName(super.name);
-            PyroTech.campfire.add(recipe);
+            ModSupport.PYROTECH.get().campfire.add(recipe);
             return recipe;
         }
     }

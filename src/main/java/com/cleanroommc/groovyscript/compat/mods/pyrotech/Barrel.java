@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -97,7 +98,7 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
             Ingredient[] inputIngredient = input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new);
 
             BarrelRecipe recipe = new BarrelRecipe(fluidOutput.get(0), inputIngredient, fluidInput.get(0), duration).setRegistryName(super.name);
-            PyroTech.barrel.add(recipe);
+            ModSupport.PYROTECH.get().barrel.add(recipe);
 
             return recipe;
         }
