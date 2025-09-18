@@ -23,9 +23,9 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:diamond') * 4).output(item('minecraft:emerald') * 2).hits(5).typeHammer().tierGranite().name('diamond_to_emerald_granite_anvil')"),
-            @Example(".input(item('minecraft:diamond') * 8).output(item('minecraft:nether_star') * 1).hits(10).typePickaxe().tierIronclad().name('diamond_to_nether_star_ironclad_anvil')"),
-            @Example(".input(item('minecraft:diamond') * 4).output(item('minecraft:gold_ingot') * 16).hits(5).typePickaxe().tierObsidian().name('diamond_to_gold_obsidian_anvil')")
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald') * 2).hits(5).typeHammer().tierGranite().name('diamond_to_emerald_granite_anvil')"),
+            @Example(".input(item('minecraft:bedrock')).output(item('minecraft:nether_star') * 1).hits(10).typePickaxe().tierIronclad().name('bedrock_to_nether_star_ironclad_anvil')"),
+            @Example(".input(item('minecraft:gold_block')).output(item('minecraft:gold_ingot') * 16).hits(5).typePickaxe().tierObsidian().name('gold_block_to_gold_obsidian_anvil')")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
