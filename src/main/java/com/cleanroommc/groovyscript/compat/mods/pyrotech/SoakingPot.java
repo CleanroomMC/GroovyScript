@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -112,7 +113,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         public @Nullable SoakingPotRecipe register() {
             if (!validate()) return null;
             SoakingPotRecipe recipe = new SoakingPotRecipe(output.get(0), input.get(0).toMcIngredient(), fluidInput.get(0), campfireRequired, time).setRegistryName(super.name);
-            PyroTech.soakingPot.add(recipe);
+            ModSupport.PYROTECH.get().soakingPot.add(recipe);
             return recipe;
         }
     }

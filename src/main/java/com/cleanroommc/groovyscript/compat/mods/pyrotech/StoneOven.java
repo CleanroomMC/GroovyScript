@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
@@ -100,7 +101,7 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
         public @Nullable StoneOvenRecipe register() {
             if (!validate()) return null;
             StoneOvenRecipe recipe = new StoneOvenRecipe(output.get(0), input.get(0).toMcIngredient(), duration).setRegistryName(super.name);
-            PyroTech.stoneOven.add(recipe);
+            ModSupport.PYROTECH.get().stoneOven.add(recipe);
             return recipe;
         }
     }

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
@@ -137,7 +138,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         public @Nullable KilnPitRecipe register() {
             if (!validate()) return null;
             KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
-            PyroTech.pitKiln.add(recipe);
+            ModSupport.PYROTECH.get().pitKiln.add(recipe);
             return recipe;
         }
     }
