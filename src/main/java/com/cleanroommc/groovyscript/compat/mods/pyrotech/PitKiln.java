@@ -26,7 +26,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')]"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'brick_to_iron', item('minecraft:brick'), item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')]"))
     public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, Iterable<ItemStack> failureOutput) {
         return recipeBuilder()
                 .burnTime(burnTime)

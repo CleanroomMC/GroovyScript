@@ -11,7 +11,7 @@ mods.pyrotech.anvil.removeByOutput(item('minecraft:stone_slab', 3))
 // mods.pyrotech.anvil.removeAll()
 
 mods.pyrotech.anvil.recipeBuilder()
-    .input(item('minecraft:diamond') * 4)
+    .input(item('minecraft:diamond'))
     .output(item('minecraft:emerald') * 2)
     .hits(5)
     .typeHammer()
@@ -20,21 +20,21 @@ mods.pyrotech.anvil.recipeBuilder()
     .register()
 
 mods.pyrotech.anvil.recipeBuilder()
-    .input(item('minecraft:diamond') * 8)
+    .input(item('minecraft:bedrock'))
     .output(item('minecraft:nether_star') * 1)
     .hits(10)
     .typePickaxe()
     .tierIronclad()
-    .name('diamond_to_nether_star_ironclad_anvil')
+    .name('bedrock_to_nether_star_ironclad_anvil')
     .register()
 
 mods.pyrotech.anvil.recipeBuilder()
-    .input(item('minecraft:diamond') * 4)
+    .input(item('minecraft:gold_block'))
     .output(item('minecraft:gold_ingot') * 16)
     .hits(5)
     .typePickaxe()
     .tierObsidian()
-    .name('diamond_to_gold_obsidian_anvil')
+    .name('gold_block_to_gold_obsidian_anvil')
     .register()
 
 
@@ -158,7 +158,7 @@ mods.pyrotech.compost_bin.recipeBuilder()
     .register()
 
 
-mods.pyrotech.compost_bin.add('iron_to_clay2', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 2)
+mods.pyrotech.compost_bin.add('iron_to_clay2', ore('ingotIron'), item('minecraft:clay_ball') * 20, 2)
 
 // Crude Drying Rack:
 // Converts an item over time into a new one.
@@ -208,7 +208,7 @@ mods.pyrotech.pit_kiln.recipeBuilder()
     .register()
 
 
-mods.pyrotech.pit_kiln.add('clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')])
+mods.pyrotech.pit_kiln.add('brick_to_iron', item('minecraft:brick'), item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')])
 
 // Soaking Pot:
 // Converts an item into a new one by soaking it in a liquid. Can require a campfire.
