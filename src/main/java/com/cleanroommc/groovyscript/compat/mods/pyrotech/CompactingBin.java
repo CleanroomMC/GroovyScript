@@ -7,9 +7,11 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasicConfig;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompactingBinRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.MechanicalCompactingBinRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.MechanicalCompactingBinRecipe;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -122,7 +124,7 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
             CompactingBinRecipe recipe = new CompactingBinRecipe(output.get(0), input.get(0).toMcIngredient(), input.get(0).getAmount(), hits.isEmpty() ? ModuleTechBasicConfig.COMPACTING_BIN.TOOL_USES_REQUIRED_PER_HARVEST_LEVEL : hits.toIntArray()).setRegistryName(super.name);
             input.get(0).setAmount(1);
             ModSupport.PYROTECH.get().compactingBin.add(recipe);
-            if (inherit) {
+            if (inherit && ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
                 MechanicalCompactingBinRecipe mechanicalCompactingBinRecipe = MechanicalCompactingBinRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(super.name.getNamespace(), "compacting_bin/" + super.name.getPath());
                 ModSupport.PYROTECH.get().mechanicalCompactingBin.add(mechanicalCompactingBinRecipe);
             }

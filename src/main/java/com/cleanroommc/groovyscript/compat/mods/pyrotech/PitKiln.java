@@ -9,8 +9,10 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickKilnRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.StoneKilnRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneKilnRecipe;
@@ -160,7 +162,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
             if (!validate()) return null;
             KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
             ModSupport.PYROTECH.get().pitKiln.add(recipe);
-            if (inherit) {
+            if (inherit && ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
                 ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "pit_kiln/" + super.name.getPath());
                 StoneKilnRecipe stoneKilnRecipe = StoneKilnRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
                 ModSupport.PYROTECH.get().stoneKiln.add(stoneKilnRecipe);
