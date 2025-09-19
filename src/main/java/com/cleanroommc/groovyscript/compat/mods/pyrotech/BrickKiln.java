@@ -20,12 +20,12 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
         super(ModuleTechMachine.Registries.BRICK_KILN_RECIPES);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items_brick')"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:fish')).output(item('minecraft:cooked_fish')).burnTime(200000).failureChance(0.99f).failureOutput(item('minecraft:dragon_egg'), item('minecraft:dragon_breath')).name('meaning_of_life')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron_brick', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone')"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'beetroot_soup', item('minecraft:beetroot'), item('minecraft:beetroot_soup'), 1200, 0.1f, item('minecraft:beetroot_seeds')"))
     public BrickKilnRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, ItemStack... failureOutput) {
         return recipeBuilder()
                 .burnTime(burnTime)
@@ -37,7 +37,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
                 .register();
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:cobblestone')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing refractory oven recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -107,7 +107,9 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder failureOutput(Iterable<ItemStack> failureOutputs) {
-            for (ItemStack itemStack : failureOutputs) failureOutput(itemStack);
+            for (ItemStack itemStack : failureOutputs) {
+                failureOutput(itemStack);
+            }
             return this;
         }
 
@@ -120,7 +122,6 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             this.failureOutput.trim();
-            validateCustom(msg, failureOutput, 1, 100, "failure output");
             msg.add(burnTime < 0, "burnTime must be a non negative integer, yet it was {}", burnTime);
             msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
             msg.add(super.name == null, "name cannot be null.");

@@ -39,7 +39,7 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
                 .register();
     }
 
-    @MethodDescription(example = @Example("fluid('freckleberry_wine') * 1000"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("fluid('freckleberry_wine') * 1000"))
     public void removeByOutput(FluidStack output) {
         if (GroovyLog.msg("Error removing barrel recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
