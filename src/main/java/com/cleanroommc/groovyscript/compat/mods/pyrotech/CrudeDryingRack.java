@@ -7,10 +7,12 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.init.recipe.DryingRackRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CrudeDryingRackRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.StoneOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickOvenRecipe;
@@ -131,10 +133,12 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
                 ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "crude_drying_rack/" + super.name.getPath());
                 DryingRackRecipe dryingRackRecipe = DryingRackRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
                 ModSupport.PYROTECH.get().dryingRack.add(dryingRackRecipe);
-                StoneOvenRecipe stoneOvenRecipe = StoneOvenRecipesAdd.INHERIT_TRANSFORMER.apply(dryingRackRecipe).setRegistryName(location);
-                ModSupport.PYROTECH.get().stoneOven.add(stoneOvenRecipe);
-                BrickOvenRecipe brickOvenRecipe = BrickOvenRecipesAdd.INHERIT_TRANSFORMER.apply(stoneOvenRecipe).setRegistryName(location);
-                ModSupport.PYROTECH.get().brickOven.add(brickOvenRecipe);
+                if (ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
+                    StoneOvenRecipe stoneOvenRecipe = StoneOvenRecipesAdd.INHERIT_TRANSFORMER.apply(dryingRackRecipe).setRegistryName(location);
+                    ModSupport.PYROTECH.get().stoneOven.add(stoneOvenRecipe);
+                    BrickOvenRecipe brickOvenRecipe = BrickOvenRecipesAdd.INHERIT_TRANSFORMER.apply(stoneOvenRecipe).setRegistryName(location);
+                    ModSupport.PYROTECH.get().brickOven.add(brickOvenRecipe);
+                }
             }
             return recipe;
         }

@@ -7,8 +7,10 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.StoneOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickOvenRecipe;
@@ -125,7 +127,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
             if (!validate()) return null;
             DryingRackRecipe recipe = new DryingRackRecipe(output.get(0), input.get(0).toMcIngredient(), dryTime).setRegistryName(super.name);
             ModSupport.PYROTECH.get().dryingRack.add(recipe);
-            if (inherit) {
+            if (inherit && ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
                 ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "drying_rack/" + super.name.getPath());
                 StoneOvenRecipe stoneOvenRecipe = StoneOvenRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
                 ModSupport.PYROTECH.get().stoneOven.add(stoneOvenRecipe);
