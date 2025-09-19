@@ -36,7 +36,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
                 .register();
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('pyrotech:hide_washed')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing soaking pot recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -51,7 +51,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         }
     }
 
-    @MethodDescription(example = @Example("item('pyrotech:material', 54)"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('pyrotech:material', 54)"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing soaking pot recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -74,7 +74,6 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
 
         @Property
         private boolean campfireRequired;
-
         @Property(comp = @Comp(gte = 1))
         private int time;
 

@@ -24,12 +24,12 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
         super(ModuleTechMachine.Registries.BRICK_OVEN_RECIPES);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald_brick')"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:chorus_fruit')).output(item('minecraft:chorus_fruit_popped')).duration(800).name('chorus_fruit_whats_popping')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt_brick', item('minecraft:apple'), item('minecraft:dirt'), 1000"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'lead_poisoning', item('minecraft:slime_ball'), item('minecraft:lead') * 16, 1000"))
     public BrickOvenRecipe add(String name, IIngredient input, ItemStack output, int duration) {
         return recipeBuilder()
                 .duration(duration)
@@ -39,7 +39,7 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
                 .register();
     }
 
-    @MethodDescription(example = @Example("item('minecraft:porkchop')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:porkchop')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing brick oven recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -54,7 +54,7 @@ public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
         }
     }
 
-    @MethodDescription(example = @Example("item('minecraft:cooked_porkchop')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:cooked_porkchop')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing brick oven recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

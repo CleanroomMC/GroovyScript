@@ -36,7 +36,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
                 .register();
     }
 
-    @MethodDescription(example = @Example("item('minecraft:golden_carrot')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:golden_carrot')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing compost bin recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -51,7 +51,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         }
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example(value = "item('pyrotech:mulch') * 4", commented = true))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing compost bin recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")

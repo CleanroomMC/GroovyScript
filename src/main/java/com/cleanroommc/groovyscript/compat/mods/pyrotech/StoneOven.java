@@ -8,8 +8,11 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickOvenRecipesAdd;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickOvenRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneOvenRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription(
@@ -24,14 +27,19 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
         super(ModuleTechMachine.Registries.STONE_OVEN_RECIPES);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald_stone')"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).inherit(true).name('diamond_campfire_to_emerald_stone')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt_stone', item('minecraft:apple'), item('minecraft:dirt'), 1000"))
     public StoneOvenRecipe add(String name, IIngredient input, ItemStack output, int duration) {
+        return add(name, input, output, duration, false);
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'sand_to_dirt', item('minecraft:sand'), item('minecraft:dirt'), 1000, true"))
+    public StoneOvenRecipe add(String name, IIngredient input, ItemStack output, int duration, boolean inherit) {
         return recipeBuilder()
+                .inherit(inherit)
                 .duration(duration)
                 .name(name)
                 .input(input)
@@ -39,7 +47,7 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
                 .register();
     }
 
-    @MethodDescription(example = @Example("item('minecraft:porkchop')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:porkchop')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing stone oven recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -54,7 +62,7 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
         }
     }
 
-    @MethodDescription(example = @Example("item('minecraft:cooked_porkchop')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:cooked_porkchop')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing stone oven recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -76,10 +84,18 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
 
         @Property(comp = @Comp(gte = 1))
         private int duration;
+        @Property
+        private boolean inherit;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder duration(int time) {
             this.duration = time;
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder inherit(boolean inherit) {
+            this.inherit = inherit;
             return this;
         }
 
@@ -102,6 +118,11 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
             if (!validate()) return null;
             StoneOvenRecipe recipe = new StoneOvenRecipe(output.get(0), input.get(0).toMcIngredient(), duration).setRegistryName(super.name);
             ModSupport.PYROTECH.get().stoneOven.add(recipe);
+            if (inherit) {
+                ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "stone_oven/" + super.name.getPath());
+                BrickOvenRecipe brickOvenRecipe = BrickOvenRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
+                ModSupport.PYROTECH.get().brickOven.add(brickOvenRecipe);
+            }
             return recipe;
         }
     }
