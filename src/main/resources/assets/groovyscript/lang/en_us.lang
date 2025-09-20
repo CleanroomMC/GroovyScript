@@ -2380,12 +2380,19 @@ groovyscript.wiki.pyrotech.anvil.description=When using hammer or pickaxe it can
 groovyscript.wiki.pyrotech.anvil.hits.value=Sets how often the item needs to be hit
 groovyscript.wiki.pyrotech.anvil.tier.value=Sets the tier of the required anvil (Granite, Ironclad, Obsidian)
 groovyscript.wiki.pyrotech.anvil.type.value=Sets the type of tool required (Hammer, Pickaxe)
-groovyscript.wiki.pyrotech.anvil.add=Adds recipes in the format `name`, `input`, `output`, `hits`, `tier`, `type`
+groovyscript.wiki.pyrotech.anvil.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.anvil.add=Adds recipes in the format `name`, `input`, `output`, `hits`, `tier`, `type`, `(optional) inherit`
 
 groovyscript.wiki.pyrotech.barrel.title=Barrel
 groovyscript.wiki.pyrotech.barrel.description=Over time converts a fluid with four items into a new fluid
 groovyscript.wiki.pyrotech.barrel.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.barrel.add=Adds recipes in the format `name`, `input1`, `input2`, `input3`, `input4`, `fluidInput`, `fluidOutput`, `duration`
+
+groovyscript.wiki.pyrotech.brick_crucible.title=Refractory Crucible
+groovyscript.wiki.pyrotech.brick_crucible.description=Melts an item into liquid.
+groovyscript.wiki.pyrotech.brick_crucible.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.brick_crucible.add=Adds recipes in the format `name`, `input`, `fluidOutput`, `burnTime`
+groovyscript.wiki.pyrotech.brick_crucible.note0=Can inherit recipes from [Stone Crucible](./stone_crucible.md)
 
 groovyscript.wiki.pyrotech.brick_kiln.title=Refractory Kiln
 groovyscript.wiki.pyrotech.brick_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
@@ -2393,11 +2400,21 @@ groovyscript.wiki.pyrotech.brick_kiln.burnTime.value=Sets the time required for 
 groovyscript.wiki.pyrotech.brick_kiln.failureChance.value=Sets the chance to fail the recipe
 groovyscript.wiki.pyrotech.brick_kiln.failureOutput.value=Sets the output when the recipe failed
 groovyscript.wiki.pyrotech.brick_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+groovyscript.wiki.pyrotech.brick_kiln.note0=Can inherit recipes from [Pit Kiln](./pit_kiln.md) and [Stone Kiln](./stone_kiln.md)
 
 groovyscript.wiki.pyrotech.brick_oven.title=Refractory Oven
 groovyscript.wiki.pyrotech.brick_oven.description=When powered by burning fuel can convert items
 groovyscript.wiki.pyrotech.brick_oven.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.brick_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
+groovyscript.wiki.pyrotech.brick_oven.note0=Can inherit recipes from [Crude Drying Rack](./crude_drying_rack.md), [Drying Rack](./drying_rack.md) and [Stone Oven](./stone_oven.md)
+
+groovyscript.wiki.pyrotech.brick_sawmill.title=Refractory Sawmill
+groovyscript.wiki.pyrotech.brick_sawmill.description=Converts an item, likely wood, by cutting it to a smaller item and drops wood chips.
+groovyscript.wiki.pyrotech.brick_sawmill.input.value=Sets the input required for the recipe. Second input value is an optional value for setting saw blade.
+groovyscript.wiki.pyrotech.brick_sawmill.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.brick_sawmill.wood_chips.value=Sets the wood chip amount that will drop.
+groovyscript.wiki.pyrotech.brick_sawmill.add=Adds recipes in the format `name`, `input`, `(optional) blade`, `output`, `duration`, `woodChips`
+groovyscript.wiki.pyrotech.brick_sawmill.note0=Can inherit recipes from [Chopping Block](./chopping_block.md) and [Stone Sawmill](./stone_sawmill.md)
 
 groovyscript.wiki.pyrotech.campfire.title=Campfire
 groovyscript.wiki.pyrotech.campfire.description=When powered by burning logs can convert items
@@ -2407,12 +2424,14 @@ groovyscript.wiki.pyrotech.campfire.add=Adds recipes in the format `name`, `inpu
 groovyscript.wiki.pyrotech.chopping_block.title=Chopping Block
 groovyscript.wiki.pyrotech.chopping_block.description=When using a axe it can convert items
 groovyscript.wiki.pyrotech.chopping_block.chops.value=Sets how often the item needs to be hit with output amount. Call it 4 times for 4 different tiers (Crude, Stone, Iron, Diamond)
+groovyscript.wiki.pyrotech.chopping_block.inherit.value=Sets if the recipe should be inherited by more advanced machines
 groovyscript.wiki.pyrotech.chopping_block.quantities.value=Sets the amount of items output for a given tier. Call it 4 times for 4 different tiers (Crude, Stone, Iron, Diamond)
 
 groovyscript.wiki.pyrotech.compacting_bin.title=Compacting Bin
 groovyscript.wiki.pyrotech.compacting_bin.description=When using a shovel it can convert items
-groovyscript.wiki.pyrotech.compacting_bin.toolUses.value=Sets how often the item needs to be hit
-groovyscript.wiki.pyrotech.compacting_bin.add=Adds recipes in the format `name`, `input`, `output`, `hits`
+groovyscript.wiki.pyrotech.compacting_bin.hits.value=Sets how often the item needs to be hit
+groovyscript.wiki.pyrotech.compacting_bin.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.compacting_bin.add=Adds recipes in the format `name`, `input`, `output`, `(optional) inherit`, `hits`
 
 groovyscript.wiki.pyrotech.compost_bin.title=Compost Bin
 groovyscript.wiki.pyrotech.compost_bin.description=Can convert multiple items into a new one when its full
@@ -2422,33 +2441,65 @@ groovyscript.wiki.pyrotech.compost_bin.add=Adds recipes in the format `name`, `i
 groovyscript.wiki.pyrotech.crude_drying_rack.title=Crude Drying Rack
 groovyscript.wiki.pyrotech.crude_drying_rack.description=Converts an item over time into a new one
 groovyscript.wiki.pyrotech.crude_drying_rack.dryTime.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.crude_drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
+groovyscript.wiki.pyrotech.crude_drying_rack.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.crude_drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`, `(optional) inherit`
 
 groovyscript.wiki.pyrotech.drying_rack.title=Drying Rack
 groovyscript.wiki.pyrotech.drying_rack.description=Converts an item over time into a new one
 groovyscript.wiki.pyrotech.drying_rack.dryTime.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`
+groovyscript.wiki.pyrotech.drying_rack.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.drying_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`, `(optional) inherit`
+groovyscript.wiki.pyrotech.drying_rack.note0=Can inherit recipes from [Crude Drying Rack](./crude_drying_rack.md)
+
+groovyscript.wiki.pyrotech.mechanical_compacting_bin.title=Mechanical Compacting Bin
+groovyscript.wiki.pyrotech.mechanical_compacting_bin.description=Compacting Bin but automatic
+groovyscript.wiki.pyrotech.mechanical_compacting_bin.hits.value=Sets how often the item needs to be hit
+groovyscript.wiki.pyrotech.mechanical_compacting_bin.add=Adds recipes in the format `name`, `input`, `output`, `hits`
+groovyscript.wiki.pyrotech.mechanical_compacting_bin.note0=Can inherit recipes from [Compacting Bin](./compacting_bin.md)
 
 groovyscript.wiki.pyrotech.pit_kiln.title=Pit Kiln
 groovyscript.wiki.pyrotech.pit_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
 groovyscript.wiki.pyrotech.pit_kiln.burnTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.pit_kiln.failureChance.value=Sets the chance to fail the recipe
 groovyscript.wiki.pyrotech.pit_kiln.failureOutput.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.pit_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+groovyscript.wiki.pyrotech.pit_kiln.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.pit_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `(optional) inherit`, `failureChance`, `failureOutput`
 
 groovyscript.wiki.pyrotech.oven.note0=Stone and Refractory Oven includes some recipes from the Furnace Registry that can't be removed here, you have to use `furnace.add` or `furnace.remove` to manipulate those recipes directly
+
+groovyscript.wiki.pyrotech.sawmill.note0=If sawmill blade is not set, it will add the recipe for all sawmill blades. sawmill blade that is set needs to be one of the sawmill blades
+
+groovyscript.wiki.pyrotech.stone_crucible.title=Stone Crucible
+groovyscript.wiki.pyrotech.stone_crucible.description=Melts an item into liquid.
+groovyscript.wiki.pyrotech.stone_crucible.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.stone_crucible.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.stone_crucible.add=Adds recipes in the format `name`, `input`, `fluidOutput`, `burnTime`, `(optional) inherit`
+groovyscript.wiki.pyrotech.stone_crucible.note0=Can inherit recipes from [Stone Crucible](./stone_crucible.md)
 
 groovyscript.wiki.pyrotech.stone_kiln.title=Stone Kiln
 groovyscript.wiki.pyrotech.stone_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
 groovyscript.wiki.pyrotech.stone_kiln.burnTime.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.stone_kiln.failureChance.value=Sets the chance to fail the recipe
 groovyscript.wiki.pyrotech.stone_kiln.failureOutput.value=Sets the output when the recipe failed
-groovyscript.wiki.pyrotech.stone_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `failureChance`, `failureOutput`
+groovyscript.wiki.pyrotech.stone_kiln.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.stone_kiln.add=Adds recipes in the format `name`, `input`, `output`, `burnTime`, `(optional) inherit`, `failureChance`, `failureOutput`
+groovyscript.wiki.pyrotech.stone_kiln.note0=Can inherit recipes from [Pit Kiln](./pit_kiln.md)
 
 groovyscript.wiki.pyrotech.stone_oven.title=Stone Oven
 groovyscript.wiki.pyrotech.stone_oven.description=When powered by burning fuel can convert items
 groovyscript.wiki.pyrotech.stone_oven.duration.value=Sets the time required for the recipe to complete
-groovyscript.wiki.pyrotech.stone_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`
+groovyscript.wiki.pyrotech.stone_oven.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.stone_oven.add=Adds recipes in the format `name`, `input`, `output`, `duration`, `(optional) inherit`
+groovyscript.wiki.pyrotech.stone_oven.note0=Can inherit recipes from [Crude Drying Rack](./crude_drying_rack.md) and [Drying Rack](./drying_rack.md)
+
+groovyscript.wiki.pyrotech.stone_sawmill.title=Stone Sawmill
+groovyscript.wiki.pyrotech.stone_sawmill.description=Converts an item, likely wood, by cutting it to a smaller item and drops wood chips.
+groovyscript.wiki.pyrotech.stone_sawmill.input.value=Sets the input required for the recipe. Second input value is an optional value for setting sawmill blade.
+groovyscript.wiki.pyrotech.stone_sawmill.duration.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.stone_sawmill.wood_chips.value=Sets the wood chip amount that will drop.
+groovyscript.wiki.pyrotech.stone_sawmill.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.stone_sawmill.add=Adds recipes in the format `name`, `input`, `(optional) blade`, `output`, `duration`, `woodChips`, `(optional) inherit`
+groovyscript.wiki.pyrotech.stone_sawmill.note0=Can inherit recipes from [Chopping Block](./chopping_block.md)
 
 groovyscript.wiki.pyrotech.soaking_pot.title=Soaking Pot
 groovyscript.wiki.pyrotech.soaking_pot.description=Converts an item into a new one by soaking it in a liquid. Can require a campfire

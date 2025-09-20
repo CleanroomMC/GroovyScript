@@ -19,7 +19,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition(
+                value = "groovyscript.wiki.pyrotech.drying_rack.note0",
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
 
     public DryingRack() {

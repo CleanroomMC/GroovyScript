@@ -15,7 +15,11 @@ import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneKilnRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition(
+                value = "groovyscript.wiki.pyrotech.stone_kiln.note0",
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
 
     public StoneKiln() {

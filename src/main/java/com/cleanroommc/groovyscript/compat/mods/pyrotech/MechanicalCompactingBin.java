@@ -17,7 +17,11 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition(
+                value = "groovyscript.wiki.pyrotech.mechanical_compacting_bin.note0",
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class MechanicalCompactingBin extends ForgeRegistryWrapper<MechanicalCompactingBinRecipe> {
 
     public MechanicalCompactingBin() {
