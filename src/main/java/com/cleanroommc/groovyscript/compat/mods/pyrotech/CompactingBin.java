@@ -122,7 +122,6 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         public @Nullable CompactingBinRecipe register() {
             if (!validate()) return null;
             CompactingBinRecipe recipe = new CompactingBinRecipe(output.get(0), input.get(0).toMcIngredient(), input.get(0).getAmount(), hits.isEmpty() ? ModuleTechBasicConfig.COMPACTING_BIN.TOOL_USES_REQUIRED_PER_HARVEST_LEVEL : hits.toIntArray()).setRegistryName(super.name);
-            input.get(0).setAmount(1);
             ModSupport.PYROTECH.get().compactingBin.add(recipe);
             if (inherit && ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
                 MechanicalCompactingBinRecipe mechanicalCompactingBinRecipe = MechanicalCompactingBinRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(super.name.getNamespace(), "compacting_bin/" + super.name.getPath());
