@@ -103,7 +103,7 @@ public class StoneSawmill extends ForgeRegistryWrapper<StoneSawmillRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<StoneSawmillRecipe> {
 
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int duration;
         @Property(comp = @Comp(gte = 0))
         private int woodChips;
@@ -136,7 +136,7 @@ public class StoneSawmill extends ForgeRegistryWrapper<StoneSawmillRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 2, 1, 1);
-            msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
+            msg.add(duration <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", duration);
             msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechMachine.Registries.STONE_SAWMILL_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }

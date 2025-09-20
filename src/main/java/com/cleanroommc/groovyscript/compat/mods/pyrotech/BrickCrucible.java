@@ -69,7 +69,7 @@ public class BrickCrucible extends ForgeRegistryWrapper<BrickCrucibleRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<BrickCrucibleRecipe> {
 
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int burnTime;
 
         @RecipeBuilderMethodDescription
@@ -92,7 +92,7 @@ public class BrickCrucible extends ForgeRegistryWrapper<BrickCrucibleRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg, 0, 0, 1, 1);
-            msg.add(burnTime < 0,  "burnTime must be a non negative integer, yet it was {}", burnTime);
+            msg.add(burnTime <= 0,  "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
             msg.add(super.name == null, "name cannot be null");
             msg.add(ModuleTechMachine.Registries.STONE_CRUCIBLE_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }

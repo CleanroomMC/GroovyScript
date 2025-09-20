@@ -97,7 +97,7 @@ public class MechanicalCompactingBin extends ForgeRegistryWrapper<MechanicalComp
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(hits.stream().anyMatch(i -> i <= 0), "hits must be a non negative integer that's larger than 0");
+            msg.add(hits.stream().anyMatch(i -> i <= 0), "hits must be a non negative integer that is larger than 0");
             msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
