@@ -14,6 +14,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription(
+        admonition = @Admonition(
+                value = "groovyscript.wiki.pyrotech.brick_crucible.note0",
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class BrickCrucible extends ForgeRegistryWrapper<BrickCrucibleRecipe> {
 
     public BrickCrucible() {

@@ -14,7 +14,11 @@ import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickKilnRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition(
+                value = "groovyscript.wiki.pyrotech.brick_kiln.note0",
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
     public BrickKiln() {

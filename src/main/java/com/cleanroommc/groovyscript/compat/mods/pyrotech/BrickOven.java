@@ -14,11 +14,18 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription(
-        admonition = @Admonition(
-                value = "groovyscript.wiki.pyrotech.oven.note0",
-                type = Admonition.Type.WARNING,
-                format = Admonition.Format.STANDARD,
-                hasTitle = true))
+        admonition = {
+                @Admonition(
+                        value = "groovyscript.wiki.pyrotech.brick_oven.note0",
+                        format = Admonition.Format.STANDARD,
+                        hasTitle = true
+                ),
+                @Admonition(
+                        value = "groovyscript.wiki.pyrotech.oven.note0",
+                        type = Admonition.Type.WARNING,
+                        format = Admonition.Format.STANDARD,
+                        hasTitle = true)
+        })
 public class BrickOven extends ForgeRegistryWrapper<BrickOvenRecipe> {
 
     public BrickOven() {

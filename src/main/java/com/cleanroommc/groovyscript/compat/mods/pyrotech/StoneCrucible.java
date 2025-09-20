@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class StoneCrucible extends ForgeRegistryWrapper<StoneCrucibleRecipe> {
 
     public StoneCrucible() {

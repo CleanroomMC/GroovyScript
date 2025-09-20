@@ -17,11 +17,18 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription(
-        admonition = @Admonition(
-                value = "groovyscript.wiki.pyrotech.sawmill.note0",
-                type = Admonition.Type.WARNING,
-                format = Admonition.Format.STANDARD,
-                hasTitle = true))
+        admonition = {
+                @Admonition(
+                        value = "groovyscript.wiki.pyrotech.brick_sawmill.note0",
+                        format = Admonition.Format.STANDARD,
+                        hasTitle = true
+                ),
+                @Admonition(
+                        value = "groovyscript.wiki.pyrotech.sawmill.note0",
+                        type = Admonition.Type.WARNING,
+                        format = Admonition.Format.STANDARD,
+                        hasTitle = true)
+        })
 public class BrickSawmill extends ForgeRegistryWrapper<BrickSawmillRecipe> {
 
     public BrickSawmill() {
@@ -97,7 +104,7 @@ public class BrickSawmill extends ForgeRegistryWrapper<BrickSawmillRecipe> {
 
         @Property(comp = @Comp(gt = 0))
         private int duration;
-        @Property(comp = @Comp(gte = 0))
+        @Property(value = "wood_chips", comp = @Comp(gte = 0))
         private int woodChips;
 
         @RecipeBuilderMethodDescription
