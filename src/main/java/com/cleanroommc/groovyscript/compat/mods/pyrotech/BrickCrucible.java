@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickCrucibleRecipe;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,11 @@ public class BrickCrucible extends ForgeRegistryWrapper<BrickCrucibleRecipe> {
 
     public BrickCrucible() {
         super(ModuleTechMachine.Registries.BRICK_CRUCIBLE_RECIPES);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
     @RecipeBuilderDescription(example = @Example("input(item('minecraft:vine')).fluidOutput(fluid('water') * 250).burnTime(60).name('water_from_vine')"))

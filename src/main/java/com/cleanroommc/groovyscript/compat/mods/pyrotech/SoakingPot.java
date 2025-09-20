@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.SoakingPotRecipe;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,11 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
 
     public SoakingPot() {
         super(ModuleTechBasic.Registries.SOAKING_POT_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('amongium') * 125).output(item('minecraft:emerald')).time(400).campfireRequired(true).name('diamond_to_emerald_with_amongium_soaking_pot')"))

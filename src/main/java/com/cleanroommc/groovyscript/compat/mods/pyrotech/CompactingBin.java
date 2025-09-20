@@ -22,9 +22,13 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
 
-
     public CompactingBin() {
         super(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = {

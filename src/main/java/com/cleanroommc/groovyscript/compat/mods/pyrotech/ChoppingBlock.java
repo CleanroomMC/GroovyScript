@@ -28,6 +28,11 @@ public class ChoppingBlock extends ForgeRegistryWrapper<ChoppingBlockRecipe> {
         super(ModuleTechBasic.Registries.CHOPPING_BLOCK_RECIPE);
     }
 
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
+    }
+
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).chops(25, 1).chops(20, 1).chops(15, 1).chops(10, 2).name('diamond_to_emerald_chopping_block')"),
             @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).inherit(true).name('iron_to_gold_chopping_block')")

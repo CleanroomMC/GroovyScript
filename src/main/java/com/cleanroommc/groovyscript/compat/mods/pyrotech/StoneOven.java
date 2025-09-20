@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickOvenRecipe;
@@ -25,6 +26,11 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
 
     public StoneOven() {
         super(ModuleTechMachine.Registries.STONE_OVEN_RECIPES);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).inherit(true).name('diamond_campfire_to_emerald_stone')"))

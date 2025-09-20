@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickKilnRecipe;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,11 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
     public BrickKiln() {
         super(ModuleTechMachine.Registries.BRICK_KILN_RECIPES);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:fish')).output(item('minecraft:cooked_fish')).burnTime(200000).failureChance(0.99f).failureOutput(item('minecraft:dragon_egg'), item('minecraft:dragon_breath')).name('meaning_of_life')"))

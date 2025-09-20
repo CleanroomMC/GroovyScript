@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickCrucibleRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickCrucibleRecipe;
@@ -19,6 +20,11 @@ public class StoneCrucible extends ForgeRegistryWrapper<StoneCrucibleRecipe> {
 
     public StoneCrucible() {
         super(ModuleTechMachine.Registries.STONE_CRUCIBLE_RECIPES);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(ore('sugarcane')).output(fluid('water') * 500).burnTime(1000).inherit(true).name('water_from_sugarcane')"))

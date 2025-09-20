@@ -22,9 +22,13 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
 
-
     public DryingRack() {
         super(ModuleTechBasic.Registries.DRYING_RACK_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = {

@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasicConfig;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
@@ -21,6 +22,11 @@ public class MechanicalCompactingBin extends ForgeRegistryWrapper<MechanicalComp
 
     public MechanicalCompactingBin() {
         super(ModuleTechMachine.Registries.MECHANICAL_COMPACTING_BIN_RECIPES);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
     @RecipeBuilderDescription(example = {

@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickSawmillRecipe;
 import net.minecraft.item.ItemStack;
@@ -25,6 +26,11 @@ public class BrickSawmill extends ForgeRegistryWrapper<BrickSawmillRecipe> {
 
     public BrickSawmill() {
         super(ModuleTechMachine.Registries.BRICK_SAWMILL_RECIPES);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:golden_helmet')).output(item('minecraft:gold_ingot') * 2).duration(1500).woodChips(5).name('golden_helmet_recycling')"))
