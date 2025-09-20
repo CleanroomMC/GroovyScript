@@ -168,7 +168,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(hits < 0, "duration must be a non negative integer, yet it was {}", hits);
+            msg.add(hits <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", hits);
             msg.add(type == null, "type cannot be null.");
             msg.add(tier == null, "tier cannot be null.");
             msg.add(super.name == null, "name cannot be null.");

@@ -71,7 +71,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<TanningRackRecipe> {
 
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int dryTime;
         @Property
         private ItemStack failureItem;
@@ -102,7 +102,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(dryTime < 0, "dryTime must be a non negative integer, yet it was {}", dryTime);
+            msg.add(dryTime <= 0, "dryTime must be a non negative integer that is larger than 0, yet it was {}", dryTime);
             msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.TANNING_RACK_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }

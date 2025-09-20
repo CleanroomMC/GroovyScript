@@ -60,7 +60,7 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<BarrelRecipe> {
 
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int duration;
 
         @RecipeBuilderMethodDescription
@@ -84,7 +84,7 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 4, 4, 0, 0);
             validateFluids(msg, 1, 1, 1, 1);
-            msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
+            msg.add(duration <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", duration);
             msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.BARREL_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
@@ -93,13 +93,10 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         @Override
         public @Nullable BarrelRecipe register() {
             if (!validate()) return null;
-
             // Because you need Ingredient[] to register a recipe
             Ingredient[] inputIngredient = input.stream().map(IIngredient::toMcIngredient).toArray(Ingredient[]::new);
-
             BarrelRecipe recipe = new BarrelRecipe(fluidOutput.get(0), inputIngredient, fluidInput.get(0), duration).setRegistryName(super.name);
             ModSupport.PYROTECH.get().barrel.add(recipe);
-
             return recipe;
         }
     }

@@ -74,7 +74,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
         @Property
         private final ItemStackList failureOutput = new ItemStackList();
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int burnTime;
         @Property(comp = @Comp(gte = 0))
         private float failureChance;
@@ -122,7 +122,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             this.failureOutput.trim();
-            msg.add(burnTime < 0, "burnTime must be a non negative integer, yet it was {}", burnTime);
+            msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
             msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
             msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechMachine.Registries.BRICK_KILN_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
