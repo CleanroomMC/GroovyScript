@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.init.recipe.AnvilIroncladRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.init.recipe.AnvilObsidianRecipesAdd;
@@ -24,6 +25,11 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
 
     public Anvil() {
         super(ModuleTechBasic.Registries.ANVIL_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = {

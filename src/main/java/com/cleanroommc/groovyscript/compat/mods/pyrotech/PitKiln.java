@@ -27,6 +27,11 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         super(ModuleTechBasic.Registries.KILN_PIT_RECIPE, Alias.generateOfClass(PitKiln.class).andGenerate("Kiln"));
     }
 
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
+    }
+
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')"),
             @Example(".input(item('minecraft:record_11')).output(item('minecraft:record_13')).burnTime(200).failureChance(0f).inherit(true).name('record_11_to_record_13')")

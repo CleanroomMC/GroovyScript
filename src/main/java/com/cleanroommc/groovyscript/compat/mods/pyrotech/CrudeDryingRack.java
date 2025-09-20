@@ -24,9 +24,13 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe> {
 
-
     public CrudeDryingRack() {
         super(ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = {
