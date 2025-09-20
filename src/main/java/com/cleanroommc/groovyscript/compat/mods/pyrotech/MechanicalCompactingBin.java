@@ -107,7 +107,6 @@ public class MechanicalCompactingBin extends ForgeRegistryWrapper<MechanicalComp
         public @Nullable MechanicalCompactingBinRecipe register() {
             if (!validate()) return null;
             MechanicalCompactingBinRecipe recipe = new MechanicalCompactingBinRecipe(output.get(0), input.get(0).toMcIngredient(), input.get(0).getAmount(), hits.isEmpty() ? ModuleTechBasicConfig.COMPACTING_BIN.TOOL_USES_REQUIRED_PER_HARVEST_LEVEL : hits.toIntArray()).setRegistryName(super.name);
-            input.get(0).setAmount(1);
             ModSupport.PYROTECH.get().mechanicalCompactingBin.add(recipe);
             return recipe;
         }
