@@ -47,6 +47,7 @@ import org.jetbrains.annotations.NotNull;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public class CompletionProvider extends DocProvider {
 
@@ -197,7 +198,13 @@ public class CompletionProvider extends DocProvider {
                             break;
                         }
                     }
-                    mapper.provideCompletion(index, params, items);
+
+                    // Provide int max completions, then filter
+                    var temp = new Completions(Integer.MAX_VALUE);
+                    mapper.provideCompletion(index, params, temp);
+
+                    temp.removeIf(item -> !item.getLabel().toLowerCase(Locale.ENGLISH).contains(node.getText().toLowerCase(Locale.ENGLISH)));
+                    items.addAll(temp, Function.identity());
                 }
             }
             return false; // don't complete keyword in strings
