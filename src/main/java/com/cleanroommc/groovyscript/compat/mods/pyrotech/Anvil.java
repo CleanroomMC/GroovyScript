@@ -191,7 +191,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
             if (inherit) {
                 String name = null;
                 if (tier.ordinal() < 2) {
-                    name = tier.name().toLowerCase(Locale.US) + "_anvil";
+                    name = tier.name().toLowerCase(Locale.ENGLISH) + "_anvil";
                     AnvilRecipe obsidianRecipe = AnvilObsidianRecipesAdd.INHERIT_TRANSFORMER.apply(recipe);
                     obsidianRecipe.setRegistryName(new ResourceLocation(super.name.getNamespace(), name + "/" + super.name.getPath()));
                     ModSupport.PYROTECH.get().anvil.add(obsidianRecipe);

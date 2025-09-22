@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.ModPyrotech;
@@ -28,7 +29,7 @@ public class StoneCrucible extends ForgeRegistryWrapper<StoneCrucibleRecipe> {
         return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(ore('sugarcane')).output(fluid('water') * 500).burnTime(1000).inherit(true).name('water_from_sugarcane')"))
+    @RecipeBuilderDescription(example = @Example(".input(ore('sugarcane')).fluidOutput(fluid('water') * 500).burnTime(1000).inherit(true).name('water_from_sugarcane')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -50,6 +51,12 @@ public class StoneCrucible extends ForgeRegistryWrapper<StoneCrucibleRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:ice')"))
     public void removeByInput(ItemStack input) {
+        if (GroovyLog.msg("Error removing stone crucible recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
         for (StoneCrucibleRecipe recipe : getRegistry()) {
             if (recipe.getInput().test(input)) {
                 remove(recipe);
@@ -59,6 +66,12 @@ public class StoneCrucible extends ForgeRegistryWrapper<StoneCrucibleRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("fluid('water') * 500"))
     public void removeByOutput(IIngredient output) {
+        if (GroovyLog.msg("Error removing stone crucible recipe")
+                .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
+                .error()
+                .postIfNotEmpty()) {
+            return;
+        }
         for (StoneCrucibleRecipe recipe : getRegistry()) {
             if (output.test(recipe.getOutput())) {
                 remove(recipe);

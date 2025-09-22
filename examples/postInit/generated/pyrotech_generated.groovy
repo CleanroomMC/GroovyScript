@@ -59,6 +59,95 @@ mods.pyrotech.barrel.recipeBuilder()
 
 mods.pyrotech.barrel.add('iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000)
 
+// Bloomery:
+// Converts item to bloom or a different item by burning it.
+
+mods.pyrotech.bloomery.removeByInput(item('minecraft:gold_ore'))
+// mods.pyrotech.bloomery.removeByOutput(item('minecraft:iron_nugget'))
+// mods.pyrotech.bloomery.removeAll()
+
+mods.pyrotech.bloomery.recipeBuilder()
+    .input(item('minecraft:iron_block'))
+    .bloom(item('minecraft:apple'))
+    .failureChance(0.0F)
+    .slag(item('minecraft:carrot'))
+    .inherit(true)
+    .name('metal_vegetation')
+    .register()
+
+mods.pyrotech.bloomery.recipeBuilder()
+    .input(item('minecraft:noteblock'))
+    .output(item('minecraft:record_13'))
+    .experience(0.25F)
+    .tierIronclad(true)
+    .bloomYield(1, 1)
+    .burnTime(2000)
+    .failureChance(0.5F)
+    .failureOutput(item('minecraft:record_11'), 1)
+    .inherit(true)
+    .name('recipe_for_soundphiles')
+    .register()
+
+mods.pyrotech.bloomery.recipeBuilder()
+    .input(item('minecraft:sponge'))
+    .output(item('minecraft:sponge'))
+    .bloomYield(2, 5)
+    .typePickaxe()
+    .langKey(item('minecraft:stick').getTranslationKey())
+    .inherit(true)
+    .name('sponge_duplication')
+    .register()
+
+mods.pyrotech.bloomery.recipeBuilder()
+    .input(item('minecraft:birch_boat'))
+    .bloom(item('minecraft:dark_oak_boat'))
+    .tierObsidian()
+    .failureChance(0.1)
+    .failureOutput(item('minecraft:spruce_boat'), 5)
+    .failureOutput(item('minecraft:jungle_boat'), 2)
+    .failureOutput(item('minecraft:boat'), 1)
+    .name('boat_smelting')
+    .register()
+
+mods.pyrotech.bloomery.recipeBuilder()
+    .input(item('minecraft:sand'))
+    .output(item('minecraft:glass'))
+    .bloomYield(3, 5)
+    .experience(0.1F)
+    .burnTime(4000)
+    .tierGranite()
+    .tierObsidian()
+    .anvilHit(2)
+    .typePickaxe()
+    .failureChance(0.05)
+    .failureOutput(item('minecraft:nether_star'), 1)
+    .failureOutput(item('minecraft:gold_ingot'), 10)
+    .name('glasswork')
+    .register()
+
+
+mods.pyrotech.bloomery.add('loreming_the_ipsum', item('minecraft:redstone'), item('minecraft:lava_bucket'), false)
+mods.pyrotech.bloomery.add('cooking_a_story', item('minecraft:written_book'), item('minecraft:book'), 200, true)
+mods.pyrotech.bloomery.addBloom('cyanide', item('minecraft:poisonous_potato'), item('minecraft:potato'), true)
+mods.pyrotech.bloomery.addBloom('good_name', item('minecraft:blaze_powder'), 2, 3, ore('cropCarrot'), 500, 0.3F, true, 0.0F)
+
+// Refractory Crucible:
+// Melts an item into liquid.
+
+mods.pyrotech.brick_crucible.removeByInput(item('minecraft:gravel'))
+mods.pyrotech.brick_crucible.removeByOutput(fluid('water') * 125)
+// mods.pyrotech.brick_crucible.removeAll()
+
+mods.pyrotech.brick_crucible.recipeBuilder()
+    .input(item('minecraft:vine'))
+    .fluidOutput(fluid('water') * 250)
+    .burnTime(60)
+    .name('water_from_vine')
+    .register()
+
+
+mods.pyrotech.brick_crucible.add('lava_from_obsidian', ore('obsidian'), fluid('lava') * 1000, 2000)
+
 // Refractory Kiln:
 // Converts an item into a new one by burning it. Has a chance to fail.
 
@@ -95,8 +184,8 @@ mods.pyrotech.brick_oven.recipeBuilder()
 
 mods.pyrotech.brick_oven.add('lead_poisoning', item('minecraft:slime_ball'), item('minecraft:lead') * 16, 1000)
 
-// groovyscript.wiki.pyrotech.brick_sawmill.title:
-// groovyscript.wiki.pyrotech.brick_sawmill.description.
+// Refractory Sawmill:
+// Converts an item, likely wood, by cutting it to a smaller item and drops wood chips.
 
 mods.pyrotech.brick_sawmill.removeByInput(item('minecraft:planks:1'))
 mods.pyrotech.brick_sawmill.removeByOutput(item('pyrotech:material:23'))
@@ -247,8 +336,8 @@ mods.pyrotech.drying_rack.recipeBuilder()
 
 mods.pyrotech.drying_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, true)
 
-// groovyscript.wiki.pyrotech.mechanical_compacting_bin.title:
-// groovyscript.wiki.pyrotech.mechanical_compacting_bin.description.
+// Mechanical Compacting Bin:
+// Compacting Bin but automatic.
 
 mods.pyrotech.mechanical_compacting_bin.removeByInput(item('minecraft:snowball'))
 mods.pyrotech.mechanical_compacting_bin.removeByOutput(item('minecraft:bone_block'))
@@ -264,6 +353,58 @@ mods.pyrotech.mechanical_compacting_bin.recipeBuilder()
 
 mods.pyrotech.mechanical_compacting_bin.add('wheat_to_hay_block', ore('cropWheat') * 9, item('minecraft:hay_block'))
 mods.pyrotech.mechanical_compacting_bin.add('gold_to_wheat', ore('ingotGold') * 4, item('minecraft:wheat') * 64, 4, 4, 3, 2)
+
+// Pit Burning:
+// Converts a block in world to an item and fluid by burning.
+
+mods.pyrotech.pit_burn.removeByInput(item('minecraft:coal_block'))
+mods.pyrotech.pit_burn.removeByOutput(item('minecraft:coal', 1) * 10)
+// mods.pyrotech.pit_burn.removeAll()
+
+mods.pyrotech.pit_burn.recipeBuilder()
+    .input(item('minecraft:cauldron'))
+    .output(item('minecraft:cobblestone'))
+    .fluidOutput(fluid('water') * 50)
+    .burnStages(6)
+    .burnTime(1200)
+    .name('water_from_cauldron')
+    .register()
+
+mods.pyrotech.pit_burn.recipeBuilder()
+    .input(item('minecraft:soul_sand'))
+    .output(item('minecraft:sand'))
+    .fluidOutput(fluid('lava') * 200)
+    .requiresRefractoryBlocks(true)
+    .burnStages(2)
+    .burnTime(600)
+    .failureChance(0.25F)
+    .failureOutput(item('minecraft:gravel') * 2)
+    .failureOutput(item('minecraft:dirt') * 3)
+    .name('lava_to_sand')
+    .register()
+
+mods.pyrotech.pit_burn.recipeBuilder()
+    .input(blockstate('minecraft:sponge',
+                      'wet=true'))
+    .output(item('minecraft:sponge'))
+    .fluidOutput(fluid('water') * 25)
+    .fluidLevelAffectsFailureChance(true)
+    .burnStages(10)
+    .burnTime(500)
+    .name('sponge_dehydrating')
+    .register()
+
+mods.pyrotech.pit_burn.recipeBuilder()
+    .input(item('minecraft:chest'))
+    .output(item('minecraft:ender_chest'))
+    .fluidOutput(fluid('lava') * 125)
+    .fluidLevelAffectsFailureChance(true)
+    .requiresRefractoryBlocks(true)
+    .burnStages(4)
+    .burnTime(2000)
+    .name('chest_burning')
+    .register()
+
 
 // Pit Kiln:
 // Converts an item into a new one by burning it. Has a chance to fail.
@@ -312,6 +453,24 @@ mods.pyrotech.soaking_pot.recipeBuilder()
 
 mods.pyrotech.soaking_pot.add('dirt_to_apple', item('minecraft:dirt'), fluid('water'), item('minecraft:apple'), 1200)
 
+// Stone Crucible:
+// Melts an item into liquid.
+
+mods.pyrotech.stone_crucible.removeByInput(item('minecraft:ice'))
+mods.pyrotech.stone_crucible.removeByOutput(fluid('water') * 500)
+// mods.pyrotech.stone_crucible.removeAll()
+
+mods.pyrotech.stone_crucible.recipeBuilder()
+    .input(ore('sugarcane'))
+    .fluidOutput(fluid('water') * 500)
+    .burnTime(1000)
+    .inherit(true)
+    .name('water_from_sugarcane')
+
+
+
+mods.pyrotech.stone_crucible.add('water_from_cactus', ore('blockCactus'), fluid('water') * 1000, 600, true)
+
 // Stone Kiln:
 // Converts an item into a new one by burning it. Has a chance to fail.
 
@@ -358,8 +517,8 @@ mods.pyrotech.stone_oven.recipeBuilder()
 
 mods.pyrotech.stone_oven.add('sand_to_dirt', item('minecraft:sand'), item('minecraft:dirt'), 1000, true)
 
-// groovyscript.wiki.pyrotech.stone_sawmill.title:
-// groovyscript.wiki.pyrotech.stone_sawmill.description.
+// Stone Sawmill:
+// Converts an item, likely wood, by cutting it to a smaller item and drops wood chips.
 
 mods.pyrotech.stone_sawmill.removeByInput(item('minecraft:planks:1'))
 mods.pyrotech.stone_sawmill.removeByOutput(item('pyrotech:material:23'))
@@ -401,3 +560,202 @@ mods.pyrotech.tanning_rack.recipeBuilder()
 
 
 mods.pyrotech.tanning_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, item('minecraft:clay_ball'))
+
+// Wither Forge:
+// Converts item to bloom or a different item by burning it.
+
+mods.pyrotech.wither_forge.removeByInput(item('minecraft:gold_ore'))
+// mods.pyrotech.wither_forge.removeByOutput(item('minecraft:iron_nugget'))
+// mods.pyrotech.wither_forge.removeAll()
+
+mods.pyrotech.wither_forge.recipeBuilder()
+    .input(item('minecraft:minecart'))
+    .output(item('minecraft:furnace_minecart'))
+    .slag(item('minecraft:iron_ingot'))
+    .experience(0.8F)
+    .bloomYield(1, 1)
+    .burnTime(2000)
+    .failureChance(0.5F)
+    .failureOutput(item('minecraft:tnt_minecart'), 1)
+    .name('minecart_smelting')
+    .register()
+
+mods.pyrotech.wither_forge.recipeBuilder()
+    .input(item('minecraft:fishing_rod') | item('minecraft:carrot_on_a_stick'))
+    .output(item('minecraft:cooked_fish'))
+    .bloomYield(5, 8)
+    .langKey(item('minecraft:fishing_rod').getTranslationKey())
+    .name('fishing')
+    .register()
+
+mods.pyrotech.wither_forge.recipeBuilder()
+    .input(item('minecraft:paper'))
+    .bloom(item('minecraft:book'))
+    .tierGranite()
+    .tierObsidian()
+    .failureChance(0.1F)
+    .failureOutput(item('minecraft:milk_bucket'), 5)
+    .failureOutput(item('minecraft:bone'), 2)
+    .name('knowledge')
+    .register()
+
+mods.pyrotech.wither_forge.recipeBuilder()
+    .input(item('minecraft:comparator'))
+    .output(item('minecraft:redstone'))
+    .bloomYield(12, 15)
+    .experience(0.6F)
+    .burnTime(4000)
+    .tierIronclad(true)
+    .anvilHit(5)
+    .typePickaxe()
+    .failureChance(0.15F)
+    .failureOutput(item('minecraft:glowstone_dust'), 5)
+    .failureOutput(item('minecraft:sugar'), 4)
+    .name('comparator_melting')
+    .register()
+
+
+mods.pyrotech.wither_forge.add('flower_pot', item('minecraft:flower_pot'), item('minecraft:clay_ball'))
+mods.pyrotech.wither_forge.add('hoopify', item('minecraft:hopper') * 4, item('minecraft:chest'), 60)
+mods.pyrotech.wither_forge.addBloom('quartz_recipe', item('minecraft:quartz') * 3, ore('oreQuartz'))
+mods.pyrotech.wither_forge.addBloom('feathery', item('minecraft:feather'), 10, 15, item('minecraft:chicken'), 200, 0.1F, 0.25F, item('minecraft:cooked_chicken'))
+
+// Worktable:
+// Crafting table with where you hit it with a tool to craft stuff.
+
+mods.pyrotech.worktable.remove(resource('minecraft:stonebrick'))
+mods.pyrotech.worktable.remove('minecraft:mossy_stonebrick')
+mods.pyrotech.worktable.removeByOutput(item('pyrotech:iron_hunters_knife'))
+// mods.pyrotech.worktable.removeAll()
+
+mods.pyrotech.worktable.shapedBuilder()
+    .name('irons_to_dirts')
+    .output(item('minecraft:dirt') * 8)
+    .shape([[item('minecraft:iron_ingot'),item('minecraft:iron_ingot'),item('minecraft:iron_ingot')],
+           [item('minecraft:iron_ingot'),null,item('minecraft:iron_ingot')],
+           [item('minecraft:iron_ingot'),item('minecraft:iron_ingot'),item('minecraft:iron_ingot')]])
+    .replaceByName()
+    .register()
+
+mods.pyrotech.worktable.shapedBuilder()
+    .name(resource('minecraft:sea_lantern'))
+    .output(item('minecraft:clay'))
+    .shape([[ore('blockRedstone')],
+           [ore('blockRedstone')],
+           [ore('blockRedstone')]])
+    .replaceByName()
+    .register()
+
+mods.pyrotech.worktable.shapedBuilder()
+    .output(item('minecraft:nether_star'))
+    .row('TXT')
+    .row('X X')
+    .row('!X!')
+    .key('T', item('minecraft:gravel'))
+    .key('X', item('minecraft:clay').reuse())
+    .key('!', item('minecraft:gunpowder').transform({ _ -> item('minecraft:diamond') }))
+    .tool(item('minecraft:diamond_sword'), 5)
+    .register()
+
+mods.pyrotech.worktable.shapedBuilder()
+    .output(item('minecraft:clay_ball') * 3)
+    .shape('S S',
+           ' G ',
+           'SWS')
+    .key([S: ore('ingotIron').reuse(), G: ore('gemDiamond'), W: fluid('water') * 1000])
+    .tool(item('minecraft:diamond_axe'), 3)
+    .register()
+
+mods.pyrotech.worktable.shapedBuilder()
+    .name('gold_duplication_with_tnt')
+    .output(item('minecraft:gold_block'))
+    .row('!!!')
+    .row('!S!')
+    .row('!!!')
+    .key([S: ore('blockGold').reuse(), '!': item('minecraft:tnt').transform(item('minecraft:diamond'))])
+    .tool(item('minecraft:iron_shovel'), 2)
+    .register()
+
+mods.pyrotech.worktable.shapedBuilder()
+    .output(item('minecraft:clay'))
+    .row(' B')
+    .key('B', item('minecraft:glass_bottle'))
+    .tool(item('minecraft:stone_sword'), 3)
+    .register()
+
+mods.pyrotech.worktable.shapedBuilder()
+    .output(item('minecraft:clay'))
+    .row(' 1 ')
+    .row(' 0 ')
+    .row(' 1 ')
+    .key('1', item('minecraft:iron_sword'))
+    .key('0', item('minecraft:diamond_sword').withNbt([display:[Name:'Sword with Specific NBT data']]))
+    .tool(item('minecraft:iron_axe'), 4)
+    .register()
+
+mods.pyrotech.worktable.shapelessBuilder()
+    .output(item('minecraft:string'))
+    .input([item('minecraft:cobblestone'),item('minecraft:feather'),item('minecraft:gold_ingot')])
+    .register()
+
+mods.pyrotech.worktable.shapelessBuilder()
+    .name('precious_to_clay')
+    .output(item('minecraft:clay'))
+    .input([item('minecraft:emerald'),item('minecraft:iron_ore'),item('minecraft:gold_ingot')])
+    .register()
+
+mods.pyrotech.worktable.shapelessBuilder()
+    .name(resource('example:resource_location2'))
+    .output(item('minecraft:stone'))
+    .input([item('minecraft:gold_ore'), item('minecraft:gold_ingot')])
+    .register()
+
+mods.pyrotech.worktable.shapelessBuilder()
+    .output(item('minecraft:ender_eye'))
+    .input([item('minecraft:ender_pearl'),item('minecraft:bowl')])
+    .replace()
+    .tool(item('minecraft:iron_sword'), 4)
+    .register()
+
+mods.pyrotech.worktable.shapelessBuilder()
+    .name('minecraft:pink_dye_from_pink_tulp')
+    .output(item('minecraft:clay'))
+    .input([item('minecraft:stick')])
+    .replaceByName()
+    .tool(item('minecraft:iron_pickaxe'), 2)
+    .register()
+
+mods.pyrotech.worktable.shapelessBuilder()
+    .name(resource('minecraft:pink_dye_from_peony'))
+    .output(item('minecraft:coal'))
+    .input([item('minecraft:stone'), item('minecraft:iron_ingot')])
+    .replaceByName()
+    .tool(item('minecraft:stone_axe'), 2)
+    .register()
+
+
+// mods.pyrotech.worktable.addShaped(item('minecraft:gold_block'), item('minecraft:diamond_pickaxe'), 2, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[null, null, null],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
+// mods.pyrotech.worktable.addShaped(item('minecraft:gold_block'), [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[null, null, null],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
+// mods.pyrotech.worktable.addShaped(resource('example:resource_location'), item('minecraft:clay'), item('minecraft:iron_shovel'), 2, [[item('minecraft:cobblestone')],[item('minecraft:nether_star')],[item('minecraft:cobblestone')]])
+// mods.pyrotech.worktable.addShaped(resource('example:resource_location'), item('minecraft:clay'), [[item('minecraft:cobblestone')],[item('minecraft:nether_star')],[item('minecraft:cobblestone')]])
+// mods.pyrotech.worktable.addShaped('gold_v_to_clay', item('minecraft:clay'), item('minecraft:iron_pickaxe'), 3, [[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:gold_ingot'),null]])
+// mods.pyrotech.worktable.addShaped('gold_v_to_clay', item('minecraft:clay'), [[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:gold_ingot'),null]])
+// mods.pyrotech.worktable.addShapeless(item('minecraft:clay'), item('minecraft:stone_shovel'), 3, [item('minecraft:cobblestone'),item('minecraft:nether_star'),item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.addShapeless(item('minecraft:clay'), [item('minecraft:cobblestone'),item('minecraft:nether_star'),item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.addShapeless(resource('example:resource_location2'), item('minecraft:clay'), item('minecraft:stone_shovel'), 3, [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.addShapeless(resource('example:resource_location2'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.addShapeless('precious_to_clay', item('minecraft:clay'), item('minecraft:iron_shovel'), 2, [item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.addShapeless('precious_to_clay', item('minecraft:clay'), [item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.replaceShaped(item('minecraft:chest'), item('minecraft:iron_axe') | item('minecraft:stone_axe'), 3, [[ore('logWood'),ore('logWood'),ore('logWood')],[ore('logWood'),null,ore('logWood')],[ore('logWood'),ore('logWood'),ore('logWood')]])
+// mods.pyrotech.worktable.replaceShaped(item('minecraft:chest'), [[ore('logWood'),ore('logWood'),ore('logWood')],[ore('logWood'),null,ore('logWood')],[ore('logWood'),ore('logWood'),ore('logWood')]])
+// mods.pyrotech.worktable.replaceShaped(resource('minecraft:sea_lantern'), item('minecraft:diamond_pickaxe'), 3, item('minecraft:clay'), [[item('minecraft:glowstone')],[item('minecraft:glowstone')],[item('minecraft:glowstone')]])
+// mods.pyrotech.worktable.replaceShaped(resource('minecraft:sea_lantern'), item('minecraft:clay'), [[item('minecraft:glowstone')],[item('minecraft:glowstone')],[item('minecraft:glowstone')]])
+// mods.pyrotech.worktable.replaceShaped('gold_to_diamonds', item('minecraft:diamond') * 8, item('minecraft:diamond_pickaxe'), 4, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
+// mods.pyrotech.worktable.replaceShaped('gold_to_diamonds', item('minecraft:diamond') * 8, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
+// mods.pyrotech.worktable.replaceShapeless(item('minecraft:ender_eye'), item('minecraft:shears'), 3, [item('minecraft:ender_pearl'),item('minecraft:nether_star')])
+// mods.pyrotech.worktable.replaceShapeless(item('minecraft:ender_eye'), [item('minecraft:ender_pearl'),item('minecraft:nether_star')])
+// mods.pyrotech.worktable.replaceShapeless(resource('minecraft:pink_dye_from_peony'), item('minecraft:clay'), item('minecraft:stone_axe'), 2, [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.replaceShapeless(resource('minecraft:pink_dye_from_peony'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.replaceShapeless('minecraft:pink_dye_from_pink_tulp', item('minecraft:iron_axe'), 2, item('minecraft:clay'), [item('minecraft:nether_star')])
+// mods.pyrotech.worktable.replaceShapeless('minecraft:pink_dye_from_pink_tulp', item('minecraft:clay'), [item('minecraft:nether_star')])
+
