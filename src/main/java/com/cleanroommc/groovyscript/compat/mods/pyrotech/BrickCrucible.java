@@ -30,7 +30,7 @@ public class BrickCrucible extends ForgeRegistryWrapper<BrickCrucibleRecipe> {
         return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
-    @RecipeBuilderDescription(example = @Example("input(item('minecraft:vine')).fluidOutput(fluid('water') * 250).burnTime(60).name('water_from_vine')"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:vine')).fluidOutput(fluid('water') * 250).burnTime(60).name('water_from_vine')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

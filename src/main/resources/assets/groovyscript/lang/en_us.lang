@@ -2126,6 +2126,26 @@ groovyscript.wiki.pyrotech.barrel.description=Over time converts a fluid with fo
 groovyscript.wiki.pyrotech.barrel.duration.value=Sets the time required for the recipe to complete
 groovyscript.wiki.pyrotech.barrel.add=Adds recipes in the format `name`, `input1`, `input2`, `input3`, `input4`, `fluidInput`, `fluidOutput`, `duration`
 
+groovyscript.wiki.pyrotech.bloomery.title=Bloomery
+groovyscript.wiki.pyrotech.bloomery.description=Converts item to bloom or a different item by burning it
+groovyscript.wiki.pyrotech.bloomery.add0=Adds recipes in the format `name`, `output`, `input`, `(optional) inherit`
+groovyscript.wiki.pyrotech.bloomery.add1=Adds recipes in the format `name`, `output`, `input`, `burnTime`, `(optional) inherit`
+groovyscript.wiki.pyrotech.bloomery.addBloom0=Adds recipes in the format `name`, `bloomOutput`, `input`, `(optional) inherit`
+groovyscript.wiki.pyrotech.bloomery.addBloom1=Adds recipes in the format `name`, `bloomOutput`, `minYield`, `maxYield`, `input`, `burnTime`, `experience`, `(optional) inherit`, `failureChance`, `failureItems`
+groovyscript.wiki.pyrotech.bloomery.slag.value=Sets the slag item
+groovyscript.wiki.pyrotech.bloomery.bloom.value=Sets the actual output (bloom) of the Bloomery. Setting langKey, anvil values, experience, bloom yields and failure values are unnecessary if this is set
+groovyscript.wiki.pyrotech.bloomery.inherit.value=Sets if the recipe should be inherited by more advanced machines
+groovyscript.wiki.pyrotech.bloomery.langKey.value=Sets the localization key to use for blooms name
+groovyscript.wiki.pyrotech.bloomery.anvilHit.value=Sets how often the bloom needs to be hit on the anvil
+groovyscript.wiki.pyrotech.bloomery.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.bloomery.anvilType.value=Sets the tool that needs to be used in anvil
+groovyscript.wiki.pyrotech.bloomery.anvilTiers.value=Sets the allowed anvil tiers bloom allows
+groovyscript.wiki.pyrotech.bloomery.experience.value=Sets the experience given from bloom
+groovyscript.wiki.pyrotech.bloomery.bloomYieldMin.value=Sets minimum amount of drops bloom can give
+groovyscript.wiki.pyrotech.bloomery.bloomYieldMax.value=Sets maximum amount of drops bloom can give
+groovyscript.wiki.pyrotech.bloomery.failureChance.value=Sets the chance for bloom to give failure item instead of the actual output
+groovyscript.wiki.pyrotech.bloomery.failureOutput.value=Sets the output to drop on failure
+
 groovyscript.wiki.pyrotech.brick_crucible.title=Refractory Crucible
 groovyscript.wiki.pyrotech.brick_crucible.description=Melts an item into liquid.
 groovyscript.wiki.pyrotech.brick_crucible.burnTime.value=Sets the time required for the recipe to complete
@@ -2195,6 +2215,18 @@ groovyscript.wiki.pyrotech.mechanical_compacting_bin.hits.value=Sets how often t
 groovyscript.wiki.pyrotech.mechanical_compacting_bin.add=Adds recipes in the format `name`, `input`, `output`, `hits`
 groovyscript.wiki.pyrotech.mechanical_compacting_bin.note0=Can inherit recipes from [Compacting Bin](./compacting_bin.md)
 
+groovyscript.wiki.pyrotech.pit_burn.title=Pit Burning
+groovyscript.wiki.pyrotech.pit_burn.description=Converts a block in world to an item and fluid by burning
+groovyscript.wiki.pyrotech.pit_burn.name.value=The recipe registry name
+groovyscript.wiki.pyrotech.pit_burn.input.value=Sets the block input
+groovyscript.wiki.pyrotech.pit_burn.output.value=Sets the itemstack output
+groovyscript.wiki.pyrotech.pit_burn.burnTime.value=Sets the time required for the recipe to complete
+groovyscript.wiki.pyrotech.pit_burn.burnStages.value=Sets the output amount. Fluid output gets multiplied by it too
+groovyscript.wiki.pyrotech.pit_burn.failureChance.value=Sets the chance to fail the recipe
+groovyscript.wiki.pyrotech.pit_burn.failureOutput.value=Sets the output when the recipe failed
+groovyscript.wiki.pyrotech.pit_burn.requiresRefractoryBlocks.value=Sets the need to use refractory blocks in the recipe
+groovyscript.wiki.pyrotech.pit_burn.fluidLevelAffectsFailureChance.value=Sets if fluid level affects failure chance
+
 groovyscript.wiki.pyrotech.pit_kiln.title=Pit Kiln
 groovyscript.wiki.pyrotech.pit_kiln.description=Converts an item into a new one by burning it. Has a chance to fail
 groovyscript.wiki.pyrotech.pit_kiln.burnTime.value=Sets the time required for the recipe to complete
@@ -2251,6 +2283,17 @@ groovyscript.wiki.pyrotech.tanning_rack.dryTime.value=Sets the time required for
 groovyscript.wiki.pyrotech.tanning_rack.failureItem.value=Sets the output when the recipe failed
 groovyscript.wiki.pyrotech.tanning_rack.add=Adds recipes in the format `name`, `input`, `output`, `dryTime`, `failureItem`
 
+groovyscript.wiki.pyrotech.wither_forge.title=Wither Forge
+groovyscript.wiki.pyrotech.wither_forge.description=Converts item to bloom or a different item by burning it
+groovyscript.wiki.pyrotech.wither_forge.add0=Adds recipes in the format `name`, `output`, `input`
+groovyscript.wiki.pyrotech.wither_forge.add1=Adds recipes in the format `name`, `output`, `input`, `burnTime`
+groovyscript.wiki.pyrotech.wither_forge.addBloom0=Adds recipes in the format `name`, `bloomOutput`, `input`
+groovyscript.wiki.pyrotech.wither_forge.addBloom1=Adds recipes in the format `name`, `bloomOutput`, `minYield`, `maxYield`, `input`, `burnTime`, `experience`, `failureChance`, `failureItems`
+
+groovyscript.wiki.pyrotech.worktable.title=Worktable
+groovyscript.wiki.pyrotech.worktable.description=Crafting table with where you hit it with a tool to craft stuff
+groovyscript.wiki.pyrotech.worktable.tool.value=Sets the tool that will be used
+groovyscript.wiki.pyrotech.worktable.damage.value=Sets the damage to put into that tool
 
 # PneumaticCraft
 groovyscript.wiki.pneumaticcraft.amadron.title=Amadron

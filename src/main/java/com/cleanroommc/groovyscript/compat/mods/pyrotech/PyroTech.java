@@ -24,6 +24,10 @@ public class PyroTech extends GroovyPropertyContainer {
     public final TanningRack tanningRack;
     public final StoneCrucible stoneCrucible;
     public final BrickCrucible brickCrucible;
+    public final Worktable worktable;
+    public final Bloomery bloomery;
+    public final WitherForge witherForge;
+    public final PitBurn pitBurn;
 
     public PyroTech() {
         this.barrel = new Barrel();
@@ -46,5 +50,9 @@ public class PyroTech extends GroovyPropertyContainer {
         this.tanningRack = new TanningRack();
         this.stoneCrucible = new StoneCrucible();
         this.brickCrucible = new BrickCrucible();
+        this.worktable = new Worktable();
+        this.bloomery = new Bloomery();
+        this.witherForge = new WitherForge();
+        this.pitBurn = new PitBurn();
     }
 }
