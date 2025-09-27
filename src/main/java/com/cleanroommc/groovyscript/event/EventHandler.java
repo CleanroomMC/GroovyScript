@@ -84,7 +84,7 @@ public class EventHandler {
     public static void createSpawnPosition(WorldEvent.CreateSpawnPosition event) {
         // only want to execute this for the overworld
         var target = DimensionManager.getWorld(0);
-        if (event.getWorld() == target) VanillaModule.gameRule.applyDefaultGameRules(event.getWorld().getGameRules());
+        if (event.getWorld() == target) VanillaModule.INSTANCE.gameRule.applyDefaultGameRules(event.getWorld().getGameRules());
     }
 
     @SubscribeEvent
@@ -116,8 +116,8 @@ public class EventHandler {
         if (tag.hasKey(EntityPlayer.PERSISTED_NBT_TAG)) {
             data = tag.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         }
-        if (VanillaModule.player.isTestingStartingItems() || !data.getBoolean(Player.GIVEN_ITEMS)) {
-            VanillaModule.player.addToInventory(event.player.inventory);
+        if (VanillaModule.INSTANCE.player.isTestingStartingItems() || !data.getBoolean(Player.GIVEN_ITEMS)) {
+            VanillaModule.INSTANCE.player.addToInventory(event.player.inventory);
             data.setBoolean(Player.GIVEN_ITEMS, true);
             tag.setTag(EntityPlayer.PERSISTED_NBT_TAG, data);
         }
@@ -163,7 +163,7 @@ public class EventHandler {
     public static void onExplosion(ExplosionEvent.Detonate event) {
         for (Entity entity : event.getAffectedEntities()) {
             if (entity instanceof EntityItem entityItem) {
-                VanillaModule.inWorldCrafting.explosion.findAndRunRecipe(entityItem);
+                VanillaModule.INSTANCE.inWorldCrafting.explosion.findAndRunRecipe(entityItem);
             }
         }
     }

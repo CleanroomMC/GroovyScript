@@ -131,7 +131,7 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
         public @Nullable PistonPush.PistonPushRecipe register() {
             if (!validate()) return null;
             PistonPushRecipe pistonPushRecipe = new PistonPushRecipe(this.input.get(0), this.output.get(0), this.maxConversionsPerPush, this.minHarvestLevel, this.startCondition);
-            VanillaModule.inWorldCrafting.pistonPush.add(pistonPushRecipe);
+            VanillaModule.INSTANCE.inWorldCrafting.pistonPush.add(pistonPushRecipe);
             return null;
         }
     }
