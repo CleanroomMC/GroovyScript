@@ -171,7 +171,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         this.loadedClasses.clear();
         getClassLoader().clearCache();
         try {
-            FileUtils.cleanDirectory(this.cacheRoot);
+            if (this.cacheRoot.exists()) FileUtils.cleanDirectory(this.cacheRoot);
             return true;
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
