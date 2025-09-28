@@ -1,14 +1,18 @@
 package com.cleanroommc.groovyscript.mapper;
 
+import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.util.Map;
 
 public class ObjectParserHelper {
 
     public static final Map<String, Material> MATERIALS;
+
+    public static final Map<String, VillagerRegistry.VillagerCareer> VILLAGER_CAREERS;
 
     static {
         MATERIALS = new ImmutableMap.Builder<String, Material>()
@@ -49,5 +53,15 @@ public class ObjectParserHelper {
                 .put("BARRIER", Material.BARRIER)
                 .put("STRUCTURE_VOID", Material.STRUCTURE_VOID)
                 .build();
+
+        var careers = new ImmutableMap.Builder<String, VillagerRegistry.VillagerCareer>();
+        for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
+            if (profession == null) continue;
+            for (var career : ((VillagerProfessionAccessor) profession).getCareers()) {
+                if (career == null) continue;
+                careers.put(career.getName(), career);
+            }
+        }
+        VILLAGER_CAREERS = careers.build();
     }
 }

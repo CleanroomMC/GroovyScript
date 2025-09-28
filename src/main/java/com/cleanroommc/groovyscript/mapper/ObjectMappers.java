@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.mapper;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
-import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
 import net.minecraft.block.Block;
@@ -21,7 +20,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -161,19 +159,6 @@ public class ObjectMappers {
             }
         }
         return Result.some(defaultState);
-    }
-
-    public static Result<VillagerRegistry.VillagerCareer> parseVillagerCareer(String mainArg, Object... args) {
-        for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
-            if (profession != null) {
-                for (var career : ((VillagerProfessionAccessor) (profession)).getCareers()) {
-                    if (career != null && mainArg.equals(career.getName())) {
-                        return Result.some(career);
-                    }
-                }
-            }
-        }
-        return Result.error();
     }
 
     public static Result<CreativeTabs> parseCreativeTab(String mainArg, Object... args) {

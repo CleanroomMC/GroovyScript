@@ -7,7 +7,6 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
-import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
@@ -175,20 +174,9 @@ public class ObjectMapperManager {
                 .completer(ForgeRegistries.VILLAGER_PROFESSIONS)
                 .docOfType("villager profession")
                 .register();
-
-        final List<String> careerList = new ArrayList<>();
-        for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
-            if (profession != null) {
-                for (var career : ((VillagerProfessionAccessor) profession).getCareers()) {
-                    if (career != null) {
-                        careerList.add(career.getName());
-                    }
-                }
-            }
-        }
         ObjectMapper.builder("career", VillagerRegistry.VillagerCareer.class)
-                .parser(ObjectMappers::parseVillagerCareer)
-                .completerOfNames(() -> careerList)
+                .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.VILLAGER_CAREERS::get))
+                .completerOfNames(ObjectParserHelper.VILLAGER_CAREERS::keySet)
                 .docOfType("villager career")
                 .register();
         ObjectMapper.builder("creativeTab", CreativeTabs.class)
