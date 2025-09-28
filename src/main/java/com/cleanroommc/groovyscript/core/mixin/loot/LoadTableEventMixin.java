@@ -23,7 +23,7 @@ public abstract class LoadTableEventMixin {
 
     @Inject(method = "reloadLootTables", at = @At("RETURN"))
     private void injection(CallbackInfo ci) {
-        VanillaModule.loot.tables.putAll(this.registeredLootTables.asMap());
+        VanillaModule.INSTANCE.loot.tables.putAll(this.registeredLootTables.asMap());
         MinecraftForge.EVENT_BUS.post(new LootTablesLoadedEvent());
     }
 }

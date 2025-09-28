@@ -146,7 +146,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
                     this.startCondition,
                     this.afterRecipe,
                     this.outputBlock);
-            VanillaModule.inWorldCrafting.fluidToBlock.add(recipe);
+            VanillaModule.INSTANCE.inWorldCrafting.fluidToBlock.add(recipe);
             return recipe;
         }
     }

@@ -24,7 +24,7 @@ public class LootTablesLoadedEvent extends Event {
         public static final LootTable EMPTY_LOOT_TABLE = new LootTable(new LootPool[0]);
 
         public LootTable getTable(ResourceLocation name) {
-            LootTable lootTable = VanillaModule.loot.tables.get(name);
+            LootTable lootTable = VanillaModule.INSTANCE.loot.tables.get(name);
             if (lootTable == null) GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
             return lootTable;
         }
@@ -43,20 +43,20 @@ public class LootTablesLoadedEvent extends Event {
 
         public void printTables() {
             GroovyLog.Msg out = GroovyLog.msg("GroovyScript found the following LootTable(s)");
-            VanillaModule.loot.tables.keySet().forEach(table -> out.add(table.toString()));
+            VanillaModule.INSTANCE.loot.tables.keySet().forEach(table -> out.add(table.toString()));
             if (!out.postIfNotEmpty())
                 GroovyLog.msg("GroovyScript found 0 LootTables :thonk:").error().post();
         }
 
         public void printPools() {
-            if (VanillaModule.loot.tables.values().isEmpty()) {
+            if (VanillaModule.INSTANCE.loot.tables.values().isEmpty()) {
                 GroovyLog.msg("GroovyScript found 0 LootTables :thonk:").error().post();
                 return;
             }
 
             GroovyLog.Msg out = GroovyLog.msg("GroovyScript found the following LootPools(s)");
 
-            VanillaModule.loot.tables.forEach((rl, table) -> {
+            VanillaModule.INSTANCE.loot.tables.forEach((rl, table) -> {
                 if (((LootTableAccessor) table).getPools() == null || ((LootTableAccessor) table).getPools().isEmpty()) {
                     return;
                 }
@@ -78,14 +78,14 @@ public class LootTablesLoadedEvent extends Event {
         }
 
         public void printEntries() {
-            if (VanillaModule.loot.tables.values().isEmpty()) {
+            if (VanillaModule.INSTANCE.loot.tables.values().isEmpty()) {
                 GroovyLog.msg("GroovyScript found 0 LootTables :thonk:").error().post();
                 return;
             }
 
             GroovyLog.Msg out = GroovyLog.msg("GroovyScript found the following LootEntries(s)");
 
-            VanillaModule.loot.tables.forEach((rl, table) -> {
+            VanillaModule.INSTANCE.loot.tables.forEach((rl, table) -> {
                 if (((LootTableAccessor) table).getPools() == null || ((LootTableAccessor) table).getPools().isEmpty()) {
                     return;
                 }

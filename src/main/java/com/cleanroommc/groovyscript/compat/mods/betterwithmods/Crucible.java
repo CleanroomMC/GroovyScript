@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class Crucible extends StandardListRegistry<CookingPotRecipe> {
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).heat(2)"),
+            @Example(".input(item('minecraft:clay') * 3).output(item('minecraft:diamond')).heat(2)"),
             @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16).ignoreHeat()")
     })
     public RecipeBuilder recipeBuilder() {
@@ -115,7 +115,7 @@ public class Crucible extends StandardListRegistry<CookingPotRecipe> {
         public @Nullable CookingPotRecipe register() {
             if (!validate()) return null;
 
-            CookingPotRecipe recipe = new CookingPotRecipe(input.stream().map(IIngredient::toMcIngredient).collect(Collectors.toList()), output, heat);
+            CookingPotRecipe recipe = new CookingPotRecipe(input.stream().map(BetterWithMods.Helper::fromIIngredient).collect(Collectors.toList()), output, heat);
             recipe.setIgnoreHeat(ignoreHeat);
             recipe.setPriority(priority);
             ModSupport.BETTER_WITH_MODS.get().crucible.add(recipe);

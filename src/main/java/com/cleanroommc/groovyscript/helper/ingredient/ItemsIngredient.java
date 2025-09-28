@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 public class ItemsIngredient extends IngredientBase implements Iterable<ItemStack> {
 
@@ -83,11 +82,6 @@ public class ItemsIngredient extends IngredientBase implements Iterable<ItemStac
             }
         }
         return false;
-    }
-
-    // protected since modifying un-copied stack directly can result in unexpected results
-    protected List<ItemStack> getItemStacks() {
-        return Collections.unmodifiableList(this.itemStacks);
     }
 
     @Override

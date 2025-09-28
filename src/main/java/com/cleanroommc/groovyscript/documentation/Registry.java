@@ -134,6 +134,7 @@ public class Registry {
         }
         out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
         out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
+        out.append(documentMethodDescriptionType(MethodDescription.Type.QUERY));
         return out.toString();
     }
 

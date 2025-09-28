@@ -18,7 +18,7 @@ public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe
 
     @RecipeBuilderDescription(example = {
             @Example(".name('betterwithmods:iron_bar').input(ore('sand')).output(item('minecraft:clay')).inWorldItemOutput(item('minecraft:gold_ingot'))"),
-            @Example(".name('betterwithmods:wicker').input(item('minecraft:clay')).inWorldItemOutput(item('minecraft:gold_ingot'))")
+            @Example(".name('betterwithmods:wicker').input(item('minecraft:clay') * 3).inWorldItemOutput(item('minecraft:gold_ingot'))")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -103,7 +103,7 @@ public class Hopper extends StandardListRegistry<HopperInteractions.HopperRecipe
         public @Nullable HopperInteractions.HopperRecipe register() {
             if (!validate()) return null;
 
-            HopperInteractions.HopperRecipe recipe = new HopperInteractions.HopperRecipe(super.name.toString(), input.get(0).toMcIngredient(), output, inWorldItemOutput);
+            HopperInteractions.HopperRecipe recipe = new HopperInteractions.HopperRecipe(super.name.toString(), BetterWithMods.Helper.fromIIngredient(input.get(0)), output, inWorldItemOutput);
             ModSupport.BETTER_WITH_MODS.get().hopper.add(recipe);
             return recipe;
         }

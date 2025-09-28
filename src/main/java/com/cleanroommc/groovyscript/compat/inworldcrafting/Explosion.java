@@ -133,7 +133,7 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
         public @Nullable Explosion.ExplosionRecipe register() {
             if (!validate()) return null;
             ExplosionRecipe explosionRecipe = new ExplosionRecipe(this.input.get(0), this.output.get(0), this.chance, this.startCondition);
-            VanillaModule.inWorldCrafting.explosion.add(explosionRecipe);
+            VanillaModule.INSTANCE.inWorldCrafting.explosion.add(explosionRecipe);
             return explosionRecipe;
         }
     }

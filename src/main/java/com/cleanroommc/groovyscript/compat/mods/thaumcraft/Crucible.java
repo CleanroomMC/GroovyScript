@@ -120,6 +120,7 @@ public class Crucible extends VirtualizedRegistry<CrucibleRecipe> {
         }
     }
 
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<CrucibleRecipe> {
 
         @Property

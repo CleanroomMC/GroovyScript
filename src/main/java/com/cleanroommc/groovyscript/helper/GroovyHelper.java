@@ -9,6 +9,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 
 import java.io.File;
+import java.util.List;
 
 public class GroovyHelper {
 
@@ -54,6 +55,10 @@ public class GroovyHelper {
 
     public static String getPackVersion() {
         return GroovyScript.getRunConfig().getVersion();
+    }
+
+    public static List<String> getPackAuthors() {
+        return GroovyScript.getRunConfig().getPackAuthors();
     }
 
     public static boolean isDebug() {
