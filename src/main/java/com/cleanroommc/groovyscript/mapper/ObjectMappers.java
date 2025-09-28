@@ -1,9 +1,12 @@
 package com.cleanroommc.groovyscript.mapper;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterators;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -28,7 +31,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
 
 import static com.cleanroommc.groovyscript.mapper.ObjectMapperManager.SPLITTER;
 import static com.cleanroommc.groovyscript.mapper.ObjectMapperManager.WILDCARD;
@@ -57,6 +63,23 @@ public class ObjectMappers {
             return Result.some(new ResourceLocation(mainArg, s));
         }
         return Result.some(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), mainArg));
+    }
+
+    public static @NotNull Result<IIngredient> parseOreDict(String mainArg, Object... args) {
+        if (args.length > 0) {
+            return Result.error("Arguments not valid for object mapper. Use 'ore(String)'");
+        }
+        if ("Unknown".equals(mainArg)) {
+            return Result.error("Unknown cannot be an OreDict");
+        }
+        // TODO: remove this warning in a later update
+        if (mainArg.contains("*")) {
+            GroovyLog.msg("ore Object Mapper '{}' contained '*'", mainArg)
+                    .add("if this is supposed to be an OreDictWildcardIngredient, use 'oredict.getOres(name)' instead")
+                    .warn()
+                    .post();
+        }
+        return Result.some(new OreDictIngredient(mainArg));
     }
 
     public static @NotNull Result<ItemStack> parseItemStack(String mainArg, Object... args) {

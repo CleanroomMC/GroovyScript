@@ -1,13 +1,13 @@
 itemGroup.groovyscript.example_creative_tab=GroovyScript Creative Tab
-item.placeholdername.heartofauniverse.name=Heart of the Universe
-item.placeholdername.clay_2.name=If clay is so good...
-item.placeholdername.clay_3.name=Enchanted Clay
-item.placeholdername.prodigy_stick.name=Prodigy Stick
-item.placeholdername.snack.name=Snack
-tile.placeholdername.generic_block.name=Generic Block
-tile.placeholdername.dragon_egg_lamp.name=Dragon Egg Lamp
+item.groovyscriptdev.heartofauniverse.name=Heart of the Universe
+item.groovyscriptdev.clay_2.name=If clay is so good...
+item.groovyscriptdev.clay_3.name=Enchanted Clay
+item.groovyscriptdev.prodigy_stick.name=Prodigy Stick
+item.groovyscriptdev.snack.name=Snack
+tile.groovyscriptdev.generic_block.name=Generic Block
+tile.groovyscriptdev.dragon_egg_lamp.name=Dragon Egg Lamp
 
-fluid.placeholdername.amongium=Amongium
+fluid.groovyscriptdev.amongium.name=Amongium
 
 # For the prodigy tech example
 enchantment.level.11=XI
@@ -20,3 +20,9 @@ enchantment.level.17=XVII
 enchantment.level.18=XVIII
 enchantment.level.19=XIX
 enchantment.level.20=XX
+
+# Debug Stick Information
+item.groovyscriptdev.debug_stick.name=Debug Stick
+item.groovyscriptdev.debug_stick.empty=%s has no properties
+item.groovyscriptdev.debug_stick.update="%s" to %s
+item.groovyscriptdev.debug_stick.select=selected "%s" (%s)

@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo;
 import cofh.core.inventory.ComparableItemStack;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Objects;
 
-@RegistryDescription
+@RegistryDescription(admonition = @Admonition(value = "groovyscript.wiki.thermalexpansion.steam.note0", type = Admonition.Type.INFO))
 public class Steam extends VirtualizedRegistry<Steam.SteamRecipe> {
 
     @Override

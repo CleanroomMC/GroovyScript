@@ -16,10 +16,10 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import party.lemons.arcaneworld.crafting.ritual.Ritual;
-import party.lemons.arcaneworld.crafting.ritual.RitualRegistry;
 import party.lemons.arcaneworld.crafting.ritual.impl.*;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import java.util.List;
 public class RitualWrapper extends ForgeRegistryWrapper<Ritual> {
 
     public RitualWrapper() {
-        super(RitualRegistry.REGISTRY, Alias.generateOf("Ritual"));
+        super(GameRegistry.findRegistry(Ritual.class), Alias.generateOf("Ritual"));
     }
 
     // TODO

@@ -25,7 +25,9 @@ import java.util.stream.Stream;
  */
 public class SandboxData {
 
-    private static final FileVisitOption[] FOLLOW_LINKS = {FileVisitOption.FOLLOW_LINKS};
+    private static final FileVisitOption[] FOLLOW_LINKS = {
+            FileVisitOption.FOLLOW_LINKS
+    };
     private static final FileVisitOption[] NO_VISIT_OPTIONS = {};
 
     public static final String[] GROOVY_SUFFIXES = {
@@ -147,7 +149,7 @@ public class SandboxData {
             // if we are looking at a specific file, we don't want that to be overridden.
             // otherwise, we want to use the specificity based on the number of file separators.
             int pathSize = StringUtils.countMatches(path, separator);
-            try (Stream<Path> stream = Files.walk(rootFile.toPath(),  debug ? FOLLOW_LINKS : NO_VISIT_OPTIONS)) {
+            try (Stream<Path> stream = Files.walk(rootFile.toPath(), debug ? FOLLOW_LINKS : NO_VISIT_OPTIONS)) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
                         //.filter(Preprocessor::validatePreprocessors)

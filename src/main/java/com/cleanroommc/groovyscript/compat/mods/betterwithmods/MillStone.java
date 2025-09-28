@@ -30,7 +30,7 @@ public class MillStone extends StandardListRegistry<MillRecipe> {
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot') * 16)"),
+            @Example(".input(item('minecraft:diamond') * 3).output(item('minecraft:gold_ingot') * 16)"),
             @Example(".input(item('minecraft:diamond_block')).output(item('minecraft:gold_ingot'), item('minecraft:gold_block'), item('minecraft:clay'))")
     })
     public RecipeBuilder recipeBuilder() {
@@ -106,11 +106,6 @@ public class MillStone extends StandardListRegistry<MillRecipe> {
         }
 
         @Override
-        protected int getMaxItemInput() {
-            return 1;
-        }
-
-        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 3, 1, 3);
             validateFluids(msg);
@@ -122,7 +117,7 @@ public class MillStone extends StandardListRegistry<MillRecipe> {
         public @Nullable MillRecipe register() {
             if (!validate()) return null;
 
-            MillRecipe recipe = new MillRecipe(input.stream().map(IIngredient::toMcIngredient).collect(Collectors.toList()), output);
+            MillRecipe recipe = new MillRecipe(input.stream().map(BetterWithMods.Helper::fromIIngredient).collect(Collectors.toList()), output);
             recipe.setSound(soundEvent);
             recipe.setTicks(ticks);
             recipe.setPriority(priority);

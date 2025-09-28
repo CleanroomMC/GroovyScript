@@ -316,9 +316,9 @@ public class LootEntryBuilder {
         if (quality < 0) out.add("quality < 0 may make the loot entry unable to be rolled");
 
         if (validateForRegister) {
-            if (tableName == null || VanillaModule.loot.tables.get(tableName) == null) out.add("No valid LootTable specified").error();
-            else if (poolName == null || poolName.isEmpty() || VanillaModule.loot.tables.get(tableName).getPool(poolName) == null) out.add("No valid LootPool specified").error();
-            else if (VanillaModule.loot.tables.get(tableName).getPool(poolName).getEntry(name) != null) out.add("Attempted to add duplicate entry " + name + " to " + tableName + " - " + poolName);
+            if (tableName == null || VanillaModule.INSTANCE.loot.tables.get(tableName) == null) out.add("No valid LootTable specified").error();
+            else if (poolName == null || poolName.isEmpty() || VanillaModule.INSTANCE.loot.tables.get(tableName).getPool(poolName) == null) out.add("No valid LootPool specified").error();
+            else if (VanillaModule.INSTANCE.loot.tables.get(tableName).getPool(poolName).getEntry(name) != null) out.add("Attempted to add duplicate entry " + name + " to " + tableName + " - " + poolName);
         }
 
         out.postIfNotEmpty();
@@ -332,7 +332,7 @@ public class LootEntryBuilder {
 
     public void register() {
         if (!validate(true)) return;
-        VanillaModule.loot.tables.get(tableName)
+        VanillaModule.INSTANCE.loot.tables.get(tableName)
                 .getPool(poolName)
                 .addEntry(new LootEntryItem(item, weight, quality, functions.toArray(new LootFunction[0]), conditions.toArray(new LootCondition[0]), name));
     }
