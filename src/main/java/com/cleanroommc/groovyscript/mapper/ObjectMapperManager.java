@@ -121,8 +121,8 @@ public class ObjectMapperManager {
                 .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
                 .register();
         ObjectMapper.builder("material", Material.class)
-                .parser(ObjectMappers::parseBlockMaterial)
-                .completerOfNames(ObjectMappers::getMaterialNames)
+                .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.MATERIALS::get))
+                .completerOfNames(ObjectParserHelper.MATERIALS::keySet)
                 .docOfType("block material")
                 .register();
         /*ObjectMapper.builder("blockstate", IBlockState.class)
