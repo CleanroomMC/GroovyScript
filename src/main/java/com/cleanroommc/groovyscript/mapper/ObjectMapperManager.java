@@ -119,7 +119,7 @@ public class ObjectMapperManager {
                 .docOfType("block")
                 .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
                 .register();
-        ObjectMapper.builder("material", Material.class)
+        ObjectMapper.builder("blockmaterial", Material.class)
                 .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.MATERIALS::get))
                 .completerOfNames(ObjectParserHelper.MATERIALS::keySet)
                 .docOfType("block material")
