@@ -27,6 +27,15 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
     private final AbstractReloadableStorage<CustomFurnaceManager.FuelConversionRecipe> conversionStorage = new AbstractReloadableStorage<>();
 
+    @GroovyBlacklist
+    private static ItemStack findTrueInput(ItemStack input) {
+        if (input == null || input.isEmpty()) return null;
+        if (FurnaceRecipeManager.FURNACE_INPUTS.containsAsWildcard(input)) {
+            return new ItemStack(input.getItem(), input.getCount(), Short.MAX_VALUE);
+        }
+        return FurnaceRecipeManager.FURNACE_INPUTS.contains(input) ? input : null;
+    }
+
     @RecipeBuilderDescription(example = @Example(".input(ore('ingotGold')).output(item('minecraft:nether_star')).exp(0.5)"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -57,16 +66,6 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     @GroovyBlacklist
     public boolean remove(Recipe recipe, boolean isScripted) {
         return removeByInput(recipe.input, isScripted, isScripted);
-    }
-
-    @GroovyBlacklist
-    private ItemStack findTrueInput(ItemStack input) {
-        ItemStack trueInput = FurnaceRecipeManager.INPUT_SET.get(input);
-        if (trueInput == null && input.getMetadata() != Short.MAX_VALUE) {
-            input = new ItemStack(input.getItem(), input.getCount(), Short.MAX_VALUE);
-            trueInput = FurnaceRecipeManager.INPUT_SET.get(input);
-        }
-        return trueInput;
     }
 
     @MethodDescription(example = @Example("item('minecraft:clay')"))
@@ -103,6 +102,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         ItemStack output = FurnaceRecipes.instance().getSmeltingList().remove(trueInput);
         if (output != null) {
             if (isScripted) addBackup(Recipe.of(trueInput, output));
+            FurnaceRecipeManager.FURNACE_INPUTS.remove(trueInput);
             return true;
         } else {
             if (log) {
@@ -156,6 +156,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         for (Recipe recipe : recipesToRemove) {
             if (isScripted) addBackup(recipe);
             FurnaceRecipes.instance().getSmeltingList().remove(recipe.input);
+            FurnaceRecipeManager.FURNACE_INPUTS.remove(recipe.input);
             CustomFurnaceManager.TIME_MAP.remove(output);
         }
 
