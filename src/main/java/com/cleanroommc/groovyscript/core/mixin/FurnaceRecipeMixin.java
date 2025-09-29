@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = FurnaceRecipes.class)
 public abstract class FurnaceRecipeMixin {
 
-    @Inject(method = "addSmeltingRecipe", at = @At("RETURN"))
+    @Inject(method = "addSmeltingRecipe", at = @At("TAIL"))
     public void addRecipe(ItemStack input, ItemStack stack, float experience, CallbackInfo ci) {
         FurnaceRecipeManager.FURNACE_INPUTS.add(input);
     }
