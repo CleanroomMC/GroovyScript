@@ -62,7 +62,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     @GroovyBlacklist
     public boolean remove(Recipe recipe) {
         FurnaceRecipes.instance().getSmeltingList().remove(recipe.input, recipe.output);
-        CustomFurnaceManager.TIME_MAP.remove(recipe.input);
+        CustomFurnaceManager.TIME_MAP.removeInt(recipe.input);
         addBackup(recipe);
         return true;
     }

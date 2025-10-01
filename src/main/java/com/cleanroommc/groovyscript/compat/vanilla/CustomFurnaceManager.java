@@ -3,10 +3,8 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
-import com.cleanroommc.groovyscript.helper.ingredient.ItemStackHashStrategy;
+import com.cleanroommc.groovyscript.helper.ingredient.itemstack.ItemStack2IntProxyMap;
 import com.github.bsideup.jabel.Desugar;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -25,7 +23,7 @@ public class CustomFurnaceManager {
      *
      * @see com.cleanroommc.groovyscript.core.mixin.furnace.TileEntityFurnaceMixin TileEntityFurnaceMixin
      */
-    public static final Object2IntMap<ItemStack> TIME_MAP = new Object2IntOpenCustomHashMap<>(ItemStackHashStrategy.STRATEGY);
+    public static final ItemStack2IntProxyMap TIME_MAP = new ItemStack2IntProxyMap();
 
     /**
      * Recipes for converting the fuel slot of a furnace into another item when a valid item is smelted.
