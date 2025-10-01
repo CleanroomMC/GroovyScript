@@ -156,7 +156,7 @@ groovyscript.wiki.minecraft.furnace.add2=Adds a recipe in the format `input`, `o
 groovyscript.wiki.minecraft.furnace.exp.value=Sets the experience rewarded for smelting the given input
 groovyscript.wiki.minecraft.furnace.time.value=Sets the time in ticks the recipe takes
 groovyscript.wiki.minecraft.furnace.addFuelConversion=Add a conversion recipe in the format `smelted`, `fuel`, with `fuel` using an IIngredient transformer
-groovyscript.wiki.minecraft.furnace.removeFuelConversionBySmelted=Removes all conversion recipes with the given smelted item
+groovyscript.wiki.minecraft.furnace.removeFuelConversionBySmeltedStack=Removes all conversion recipes with the given smelted item
 groovyscript.wiki.minecraft.furnace.removeAllFuelConversions=Removes all conversion recipes
 
 groovyscript.wiki.minecraft.ore_dict.title=Ore Dictionary

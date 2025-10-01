@@ -149,7 +149,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     }
 
     @MethodDescription(example = @Example("item('minecraft:sponge', 1)"))
-    public boolean removeFuelConversionBySmelted(ItemStack smelted) {
+    public boolean removeFuelConversionBySmeltedStack(ItemStack smelted) {
         return CustomFurnaceManager.FUEL_TRANSFORMERS.removeIf(x -> x.smelted().test(smelted) && conversionStorage.addBackup(x));
     }
 
