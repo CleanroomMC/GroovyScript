@@ -222,7 +222,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
             var out = output.get(0);
             for (ItemStack input : input.get(0).getMatchingStacks()) {
                 recipe = new Recipe(input, out, exp, time);
-                VanillaModule.furnace.add(recipe);
+                VanillaModule.INSTANCE.furnace.add(recipe);
             }
             return recipe;
         }

@@ -113,7 +113,7 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
     }
 
     public void add(ItemStack itemStack) {
-        VanillaModule.oreDict.add(this.oreDict, itemStack);
+        VanillaModule.INSTANCE.oreDict.add(this.oreDict, itemStack);
     }
 
     public void add(ItemStack... itemStacks) {
@@ -133,7 +133,7 @@ public class OreDictIngredient extends IngredientBase implements Iterable<ItemSt
     }
 
     public void remove(ItemStack itemStack) {
-        VanillaModule.oreDict.remove(this.oreDict, itemStack);
+        VanillaModule.INSTANCE.oreDict.remove(this.oreDict, itemStack);
     }
 
     public void remove(ItemStack... itemStacks) {

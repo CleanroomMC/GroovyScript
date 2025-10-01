@@ -2971,6 +2971,7 @@ groovyscript.wiki.thermalexpansion.smelter.chance.value=Sets the chance the seco
 
 groovyscript.wiki.thermalexpansion.steam.title=Steam Dynamo
 groovyscript.wiki.thermalexpansion.steam.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.steam.note0=If no energy is provided from an itemstack, the furnace fuel burn time will be checked, with the time in ticks being multiplied by 10 to calculate the energy output and if the energy is over 3000 the itemstack will be a valid fuel.
 groovyscript.wiki.thermalexpansion.steam.add=Adds recipes in the format `itemStack`, `energy`
 groovyscript.wiki.thermalexpansion.steam.removeByInput=Removes all recipes with given IIngredient
 
