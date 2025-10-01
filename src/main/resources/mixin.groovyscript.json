@@ -12,7 +12,6 @@
     "EventBusMixin",
     "FluidStackMixin",
     "ForgeRegistryMixin",
-    "FurnaceRecipeMixin",
     "InventoryCraftingAccess",
     "ItemMixin",
     "ItemStackMixin",

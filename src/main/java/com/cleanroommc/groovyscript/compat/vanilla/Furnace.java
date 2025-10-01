@@ -11,11 +11,11 @@ import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RegistryDescription(
         admonition = @Admonition("groovyscript.wiki.minecraft.furnace.note0")
@@ -27,13 +27,9 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
     private final AbstractReloadableStorage<CustomFurnaceManager.FuelConversionRecipe> conversionStorage = new AbstractReloadableStorage<>();
 
-    @GroovyBlacklist
-    private static ItemStack findTrueInput(ItemStack input) {
-        if (input == null || input.isEmpty()) return null;
-        if (FurnaceRecipeManager.FURNACE_INPUTS.containsAsWildcard(input)) {
-            return new ItemStack(input.getItem(), input.getCount(), Short.MAX_VALUE);
-        }
-        return FurnaceRecipeManager.FURNACE_INPUTS.contains(input) ? input : null;
+    private static boolean isInSmeltingList(ItemStack stack) {
+        if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) return FurnaceRecipes.instance().getSmeltingList().get(stack) != null;
+        return FurnaceRecipes.instance().getSmeltingList().get(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE)) != null;
     }
 
     @RecipeBuilderDescription(example = @Example(".input(ore('ingotGold')).output(item('minecraft:nether_star')).exp(0.5)"))
@@ -64,112 +60,67 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     }
 
     @GroovyBlacklist
-    public boolean remove(Recipe recipe, boolean isScripted) {
-        return removeByInput(recipe.input, isScripted, isScripted);
+    public boolean remove(Recipe recipe) {
+        FurnaceRecipes.instance().getSmeltingList().remove(recipe.input, recipe.output);
+        CustomFurnaceManager.TIME_MAP.remove(recipe.input);
+        addBackup(recipe);
+        return true;
     }
 
     @MethodDescription(example = @Example("item('minecraft:clay')"))
-    public boolean removeByInput(ItemStack input) {
-        return removeByInput(input, true);
-    }
-
-    public boolean removeByInput(ItemStack input, boolean log) {
-        return removeByInput(input, log, true);
-    }
-
-    @GroovyBlacklist
-    public boolean removeByInput(ItemStack input, boolean log, boolean isScripted) {
-        if (IngredientHelper.isEmpty(input)) {
-            if (log) {
-                GroovyLog.msg("Error adding Minecraft Furnace recipe")
-                        .add(IngredientHelper.isEmpty(input), () -> "Input must not be empty")
-                        .error()
-                        .postIfNotEmpty();
-            }
+    public boolean removeByInput(IIngredient input) {
+        if (GroovyLog.msg("Error adding Minecraft Furnace recipe")
+                .add(IngredientHelper.isEmpty(input), () -> "Input must not be empty")
+                .error()
+                .postIfNotEmpty()) {
             return false;
         }
-
-        ItemStack trueInput = findTrueInput(input);
-        if (trueInput == null) {
-            if (log) {
-                GroovyLog.msg("Error removing Minecraft Furnace recipe")
-                        .add("Can't find recipe for input " + input)
-                        .error()
-                        .post();
+        if (FurnaceRecipes.instance().getSmeltingList().entrySet().removeIf(entry -> {
+            if (input.test(entry.getKey())) {
+                addBackup(Recipe.of(entry.getKey(), entry.getValue()));
+                return true;
             }
             return false;
-        }
-        ItemStack output = FurnaceRecipes.instance().getSmeltingList().remove(trueInput);
-        if (output != null) {
-            if (isScripted) addBackup(Recipe.of(trueInput, output));
-            FurnaceRecipeManager.FURNACE_INPUTS.remove(trueInput);
+        })) {
             return true;
-        } else {
-            if (log) {
-                GroovyLog.msg("Error removing Minecraft Furnace recipe")
-                        .add("Found input, but no output for " + input)
-                        .error()
-                        .post();
-            }
         }
-
+        GroovyLog.msg("Error removing Minecraft Furnace recipe")
+                .add("Can't find recipe for input " + input)
+                .add(((Object) input instanceof ItemStack is && isInSmeltingList(is)), "the furnace often uses wildcard itemstacks, and removing also requires using them - ie item('minecraft:log:*')")
+                .error()
+                .post();
         return false;
     }
 
     @MethodDescription(example = @Example("item('minecraft:brick')"))
     public boolean removeByOutput(IIngredient output) {
-        return removeByOutput(output, true);
-    }
-
-    public boolean removeByOutput(IIngredient output, boolean log) {
-        return removeByOutput(output, log, true);
-    }
-
-    @GroovyBlacklist
-    public boolean removeByOutput(IIngredient output, boolean log, boolean isScripted) {
-        if (IngredientHelper.isEmpty(output)) {
-            if (log) {
-                GroovyLog.msg("Error adding Minecraft Furnace recipe")
-                        .add(IngredientHelper.isEmpty(output), () -> "Output must not be empty")
-                        .error()
-                        .postIfNotEmpty();
-            }
+        if (GroovyLog.msg("Error adding Minecraft Furnace recipe")
+                .add(IngredientHelper.isEmpty(output), () -> "Output must not be empty")
+                .error()
+                .postIfNotEmpty()) {
             return false;
         }
-
-        List<Recipe> recipesToRemove = new ArrayList<>();
-        for (Map.Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
+        if (FurnaceRecipes.instance().getSmeltingList().entrySet().removeIf(entry -> {
             if (output.test(entry.getValue())) {
-                recipesToRemove.add(Recipe.of(entry.getKey(), entry.getValue()));
-            }
-        }
-        if (recipesToRemove.isEmpty()) {
-            if (log) {
-                GroovyLog.msg("Error removing Minecraft Furnace recipe")
-                        .add("Can't find recipe for output " + output)
-                        .error()
-                        .post();
+                addBackup(Recipe.of(entry.getKey(), entry.getValue()));
+                return true;
             }
             return false;
+        })) {
+            return true;
         }
-
-        for (Recipe recipe : recipesToRemove) {
-            if (isScripted) addBackup(recipe);
-            FurnaceRecipes.instance().getSmeltingList().remove(recipe.input);
-            FurnaceRecipeManager.FURNACE_INPUTS.remove(recipe.input);
-            CustomFurnaceManager.TIME_MAP.remove(output);
-        }
-
-        return true;
+        GroovyLog.msg("Error removing Minecraft Furnace recipe")
+                .add("Can't find recipe for output " + output)
+                .error()
+                .post();
+        return false;
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Recipe> streamRecipes() {
         List<Recipe> recipes = new ArrayList<>();
-        for (Map.Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
-            recipes.add(Recipe.of(entry.getKey(), entry.getValue()));
-        }
-        return new SimpleObjectStream<>(recipes, false).setRemover(recipe -> remove(recipe, true));
+        FurnaceRecipes.instance().getSmeltingList().forEach((key, value) -> recipes.add(Recipe.of(key, value)));
+        return new SimpleObjectStream<>(recipes, false).setRemover(this::remove);
     }
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))
@@ -217,7 +168,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     public void onReload() {
         // since time is entirely custom, it can be cleared directly
         CustomFurnaceManager.TIME_MAP.clear();
-        getScriptedRecipes().forEach(recipe -> remove(recipe, false));
+        getScriptedRecipes().forEach(recipe -> FurnaceRecipes.instance().getSmeltingList().remove(recipe.input, recipe.output));
         getBackupRecipes().forEach(recipe -> FurnaceRecipes.instance().addSmeltingRecipe(recipe.input, recipe.output, recipe.exp));
         CustomFurnaceManager.FUEL_TRANSFORMERS.addAll(conversionStorage.restoreFromBackup());
         CustomFurnaceManager.FUEL_TRANSFORMERS.removeAll(conversionStorage.removeScripted());
