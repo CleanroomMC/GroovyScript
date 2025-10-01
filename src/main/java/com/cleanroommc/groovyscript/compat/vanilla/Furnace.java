@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
@@ -26,11 +27,6 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
     private static final int TIME_DEFAULT = 200;
 
     private final AbstractReloadableStorage<CustomFurnaceManager.FuelConversionRecipe> conversionStorage = new AbstractReloadableStorage<>();
-
-    private static boolean isInSmeltingList(ItemStack stack) {
-        if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) return FurnaceRecipes.instance().getSmeltingList().get(stack) != null;
-        return FurnaceRecipes.instance().getSmeltingList().get(new ItemStack(stack.getItem(), 1, OreDictionary.WILDCARD_VALUE)) != null;
-    }
 
     @RecipeBuilderDescription(example = @Example(".input(ore('ingotGold')).output(item('minecraft:nether_star')).exp(0.5)"))
     public RecipeBuilder recipeBuilder() {
@@ -67,7 +63,7 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         return true;
     }
 
-    @MethodDescription(example = @Example("item('minecraft:clay')"))
+    @MethodDescription(example = @Example("item('minecraft:clay:*')"))
     public boolean removeByInput(IIngredient input) {
         if (GroovyLog.msg("Error adding Minecraft Furnace recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input must not be empty")
@@ -84,11 +80,15 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         })) {
             return true;
         }
-        GroovyLog.msg("Error removing Minecraft Furnace recipe")
-                .add("Can't find recipe for input " + input)
-                .add(((Object) input instanceof ItemStack is && isInSmeltingList(is)), "the furnace often uses wildcard itemstacks, and removing also requires using them - ie item('minecraft:log:*')")
-                .error()
-                .post();
+        var log = GroovyLog.msg("Error removing Minecraft Furnace recipe").error();
+        log.add("Can't find recipe for input " + input);
+        if ((Object) input instanceof ItemStack is && is.getMetadata() != OreDictionary.WILDCARD_VALUE) {
+            var wild = new ItemStack(is.getItem(), 1, OreDictionary.WILDCARD_VALUE);
+            if (!FurnaceRecipes.instance().getSmeltingResult(wild).isEmpty()) {
+                log.add("there was no input found for {}, but there was an input matching the wildcard itemstack {}", GroovyScriptCodeConverter.asGroovyCode(is, false), GroovyScriptCodeConverter.asGroovyCode(wild, false));
+            }
+        }
+        log.post();
         return false;
     }
 

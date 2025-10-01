@@ -162,7 +162,7 @@ mods.minecraft.crafting.shapelessBuilder()
 // Converts an input item into an output itemstack after a configurable amount of time, with the ability to give experience
 // and using fuel to run. Can also convert the item in the fuel slot.
 
-mods.minecraft.furnace.removeByInput(item('minecraft:clay'))
+mods.minecraft.furnace.removeByInput(item('minecraft:clay:*'))
 mods.minecraft.furnace.removeByOutput(item('minecraft:brick'))
 mods.minecraft.furnace.removeFuelConversionBySmelted(item('minecraft:sponge', 1))
 // mods.minecraft.furnace.removeAll()
