@@ -36,8 +36,8 @@ public class ItemStack2IntProxyMap {
     }
 
     public int getInt(ItemStack key) {
-        if (wildcard.containsKey(key.getItem())) wildcard.get(key.getItem());
-        return metadata.get(key);
+        if (wildcard.containsKey(key.getItem())) wildcard.getInt(key.getItem());
+        return metadata.getInt(key);
     }
 
     public void clear() {
