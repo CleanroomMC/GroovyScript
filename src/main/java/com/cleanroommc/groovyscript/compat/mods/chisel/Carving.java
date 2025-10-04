@@ -99,7 +99,12 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
                     .error()
                     .post();
         } catch (NullPointerException e) {
-            GroovyLog.get().exception("An exception occurred with chisel carving - possibly due to some other mod doing registry replacement.", e);
+            var log = GroovyLog.msg("An exception occurred with Chisel Carving - likely due to some other mod doing registry replacement")
+                    .add("This is not a bug with GroovyScript! It is a bug between Chisel and whatever mod is doing registry replacement.")
+                    .exception(e)
+                    .error();
+            if (ModSupport.INSPIRATIONS.isLoaded()) log.add("The Inspirations Fitted Carpets feature will cause this if enabled - you will need to disable it in 'config/inspirations.cfg'");
+            log.post();
         }
     }
 
