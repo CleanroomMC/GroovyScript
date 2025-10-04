@@ -43,7 +43,7 @@ import java.util.*;
 public class MixinSandbox extends AbstractGroovySandbox {
 
     private static MixinSandbox instance;
-    private static final Map<String, byte[]> injectedResourceCache = new Object2ObjectOpenHashMap<>();
+    private static Map<String, byte[]> injectedResourceCache = new Object2ObjectOpenHashMap<>();
     private static final List<String> mixinClasses = new ArrayList<>();
 
     @UnmodifiableView
@@ -75,7 +75,9 @@ public class MixinSandbox extends AbstractGroovySandbox {
         // create and register config
         String cfgName = "mixin.groovyscript.custom.json";
         Mixins.addConfiguration(cfgName);
-        lclBytecodesField.set(Launch.classLoader, new LaunchClassLoaderResourceCache(resourceCache, injectedResourceCache));
+        // from now on we forbid modifying the map
+        MixinSandbox.injectedResourceCache = Collections.unmodifiableMap(MixinSandbox.injectedResourceCache);
+        lclBytecodesField.set(Launch.classLoader, new LaunchClassLoaderResourceCache(resourceCache, MixinSandbox.injectedResourceCache));
         mixinClasses.addAll(groovyMixins); // mixins are registered by a mixin config plugin at core.MixinPlugin
         instance.getEngine().writeIndex();
     }
@@ -213,6 +215,7 @@ public class MixinSandbox extends AbstractGroovySandbox {
             // mixin will try to find the bytes in that map, so we will put them there
             byte[] code = ((ClassWriter) classVisitor).toByteArray();
             injectedResourceCache.put(classNode.getName(), code);
+            GroovyLog.get().info(" - compiled mixin class {}", classNode.getName());
             if (DEBUG) LOG.info("Generated groovy mixin class {}", classNode.getName());
             MixinSandbox.this.getEngine().onCompileClass(this.su, classNode, null, code);
         }

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.core;
 
 import com.google.common.collect.ForwardingMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -28,12 +29,12 @@ public class LaunchClassLoaderResourceCache extends ForwardingMap<String, byte[]
 
     private final Map<String, byte[]> delegate;
 
-    // immutable to thread-safe // groovyscript: we probably don't need this :clueless:
+    // immutable to thread-safe // groovyscript: we make a copy instead of immutability
     private final Map<String, byte[]> injected;
 
     public LaunchClassLoaderResourceCache(Map<String, byte[]> delegate, Map<String, byte[]> injected) {
         this.delegate = delegate;
-        this.injected = injected;
+        this.injected = new Object2ObjectOpenHashMap<>(injected);
     }
 
     @Override

@@ -158,6 +158,7 @@ dependencies {
         exclude group: 'com.google.code.gson', module: 'gson'
     }
 
+    implementation("com.cleanroommc:modularui:2.5.1") { transitive false }
     api "codechicken:codechickenlib:3.2.3.358"
     // api "gregtech:gregtech:2.8.10-beta", { transitive false }
 
