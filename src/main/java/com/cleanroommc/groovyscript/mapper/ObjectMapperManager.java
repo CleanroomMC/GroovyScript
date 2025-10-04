@@ -6,6 +6,7 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
+import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
@@ -73,6 +74,7 @@ public class ObjectMapperManager {
     }
 
     public static void init() {
+        ObjectParserHelper.init();
         registerObjectMapper(ItemStackMapper.INSTANCE);
         registerObjectMapper(BlockStateMapper.INSTANCE);
         ObjectMapper.builder("resource", ResourceLocation.class)
@@ -117,8 +119,8 @@ public class ObjectMapperManager {
                 .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
                 .register();
         ObjectMapper.builder("blockmaterial", Material.class)
-                .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.MATERIALS::get))
-                .completerOfNames(ObjectParserHelper.MATERIALS::keySet)
+                .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.materials::get))
+                .completerOfNames(ObjectParserHelper.materials::keySet)
                 .docOfType("block material")
                 .register();
         /*ObjectMapper.builder("blockstate", IBlockState.class)
@@ -172,8 +174,23 @@ public class ObjectMapperManager {
                 .docOfType("villager profession")
                 .register();
         ObjectMapper.builder("career", VillagerRegistry.VillagerCareer.class)
-                .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.VILLAGER_CAREERS::get))
-                .completerOfNames(ObjectParserHelper.VILLAGER_CAREERS::keySet)
+                .parser(IObjectParser.wrapStringGetter(x -> {
+                    for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
+                        for (var career : ((VillagerProfessionAccessor) profession).getCareers()) {
+                            if (x.equals(career.getName())) return career;
+                        }
+                    }
+                    return null;
+                }))
+                .completerOfNames(() -> {
+                    List<String> careers = new ArrayList<>();
+                    for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
+                        for (var career : ((VillagerProfessionAccessor) profession).getCareers()) {
+                            careers.add(career.getName());
+                        }
+                    }
+                    return careers;
+                })
                 .docOfType("villager career")
                 .register();
         ObjectMapper.builder("creativeTab", CreativeTabs.class)
@@ -213,7 +230,7 @@ public class ObjectMapperManager {
      * @param name    game object handler name (method name)
      * @param mainArg main argument
      * @param args    extra arguments
-     * @param silent if error messages should be logged
+     * @param silent  if error messages should be logged
      * @return game object or null
      */
 
