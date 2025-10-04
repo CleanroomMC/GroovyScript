@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.mapper;
 
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import net.minecraft.client.Minecraft;
@@ -37,6 +38,11 @@ public class ItemStackMapper extends AbstractObjectMapper<ItemStack> {
     @Override
     public void provideCompletion(int index, CompletionParams params, Completions items) {
         if (index == 0) items.addAllOfRegistry(ForgeRegistries.ITEMS);
+    }
+
+    @Override
+    public String getGroovyCode(ItemStack value) {
+        return GroovyScriptCodeConverter.asGroovyCode(value, false, false);
     }
 
     @Override
