@@ -37,7 +37,6 @@ public interface AnvilRecipeBuilder {
             }
             if (msg.postIfNotEmpty()) return null;
             if (recipe != null) {
-                handleReplace();
                 ModSupport.BETTER_WITH_MODS.get().anvilCrafting.add(recipe);
             }
             return recipe;
