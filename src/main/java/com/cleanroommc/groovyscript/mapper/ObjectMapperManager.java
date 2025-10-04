@@ -155,11 +155,13 @@ public class ObjectMapperManager {
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS))
                 .completer(ForgeRegistries.SOUND_EVENTS)
                 .docOfType("sound")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .register();
         ObjectMapper.builder("entity", EntityEntry.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.ENTITIES))
                 .completer(ForgeRegistries.ENTITIES)
                 .docOfType("entity entry")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .register();
         ObjectMapper.builder("dimension", DimensionType.class)
                 .parser(IObjectParser.wrapStringGetter(DimensionType::byName))
