@@ -84,10 +84,11 @@ public class ObjectMapperManager {
                 .docOfType("resource location")
                 .toGroovyCode(x -> GroovyScriptCodeConverter.formatResourceLocation("resource", x, false))
                 .register();
-        ObjectMapper.builder("ore", IIngredient.class)
+        ObjectMapper.builder("ore", OreDictIngredient.class)
                 .parser(ObjectMappers::parseOreDict)
                 .completerOfNames(OreDictionaryAccessor::getIdToName)
                 .docOfType("ore dict entry")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x.getOreDict(), false))
                 .textureBinder(TextureBinder.ofArray(IIngredient::getMatchingStacks, TextureBinder.ofItem()))
                 .tooltipOfArray(IIngredient::getMatchingStacks, i -> String.format("![](${item('%s')}) %s", i.getItem().getRegistryName(), i.getDisplayName()))
                 .register();
