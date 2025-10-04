@@ -230,10 +230,10 @@ public class RunConfig {
     }
 
     private static JsonArray getLoaderJsonArray(JsonObject loaders, String loader) {
-        JsonElement loadersElement = loaders.get(LoadStage.PRE_INIT.getName());
+        JsonElement loadersElement = loaders.get(loader);
         if (loadersElement == null || !loadersElement.isJsonArray()) {
             loadersElement = new JsonArray();
-            loaders.add(LoadStage.PRE_INIT.getName(), loadersElement);
+            loaders.add(loader, loadersElement);
         }
         return loadersElement.getAsJsonArray();
     }
