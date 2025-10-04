@@ -39,12 +39,13 @@ import java.util.*;
 
 public class ObjectMapperManager {
 
-    private static final Map<String, AbstractObjectMapper<?>> handlers = new Object2ObjectOpenHashMap<>();
-    private static final Map<String, List<AbstractObjectMapper<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
-    private static final Map<Class<? extends GroovyPropertyContainer>, Map<String, AbstractObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty";
     public static final String WILDCARD = "*";
     public static final String SPLITTER = ":";
+
+    private static final Map<String, AbstractObjectMapper<?>> handlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, List<AbstractObjectMapper<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends GroovyPropertyContainer>, Map<String, AbstractObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
 
     public static void registerObjectMapper(AbstractObjectMapper<?> mapper) {
         String key = mapper.getName();

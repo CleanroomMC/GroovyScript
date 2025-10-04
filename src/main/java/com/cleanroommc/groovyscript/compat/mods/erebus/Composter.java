@@ -104,5 +104,4 @@ public class Composter extends NamedRegistry implements IScriptReloadable {
         entries.forEach(blacklistStorage::addBackup);
         entries.clear();
     }
-
 }

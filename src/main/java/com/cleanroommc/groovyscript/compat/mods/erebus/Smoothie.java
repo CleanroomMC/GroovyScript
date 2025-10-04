@@ -39,7 +39,9 @@ public class Smoothie extends StandardListRegistry<SmoothieMakerRecipe> {
         return SmoothieMakerRecipeAccessor.getRecipes();
     }
 
-    @MethodDescription(example = {@Example("item('erebus:materials', 18)"), @Example("fluid('honey')")})
+    @MethodDescription(example = {
+            @Example("item('erebus:materials', 18)"), @Example("fluid('honey')")
+    })
     public boolean removeByInput(IIngredient input) {
         return getRecipes().removeIf(r -> {
             for (FluidStack fluid : r.getFluids()) {
