@@ -18,7 +18,7 @@ public class ObjectParserHelper {
     private static ImmutableMap<String, Material> getMaterials() {
         ImmutableMap.Builder<String, Material> materialBuilder = new ImmutableMap.Builder<>();
         for (var field : Material.class.getFields()) {
-            if ((field.getModifiers() & Modifier.STATIC) != 0 && field.getType() == Material.class) {
+            if (Modifier.isStatic(field.getModifiers()) && field.getType() == Material.class) {
                 try {
                     var material = (Material) field.get(null);
                     materialBuilder.put(field.getName(), material);
