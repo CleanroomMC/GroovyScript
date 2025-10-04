@@ -39,7 +39,7 @@ public class Rotting extends VirtualizedRegistry<Map.Entry<Item, RotInfo>> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:gold_ingot'))"),
-            @Example(".input(item('placeholdername:snack')).time(100).key('groovy_example').rotted(item('minecraft:clay') * 4)")
+            @Example(".input(item('minecraft:apple')).time(100).key('groovy_example').rotted(item('minecraft:clay') * 4)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

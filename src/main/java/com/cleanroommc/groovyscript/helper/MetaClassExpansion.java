@@ -1,9 +1,7 @@
 package com.cleanroommc.groovyscript.helper;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import groovy.lang.MetaClass;
-import groovy.lang.MetaMethod;
-import groovy.lang.MetaProperty;
+import groovy.lang.*;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.reflection.CachedField;
 import org.codehaus.groovy.reflection.CachedMethod;
@@ -22,8 +20,14 @@ public class MetaClassExpansion {
     public static void makePublic(MetaClass mc, String memberName) {
         boolean success = false;
         MetaProperty mp = mc.getMetaProperty(memberName);
-        if (mp instanceof CachedField cachedField) {
-            ReflectionHelper.makeFieldPublic(cachedField.getCachedField());
+        CachedField field = null;
+        if (mp instanceof MetaBeanProperty beanProperty) {
+            field = beanProperty.getField();
+        } else if (mp instanceof CachedField cachedField) {
+            field = cachedField;
+        }
+        if (field != null) {
+            ReflectionHelper.makeFieldPublic(field.getCachedField());
             success = true;
         }
         for (MetaMethod mm : mc.getMethods()) {
@@ -48,9 +52,18 @@ public class MetaClassExpansion {
      * @param fieldName name of field to make non-final
      */
     public static void makeMutable(MetaClass mc, String fieldName) {
+        /*while (mc instanceof DelegatingMetaClass delegatingMetaClass) {
+            mc = delegatingMetaClass.getAdaptee();
+        }*/
         MetaProperty mp = mc.getMetaProperty(fieldName);
-        if (mp instanceof CachedField cachedField) {
-            ReflectionHelper.setFinal(cachedField.getCachedField(), false);
+        CachedField field = null;
+        if (mp instanceof MetaBeanProperty beanProperty) {
+            field = beanProperty.getField();
+        } else if (mp instanceof CachedField cachedField) {
+            field = cachedField;
+        }
+        if (field != null) {
+            ReflectionHelper.setFinal(field.getCachedField(), false);
             return;
         }
         GroovyLog.get().error("Failed to make member '{}' of class {} mutable, because no field was found!", fieldName, getName(mc));

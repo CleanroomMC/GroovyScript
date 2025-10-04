@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -22,6 +23,11 @@ import java.util.stream.Stream;
 public class SandboxData {
 
     public static final String MIXIN_PKG = "mixins";
+
+    private static final FileVisitOption[] FOLLOW_LINKS = {
+            FileVisitOption.FOLLOW_LINKS
+    };
+    private static final FileVisitOption[] NO_VISIT_OPTIONS = {};
 
     public static final String[] GROOVY_SUFFIXES = {
             ".groovy", ".gvy", ".gy", ".gsh"
@@ -161,7 +167,7 @@ public class SandboxData {
         return FileUtil.relativize(getScriptPath(), path);
     }
 
-    static Collection<File> getSortedFilesOf(File root, Collection<String> paths) {
+    static Collection<File> getSortedFilesOf(File root, Collection<String> paths, boolean debug) {
         Object2IntLinkedOpenHashMap<File> files = new Object2IntLinkedOpenHashMap<>();
         String separator = File.separatorChar == '\\' ? "\\\\" : File.separator;
 
@@ -173,7 +179,7 @@ public class SandboxData {
             // if we are looking at a specific file, we don't want that to be overridden.
             // otherwise, we want to use the specificity based on the number of file separators.
             int pathSize = StringUtils.countMatches(path, separator);
-            try (Stream<Path> stream = Files.walk(rootFile.toPath())) {
+            try (Stream<Path> stream = Files.walk(rootFile.toPath(), debug ? FOLLOW_LINKS : NO_VISIT_OPTIONS)) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
                         //.filter(Preprocessor::validatePreprocessors)

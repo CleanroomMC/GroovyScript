@@ -120,9 +120,9 @@ public class LootPoolBuilder {
     private boolean validate(boolean validateForRegister) {
         if (name == null || name.isEmpty()) out.add("No name provided").error();
         if (validateForRegister) {
-            if (tableName == null || !VanillaModule.loot.tables.containsKey(tableName)) out.add("No valid LootTable specified").error();
+            if (tableName == null || !VanillaModule.INSTANCE.loot.tables.containsKey(tableName)) out.add("No valid LootTable specified").error();
             else if (name == null || name.isEmpty()) out.add("LootPool must have a name specified with .name()").error();
-            else if (VanillaModule.loot.tables.get(tableName).getPool(name) != null) out.add("Attempted to add duplicate pool " + name + " to " + tableName).error();
+            else if (VanillaModule.INSTANCE.loot.tables.get(tableName).getPool(name) != null) out.add("Attempted to add duplicate pool " + name + " to " + tableName).error();
         }
         out.postIfNotEmpty();
         return out.getLevel() != Level.ERROR;
@@ -135,7 +135,7 @@ public class LootPoolBuilder {
 
     public void register() {
         if (!validate(true)) return;
-        VanillaModule.loot.tables.get(tableName)
+        VanillaModule.INSTANCE.loot.tables.get(tableName)
                 .addPool(
                         new LootPool(lootEntries.toArray(new LootEntry[0]), poolConditions.toArray(new LootCondition[0]), rolls, bonusRolls, name)
                 );

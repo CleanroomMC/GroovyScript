@@ -141,7 +141,7 @@ mods.betterwithaddons.rotting.recipeBuilder()
     .register()
 
 mods.betterwithaddons.rotting.recipeBuilder()
-    .input(item('placeholdername:snack'))
+    .input(item('minecraft:apple'))
     .time(100)
     .key('groovy_example')
     .rotted(item('minecraft:clay') * 4)

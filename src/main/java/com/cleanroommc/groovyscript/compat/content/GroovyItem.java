@@ -36,8 +36,8 @@ public class GroovyItem extends Item {
             GroovyLog.get().errorMC("Items must registered in preInit. Tried to register {} too late!", item.getRegistryName());
             return;
         }
-        if (item.getCreativeTab() == null && VanillaModule.content.getDefaultTab() != null) {
-            item.setCreativeTab(VanillaModule.content.getDefaultTab());
+        if (item.getCreativeTab() == null && VanillaModule.INSTANCE.content.getDefaultTab() != null) {
+            item.setCreativeTab(VanillaModule.INSTANCE.content.getDefaultTab());
         }
         ResourceLocation key = item.getRegistryName();
         if (key == null || ITEMS.containsKey(key.getPath())) {
@@ -77,8 +77,8 @@ public class GroovyItem extends Item {
 
     public GroovyItem(String loc) {
         setRegistryName(GroovyScript.getRunConfig().getPackId(), loc);
-        if (VanillaModule.content.getDefaultTab() != null) {
-            setCreativeTab(VanillaModule.content.getDefaultTab());
+        if (VanillaModule.INSTANCE.content.getDefaultTab() != null) {
+            setCreativeTab(VanillaModule.INSTANCE.content.getDefaultTab());
         }
     }
 

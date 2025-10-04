@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.content;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.registry.NamedRegistry;
+import groovy.lang.Closure;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,6 +14,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 public class Content extends NamedRegistry {
 
@@ -64,6 +67,26 @@ public class Content extends NamedRegistry {
             @Override
             public @NotNull ItemStack createIcon() {
                 return icon.copy();
+            }
+        };
+    }
+
+    public CreativeTabs createCreativeTab(String name, Supplier<ItemStack> icon) {
+        return new CreativeTabs(name) {
+
+            @Override
+            public @NotNull ItemStack createIcon() {
+                return icon.get().copy();
+            }
+        };
+    }
+
+    public CreativeTabs createCreativeTab(String name, Closure<ItemStack> icon) {
+        return new CreativeTabs(name) {
+
+            @Override
+            public @NotNull ItemStack createIcon() {
+                return icon.call().copy();
             }
         };
     }

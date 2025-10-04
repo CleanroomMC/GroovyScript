@@ -1,11 +1,13 @@
 package com.cleanroommc.groovyscript.api;
 
-import java.util.List;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Collection;
 
 /**
- * Indicates that the IIngredient represents one or more oredicts.
+ * Indicates something that represents one or more oredicts, typically an {@link IIngredient}.
  */
-public interface IOreDicts extends IIngredient {
+public interface IOreDicts {
     // TODO
     //  There are a large number of places currently in the GroovyScript codebase
     //  that check if something is "instanceof OreDictIngredient".
@@ -13,7 +15,8 @@ public interface IOreDicts extends IIngredient {
     //  and surrounding code changed appropriately.
 
     /**
-     * @return a list of oredict strings
+     * @return a collection of oredict strings
      */
-    List<String> getOreDicts();
+    @UnmodifiableView
+    Collection<String> getOreDicts();
 }

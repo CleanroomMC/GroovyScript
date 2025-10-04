@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.sandbox;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,10 +14,14 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class FileUtil {
 
     private static final Char2ObjectOpenHashMap<String> encodings = new Char2ObjectOpenHashMap<>();
+    private static final Set<String> warnedAboutPackage = new ObjectOpenHashSet<>();
+    private static final Pattern pathPattern = Pattern.compile("^[a-zA-Z][a-zA-Z0-9_]*$");
 
     static {
         encodings.put(' ', "%20");
@@ -45,6 +51,48 @@ public class FileUtil {
         if (File.separatorChar != '/') {
             encodings.put('\\', "/");
         }
+    }
+
+    public static void cleanScriptPathWarnedCache() {
+        warnedAboutPackage.clear();
+    }
+
+    /**
+     * Logs an error for every directory in the path if it contains illegal characters.
+     *
+     * @param path relative script path to check for
+     * @return if script path is valid
+     */
+    public static boolean validateScriptPath(String path) {
+        int index = path.lastIndexOf('.');
+        if (index < 0) {
+            GroovyLog.get().errorMC("Script path '{}' doesn't have a file ending.", decodeURI(path));
+            return false;
+        }
+        String[] parts = path.substring(0, index).split("/");
+        boolean errorInFile = false;
+        boolean errorInPath = false;
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i];
+            if (!pathPattern.matcher(part).matches()) {
+                String fullPath = StringUtils.join(parts, '/', 0, i + 1);
+                if (i == parts.length - 1) {
+                    errorInFile = true;
+                } else {
+                    errorInPath = true;
+                    if (!warnedAboutPackage.contains(fullPath)) {
+                        warnedAboutPackage.add(fullPath);
+                        GroovyLog.get().errorMC("Script path '{}' contains illegal characters. Only letters, numbers and underscores are allowed for folder and file names. Folders and files must start with a letter!", decodeURI(fullPath));
+                    }
+                }
+            }
+        }
+        if (errorInFile) {
+            GroovyLog.get().errorMC("Skipping script '{}', because path contains illegal characters. Only letters, numbers and underscores are allowed for folder and file names. Folders and files must start with a letter!", decodeURI(path));
+        } else if (errorInPath) {
+            GroovyLog.get().error("Skipping script '{}' because of illegal characters", decodeURI(path));
+        }
+        return !errorInFile && !errorInPath;
     }
 
     public static @NotNull String relativize(String rootPath, String longerThanRootPath) {

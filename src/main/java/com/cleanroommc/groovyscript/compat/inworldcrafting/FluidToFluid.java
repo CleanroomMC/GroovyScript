@@ -132,7 +132,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
                     this.startCondition,
                     this.afterRecipe,
                     this.fluidOutput.get(0).getFluid());
-            VanillaModule.inWorldCrafting.fluidToFluid.add(recipe);
+            VanillaModule.INSTANCE.inWorldCrafting.fluidToFluid.add(recipe);
             return recipe;
         }
     }

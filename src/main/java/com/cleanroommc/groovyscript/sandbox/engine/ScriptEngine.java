@@ -21,7 +21,6 @@ import org.codehaus.groovy.tools.gse.DependencyTracker;
 import org.codehaus.groovy.tools.gse.StringSetMap;
 import org.codehaus.groovy.vmplugin.VMPlugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -197,7 +196,7 @@ public class ScriptEngine {
         this.loadedClasses.clear();
         getClassLoader().clearCache();
         try {
-            FileUtils.cleanDirectory(this.cacheRoot);
+            if (this.cacheRoot.exists()) FileUtils.cleanDirectory(this.cacheRoot);
             return true;
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
@@ -235,7 +234,7 @@ public class ScriptEngine {
         List<CompiledScript> scripts = new ArrayList<>(files.size());
         for (File file : files) {
             CompiledScript cs = checkScriptLoadability(file);
-            if (!cs.preprocessorCheckFailed()) scripts.add(cs);
+            if (cs != null && !cs.preprocessorCheckFailed()) scripts.add(cs);
         }
         return scripts;
     }
@@ -259,10 +258,13 @@ public class ScriptEngine {
         return compiledScript;
     }
 
-    @NotNull
     CompiledScript checkScriptLoadability(File file) {
         String relativeFileName = FileUtil.relativize(this.scriptRoot.getPath(), file.getPath());
-        File relativeFile = new File(relativeFileName);
+        if (!FileUtil.validateScriptPath(relativeFileName)) {
+            // skip
+            return null;
+        }
+        // File relativeFile = new File(relativeFileName);
         long lastModified = file.lastModified();
         CompiledScript comp = this.index.computeIfAbsent(relativeFileName, key -> new CompiledScript(key, 0));
 
@@ -318,8 +320,11 @@ public class ScriptEngine {
 
     private @Nullable Class<?> parseDynamicScript(File file, boolean isFileRelative) {
         if (isFileRelative) {
-            file = findScriptFile(file.getPath());
-            if (file == null) return null;
+            File absoutefile = findScriptFile(file.getPath());
+            if (absoutefile == null) {
+                throw new IllegalArgumentException("Now file was found for '" + file.getPath() + "'");
+            }
+            file = absoutefile;
         }
         Class<?> clazz = null;
         try {
@@ -498,14 +503,16 @@ public class ScriptEngine {
                     File scriptFile = ScriptEngine.this.findScriptFileOfClass(name);
                     if (scriptFile != null) {
                         CompiledScript result = checkScriptLoadability(scriptFile);
-                        if (result.requiresReload() || result.clazz == null) {
-                            try {
-                                return new LookupResult(compilationUnit.addSource(scriptFile.toURI().toURL()), null);
-                            } catch (MalformedURLException e) {
-                                throw new RuntimeException(e);
+                        if (result != null) {
+                            if (result.requiresReload() || result.clazz == null) {
+                                try {
+                                    return new LookupResult(compilationUnit.addSource(scriptFile.toURI().toURL()), null);
+                                } catch (MalformedURLException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            } else {
+                                return new LookupResult(null, ClassHelper.make(result.clazz));
                             }
-                        } else {
-                            return new LookupResult(null, ClassHelper.make(result.clazz));
                         }
                     }
                     return super.findClassNode(origName, compilationUnit);

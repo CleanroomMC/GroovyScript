@@ -160,6 +160,8 @@ groovyscript.wiki.minecraft.ore_dict.remove=Removes the given itemstack from the
 groovyscript.wiki.minecraft.ore_dict.clear=Removes all itemstacks from the given oredict
 groovyscript.wiki.minecraft.ore_dict.exists=Returns true if the given oredict exists, although this does not check if the oredict contains entries
 groovyscript.wiki.minecraft.ore_dict.getItems=Returns a list of all itemstacks in the given oredict
+groovyscript.wiki.minecraft.ore_dict.getOres=Returns an IIngredient containing all items for all matching oredicts at the time it is called
+groovyscript.wiki.minecraft.ore_dict.streamOreNames=Iterates through every registered oredict, with the ability to clear all items from each one
 groovyscript.wiki.minecraft.ore_dict.removeAll=Removes all itemstacks from all oredicts
 
 groovyscript.wiki.minecraft.player.title=Starting Inventory
@@ -412,6 +414,26 @@ groovyscript.wiki.appliedenergistics2.spatial.remove=Removes the given class fro
 groovyscript.wiki.arcanearchives.gem_cutting_table.title=Gem Cutting Table
 groovyscript.wiki.arcanearchives.gem_cutting_table.description=Converts any number of itemstacks into a single output itemstack via selecting the desired output itemstack in the GUI.
 groovyscript.wiki.arcanearchives.gem_cutting_table.note0=While more than 8 items can function as the input of a Stygian Iron Anvil recipe, only the first 8 are shown in JEI.
+
+
+# Armor Plus
+groovyscript.wiki.armorplus.champion_bench.title=Champion Bench
+groovyscript.wiki.armorplus.champion_bench.description=A normal crafting recipe, but with a 9x9 grid and in the Champion Bench.
+#A 9x9 crafting grid capable of everything the vanilla crafting grid can do, but in the Champion Bench
+
+groovyscript.wiki.armorplus.high_tech_bench.title=High-Tech Bench
+groovyscript.wiki.armorplus.high_tech_bench.description=A normal crafting recipe, but with a 5x5 grid and in the High-Tech Bench
+
+groovyscript.wiki.armorplus.lava_infuser.title=Lava Infuser
+groovyscript.wiki.armorplus.lava_infuser.description=Convert input itemstack to output itemstack over a second, with the ability to reward a configurable amount of experience based on the output itemstack. Consumes lava at a rate of 1 bucket per 10 seconds.
+groovyscript.wiki.armorplus.lava_infuser.experience.value=Sets the experience provided by the output
+groovyscript.wiki.armorplus.lava_infuser.note0=Experience provided is based on the output itemstack. Experience is a fallback value, only used if the itemstack provides no experience when smelting.
+
+groovyscript.wiki.armorplus.ultimate_bench.title=Ultimate Bench
+groovyscript.wiki.armorplus.ultimate_bench.description=A normal crafting recipe, but with a 7x7 grid and in the Ultimate Bench
+
+groovyscript.wiki.armorplus.work_bench.title=WorkBench
+groovyscript.wiki.armorplus.work_bench.description=A normal crafting recipe, but with a 3x3 grid and in the WorkBench
 
 
 # Arcane World
@@ -1427,6 +1449,12 @@ groovyscript.wiki.futuremc.blast_furnace.description=Converts an input itemstack
 groovyscript.wiki.futuremc.campfire.title=Campfire
 groovyscript.wiki.futuremc.campfire.description=Converts an input itemstack into an output itemstack when placed on the Campfire.
 groovyscript.wiki.futuremc.campfire.duration.value=Sets the time in ticks the takes to process
+
+groovyscript.wiki.futuremc.composter.title=Composter
+groovyscript.wiki.futuremc.composter.description=Converts input items into a chance to get a layer of compost, with 8 layers providing a single bonemeal
+groovyscript.wiki.futuremc.composter.add=Adds entries in the format `ingredient`, `chance`
+groovyscript.wiki.futuremc.composter.remove=Removes an entry with the same Ingredient
+groovyscript.wiki.futuremc.composter.rarity.value=Sets the chance the recipe has to provide a layer of compost
 
 groovyscript.wiki.futuremc.smithing.title=Smithing
 groovyscript.wiki.futuremc.smithing.description=Converts two input itemstacks into an output output itemstack in the Smithing Table.
@@ -2957,6 +2985,7 @@ groovyscript.wiki.thermalexpansion.smelter.chance.value=Sets the chance the seco
 
 groovyscript.wiki.thermalexpansion.steam.title=Steam Dynamo
 groovyscript.wiki.thermalexpansion.steam.description=Converts an input itemstack into power, taking time based on the power.
+groovyscript.wiki.thermalexpansion.steam.note0=If no energy is provided from an itemstack, the furnace fuel burn time will be checked, with the time in ticks being multiplied by 10 to calculate the energy output and if the energy is over 3000 the itemstack will be a valid fuel.
 groovyscript.wiki.thermalexpansion.steam.add=Adds recipes in the format `itemStack`, `energy`
 groovyscript.wiki.thermalexpansion.steam.removeByInput=Removes all recipes with given IIngredient
 
