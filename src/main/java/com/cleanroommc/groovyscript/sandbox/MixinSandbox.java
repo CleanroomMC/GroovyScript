@@ -7,7 +7,6 @@ import com.cleanroommc.groovyscript.sandbox.engine.ScriptEngine;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReceiver;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
@@ -153,8 +152,9 @@ public class MixinSandbox extends AbstractGroovySandbox {
                         LocalShortRef.class,
                         Cancellable.class,
                         Invoker.class,
-                        Accessor.class,
-                        WrapMethod.class)
+                        Accessor.class
+                //WrapMethod.class
+                )
                         .stream()
                         .map(Class::getName)
                         .toArray(String[]::new));
@@ -201,7 +201,7 @@ public class MixinSandbox extends AbstractGroovySandbox {
 
     @Override
     public Collection<File> getScriptFiles() {
-        return SandboxData.getSortedFilesOf(getScriptRoot(), Collections.singleton(SandboxData.MIXIN_PKG + "/"));
+        return SandboxData.getSortedFilesOf(getScriptRoot(), Collections.singleton(SandboxData.MIXIN_PKG + "/"), false);
     }
 
     @Override

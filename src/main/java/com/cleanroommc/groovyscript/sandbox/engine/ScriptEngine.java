@@ -21,6 +21,7 @@ import org.codehaus.groovy.tools.gse.DependencyTracker;
 import org.codehaus.groovy.tools.gse.StringSetMap;
 import org.codehaus.groovy.vmplugin.VMPlugin;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;

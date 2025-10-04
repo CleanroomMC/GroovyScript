@@ -214,6 +214,7 @@ public abstract class AbstractGroovySandbox {
     }
 
     protected void loadScripts(Binding binding, Set<String> executedClasses, boolean run) throws Throwable {
+        FileUtil.cleanScriptPathWarnedCache();
         Collection<File> files = getScriptFiles();
         List<CompiledScript> scripts = this.engine.findScripts(files);
         for (CompiledScript compiledScript : scripts) {
