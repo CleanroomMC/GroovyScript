@@ -19,6 +19,10 @@ public class EvilCraft extends GroovyPropertyContainer {
         return GroovyScriptCodeConverter.formatGenericHandler("weather", weatherType, colored);
     }
 
+    public static String asGroovyCode(WeatherType weatherType, boolean colored) {
+        return asGroovyCode(weatherType.toString(), colored);
+    }
+
     @Override
     public void initialize(GroovyContainer<?> container) {
         final List<String> weatherTypes = Arrays.asList("any", "clear", "rain", "lightning");
@@ -27,6 +31,7 @@ public class EvilCraft extends GroovyPropertyContainer {
                 .completerOfNames(() -> weatherTypes) // elements don't have names
                 .defaultValue(() -> WeatherType.ANY)
                 .docOfType("weather type")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
 
         InfoParserRegistry.addInfoParser(InfoParserWeather.instance);
