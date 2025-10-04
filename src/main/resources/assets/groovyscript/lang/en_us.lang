@@ -1100,7 +1100,8 @@ groovyscript.wiki.calculator.stone_separator.description=Converts an input items
 # Chisel
 groovyscript.wiki.chisel.carving.title=Carving
 groovyscript.wiki.chisel.carving.description=Sets a group of items any item can be converted between freely, in world and in a GUI
-groovyscript.wiki.chisel.carving.note=You cannot addVariation/removeVariation to chisel groups based on the oredict, you have to modify the oredict directly.
+groovyscript.wiki.chisel.carving.note0=You cannot addVariation/removeVariation to chisel groups based on the oredict, you have to modify the oredict directly.
+groovyscript.wiki.chisel.carving.note1=Some mods use "registry replacement" to change a preexisting entry in a registry. If this has been done to a block used by chisel, this will result in errors when manipulating *any* carving group and prevent the chiseling of that block. Of particular note is Inspirations, which can replace carpets and causes [this issue](https://github.com/Chisel-Team/Chisel/issues/828).
 groovyscript.wiki.chisel.carving.setSound=Sets the sound of the Chisel Group
 groovyscript.wiki.chisel.carving.addGroup=Adds a new Chisel Group with the given name
 groovyscript.wiki.chisel.carving.addVariation=Adds a new Item Variation to the Chisel Group

@@ -21,7 +21,10 @@ import java.util.Collection;
 
 @RegistryDescription(
         category = RegistryDescription.Category.ENTRIES,
-        admonition = @Admonition(value = "groovyscript.wiki.chisel.carving.note", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD),
+        admonition = {
+                @Admonition(value = "groovyscript.wiki.chisel.carving.note0", type = Admonition.Type.DANGER, format = Admonition.Format.STANDARD),
+                @Admonition(value = "groovyscript.wiki.chisel.carving.note1", type = Admonition.Type.BUG, format = Admonition.Format.STANDARD)
+        },
         isFullyDocumented = false // TODO fully document Chisel Carving
 )
 public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
@@ -95,6 +98,13 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
                     .add("instead, edit the oredict via `oredict.remove('{}', {})`", groupName, GroovyScriptCodeConverter.asGroovyCode(item, false, false))
                     .error()
                     .post();
+        } catch (NullPointerException e) {
+            var log = GroovyLog.msg("An exception occurred with Chisel Carving - likely due to some other mod doing registry replacement")
+                    .add("This is not a bug with GroovyScript! It is a bug between Chisel and whatever mod is doing registry replacement.")
+                    .exception(e)
+                    .error();
+            if (ModSupport.INSPIRATIONS.isLoaded()) log.add("The Inspirations Fitted Carpets feature will cause this if enabled - you will need to disable it in 'config/inspirations.cfg'");
+            log.post();
         }
     }
 
