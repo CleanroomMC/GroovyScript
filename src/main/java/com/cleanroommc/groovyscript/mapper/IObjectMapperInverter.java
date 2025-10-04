@@ -47,7 +47,7 @@ public interface IObjectMapperInverter<T> {
     /**
      * Converts any number of objects into a collection of their strings
      */
-    default Collection<String> mod(Collection<T> values) {
+    default Collection<String> mod(Iterable<T> values) {
         List<String> list = new ArrayList<>();
         for (T value : values) {
             list.add(getGroovyCode(value));
