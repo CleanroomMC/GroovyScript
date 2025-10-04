@@ -48,6 +48,7 @@ public class Thaumcraft extends GroovyPropertyContainer {
                 .parser(IObjectParser.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
                 .docOfType("aspect stack")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
         container.objectMapperBuilder("crystal", ItemStack.class)
                 .parser(IObjectParser.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal))

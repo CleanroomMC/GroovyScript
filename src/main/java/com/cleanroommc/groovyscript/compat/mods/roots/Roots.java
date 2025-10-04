@@ -59,27 +59,32 @@ public class Roots extends GroovyPropertyContainer {
                 .parser(IObjectParser.wrapStringGetter(RitualRegistry::getRitual))
                 .completerOfNames(() -> RitualRegistry.ritualRegistry.keySet())
                 .docOfType("ritual")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.formatGenericHandler("ritual", x.getName(), false))
                 .register();
         container.objectMapperBuilder("herb", Herb.class)
                 .parser(IObjectParser.wrapStringGetter(HerbRegistry::getHerbByName))
                 .completerOfNames(HerbRegistry.registry::keySet)
                 .docOfType("herb")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
         container.objectMapperBuilder("cost", CostType.class)
                 .parser(IObjectParser.wrapEnum(CostType.class, false))
                 .completerOfEnum(CostType.class, false)
                 .docOfType("cost")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.formatGenericHandler("cost", x.name(), false))
                 .register();
         container.objectMapperBuilder("spell", SpellBase.class)
                 .parser(Roots::getSpell)
                 .completer(SpellRegistry.spellRegistry::keySet)
                 .defaultValueSup(() -> Result.some(FakeSpell.INSTANCE))  // crashes otherwise
                 .docOfType("spell")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
         container.objectMapperBuilder("modifier", Modifier.class)
                 .parser(Roots::getModifier)
                 .completerOfNamed(ModifierRegistry::getModifiers, v -> v.getRegistryName().toString())
                 .docOfType("modifier")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
 
         InfoParserRegistry.addInfoParser(InfoParserHerb.instance);

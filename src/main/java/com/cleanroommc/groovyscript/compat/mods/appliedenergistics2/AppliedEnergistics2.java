@@ -29,6 +29,7 @@ public class AppliedEnergistics2 extends GroovyPropertyContainer {
                 .completerOfNamed(() -> Arrays.asList(TunnelType.values()), v -> v.name().toUpperCase(Locale.ROOT))
                 .defaultValue(() -> TunnelType.ME)
                 .docOfType("P2P tunnel type")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
 
         InfoParserRegistry.addInfoParser(InfoParserTunnel.instance);

@@ -7,6 +7,8 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.core.mixin.OreDictionaryAccessor;
 import com.cleanroommc.groovyscript.core.mixin.VillagerProfessionAccessor;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
@@ -80,6 +82,7 @@ public class ObjectMapperManager {
                 .addSignature(String.class)
                 .addSignature(String.class, String.class)
                 .docOfType("resource location")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.formatResourceLocation("resource", x, false))
                 .register();
         ObjectMapper.builder("ore", IIngredient.class)
                 .parser(ObjectMappers::parseOreDict)
@@ -101,11 +104,13 @@ public class ObjectMapperManager {
                 .parser(ObjectMappers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
                 .docOfType("fluid stack")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .textureBinder(TextureBinder.ofFluid())
                 .register();
         ObjectMapper.builder("fluid", FluidStack.class)
                 .parser(ObjectMappers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .textureBinder(TextureBinder.ofFluid())
                 .tooltip(f -> Collections.singletonList(f.getLocalizedName()))
                 .register();
@@ -114,6 +119,7 @@ public class ObjectMapperManager {
                 .completer(ForgeRegistries.BLOCKS)
                 .defaultValue(() -> Blocks.AIR)
                 .docOfType("block")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
                 .register();
         /*ObjectMapper.builder("blockstate", IBlockState.class)
@@ -129,17 +135,20 @@ public class ObjectMapperManager {
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.ENCHANTMENTS))
                 .completer(ForgeRegistries.ENCHANTMENTS)
                 .docOfType("enchantment")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .register();
         ObjectMapper.builder("potion", Potion.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.POTIONS))
                 .completer(ForgeRegistries.POTIONS)
                 .docOfType("potion")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .textureBinder(TextureBinder.of(potion -> PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionType.REGISTRY.getObject(potion.getRegistryName())), TextureBinder.ofItem()))
                 .register();
         ObjectMapper.builder("potionType", PotionType.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.POTION_TYPES))
                 .completer(ForgeRegistries.POTION_TYPES)
                 .docOfType("potion type")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.formatForgeRegistryImpl("potionType", x, false))
                 .register();
         ObjectMapper.builder("sound", SoundEvent.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.SOUND_EVENTS))
@@ -154,16 +163,19 @@ public class ObjectMapperManager {
         ObjectMapper.builder("dimension", DimensionType.class)
                 .parser(IObjectParser.wrapStringGetter(DimensionType::byName))
                 .completerOfNamed(() -> Arrays.asList(DimensionType.values()), DimensionType::getName)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .docOfType("dimension")
                 .register();
         ObjectMapper.builder("biome", Biome.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.BIOMES))
                 .completer(ForgeRegistries.BIOMES)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .docOfType("biome")
                 .register();
         ObjectMapper.builder("profession", VillagerRegistry.VillagerProfession.class)
                 .parser(IObjectParser.wrapForgeRegistry(ForgeRegistries.VILLAGER_PROFESSIONS))
                 .completer(ForgeRegistries.VILLAGER_PROFESSIONS)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .docOfType("villager profession")
                 .register();
 
@@ -180,23 +192,27 @@ public class ObjectMapperManager {
         ObjectMapper.builder("career", VillagerRegistry.VillagerCareer.class)
                 .parser(ObjectMappers::parseVillagerCareer)
                 .completerOfNames(() -> careerList)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .docOfType("villager career")
                 .register();
         ObjectMapper.builder("creativeTab", CreativeTabs.class)
                 .parser(ObjectMappers::parseCreativeTab)
                 .completerOfNamed(() -> Arrays.asList(CreativeTabs.CREATIVE_TAB_ARRAY), v -> ((CreativeTabsAccessor) v).getTabLabel2())
                 .defaultValue(() -> CreativeTabs.SEARCH)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .docOfType("creative tab")
                 .register();
         ObjectMapper.builder("textformat", TextFormatting.class)
                 .parser(ObjectMappers::parseTextFormatting)
                 .completerOfNamed(() -> Arrays.asList(TextFormatting.values()), format -> format.name().toLowerCase(Locale.ROOT).replaceAll("[^a-z]", ""))
                 .defaultValue(() -> TextFormatting.RESET)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.formatGenericHandler("textformat", x.getFriendlyName(), false))
                 .docOfType("text format")
                 .register();
         ObjectMapper.builder("nbt", NBTTagCompound.class)
                 .parser(ObjectMappers::parseNBT)
                 .defaultValue(NBTTagCompound::new)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.formatNBTTag(x, false, false))
                 .docOfType("nbt tag")
                 .register();
     }

@@ -53,6 +53,7 @@ public class AstralSorcery extends GroovyPropertyContainer {
                 })
                 .completerOfNamed(ConstellationRegistryAccessor::getConstellationList, IConstellation::getSimpleName)
                 .docOfType("constellation")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
         ExpansionHelper.mixinClass(ItemStack.class, CrystalItemStackExpansion.class);
 
