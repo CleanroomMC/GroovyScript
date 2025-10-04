@@ -30,6 +30,20 @@ public class Alchemistry extends GroovyPropertyContainer {
         return GroovyScriptCodeConverter.formatGenericHandler("element", element.getName(), colored);
     }
 
+    public static String itemStackToElementGroovyCode(ItemStack itemStack, boolean colored) {
+        for (var x : ElementRegistry.INSTANCE.getAllElements()) {
+            if (ItemStack.areItemsEqual(x.toItemStack(1), itemStack)) {
+                return asGroovyCode(x, colored);
+            }
+        }
+        for (var x : CompoundRegistry.INSTANCE.compounds()) {
+            if (ItemStack.areItemsEqual(x.toItemStack(1), itemStack)) {
+                return asGroovyCode(x, colored);
+            }
+        }
+        return null;
+    }
+
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapperBuilder("element", ItemStack.class)
@@ -49,6 +63,7 @@ public class Alchemistry extends GroovyPropertyContainer {
                 .completerOfNamed(CompoundRegistry.INSTANCE::compounds, ChemicalCompound::getName)
                 .completerOfNamed(ElementRegistry.INSTANCE::getAllElements, ChemicalElement::getName)
                 .docOfType("chemical element or compound as item stack")
+                .toGroovyCode(x -> itemStackToElementGroovyCode(x, false))
                 .register();
 
         InfoParserRegistry.addInfoParser(InfoParserElement.instance);
