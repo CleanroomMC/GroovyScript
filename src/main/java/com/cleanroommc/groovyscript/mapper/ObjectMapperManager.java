@@ -107,10 +107,12 @@ public class ObjectMapperManager {
                 .docOfType("fluid stack")
                 .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .textureBinder(TextureBinder.ofFluid())
+                .tooltip(f -> Collections.singletonList(f.getLocalizedName()))
                 .register();
         ObjectMapper.builder("fluid", FluidStack.class)
                 .parser(ObjectMappers::parseFluidStack)
                 .completerOfNames(FluidRegistry.getRegisteredFluids()::keySet)
+                .docOfType("fluid stack")
                 .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .textureBinder(TextureBinder.ofFluid())
                 .tooltip(f -> Collections.singletonList(f.getLocalizedName()))
@@ -238,7 +240,7 @@ public class ObjectMapperManager {
      * @param name    game object handler name (method name)
      * @param mainArg main argument
      * @param args    extra arguments
-     * @param silent if error messages should be logged
+     * @param silent  if error messages should be logged
      * @return game object or null
      */
 
