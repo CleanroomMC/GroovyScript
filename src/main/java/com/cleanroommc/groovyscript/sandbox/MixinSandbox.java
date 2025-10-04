@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.core.LaunchClassLoaderResourceCache;
 import com.cleanroommc.groovyscript.sandbox.engine.CompiledClass;
 import com.cleanroommc.groovyscript.sandbox.engine.CompiledScript;
 import com.cleanroommc.groovyscript.sandbox.engine.ScriptEngine;
@@ -15,8 +16,8 @@ import groovy.lang.Binding;
 import groovy.lang.Script;
 import groovyjarjarasm.asm.ClassVisitor;
 import groovyjarjarasm.asm.ClassWriter;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.codehaus.groovy.GroovyBugError;
@@ -26,15 +27,14 @@ import org.codehaus.groovy.classgen.GeneratorContext;
 import org.codehaus.groovy.control.*;
 import org.codehaus.groovy.control.customizers.CompilationCustomizer;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.extensibility.IMixinConfig;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.Cancellable;
-import org.spongepowered.asm.mixin.transformer.Config;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -42,13 +42,28 @@ import java.util.*;
 
 public class MixinSandbox extends AbstractGroovySandbox {
 
+    private static MixinSandbox instance;
+    private static final Map<String, byte[]> injectedResourceCache = new Object2ObjectOpenHashMap<>();
+    private static final List<String> mixinClasses = new ArrayList<>();
+
+    @UnmodifiableView
     @ApiStatus.Internal
-    public static void loadMixins() {
+    public static List<String> getMixinClasses() {
+        return Collections.unmodifiableList(mixinClasses);
+    }
+
+    @ApiStatus.Internal
+    public static void loadMixins() throws Exception {
         if (instance != null) {
             throw new IllegalStateException("Mixins already loaded");
         }
         instance = new MixinSandbox();
         instance.run(LoadStage.MIXIN);
+
+        Field lclBytecodesField = Launch.classLoader.getClass().getDeclaredField("resourceCache");
+        lclBytecodesField.setAccessible(true);
+        //noinspection unchecked
+        Map<String, byte[]> resourceCache = (Map<String, byte[]>) lclBytecodesField.get(Launch.classLoader);
 
         // called later than mixin booter, we can now try to compile groovy mixins
         // the groovy mixins need to be compiled to bytes manually first
@@ -57,38 +72,12 @@ public class MixinSandbox extends AbstractGroovySandbox {
             LOG.info("No groovy mixins configured");
             return;
         }
-        String cfgName = "mixin.groovyscript.custom.json";
         // create and register config
+        String cfgName = "mixin.groovyscript.custom.json";
         Mixins.addConfiguration(cfgName);
-        // obtain the just created config
-        IMixinConfig config = Config.create(cfgName, MixinEnvironment.getDefaultEnvironment()).getConfig();
-        List<String> mixinClasses;
-        try {
-            Class<?> mixinConfigClass = Class.forName("org.spongepowered.asm.mixin.transformer.MixinConfig");
-            Field field = mixinConfigClass.getDeclaredField("mixinClasses");
-            field.setAccessible(true);
-            mixinClasses = (List<String>) field.get(config);
-        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        // inject loaded mixin classes into configuration
-        mixinClasses.addAll(groovyMixins);
+        lclBytecodesField.set(Launch.classLoader, new LaunchClassLoaderResourceCache(resourceCache, injectedResourceCache));
+        mixinClasses.addAll(groovyMixins); // mixins are registered by a mixin config plugin at core.MixinPlugin
         instance.getEngine().writeIndex();
-    }
-
-    private static MixinSandbox instance;
-    private static final Map<String, byte[]> resourceCache;
-
-    static {
-        Map<String, byte[]> resourceCache1;
-        try {
-            Field field = LaunchClassLoader.class.getDeclaredField("resourceCache");
-            field.setAccessible(true);
-            resourceCache1 = (Map<String, byte[]>) field.get(Launch.classLoader);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        resourceCache = resourceCache1;
     }
 
     public static final Logger LOG = LogManager.getLogger("GroovyScript-MixinSandbox");
@@ -101,7 +90,7 @@ public class MixinSandbox extends AbstractGroovySandbox {
         return new ScriptEngine(SandboxData.getRootUrls(), SandboxData.getMixinScriptCachePath(), SandboxData.getScriptFile(), config)
                 .onClassLoaded(cc -> {
                     GroovyLog.get().info(" - loaded mixin class {} from cache", cc.getName());
-                    resourceCache.put(cc.getName(), cc.getData());
+                    injectedResourceCache.put(cc.getName(), cc.getData());
                 });
     }
 
@@ -223,7 +212,7 @@ public class MixinSandbox extends AbstractGroovySandbox {
         public void call(ClassVisitor classVisitor, ClassNode classNode) throws CompilationFailedException {
             // mixin will try to find the bytes in that map, so we will put them there
             byte[] code = ((ClassWriter) classVisitor).toByteArray();
-            resourceCache.put(classNode.getName(), code);
+            injectedResourceCache.put(classNode.getName(), code);
             if (DEBUG) LOG.info("Generated groovy mixin class {}", classNode.getName());
             MixinSandbox.this.getEngine().onCompileClass(this.su, classNode, null, code);
         }
