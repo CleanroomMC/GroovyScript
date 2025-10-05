@@ -145,7 +145,7 @@ public class RunConfig {
         JsonElement el = json.get("loaders");
         JsonObject jsonLoaders;
         if (el == null || !el.isJsonObject()) {
-            GroovyLog.msg("No loaders are defined (or is not a json object). This means no scripts will be executed.")
+            GroovyLog.msg("No loaders are defined (or is not a json object). This means no scripts will be executed")
                     .add("Please see https://cleanroommc.com/groovy-script/getting_started/run_config#loaders for help.")
                     .add("Alternatively delete runConfig.json to let GroovyScript generate default values.")
                     .warn()
@@ -159,7 +159,7 @@ public class RunConfig {
         }
 
         if (json.has("classes")) {
-            GroovyLog.msg("GroovyScript classes definition in runConfig is deprecated! Classes are now treated as normal scripts.")
+            GroovyLog.msg("GroovyScript classes definition in runConfig is deprecated! Classes are now treated as normal scripts")
                     .add("GroovyScript will try to add the defined paths to the loaders automatically. This may result in unexpected behaviour.")
                     .add("Visit https://cleanroommc.com/groovy-script/getting_started/run_config#classes to find out how to migrate.")
                     .add("Ask on the discord if you need more help.")
