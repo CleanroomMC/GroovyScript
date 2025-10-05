@@ -261,14 +261,8 @@ public class GroovyLogImpl implements GroovyLog {
         exception("An exception occurred while running scripts.", throwable);
     }
 
-    /**
-     * Logs an exception to the groovy log AND Minecraft's log. It does NOT throw the exception! The stacktrace for the groovy log will be
-     * stripped for better readability.
-     *
-     * @param throwable exception
-     */
     @Override
-    public void exception(String msg, Throwable throwable) {
+    public void exception(String msg, Throwable throwable, boolean doThrow) {
         String throwableMsg = throwable.toString();
         this.errors.add(throwableMsg);
         msg += " Look at latest.log for a full stacktrace:";
@@ -284,7 +278,12 @@ public class GroovyLogImpl implements GroovyLog {
             }
         }
         GroovyScript.LOGGER.error(msg);
-        GroovyScript.LOGGER.throwing(throwable);
+        if (doThrow) {
+            if (throwable instanceof RuntimeException e) throw e;
+            throw new RuntimeException(throwable);
+        } else {
+            GroovyScript.LOGGER.throwing(throwable);
+        }
     }
 
     private List<String> prepareStackTrace(StackTraceElement[] stackTrace) {

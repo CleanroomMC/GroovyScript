@@ -130,7 +130,11 @@ public class GroovySecurityManager {
     }
 
     public boolean isValid(ClassNode classNode) {
-        return this.whiteListedClasses.contains(classNode.name) || (!bannedClasses.contains(classNode.name) && !hasBlacklistAnnotation(classNode.visibleAnnotations) && isValidPackage(classNode.name));
+        return isValid(classNode, classNode.name.replace('/', '.'));
+    }
+
+    public boolean isValid(ClassNode classNode, String name) {
+        return this.whiteListedClasses.contains(name) || (!bannedClasses.contains(name) && !hasBlacklistAnnotation(classNode.visibleAnnotations) && isValidPackage(name));
     }
 
     public boolean isValid(Class<?> clazz) {
