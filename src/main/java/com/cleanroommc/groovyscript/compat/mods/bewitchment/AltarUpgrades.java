@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
+import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import net.minecraft.block.state.BlockWorldState;
@@ -225,7 +226,7 @@ public class AltarUpgrades extends VirtualizedRegistry<Map.Entry<Predicate<Block
 
         @RecipeBuilderMethodDescription(priority = 1002)
         public RecipeBuilder type(String type) {
-            return type(AltarUpgrade.Type.valueOf(type));
+            return type(EnumHelper.valueOfNullable(AltarUpgrade.Type.class, type, false));
         }
 
         @RecipeBuilderMethodDescription(priority = 1001)

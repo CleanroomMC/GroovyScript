@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.inspirations.InspirationsRegistryAccessor;
+import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.StandardListRegistry;
 import knightminer.inspirations.library.InspirationsRegistry;
@@ -223,7 +224,7 @@ public class Cauldron extends StandardListRegistry<ICauldronRecipe> {
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder type(String type) {
-            return type(RecipeType.valueOf(type.toUpperCase(Locale.ROOT)));
+            return type(EnumHelper.valueOfNullable(RecipeType.class, type, false));
         }
 
         @RecipeBuilderMethodDescription(field = "type")
