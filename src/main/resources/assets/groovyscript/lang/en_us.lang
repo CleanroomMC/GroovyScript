@@ -1228,6 +1228,32 @@ groovyscript.wiki.enderio.vat.multipliers2.value=Sets the multiplier applied to 
 groovyscript.wiki.enderio.vat.baseMultiplier.value=Sets the base amount of fluid output
 groovyscript.wiki.enderio.vat.energy.value=Sets the energy cost of the recipe
 
+
+# Erebus
+groovyscript.wiki.erebus.composter.title=Organic Composter
+groovyscript.wiki.erebus.composter.description=Converts valid items into compost. The Blacklist blocks all ItemStacks on it from being used, the Material list allows any Blocks using the valid Materials to be converted, and the Registry contains any valid ItemStacks. The conversion takes 10 seconds, and is fueled by erebus wall plants.
+groovyscript.wiki.erebus.composter.note0=The Blacklist is supposed to have 2 entries by default - `erebus:wall_plants@1` and `erebus:wall_plants_cultivated@1` - however it is initialized prior to blocks or items being registered, and so contains two empty itemstacks instead. Furthermore, it is likely that using the metadata **1** is also a bug, as only metadata **7** is used as fuel.
+groovyscript.wiki.erebus.composter.note1=Items extending `ItemFood` and `ItemSeed` will always be valid items unless added to the blacklist.
+groovyscript.wiki.erebus.composter.addBlacklist=Add the given ItemStack to the Composter Blacklist
+groovyscript.wiki.erebus.composter.addMaterial=Add the given Material to the Composter Material list
+groovyscript.wiki.erebus.composter.addRegistry=Add the given ItemStack to the Composter Registry
+groovyscript.wiki.erebus.composter.removeAllFromBlacklist=Removes all entries from the Blacklist
+groovyscript.wiki.erebus.composter.removeAllFromMaterial=Removes all entries from the Material list
+groovyscript.wiki.erebus.composter.removeAllFromRegistry=Removes all entries from the Registry
+groovyscript.wiki.erebus.composter.removeFromBlacklist=Removes all matching ItemStacks from the Blacklist
+groovyscript.wiki.erebus.composter.removeFromMaterial=Removes the provided Material from the Material list
+groovyscript.wiki.erebus.composter.removeFromRegistry=Removes all matching ItemStacks from the Registry
+
+groovyscript.wiki.erebus.offering_altar.title=Offering Altar
+groovyscript.wiki.erebus.offering_altar.description=Converts up to 3 input itemstacks into an output itemstack.
+
+groovyscript.wiki.erebus.smoothie.title=Smoothie-matic
+groovyscript.wiki.erebus.smoothie.description=Converts a container item, up to 4 input items, and up to 4 input fluidstacks into an output itemstack.
+groovyscript.wiki.erebus.smoothie.fluidInput.required=no fluid inputs can have a duplicate fluid type
+groovyscript.wiki.erebus.smoothie.container.value=Sets the container itemstack required
+groovyscript.wiki.erebus.smoothie.removeByContainer=Removes all recipes matching the provided container
+
+
 # EssentialCraft
 groovyscript.wiki.essentialcraft.demon_trade.title=Demon Trade
 groovyscript.wiki.essentialcraft.demon_trade.description=Adds an item that can be sold to Demons to obtain Ackronite. Note that each demon that spawns has a random item that it can accept, and will not accept any other item.

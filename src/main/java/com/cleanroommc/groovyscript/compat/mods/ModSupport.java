@@ -30,6 +30,7 @@ import com.cleanroommc.groovyscript.compat.mods.compactmachines.CompactMachines;
 import com.cleanroommc.groovyscript.compat.mods.cyclic.Cyclic;
 import com.cleanroommc.groovyscript.compat.mods.draconicevolution.DraconicEvolution;
 import com.cleanroommc.groovyscript.compat.mods.enderio.EnderIO;
+import com.cleanroommc.groovyscript.compat.mods.erebus.Erebus;
 import com.cleanroommc.groovyscript.compat.mods.essentialcraft.EssentialCraft;
 import com.cleanroommc.groovyscript.compat.mods.evilcraft.EvilCraft;
 import com.cleanroommc.groovyscript.compat.mods.extendedcrafting.ExtendedCrafting;
@@ -120,6 +121,7 @@ public class ModSupport {
     public static final GroovyContainer<Cyclic> CYCLIC = new InternalModContainer<>("cyclicmagic", "Cyclic", Cyclic::new, "cyclic");
     public static final GroovyContainer<DraconicEvolution> DRACONIC_EVOLUTION = new InternalModContainer<>("draconicevolution", "Draconic Evolution", DraconicEvolution::new, "de");
     public static final GroovyContainer<EnderIO> ENDER_IO = new InternalModContainer<>("enderio", "Ender IO", EnderIO::new, "eio");
+    public static final GroovyContainer<Erebus> EREBUS = new InternalModContainer<>("erebus", "The Erebus", Erebus::new);
     public static final GroovyContainer<EssentialCraft> ESSENTIALCRAFT = new InternalModContainer<>("essentialcraft", "EssentialCraft 4", EssentialCraft::new, "ec4");
     public static final GroovyContainer<EvilCraft> EVILCRAFT = new InternalModContainer<>("evilcraft", "EvilCraft", EvilCraft::new);
     public static final GroovyContainer<ExtendedCrafting> EXTENDED_CRAFTING = new InternalModContainer<>("extendedcrafting", "Extended Crafting", ExtendedCrafting::new);
