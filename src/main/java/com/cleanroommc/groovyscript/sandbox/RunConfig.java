@@ -141,11 +141,35 @@ public class RunConfig {
 
         String regex = File.separatorChar == '\\' ? "/" : "\\\\";
         String replacement = getSeparator();
-        if (json.has("classes")) {
-            throw new IllegalStateException("GroovyScript classes definition in runConfig is deprecated! Classes are now treated as normal scripts.");
+
+        JsonElement el = json.get("loaders");
+        JsonObject jsonLoaders;
+        if (el == null || !el.isJsonObject()) {
+            GroovyLog.msg("No loaders are defined (or is not a json object). This means no scripts will be executed")
+                    .add("Please see https://cleanroommc.com/groovy-script/getting_started/run_config#loaders for help.")
+                    .add("Alternatively delete runConfig.json to let GroovyScript generate default values.")
+                    .warn()
+                    .logToMc()
+                    .post();
+            jsonLoaders = new JsonObject();
+            el = jsonLoaders;
+            json.add("loaders", jsonLoaders);
+        } else {
+            jsonLoaders = el.getAsJsonObject();
         }
 
-        JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
+        if (json.has("classes")) {
+            GroovyLog.msg("GroovyScript classes definition in runConfig is deprecated! Classes are now treated as normal scripts")
+                    .add("GroovyScript will try to add the defined paths to the loaders automatically. This may result in unexpected behaviour.")
+                    .add("Visit https://cleanroommc.com/groovy-script/getting_started/run_config#classes to find out how to migrate.")
+                    .add("Ask on the discord if you need more help.")
+                    .error()
+                    .logToMc()
+                    .post();
+            // adds properties of classes into the appropriate loader json element
+            migrateClassesToLoaders(json.get("classes"), jsonLoaders);
+        }
+
         List<Pair<String, String>> pathsList = new ArrayList<>();
 
         GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json")
@@ -158,11 +182,8 @@ public class RunConfig {
             List<String> paths = new ArrayList<>();
 
             for (JsonElement element : loader) {
-                String path = element.getAsString().replaceAll(regex, replacement);
-                while (path.endsWith("/") || path.endsWith("\\")) {
-                    path = path.substring(0, path.length() - 1);
-                }
-                if (!checkValid(errorMsg, pathsList, entry.getKey(), path)) continue;
+                String path = sanitizePath(element.getAsString().replaceAll(regex, replacement));
+                if (paths.contains(path) || !checkValid(errorMsg, pathsList, entry.getKey(), path)) continue;
                 paths.add(path);
             }
 
@@ -205,6 +226,41 @@ public class RunConfig {
                 }
             }
             if (pm != null) Packmode.updatePackmode(pm);
+        }
+    }
+
+    private static JsonArray getLoaderJsonArray(JsonObject loaders, String loader) {
+        JsonElement loadersElement = loaders.get(loader);
+        if (loadersElement == null || !loadersElement.isJsonArray()) {
+            loadersElement = new JsonArray();
+            loaders.add(loader, loadersElement);
+        }
+        return loadersElement.getAsJsonArray();
+    }
+
+    private void migrateClassesToLoaders(JsonElement classesJson, JsonObject jsonLoaders) {
+        JsonArray loaderPaths;
+        if (classesJson.isJsonArray()) {
+            loaderPaths = getLoaderJsonArray(jsonLoaders, LoadStage.PRE_INIT.getName());
+            for (JsonElement el1 : classesJson.getAsJsonArray()) {
+                if (el1.isJsonPrimitive()) {
+                    loaderPaths.add(el1);
+                }
+            }
+        } else if (classesJson.isJsonObject()) {
+            JsonObject classes = classesJson.getAsJsonObject();
+            for (Map.Entry<String, JsonElement> entry : classes.entrySet()) {
+                loaderPaths = getLoaderJsonArray(jsonLoaders, entry.getKey());
+                if (entry.getValue().isJsonPrimitive()) {
+                    loaderPaths.add(entry.getValue().getAsString());
+                } else if (entry.getValue().isJsonArray()) {
+                    for (JsonElement el1 : entry.getValue().getAsJsonArray()) {
+                        if (el1.isJsonPrimitive()) {
+                            loaderPaths.add(el1);
+                        }
+                    }
+                }
+            }
         }
     }
 
