@@ -41,6 +41,7 @@ public class GroovyScriptKeybinds {
 
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseInputEvent event) {
+        if (!Mouse.getEventButtonState()) return; // only activate on click, not on release or movement
         for (Key key : KEYS) {
             if (key.isPressed()) key.runOperation();
         }
