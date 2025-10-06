@@ -40,6 +40,7 @@ public class MixinScriptEngine extends ScriptEngine {
 
     @Override
     protected void onClassLoaded(CompiledClass cc) {
+        super.onClassLoaded(cc);
         if (this.onClassLoaded != null) {
             this.onClassLoaded.accept(cc);
         }
@@ -50,11 +51,6 @@ public class MixinScriptEngine extends ScriptEngine {
         CompiledClass cc = super.findCompiledClass(su, classNode, bytecode);
         cc.mixin = isMixinClass(classNode);
         return cc;
-    }
-
-    @Override
-    protected void onClassCompiled(CompiledClass cc, ClassNode classNode, byte[] bytecode, Class<?> clz) {
-        super.onClassCompiled(cc, classNode, bytecode, clz);
     }
 
     public static boolean isMixinClass(ClassNode classNode) {
