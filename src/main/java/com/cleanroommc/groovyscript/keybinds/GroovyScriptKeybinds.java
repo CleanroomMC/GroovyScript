@@ -21,27 +21,27 @@ import java.util.Collection;
 @SideOnly(Side.CLIENT)
 public class GroovyScriptKeybinds {
 
-    private static final Collection<Key> keys = new ArrayList<>();
+    private static final Collection<Key> KEYS = new ArrayList<>();
 
     public static void initialize() {
         addKey(ReloadKey.createKeybind());
         addKey(CopyKey.createKeybind());
     }
 
-    public static void addKey(Key key) {
-        if (key != null) keys.add(key);
+    private static void addKey(Key key) {
+        if (key != null) KEYS.add(key);
     }
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.KeyInputEvent event) {
-        for (Key key : keys) {
+        for (Key key : KEYS) {
             if (key.isPressed()) key.runOperation();
         }
     }
 
     @SubscribeEvent
     public static void onMouseInput(InputEvent.MouseInputEvent event) {
-        for (Key key : keys) {
+        for (Key key : KEYS) {
             if (key.isPressed()) key.runOperation();
         }
     }
@@ -52,7 +52,7 @@ public class GroovyScriptKeybinds {
         char typedChar = Keyboard.getEventCharacter();
         int eventKey = Keyboard.getEventKey();
 
-        for (Key key : keys) {
+        for (Key key : KEYS) {
             if (key.isPressed(typedChar, eventKey)) {
                 key.runOperation();
                 event.setCanceled(true);
