@@ -26,16 +26,6 @@ import java.util.stream.Collectors;
 
 public class RunConfig {
 
-    public enum MixinSide {
-        CLIENT("client"), SERVER("server"), COMMON("common");
-
-        public final String name;
-
-        MixinSide(String name) {
-            this.name = name;
-        }
-    }
-
     public static JsonObject createDefaultJson() {
         JsonObject json = new JsonObject();
         json.addProperty("packName", "PlaceHolder name");
@@ -79,7 +69,6 @@ public class RunConfig {
     private final String version;
     private final List<String> packAuthors;
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
-    //private final Map<String, List<String>> mixinPaths = new Object2ObjectOpenHashMap<>();
     private final List<String> packmodeList = new ArrayList<>();
     private final Set<String> packmodeSet = new ObjectOpenHashSet<>();
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
@@ -131,7 +120,6 @@ public class RunConfig {
         } else {
             this.packAuthors = Collections.emptyList();
         }
-        //loadMixinPaths(json.get("mixins"));
         modMetadata.modId = this.packId;
         modMetadata.name = this.packName;
         modMetadata.version = this.version;
@@ -148,11 +136,34 @@ public class RunConfig {
         this.packmodePaths.clear();
         this.packmodeConfigState = 0;
 
-        if (json.has("classes")) {
-            throw new IllegalStateException("GroovyScript classes definition in runConfig is deprecated! Classes are now treated as normal scripts.");
+        JsonElement el = json.get("loaders");
+        JsonObject jsonLoaders;
+        if (el == null || !el.isJsonObject()) {
+            GroovyLog.msg("No loaders are defined (or is not a json object). This means no scripts will be executed")
+                    .add("Please see https://cleanroommc.com/groovy-script/getting_started/run_config#loaders for help.")
+                    .add("Alternatively delete runConfig.json to let GroovyScript generate default values.")
+                    .warn()
+                    .logToMc()
+                    .post();
+            jsonLoaders = new JsonObject();
+            el = jsonLoaders;
+            json.add("loaders", jsonLoaders);
+        } else {
+            jsonLoaders = el.getAsJsonObject();
         }
 
-        JsonObject jsonLoaders = JsonHelper.getJsonObject(json, "loaders");
+        if (json.has("classes")) {
+            GroovyLog.msg("GroovyScript classes definition in runConfig is deprecated! Classes are now treated as normal scripts")
+                    .add("GroovyScript will try to add the defined paths to the loaders automatically. This may result in unexpected behaviour.")
+                    .add("Visit https://cleanroommc.com/groovy-script/getting_started/run_config#classes to find out how to migrate.")
+                    .add("Ask on the discord if you need more help.")
+                    .error()
+                    .logToMc()
+                    .post();
+            // adds properties of classes into the appropriate loader json element
+            migrateClassesToLoaders(json.get("classes"), jsonLoaders);
+        }
+
         List<Pair<String, String>> pathsList = new ArrayList<>();
 
         GroovyLog.Msg errorMsg = GroovyLog.msg("Fatal while parsing runConfig.json")
@@ -165,11 +176,8 @@ public class RunConfig {
             List<String> paths = new ArrayList<>();
 
             for (JsonElement element : loader) {
-                String path = element.getAsString().replaceAll(separatorRegex, separatorReplacement);
-                while (path.endsWith("/") || path.endsWith("\\")) {
-                    path = path.substring(0, path.length() - 1);
-                }
-                if (!checkValid(errorMsg, pathsList, entry.getKey(), path)) continue;
+                String path = sanitizePath(element.getAsString());
+                if (paths.contains(path) || !checkValid(errorMsg, pathsList, entry.getKey(), path)) continue;
                 paths.add(path);
             }
 
@@ -215,40 +223,40 @@ public class RunConfig {
         }
     }
 
-    /*private void loadMixinPaths(JsonElement mixinElement) {
-        if (mixinElement == null) {
-            mixinPaths.put(MixinSide.COMMON.name, Collections.singletonList(""));
-            return;
+    private static JsonArray getLoaderJsonArray(JsonObject loaders, String loader) {
+        JsonElement loadersElement = loaders.get(loader);
+        if (loadersElement == null || !loadersElement.isJsonArray()) {
+            loadersElement = new JsonArray();
+            loaders.add(loader, loadersElement);
         }
-        if (mixinElement.isJsonPrimitive()) {
-            mixinPaths.put(MixinSide.COMMON.name, Collections.singletonList(sanitizePath(mixinElement.getAsString())));
-            return;
-        }
-        if (mixinElement.isJsonObject()) {
-            loadMixinSidePaths(MixinSide.CLIENT, mixinElement.getAsJsonObject());
-            loadMixinSidePaths(MixinSide.SERVER, mixinElement.getAsJsonObject());
-            loadMixinSidePaths(MixinSide.COMMON, mixinElement.getAsJsonObject());
-        }
+        return loadersElement.getAsJsonArray();
     }
 
-    private void loadMixinSidePaths(MixinSide side, JsonObject mixinJson) {
-        if (!mixinJson.has(side.name)) return;
-        JsonElement el = mixinJson.get(side.name);
-        if (el.isJsonPrimitive()) {
-            mixinPaths.put(side.name, Collections.singletonList(sanitizePath(el.getAsString())));
-        } else if (el.isJsonArray()) {
-            List<String> paths = new ArrayList<>();
-            for (JsonElement path : el.getAsJsonArray()) {
-                if (path.isJsonPrimitive()) {
-                    String s = sanitizePath(path.getAsString());
-                    if (!paths.contains(s)) {
-                        paths.add(s);
+    private void migrateClassesToLoaders(JsonElement classesJson, JsonObject jsonLoaders) {
+        JsonArray loaderPaths;
+        if (classesJson.isJsonArray()) {
+            loaderPaths = getLoaderJsonArray(jsonLoaders, LoadStage.PRE_INIT.getName());
+            for (JsonElement el1 : classesJson.getAsJsonArray()) {
+                if (el1.isJsonPrimitive()) {
+                    loaderPaths.add(el1);
+                }
+            }
+        } else if (classesJson.isJsonObject()) {
+            JsonObject classes = classesJson.getAsJsonObject();
+            for (Map.Entry<String, JsonElement> entry : classes.entrySet()) {
+                loaderPaths = getLoaderJsonArray(jsonLoaders, entry.getKey());
+                if (entry.getValue().isJsonPrimitive()) {
+                    loaderPaths.add(entry.getValue().getAsString());
+                } else if (entry.getValue().isJsonArray()) {
+                    for (JsonElement el1 : entry.getValue().getAsJsonArray()) {
+                        if (el1.isJsonPrimitive()) {
+                            loaderPaths.add(el1);
+                        }
                     }
                 }
             }
-            mixinPaths.put(side.name, paths);
         }
-    }*/
+    }
 
     public String getPackName() {
         return packName;

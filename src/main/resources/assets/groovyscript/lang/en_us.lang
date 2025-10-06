@@ -148,10 +148,16 @@ groovyscript.wiki.minecraft.crafting.replaceShapeless0=Adds a shapeless recipe i
 groovyscript.wiki.minecraft.crafting.replaceShapeless1=Adds a shapeless recipe in the format `name`, `output`, `input` and removes the recipe matching the given name
 
 groovyscript.wiki.minecraft.furnace.title=Furnace
-groovyscript.wiki.minecraft.furnace.description=Converts an input item into an output itemstack after a set amount of time, with the ability to give experience and using fuel to run.
+groovyscript.wiki.minecraft.furnace.description=Converts an input item into an output itemstack after a configurable amount of time, with the ability to give experience and using fuel to run. Can also convert the item in the fuel slot.
+groovyscript.wiki.minecraft.furnace.note0=Fuel Conversion Recipes may not function as desired in all furnaces - only the vanilla furnace has specific support. By default the only recipe reproduces the vanilla behavior of a wet sponge converting an empty bucket into a water bucket.
 groovyscript.wiki.minecraft.furnace.add0=Adds a recipe in the format `input`, `output`
 groovyscript.wiki.minecraft.furnace.add1=Adds a recipe in the format `input`, `output`, `experience`
+groovyscript.wiki.minecraft.furnace.add2=Adds a recipe in the format `input`, `output`, `experience`, `time`
 groovyscript.wiki.minecraft.furnace.exp.value=Sets the experience rewarded for smelting the given input
+groovyscript.wiki.minecraft.furnace.time.value=Sets the time in ticks the recipe takes
+groovyscript.wiki.minecraft.furnace.addFuelConversion=Add a conversion recipe in the format `smelted`, `fuel`, with `fuel` using an IIngredient transformer
+groovyscript.wiki.minecraft.furnace.removeFuelConversionBySmeltedStack=Removes all conversion recipes with the given smelted item
+groovyscript.wiki.minecraft.furnace.removeAllFuelConversions=Removes all conversion recipes
 
 groovyscript.wiki.minecraft.ore_dict.title=Ore Dictionary
 groovyscript.wiki.minecraft.ore_dict.description=Manipulate the Ore Dictionary and what itemstacks are part of what oredicts.
@@ -1100,7 +1106,8 @@ groovyscript.wiki.calculator.stone_separator.description=Converts an input items
 # Chisel
 groovyscript.wiki.chisel.carving.title=Carving
 groovyscript.wiki.chisel.carving.description=Sets a group of items any item can be converted between freely, in world and in a GUI
-groovyscript.wiki.chisel.carving.note=You cannot addVariation/removeVariation to chisel groups based on the oredict, you have to modify the oredict directly.
+groovyscript.wiki.chisel.carving.note0=You cannot addVariation/removeVariation to chisel groups based on the oredict, you have to modify the oredict directly.
+groovyscript.wiki.chisel.carving.note1=Some mods use "registry replacement" to change a preexisting entry in a registry. If this has been done to a block used by chisel, this will result in errors when manipulating *any* carving group and prevent the chiseling of that block. Of particular note is Inspirations, which can replace carpets and causes [this issue](https://github.com/Chisel-Team/Chisel/issues/828).
 groovyscript.wiki.chisel.carving.setSound=Sets the sound of the Chisel Group
 groovyscript.wiki.chisel.carving.addGroup=Adds a new Chisel Group with the given name
 groovyscript.wiki.chisel.carving.addVariation=Adds a new Item Variation to the Chisel Group
@@ -1226,6 +1233,32 @@ groovyscript.wiki.enderio.vat.itemInputs2.value=Sets the valid input items for t
 groovyscript.wiki.enderio.vat.multipliers2.value=Sets the multiplier applied to the respective input item on the right side
 groovyscript.wiki.enderio.vat.baseMultiplier.value=Sets the base amount of fluid output
 groovyscript.wiki.enderio.vat.energy.value=Sets the energy cost of the recipe
+
+
+# Erebus
+groovyscript.wiki.erebus.composter.title=Organic Composter
+groovyscript.wiki.erebus.composter.description=Converts valid items into compost. The Blacklist blocks all ItemStacks on it from being used, the Material list allows any Blocks using the valid Materials to be converted, and the Registry contains any valid ItemStacks. The conversion takes 10 seconds, and is fueled by erebus wall plants.
+groovyscript.wiki.erebus.composter.note0=The Blacklist is supposed to have 2 entries by default - `erebus:wall_plants@1` and `erebus:wall_plants_cultivated@1` - however it is initialized prior to blocks or items being registered, and so contains two empty itemstacks instead. Furthermore, it is likely that using the metadata **1** is also a bug, as only metadata **7** is used as fuel.
+groovyscript.wiki.erebus.composter.note1=Items extending `ItemFood` and `ItemSeed` will always be valid items unless added to the blacklist.
+groovyscript.wiki.erebus.composter.addBlacklist=Add the given ItemStack to the Composter Blacklist
+groovyscript.wiki.erebus.composter.addMaterial=Add the given Material to the Composter Material list
+groovyscript.wiki.erebus.composter.addRegistry=Add the given ItemStack to the Composter Registry
+groovyscript.wiki.erebus.composter.removeAllFromBlacklist=Removes all entries from the Blacklist
+groovyscript.wiki.erebus.composter.removeAllFromMaterial=Removes all entries from the Material list
+groovyscript.wiki.erebus.composter.removeAllFromRegistry=Removes all entries from the Registry
+groovyscript.wiki.erebus.composter.removeFromBlacklist=Removes all matching ItemStacks from the Blacklist
+groovyscript.wiki.erebus.composter.removeFromMaterial=Removes the provided Material from the Material list
+groovyscript.wiki.erebus.composter.removeFromRegistry=Removes all matching ItemStacks from the Registry
+
+groovyscript.wiki.erebus.offering_altar.title=Offering Altar
+groovyscript.wiki.erebus.offering_altar.description=Converts up to 3 input itemstacks into an output itemstack.
+
+groovyscript.wiki.erebus.smoothie.title=Smoothie-matic
+groovyscript.wiki.erebus.smoothie.description=Converts a container item, up to 4 input items, and up to 4 input fluidstacks into an output itemstack.
+groovyscript.wiki.erebus.smoothie.fluidInput.required=no fluid inputs can have a duplicate fluid type
+groovyscript.wiki.erebus.smoothie.container.value=Sets the container itemstack required
+groovyscript.wiki.erebus.smoothie.removeByContainer=Removes all recipes matching the provided container
+
 
 # EssentialCraft
 groovyscript.wiki.essentialcraft.demon_trade.title=Demon Trade
