@@ -65,7 +65,7 @@ public class GroovyScriptKeybinds {
     public static void onGuiMouseInput(GuiScreenEvent.MouseInputEvent.Post event) {
         if (!Mouse.getEventButtonState()) return; // only activate on click, not on release or movement
         for (Key key : KEYS) {
-            if (key.isValid() && GameSettings.isKeyDown(key.getKey())) {
+            if (key.isValid() && GameSettings.isKeyDown(key.getKey()) && key.getKey().getKeyConflictContext().isActive()) {
                 key.runOperation();
                 event.setCanceled(true);
                 return;
@@ -139,7 +139,7 @@ public class GroovyScriptKeybinds {
         }
 
         public boolean isPressed() {
-            return isValid() && key.isPressed();
+            return isValid() && key.isPressed() && key.getKeyConflictContext().isActive();
         }
 
         public boolean isPressed(char typedChar, int keyCode) {
