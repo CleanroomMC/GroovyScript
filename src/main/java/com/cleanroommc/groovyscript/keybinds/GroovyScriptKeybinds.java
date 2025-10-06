@@ -1,0 +1,130 @@
+package com.cleanroommc.groovyscript.keybinds;
+
+import com.cleanroommc.groovyscript.GroovyScript;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.settings.IKeyConflictContext;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.client.settings.KeyModifier;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class GroovyScriptKeybinds extends KeyBinding {
+
+    private static final Collection<Key> keys = new ArrayList<>();
+
+    protected GroovyScriptKeybinds(GroovyScriptKeybinds.Key key) {
+        super(key.getDescription(), key.getKeyConflictContext(), key.getKeyModifier(), key.getKeyCode(), GroovyScript.NAME);
+        ClientRegistry.registerKeyBinding(this);
+    }
+
+    public static void initialize() {
+        addKey(ReloadKey.createKeybind());
+    }
+
+    public static void addKey(GroovyScriptKeybinds.Key key) {
+        if (key != null) keys.add(key);
+    }
+
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.KeyInputEvent event) {
+        for (Key key : keys) {
+            if (key.isPressed()) key.runOperation();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMouseInput(InputEvent.MouseInputEvent event) {
+        for (Key key : keys) {
+            if (key.isPressed()) key.runOperation();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onGuiKeyInput(GuiScreenEvent.KeyboardInputEvent.Post event) {
+        if (!Keyboard.getEventKeyState()) return; // only activate on press, not on release
+        char typedChar = Keyboard.getEventCharacter();
+        int eventKey = Keyboard.getEventKey();
+
+        for (Key key : keys) {
+            if (key.isPressed(typedChar, eventKey)) {
+                key.runOperation();
+                event.setCanceled(true);
+                return;
+            }
+        }
+    }
+
+    public abstract static class Key {
+
+        private final String name;
+        private final IKeyConflictContext keyConflictContext;
+        private final KeyModifier keyModifier;
+        private final int keyCode;
+
+        private final KeyBinding key;
+
+        public Key(String name, int keyCode) {
+            this(name, KeyConflictContext.UNIVERSAL, KeyModifier.NONE, keyCode);
+        }
+
+        public Key(String name, IKeyConflictContext keyConflictContext, int keyCode) {
+            this(name, keyConflictContext, KeyModifier.NONE, keyCode);
+        }
+
+        public Key(String name, KeyModifier keyModifier, int keyCode) {
+            this(name, KeyConflictContext.UNIVERSAL, keyModifier, keyCode);
+        }
+
+        public Key(String name, IKeyConflictContext keyConflictContext, KeyModifier keyModifier, int keyCode) {
+            this.name = name;
+            this.keyConflictContext = keyConflictContext;
+            this.keyModifier = keyModifier;
+            this.keyCode = keyCode;
+            this.key = new GroovyScriptKeybinds(this);
+        }
+
+        public boolean isValid() {
+            return true;
+        }
+
+        public abstract void runOperation();
+
+        public String getName() {
+            return name;
+        }
+
+        public IKeyConflictContext getKeyConflictContext() {
+            return keyConflictContext;
+        }
+
+        public KeyModifier getKeyModifier() {
+            return keyModifier;
+        }
+
+        public int getKeyCode() {
+            return keyCode;
+        }
+
+        public KeyBinding getKey() {
+            return key;
+        }
+
+        public boolean isPressed() {
+            return isValid() && key.isPressed();
+        }
+
+        public boolean isPressed(char typedChar, int keyCode) {
+            return isValid() && key.isActiveAndMatches(keyCode);
+        }
+
+        public String getDescription() {
+            return String.format("keybind.%s.%s", GroovyScript.ID, name);
+        }
+    }
+}
