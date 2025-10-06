@@ -25,6 +25,7 @@ public class GroovyScriptKeybinds extends KeyBinding {
 
     public static void initialize() {
         addKey(ReloadKey.createKeybind());
+        addKey(CopyKey.createKeybind());
     }
 
     public static void addKey(GroovyScriptKeybinds.Key key) {

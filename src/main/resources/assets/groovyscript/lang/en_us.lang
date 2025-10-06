@@ -4,6 +4,7 @@ groovyscript.command.copy.copied_end=] to the clipboard
 
 key.categories.groovyscript=GroovyScript
 keybind.groovyscript.reload=Reload Scripts
+keybind.groovyscript.copy=Copy focused
 
 groovyscript.jei.category.groovyscript:fluid_recipe.name=In world fluid recipes
 groovyscript.jei.category.groovyscript:explosion.name=Explosion recipes
