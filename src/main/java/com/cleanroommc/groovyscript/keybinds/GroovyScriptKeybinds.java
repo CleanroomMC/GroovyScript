@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -62,6 +63,7 @@ public class GroovyScriptKeybinds {
 
     @SubscribeEvent
     public static void onGuiMouseInput(GuiScreenEvent.MouseInputEvent.Post event) {
+        if (!Mouse.getEventButtonState()) return; // only activate on click, not on release or movement
         for (Key key : KEYS) {
             if (key.isValid() && GameSettings.isKeyDown(key.getKey())) {
                 key.runOperation();
