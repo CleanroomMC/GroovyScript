@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.sandbox;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
@@ -311,8 +310,8 @@ public class GroovyLogImpl implements GroovyLog {
         // if we load FMLCommonHandler to early it will cause class loading issues with other classes
         // guess how long it took to figure this out
         // if we are in early stage use fallback side which is available early, but might be inaccurate
-        Side side = this.passedEarly ? FMLCommonHandler.instance().getEffectiveSide() : FMLLaunchHandler.side();
-        return side.isClient() ? "CLIENT" : "SERVER";
+        ActualSide side = SandboxData.getLogicalSide();
+        return side.isPhysical() ? side.getName() : side.getShortName();
     }
 
     private String getSource() {

@@ -281,19 +281,13 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
         throw new UnsupportedOperationException();
     }
 
-    public interface ClassgenCallback {
-
-        void onGenerate(byte[] bytes, ClassNode classNode, Class<?> clz);
-    }
-
     public static class ClassCollector implements CompilationUnit.ClassgenCallback {
 
-        private Class<?> generatedClass;
-        private final GroovyScriptClassLoader cl;
-        private final SourceUnit su;
-        private final CompilationUnit unit;
-        private final Collection<Class<?>> loadedClasses;
-        private ClassgenCallback creatClassCallback;
+        protected Class<?> generatedClass;
+        protected final GroovyScriptClassLoader cl;
+        protected final SourceUnit su;
+        protected final CompilationUnit unit;
+        protected final Collection<Class<?>> loadedClasses;
 
         protected ClassCollector(GroovyScriptClassLoader cl, CompilationUnit unit, SourceUnit su) {
             this.cl = cl;
@@ -306,14 +300,23 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
             return cl;
         }
 
-        protected Class<?> createClass(byte[] code, ClassNode classNode) {
+        @Override
+        public void call(ClassVisitor classWriter, ClassNode classNode) {
+            byte[] code = ((ClassWriter) classWriter).toByteArray();
+            Class<?> clz = generateClass(postProcessBytecode(code, classNode), classNode);
+        }
+
+        public byte[] postProcessBytecode(byte[] bytecode, ClassNode classNode) {
             BytecodeProcessor bytecodePostprocessor = unit.getConfiguration().getBytecodePostprocessor();
-            byte[] fcode = code;
             if (bytecodePostprocessor != null) {
-                fcode = bytecodePostprocessor.processBytecode(classNode.getName(), fcode);
+                bytecode = bytecodePostprocessor.processBytecode(classNode.getName(), bytecode);
             }
+            return bytecode;
+        }
+
+        protected Class<?> generateClass(byte[] code, ClassNode classNode) {
             GroovyScriptClassLoader cl = getDefiningClassLoader();
-            Class<?> theClass = cl.defineClass(classNode.getName(), fcode, 0, fcode.length, unit.getAST().getCodeSource());
+            Class<?> theClass = cl.defineClass(classNode.getName(), code, 0, code.length, unit.getAST().getCodeSource());
             this.loadedClasses.add(theClass);
 
             if (generatedClass == null) {
@@ -324,30 +327,11 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
                 if (mn != null) main = mn.getClasses().get(0);
                 if (msu == su && main == classNode) generatedClass = theClass;
             }
-
-            if (this.creatClassCallback != null) {
-                this.creatClassCallback.onGenerate(code, classNode, theClass);
-            }
             return theClass;
-        }
-
-        protected Class<?> onClassNode(ClassWriter classWriter, ClassNode classNode) {
-            byte[] code = classWriter.toByteArray();
-            return createClass(code, classNode);
-        }
-
-        @Override
-        public void call(ClassVisitor classWriter, ClassNode classNode) {
-            onClassNode((ClassWriter) classWriter, classNode);
         }
 
         public Collection<Class<?>> getLoadedClasses() {
             return this.loadedClasses;
-        }
-
-        public ClassCollector creatClassCallback(ClassgenCallback creatClassCallback) {
-            this.creatClassCallback = creatClassCallback;
-            return this;
         }
     }
 

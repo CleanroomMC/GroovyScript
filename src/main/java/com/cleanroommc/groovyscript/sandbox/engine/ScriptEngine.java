@@ -35,15 +35,15 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.CodeSource;
 import java.util.*;
-import java.util.function.Consumer;
 
+@ApiStatus.Internal
 public class ScriptEngine {
 
     /**
      * Changing this number will force the cache to be deleted and every script has to be recompiled.
      * Useful when changes to the compilation process were made.
      */
-    public static final int CACHE_VERSION = 4;
+    public static final int CACHE_VERSION = 5;
     /**
      * Setting this to false will cause compiled classes to never be cached.
      * As a side effect some compilation behaviour might change. Can be useful for debugging.
@@ -72,15 +72,18 @@ public class ScriptEngine {
     private final ScriptClassLoader classLoader;
     private final Map<String, CompiledScript> index = new Object2ObjectOpenHashMap<>();
     private final Map<String, CompiledClass> loadedClasses = new Object2ObjectOpenHashMap<>();
-    private Consumer<CompiledClass> onClassLoaded;
 
     public ScriptEngine(URL[] scriptEnvironment, File cacheRoot, File scriptRoot, CompilerConfiguration config) {
         this.scriptEnvironment = scriptEnvironment;
         this.cacheRoot = cacheRoot;
         this.scriptRoot = scriptRoot;
         this.config = config;
-        this.classLoader = new ScriptClassLoader(ScriptEngine.class.getClassLoader(), config, Collections.unmodifiableMap(this.loadedClasses));
+        this.classLoader = createClassLoader();
         readIndex();
+    }
+
+    protected ScriptClassLoader createClassLoader() {
+        return new ScriptClassLoader(ScriptEngine.class.getClassLoader(), config, Collections.unmodifiableMap(this.loadedClasses));
     }
 
     public File getScriptRoot() {
@@ -99,9 +102,8 @@ public class ScriptEngine {
         return classLoader;
     }
 
-    public ScriptEngine onClassLoaded(Consumer<CompiledClass> onClassLoaded) {
-        this.onClassLoaded = onClassLoaded;
-        return this;
+    protected Map<String, CompiledClass> getLoadedClasses() {
+        return loadedClasses;
     }
 
     public Iterator<CompiledClass> classIterator() {
@@ -192,12 +194,12 @@ public class ScriptEngine {
 
     @ApiStatus.Internal
     public boolean deleteScriptCache() {
-        this.index.values().forEach(script -> script.deleteCache(this.cacheRoot.getPath()));
         this.index.clear();
         this.loadedClasses.clear();
         getClassLoader().clearCache();
         try {
-            if (this.cacheRoot.exists()) FileUtils.cleanDirectory(this.cacheRoot);
+            File cache = SandboxData.getCacheBasePath();
+            if (cache.exists()) FileUtils.cleanDirectory(cache);
             return true;
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
@@ -224,10 +226,14 @@ public class ScriptEngine {
                 cc.clazz = classLoader.defineClass(cc.name, cc.data);
             }
             this.loadedClasses.put(cc.name, cc);
-            if (this.onClassLoaded != null) {
-                this.onClassLoaded.accept(cc);
-            }
+            onClassLoaded(cc);
         }
+    }
+
+    protected void onClassLoaded(CompiledClass cc) {}
+
+    public Collection<CompiledScript> getCompiledScriptsFromIndex() {
+        return Collections.unmodifiableCollection(this.index.values());
     }
 
     @ApiStatus.Internal
@@ -340,15 +346,11 @@ public class ScriptEngine {
         return clazz;
     }
 
-    /**
-     * Called via mixin when groovy compiled a class from scripts.
-     */
-    @ApiStatus.Internal
-    public void onCompileClass(@NotNull SourceUnit su, @NotNull ClassNode classNode, @Nullable Class<?> clazz, byte @NotNull [] code) {
+    protected @NotNull CompiledClass findCompiledClass(SourceUnit su, ClassNode classNode, byte[] bytecode) {
         // class is null for mixins
+        String className = classNode.getName();
         String path = su.getName();
         String shortPath = FileUtil.relativize(this.scriptRoot.getPath(), path);
-        String className = classNode.getName();
         String mainClassName = mainClassName(className);
         // if the script was compiled because another script depends on it, the source unit is wrong
         // we need to find the source unit of the compiled class
@@ -359,8 +361,13 @@ public class ScriptEngine {
         CompiledScript comp = this.index.computeIfAbsent(truePath, k -> new CompiledScript(k, inner ? -1 : 0));
         CompiledClass innerClass = comp;
         if (inner) innerClass = comp.findInnerClass(className);
-        innerClass.onCompile(code, clazz, this.cacheRoot.getPath());
-        this.loadedClasses.put(innerClass.name, innerClass);
+        return innerClass;
+    }
+
+    protected void onClassCompiled(CompiledClass cc, ClassNode classNode, byte[] bytecode, Class<?> clz) {
+        cc.onCompile(bytecode, clz, this.cacheRoot.getPath());
+        this.loadedClasses.put(cc.name, cc);
+        onClassLoaded(cc);
     }
 
     /**
@@ -443,7 +450,22 @@ public class ScriptEngine {
         final Map<String, String> precompiledEntries = new HashMap<>();
     }
 
-    private class ScriptClassLoader extends GroovyScriptClassLoader {
+    public class ClassCollector extends GroovyScriptClassLoader.ClassCollector {
+
+        protected ClassCollector(GroovyScriptClassLoader cl, CompilationUnit unit, SourceUnit su) {
+            super(cl, unit, su);
+        }
+
+        @Override
+        protected Class<?> generateClass(byte[] code, ClassNode classNode) {
+            CompiledClass cc = findCompiledClass(this.su, classNode, code);
+            Class<?> clz = super.generateClass(code, classNode);
+            onClassCompiled(cc, classNode, code, clz);
+            return clz;
+        }
+    }
+
+    protected class ScriptClassLoader extends GroovyScriptClassLoader {
 
         public ScriptClassLoader(ClassLoader loader, CompilerConfiguration config, Map<String, CompiledClass> cache) {
             super(loader, config, cache);
@@ -461,9 +483,7 @@ public class ScriptEngine {
 
         @Override
         protected ClassCollector createCustomCollector(CompilationUnit unit, SourceUnit su) {
-            return super.createCustomCollector(unit, su).creatClassCallback((code, classNode, clz) -> {
-                onCompileClass(su, classNode, clz, code);
-            });
+            return new ScriptEngine.ClassCollector(new InnerLoader(this), unit, su);
         }
 
         @Override
@@ -505,6 +525,9 @@ public class ScriptEngine {
                     if (scriptFile != null) {
                         CompiledScript result = checkScriptLoadability(scriptFile);
                         if (result != null) {
+                            if (result.isMixin()) {
+                                throw new IllegalStateException("Can't reference other mixin scripts!");
+                            }
                             if (result.requiresReload() || result.clazz == null) {
                                 try {
                                     return new LookupResult(compilationUnit.addSource(scriptFile.toURI().toURL()), null);

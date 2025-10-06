@@ -26,6 +26,16 @@ import java.util.stream.Collectors;
 
 public class RunConfig {
 
+    public enum MixinSide {
+        CLIENT("client"), SERVER("server"), COMMON("common");
+
+        public final String name;
+
+        MixinSide(String name) {
+            this.name = name;
+        }
+    }
+
     public static JsonObject createDefaultJson() {
         JsonObject json = new JsonObject();
         json.addProperty("packName", "PlaceHolder name");
@@ -61,19 +71,20 @@ public class RunConfig {
         modMetadata.version = "0.0.0";
     }
 
+    public static final String separatorRegex = File.separatorChar == '\\' ? "/" : "\\\\";
+    public static final String separatorReplacement = File.separatorChar == '\\' ? "\\\\" : File.separator;
+
     private final String packName;
     private final String packId;
     private final String version;
     private final List<String> packAuthors;
     private final Map<String, List<String>> loaderPaths = new Object2ObjectOpenHashMap<>();
+    //private final Map<String, List<String>> mixinPaths = new Object2ObjectOpenHashMap<>();
     private final List<String> packmodeList = new ArrayList<>();
     private final Set<String> packmodeSet = new ObjectOpenHashSet<>();
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
     private boolean integratePackmodeMod;
-    // TODO asm
-    private final String asmClass = null;
     private boolean debug;
-
 
     private final boolean invalidPackId;
     private boolean warnedAboutInvalidPackId;
@@ -120,6 +131,7 @@ public class RunConfig {
         } else {
             this.packAuthors = Collections.emptyList();
         }
+        //loadMixinPaths(json.get("mixins"));
         modMetadata.modId = this.packId;
         modMetadata.name = this.packName;
         modMetadata.version = this.version;
@@ -129,9 +141,6 @@ public class RunConfig {
 
     @ApiStatus.Internal
     public void reload(JsonObject json, boolean init) {
-        if (GroovyScript.isSandboxLoaded() && GroovyScript.getSandbox().isRunning()) {
-            throw new RuntimeException();
-        }
         this.debug = JsonHelper.getBoolean(json, false, "debug");
         this.loaderPaths.clear();
         this.packmodeList.clear();
@@ -139,8 +148,6 @@ public class RunConfig {
         this.packmodePaths.clear();
         this.packmodeConfigState = 0;
 
-        String regex = File.separatorChar == '\\' ? "/" : "\\\\";
-        String replacement = getSeparator();
         if (json.has("classes")) {
             throw new IllegalStateException("GroovyScript classes definition in runConfig is deprecated! Classes are now treated as normal scripts.");
         }
@@ -158,7 +165,7 @@ public class RunConfig {
             List<String> paths = new ArrayList<>();
 
             for (JsonElement element : loader) {
-                String path = element.getAsString().replaceAll(regex, replacement);
+                String path = element.getAsString().replaceAll(separatorRegex, separatorReplacement);
                 while (path.endsWith("/") || path.endsWith("\\")) {
                     path = path.substring(0, path.length() - 1);
                 }
@@ -207,6 +214,41 @@ public class RunConfig {
             if (pm != null) Packmode.updatePackmode(pm);
         }
     }
+
+    /*private void loadMixinPaths(JsonElement mixinElement) {
+        if (mixinElement == null) {
+            mixinPaths.put(MixinSide.COMMON.name, Collections.singletonList(""));
+            return;
+        }
+        if (mixinElement.isJsonPrimitive()) {
+            mixinPaths.put(MixinSide.COMMON.name, Collections.singletonList(sanitizePath(mixinElement.getAsString())));
+            return;
+        }
+        if (mixinElement.isJsonObject()) {
+            loadMixinSidePaths(MixinSide.CLIENT, mixinElement.getAsJsonObject());
+            loadMixinSidePaths(MixinSide.SERVER, mixinElement.getAsJsonObject());
+            loadMixinSidePaths(MixinSide.COMMON, mixinElement.getAsJsonObject());
+        }
+    }
+
+    private void loadMixinSidePaths(MixinSide side, JsonObject mixinJson) {
+        if (!mixinJson.has(side.name)) return;
+        JsonElement el = mixinJson.get(side.name);
+        if (el.isJsonPrimitive()) {
+            mixinPaths.put(side.name, Collections.singletonList(sanitizePath(el.getAsString())));
+        } else if (el.isJsonArray()) {
+            List<String> paths = new ArrayList<>();
+            for (JsonElement path : el.getAsJsonArray()) {
+                if (path.isJsonPrimitive()) {
+                    String s = sanitizePath(path.getAsString());
+                    if (!paths.contains(s)) {
+                        paths.add(s);
+                    }
+                }
+            }
+            mixinPaths.put(side.name, paths);
+        }
+    }*/
 
     public String getPackName() {
         return packName;
@@ -295,6 +337,7 @@ public class RunConfig {
     }
 
     private static String sanitizePath(String path) {
+        path = path.replaceAll(separatorRegex, separatorReplacement);
         while (path.endsWith("/") || path.endsWith("\\")) {
             path = path.substring(0, path.length() - 1);
         }

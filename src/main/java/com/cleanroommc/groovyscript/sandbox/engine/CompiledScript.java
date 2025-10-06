@@ -1,17 +1,20 @@
 package com.cleanroommc.groovyscript.sandbox.engine;
 
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.helper.PairList;
 import com.cleanroommc.groovyscript.sandbox.Preprocessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @ApiStatus.Internal
@@ -25,7 +28,8 @@ public class CompiledScript extends CompiledClass {
 
     final List<CompiledClass> innerClasses = new ArrayList<>();
     long lastEdited;
-    List<String> preprocessors;
+    PairList<String, String> preprocessors;
+    boolean requiresModLoaded = false;
     private boolean preprocessorCheckFailed;
     private boolean requiresReload;
 
@@ -64,17 +68,28 @@ public class CompiledScript extends CompiledClass {
         jsonEntry.addProperty("name", this.name);
         jsonEntry.addProperty("path", this.path);
         jsonEntry.addProperty("lm", this.lastEdited);
+        jsonEntry.addProperty("mixin", this.mixin);
         if (!this.innerClasses.isEmpty()) {
             JsonArray inner = new JsonArray();
             for (CompiledClass comp : this.innerClasses) {
-                inner.add(comp.name);
+                JsonObject json = new JsonObject();
+                json.addProperty("name", comp.name);
+                json.addProperty("mixin", comp.mixin);
+                inner.add(json);
             }
             jsonEntry.add("inner", inner);
         }
         if (this.preprocessors != null && !this.preprocessors.isEmpty()) {
             JsonArray jsonPp = new JsonArray();
-            for (String pp : this.preprocessors) {
-                jsonPp.add(pp);
+            for (Pair<String, String> pp : this.preprocessors) {
+                if (pp.getRight() == null) {
+                    jsonPp.add(pp.getLeft());
+                } else {
+                    JsonObject json = new JsonObject();
+                    json.addProperty("name", pp.getLeft());
+                    json.addProperty("args", pp.getRight());
+                    jsonPp.add(json);
+                }
             }
             jsonEntry.add("preprocessors", jsonPp);
         }
@@ -89,13 +104,21 @@ public class CompiledScript extends CompiledClass {
         if (new File(scriptRoot, cs.path).exists()) {
             if (json.has("inner")) {
                 for (JsonElement element : json.getAsJsonArray("inner")) {
-                    cs.innerClasses.add(new CompiledClass(cs.path, element.getAsString()));
+                    JsonObject o = element.getAsJsonObject();
+                    cs.innerClasses.add(new CompiledClass(cs.path, o.get("name").getAsString(), o.get("mixin").getAsBoolean()));
                 }
             }
             if (json.has("preprocessors")) {
-                cs.preprocessors = new ArrayList<>();
+                cs.requiresModLoaded = false;
+                cs.preprocessors = new PairList<>();
                 for (JsonElement element : json.getAsJsonArray("preprocessors")) {
-                    cs.preprocessors.add(element.getAsString());
+                    if (element.isJsonPrimitive()) {
+                        cs.preprocessors.add(element.getAsString(), null);
+                    } else if (element.isJsonObject()) {
+                        String name = element.getAsJsonObject().get("name").getAsString();
+                        cs.preprocessors.add(name, element.getAsJsonObject().get("args").getAsString());
+                        cs.requiresModLoaded |= Preprocessor.MODS_LOADED.equals(name);
+                    }
                 }
             }
             return cs;
@@ -133,6 +156,7 @@ public class CompiledScript extends CompiledClass {
             // parse preprocessors if file was modified
             if (this.preprocessors == null || lastModified > this.lastEdited) {
                 this.preprocessors = Preprocessor.parsePreprocessors(file);
+                this.requiresModLoaded = Preprocessor.containsPreProcessor(Preprocessor.MODS_LOADED, this.preprocessors);
             }
             this.lastEdited = lastModified;
         }
@@ -152,6 +176,10 @@ public class CompiledScript extends CompiledClass {
         return preprocessorCheckFailed();
     }
 
+    public List<CompiledClass> getInnerClasses() {
+        return Collections.unmodifiableList(this.innerClasses);
+    }
+
     public boolean requiresReload() {
         return this.requiresReload;
     }
@@ -166,6 +194,10 @@ public class CompiledScript extends CompiledClass {
 
     protected void setPreprocessorCheckFailed(boolean preprocessorCheckFailed) {
         this.preprocessorCheckFailed = preprocessorCheckFailed;
+    }
+
+    public boolean requiresModLoaded() {
+        return requiresModLoaded;
     }
 
     @Override

@@ -44,7 +44,7 @@ public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
         SandboxData.initialize((File) FMLInjectionData.data()[6], LOG);
         SideOnlyConfig.init();
         try {
-            MixinSandbox.loadMixins();
+            MixinSandbox.loadEarlyMixins();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

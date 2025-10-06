@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.sandbox.engine;
 
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
+import com.cleanroommc.groovyscript.sandbox.SandboxData;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.codehaus.groovy.runtime.InvokerHelper;
 import org.jetbrains.annotations.ApiStatus;
@@ -21,12 +22,17 @@ public class CompiledClass {
     final String name;
     byte[] data;
     Class<?> clazz;
-    final boolean mixin;
+    boolean mixin;
+    boolean earlyMixin;
 
     public CompiledClass(String path, String name) {
         this.path = path;
         this.name = name;
-        this.mixin = name.startsWith("mixin");
+    }
+
+    public CompiledClass(String path, String name, boolean mixin) {
+        this(path, name);
+        this.mixin = mixin;
     }
 
     public void onCompile(byte @NotNull [] data, @Nullable Class<?> clazz, String basePath) {

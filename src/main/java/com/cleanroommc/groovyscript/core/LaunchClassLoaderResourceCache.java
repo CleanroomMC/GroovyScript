@@ -29,12 +29,12 @@ public class LaunchClassLoaderResourceCache extends ForwardingMap<String, byte[]
 
     private final Map<String, byte[]> delegate;
 
-    // immutable to thread-safe // groovyscript: we make a copy instead of immutability
+    // immutable to thread-safe // groovyscript: we need to modify the map when loading late mixins
     private final Map<String, byte[]> injected;
 
     public LaunchClassLoaderResourceCache(Map<String, byte[]> delegate, Map<String, byte[]> injected) {
         this.delegate = delegate;
-        this.injected = new Object2ObjectOpenHashMap<>(injected);
+        this.injected = injected;
     }
 
     @Override
