@@ -21,6 +21,7 @@ import java.util.Collection;
 @SideOnly(Side.CLIENT)
 public class GroovyScriptKeybinds {
 
+    private static final String CATEGORY = "key.categories.groovyscript";
     private static final Collection<Key> KEYS = new ArrayList<>();
 
     public static void initialize() {
@@ -76,8 +77,8 @@ public class GroovyScriptKeybinds {
 
     private static KeyBinding createKeybind(boolean setByDefault, Key key) {
         var binding = setByDefault
-                      ? new KeyBinding(key.getDescription(), key.getKeyConflictContext(), key.getKeyModifier(), key.getKeyCode(), GroovyScript.NAME)
-                      : new KeyBinding(key.getDescription(), key.getKeyConflictContext(), KeyModifier.NONE, Keyboard.KEY_NONE, GroovyScript.NAME);
+                      ? new KeyBinding(key.getDescription(), key.getKeyConflictContext(), key.getKeyModifier(), key.getKeyCode(), CATEGORY)
+                      : new KeyBinding(key.getDescription(), key.getKeyConflictContext(), KeyModifier.NONE, Keyboard.KEY_NONE, CATEGORY);
         ClientRegistry.registerKeyBinding(binding);
         return binding;
     }
