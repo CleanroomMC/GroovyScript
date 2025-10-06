@@ -85,6 +85,8 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
         return mc.isIntegratedServerRunning();
     }
 
+    // only runs if isIntegratedServerRunning() is true, so getIntegratedServer() cannot be null
+    @SuppressWarnings("DataFlowIssue")
     @Override
     public void runOperation() {
         var player = mc.player;
