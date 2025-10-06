@@ -9,26 +9,24 @@ import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class GroovyScriptKeybinds extends KeyBinding {
+@SideOnly(Side.CLIENT)
+public class GroovyScriptKeybinds {
 
     private static final Collection<Key> keys = new ArrayList<>();
-
-    protected GroovyScriptKeybinds(GroovyScriptKeybinds.Key key) {
-        super(key.getDescription(), key.getKeyConflictContext(), key.getKeyModifier(), key.getKeyCode(), GroovyScript.NAME);
-        ClientRegistry.registerKeyBinding(this);
-    }
 
     public static void initialize() {
         addKey(ReloadKey.createKeybind());
         addKey(CopyKey.createKeybind());
     }
 
-    public static void addKey(GroovyScriptKeybinds.Key key) {
+    public static void addKey(Key key) {
         if (key != null) keys.add(key);
     }
 
@@ -61,6 +59,14 @@ public class GroovyScriptKeybinds extends KeyBinding {
         }
     }
 
+    private static KeyBinding createKeybind(boolean setByDefault, Key key) {
+        var binding = setByDefault
+                      ? new KeyBinding(key.getDescription(), key.getKeyConflictContext(), key.getKeyModifier(), key.getKeyCode(), GroovyScript.NAME)
+                      : new KeyBinding(key.getDescription(), key.getKeyConflictContext(), KeyModifier.NONE, Keyboard.KEY_NONE, GroovyScript.NAME);
+        ClientRegistry.registerKeyBinding(binding);
+        return binding;
+    }
+
     public abstract static class Key {
 
         private final String name;
@@ -87,12 +93,14 @@ public class GroovyScriptKeybinds extends KeyBinding {
             this.keyConflictContext = keyConflictContext;
             this.keyModifier = keyModifier;
             this.keyCode = keyCode;
-            this.key = new GroovyScriptKeybinds(this);
+            this.key = createKeybind(isSetByDefault(), this);
         }
 
-        public boolean isValid() {
-            return true;
+        protected boolean isSetByDefault() {
+            return GroovyScript.getRunConfig().isDebug();
         }
+
+        public abstract boolean isValid();
 
         public abstract void runOperation();
 
