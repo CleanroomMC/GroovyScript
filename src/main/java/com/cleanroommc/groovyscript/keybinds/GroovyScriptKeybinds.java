@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.keybinds;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.settings.IKeyConflictContext;
@@ -52,6 +53,17 @@ public class GroovyScriptKeybinds {
 
         for (Key key : keys) {
             if (key.isPressed(typedChar, eventKey)) {
+                key.runOperation();
+                event.setCanceled(true);
+                return;
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onGuiMouseInput(GuiScreenEvent.MouseInputEvent.Post event) {
+        for (Key key : KEYS) {
+            if (key.isValid() && GameSettings.isKeyDown(key.getKey())) {
                 key.runOperation();
                 event.setCanceled(true);
                 return;
