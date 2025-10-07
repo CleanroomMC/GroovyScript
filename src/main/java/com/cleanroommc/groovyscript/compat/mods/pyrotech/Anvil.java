@@ -41,11 +41,12 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public AnvilRecipe add(String name, IIngredient input, ItemStack output, int hits, String tier, String type) {
         return add(name, input, output, hits, tier, type, false);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'flint_from_gravel', ore('gravel'), item('minecraft:flint'), 5, 'granite', 'pickaxe', true"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.anvil.add.inherit", example = @Example("'flint_from_gravel', ore('gravel'), item('minecraft:flint'), 5, 'granite', 'pickaxe', true"))
     public AnvilRecipe add(String name, IIngredient input, ItemStack output, int hits, String tier, String type, boolean inherit) {
         AnvilRecipe.EnumTier enumTier = EnumHelper.valueOfNullable(AnvilRecipe.EnumTier.class, tier, false);
         AnvilRecipe.EnumType enumType = EnumHelper.valueOfNullable(AnvilRecipe.EnumType.class, type, false);
@@ -69,7 +70,7 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
     }
 
     @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('pyrotech:material:37')"))
-    public void removeByInput(ItemStack input)  {
+    public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing pyrotech anvil recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
                 .error()
@@ -105,9 +106,9 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
 
         @Property(comp = @Comp(gt = 0))
         private int hits;
-        @Property
+        @Property(comp = @Comp(not = "null"))
         private AnvilRecipe.EnumType type;
-        @Property
+        @Property(comp = @Comp(not = "null"))
         private AnvilRecipe.EnumTier tier;
         @Property
         private boolean inherit;
@@ -161,6 +162,11 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_anvil_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Anvil Recipe";
         }
@@ -173,11 +179,11 @@ public class Anvil extends ForgeRegistryWrapper<AnvilRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             msg.add(hits <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", hits);
             msg.add(type == null, "type cannot be null.");
             msg.add(tier == null, "tier cannot be null.");
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.ANVIL_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
             msg.add(tier == AnvilRecipe.EnumTier.OBSIDIAN && inherit, "nothing can inherit from obsidian anvil.");
         }

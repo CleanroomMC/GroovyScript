@@ -7,14 +7,18 @@ import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.athenaeum.util.ArrayHelper;
 import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachineConfig;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickSawmillRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 @RegistryDescription(
         admonition = {
@@ -97,7 +101,7 @@ public class BrickSawmill extends ForgeRegistryWrapper<BrickSawmillRecipe> {
         }
     }
 
-    @Property(property = "input", comp = @Comp(gte = 1, lt = 3))
+    @Property(property = "input", comp = @Comp(gte = 1, lte = 2))
     @Property(property = "output", comp = @Comp(eq = 1))
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<BrickSawmillRecipe> {
@@ -120,15 +124,25 @@ public class BrickSawmill extends ForgeRegistryWrapper<BrickSawmillRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_brick_sawmill_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Refractory Sawmill Recipe";
         }
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 2, 1, 1);
+            if (input.size() > 1) {
+                for (ItemStack stack : input.get(1).toMcIngredient().getMatchingStacks()) {
+                    msg.add(!ArrayHelper.contains(ModuleTechMachineConfig.BRICK_SAWMILL.SAWMILL_BLADES, Objects.requireNonNull(stack.getItem().getRegistryName()).toString()), "{} is not a brick sawmill blade", stack);
+                }
+            }
             msg.add(duration <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", duration);
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechMachine.Registries.BRICK_SAWMILL_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -137,23 +151,25 @@ public class BrickSawmill extends ForgeRegistryWrapper<BrickSawmillRecipe> {
         public @Nullable BrickSawmillRecipe register() {
             if (!validate()) return null;
             if (input.size() > 1) {
-                return this.addRecipe(1, 1, input.get(1).toMcIngredient(), 1, "");
-            }
-            else {
-                BrickSawmillRecipe recipe = this.addRecipe(1, 1, Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.STONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), 1, "");
-                this.addRecipe(2, 3.0 / 2.0, Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.FLINT_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), 2, "_flint_blade");
-                this.addRecipe(2, 0.5, Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.IRON_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), 4, "_iron_blade");
-                this.addRecipe(3, 3.0 / 2.0, Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.DIAMOND_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), 4, "_diamond_blade");
+                BrickSawmillRecipe recipe = new BrickSawmillRecipe(output.get(0), input.get(0).toMcIngredient(), duration, input.get(1).toMcIngredient(), woodChips).setRegistryName(super.name);
+                ModSupport.PYROTECH.get().brickSawmill.add(recipe);
                 return recipe;
+            } else {
+                return addMultiRecipe(output.get(0), input.get(0).toMcIngredient(), woodChips, duration, super.name);
             }
         }
+    }
 
-        private BrickSawmillRecipe addRecipe(int outputMultiplier, double durationMultiplier, Ingredient blade, int woodChipsDivisor, String name) {
-            ItemStack out = output.get(0).copy();
-            out.setCount(Math.min(output.get(0).getCount() * outputMultiplier, 64));
-            BrickSawmillRecipe recipe = new BrickSawmillRecipe(out, input.get(0).toMcIngredient(), (int) ((double) duration * durationMultiplier), blade, woodChips / woodChipsDivisor).setRegistryName(new ResourceLocation(super.name.getNamespace(), super.name.getPath() + name));
-            ModSupport.PYROTECH.get().brickSawmill.add(recipe);
-            return recipe;
-        }
+    protected static BrickSawmillRecipe addMultiRecipe(ItemStack output, Ingredient input, int woodChips, int duration, ResourceLocation name) {
+        BrickSawmillRecipe recipe = new BrickSawmillRecipe(output, input, duration, Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.STONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips).setRegistryName(name + "_tier_0");
+        ModSupport.PYROTECH.get().brickSawmill.add(recipe);
+        ItemStack out = output.copy();
+        out.setCount(Math.min(output.getMaxStackSize(), output.getCount() * 2));
+        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (1.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.FLINT_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModuleTechMachine.Items.BONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 2).setRegistryName(name + "_tier_1"));
+        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (0.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.IRON_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(name + "_tier_2"));
+        out = output.copy();
+        out.setCount(Math.min(output.getMaxStackSize(), output.getCount() * 3));
+        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (1.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.DIAMOND_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(name + "_tier_3"));
+        return recipe;
     }
 }

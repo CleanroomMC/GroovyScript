@@ -12,7 +12,6 @@ import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickKilnRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.StoneKilnRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneKilnRecipe;
@@ -40,11 +39,12 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, ItemStack... failureOutput) {
         return add(name, input, output, burnTime, false, failureChance, failureOutput);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'brick_to_iron', item('minecraft:brick'), item('minecraft:iron_ingot'), 1200, true, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone')"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.pit_kiln.add.inherit", example = @Example("'brick_to_iron', item('minecraft:brick'), item('minecraft:iron_ingot'), 1200, true, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone')"))
     public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, boolean inherit, float failureChance, ItemStack... failureOutput) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -96,7 +96,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         private final ItemStackList failureOutput = new ItemStackList();
         @Property(comp = @Comp(gt = 0))
         private int burnTime;
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float failureChance;
         @Property
         private boolean inherit;
@@ -142,6 +142,11 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_pit_kiln_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Pit Kiln Recipe";
         }
@@ -153,11 +158,11 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             this.failureOutput.trim();
             msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
-            msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(failureChance < 0, "failureChance must not be negative nor larger than 1.0, yet it was {}", failureChance);
             msg.add(ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -167,7 +172,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
             if (!validate()) return null;
             KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
             ModSupport.PYROTECH.get().pitKiln.add(recipe);
-            if (inherit && ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
+            if (inherit && ModSupport.PYROTECH.get().stoneKiln.isEnabled()) {
                 ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "pit_kiln/" + super.name.getPath());
                 StoneKilnRecipe stoneKilnRecipe = StoneKilnRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
                 ModSupport.PYROTECH.get().stoneKiln.add(stoneKilnRecipe);

@@ -86,6 +86,11 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_compost_bin_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Compost Bin Recipe";
         }
@@ -98,9 +103,9 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             msg.add(compostValue <= 0, "compostValue must be a non negative integer that is larger than 0, yet it was {}", compostValue);
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 

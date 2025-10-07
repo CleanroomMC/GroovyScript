@@ -87,11 +87,16 @@ public class Barrel extends ForgeRegistryWrapper<BarrelRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_barrel_";
+        }
+
+        @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 4, 4, 0, 0);
             validateFluids(msg, 1, 1, 1, 1);
             msg.add(duration <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", duration);
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.BARREL_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 

@@ -10,7 +10,6 @@ import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
 import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.StoneOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickOvenRecipe;
@@ -43,11 +42,12 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public DryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime) {
         return add(name, input, output, dryTime, false);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, true"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.drying_rack.add.inherit", example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, true"))
     public DryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime, boolean inherit) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -111,6 +111,11 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_drying_rack_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Drying Rack Recipe";
         }
@@ -123,9 +128,9 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             msg.add(dryTime <= 0, "dryTime must be a non negative integer that is larger than 0, yet it was {}", dryTime);
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.DRYING_RACK_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -135,7 +140,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
             if (!validate()) return null;
             DryingRackRecipe recipe = new DryingRackRecipe(output.get(0), input.get(0).toMcIngredient(), dryTime).setRegistryName(super.name);
             ModSupport.PYROTECH.get().dryingRack.add(recipe);
-            if (inherit && ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
+            if (inherit && ModSupport.PYROTECH.get().stoneOven.isEnabled()) {
                 ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "drying_rack/" + super.name.getPath());
                 StoneOvenRecipe stoneOvenRecipe = StoneOvenRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
                 ModSupport.PYROTECH.get().stoneOven.add(stoneOvenRecipe);
