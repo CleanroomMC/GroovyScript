@@ -6,6 +6,6 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "WorldHelperAccessor",
-    "CraftingMapperAccessor"
+    "CraftingMapperMixin"
   ]
 }

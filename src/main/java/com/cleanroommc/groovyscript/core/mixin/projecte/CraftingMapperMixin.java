@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(value = CraftingMapper.class, remap = false)
-public class CraftingMapperAccessor {
+public class CraftingMapperMixin {
 
     @Shadow @Final @Mutable
     private List<IRecipeMapper> recipeMappers;
