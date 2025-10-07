@@ -87,18 +87,18 @@ public class PitBurn extends ForgeRegistryWrapper<PitBurnRecipe> {
 
     public static class RecipeBuilder implements IRecipeBuilder<PitBurnRecipe> {
 
-        @Property
+        @Property(comp = @Comp(not = "null"))
         private ResourceLocation name;
-        @Property
+        @Property(comp = @Comp(not = "null"))
         private MatcherPredicate input;
-        @Property
+        @Property(comp = @Comp(not = "null"))
         private ItemStack output;
         @Property(comp = @Comp(gt = 0))
         private int burnStages;
         @Property(comp = @Comp(gt = 0))
         private int burnTime;
         private FluidStack fluidOutput;
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float failureChance;
         @Property
         private final ItemStackList failureOutput = new ItemStackList();
@@ -141,11 +141,9 @@ public class PitBurn extends ForgeRegistryWrapper<PitBurnRecipe> {
             Predicate<IBlockState> predicate = s -> s.getBlock() == block && (metadata == OreDictionary.WILDCARD_VALUE || s.getBlock().getMetaFromState(s) == metadata);
             if (this.input == null) {
                 this.input = new MatcherPredicate(block, metadata, predicate);
-            }
-            else if (this.input.getBlock() == Blocks.AIR) {
+            } else if (this.input.getBlock() == Blocks.AIR) {
                 this.input = new MatcherPredicate(block, metadata, this.input.predicate.or(predicate));
-            }
-            else {
+            } else {
                 this.input = new MatcherPredicate(this.input.getBlock(), this.input.getMeta(), this.input.predicate.or(predicate));
             }
             return this;
@@ -215,16 +213,15 @@ public class PitBurn extends ForgeRegistryWrapper<PitBurnRecipe> {
             return this;
         }
 
-
         @Override
         public boolean validate() {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding Pyrotech Pit Burn Recipe");
+            msg.add(name == null, "name cannot be null");
             msg.add(input == null, "input is null");
             msg.add(output == null, "output is empty");
             msg.add(burnStages <= 0, "burnStages must be a non negative integer that is larger than 0, yet it was {}", burnStages);
             msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
-            msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
-            msg.add(name == null, "name cannot be null");
+            msg.add(failureChance < 0 || failureChance > 1, "failureChance must not be negative nor larger than 1.0, yet it was {}", failureChance);
             msg.add(fluidOutput != null && fluidOutput.amount * burnStages > 500, "fluidOutput amount must not be larger than 500");
             msg.add(ModSupport.PYROTECH.get().pitBurn.getRegistry().getValue(name) != null, "tried to register {}, but it already exists.", name);
             return false;

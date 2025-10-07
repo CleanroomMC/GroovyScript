@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -275,6 +276,7 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
         removeByOutput(output, true);
     }
 
+    @GroovyBlacklist
     public void removeByOutput(IIngredient output, boolean log) {
         if (IngredientHelper.isEmpty(output)) {
             if (log) {
@@ -310,6 +312,7 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
         removeByInput(input, true);
     }
 
+    @GroovyBlacklist
     public void removeByInput(IIngredient input, boolean log) {
         if (IngredientHelper.isEmpty(input)) {
             if (log) {
@@ -369,9 +372,10 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
     @Property(property = "recipeFunction")
     @Property(property = "recipeAction")
     @Property(property = "name")
+    @Property(property = "replace")
     public static class Shaped extends AbstractCraftingRecipeBuilder.AbstractShaped<WorktableRecipe> {
 
-        @Property
+        @Property(comp = @Comp(not = "null"))
         private IIngredient tool = IIngredient.EMPTY;
         @Property(comp = @Comp(gte = 0))
         private int damage;
@@ -400,6 +404,11 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
                 }
                 ReloadableRegistryManager.removeRegistryEntry(ModSupport.PYROTECH.get().worktable.getRegistry(), name);
             }
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_worktable_shaped";
         }
 
         @RecipeBuilderRegistrationMethod
@@ -439,6 +448,7 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
     @Property(property = "recipeFunction")
     @Property(property = "recipeAction")
     @Property(property = "name")
+    @Property(property = "replace")
     public static class Shapeless extends AbstractCraftingRecipeBuilder.AbstractShapeless<WorktableRecipe> {
 
         @Property
@@ -470,6 +480,11 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
                 }
                 ReloadableRegistryManager.removeRegistryEntry(ModSupport.PYROTECH.get().worktable.getRegistry(), name);
             }
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_worktable_shapeless_";
         }
 
         @RecipeBuilderRegistrationMethod

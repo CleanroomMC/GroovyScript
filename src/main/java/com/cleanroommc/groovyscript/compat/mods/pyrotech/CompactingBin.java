@@ -11,7 +11,6 @@ import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasicConfig;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompactingBinRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.MechanicalCompactingBinRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.MechanicalCompactingBinRecipe;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -39,11 +38,12 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public CompactingBinRecipe add(String name, IIngredient input, ItemStack output, int... hits) {
         return add(name, input, output, false, hits);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, false, 9, 7, 6, 6"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.compacting_bin.add.inherit", example = @Example("'iron_to_clay', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, false, 9, 7, 6, 6"))
     public CompactingBinRecipe add(String name, IIngredient input, ItemStack output, boolean inherit, int... hits) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -109,15 +109,20 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_compacting_bin_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Compacting Bin Recipe";
         }
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             msg.add(hits.stream().anyMatch(i -> i <= 0), "hits must be a non negative integer that is larger than 0");
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -127,7 +132,7 @@ public class CompactingBin extends ForgeRegistryWrapper<CompactingBinRecipe> {
             if (!validate()) return null;
             CompactingBinRecipe recipe = new CompactingBinRecipe(output.get(0), input.get(0).toMcIngredient(), input.get(0).getAmount(), hits.isEmpty() ? ModuleTechBasicConfig.COMPACTING_BIN.TOOL_USES_REQUIRED_PER_HARVEST_LEVEL : hits.toIntArray()).setRegistryName(super.name);
             ModSupport.PYROTECH.get().compactingBin.add(recipe);
-            if (inherit && ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
+            if (inherit && ModSupport.PYROTECH.get().mechanicalCompactingBin.isEnabled()) {
                 MechanicalCompactingBinRecipe mechanicalCompactingBinRecipe = MechanicalCompactingBinRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(super.name.getNamespace(), "compacting_bin/" + super.name.getPath());
                 ModSupport.PYROTECH.get().mechanicalCompactingBin.add(mechanicalCompactingBinRecipe);
             }

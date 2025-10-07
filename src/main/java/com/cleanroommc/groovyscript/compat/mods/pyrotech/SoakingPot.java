@@ -96,6 +96,11 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_soaking_pot_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Soaking Pot Recipe";
         }
@@ -107,10 +112,10 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
             msg.add(time <= 0, "time must be a non negative integer that is larger than 0, yet it was {}", time);
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.SOAKING_POT_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 

@@ -19,7 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
 
     @RecipeBuilderDescription(example = {
             @Example(".input(item('minecraft:iron_block')).bloom(item('minecraft:apple')).failureChance(0.0F).slag(item('minecraft:carrot')).inherit(true).name('metal_vegetation')"),
-            @Example(".input(item('minecraft:noteblock')).output(item('minecraft:record_13')).experience(0.25F).tierIronclad(true).bloomYield(1, 1).burnTime(2000).failureChance(0.5F).failureOutput(item('minecraft:record_11'), 1).inherit(true).name('recipe_for_soundphiles')"),
+            @Example(".input(item('minecraft:noteblock')).output(item('minecraft:record_13')).experience(0.25F).tierIronclad().bloomYield(1, 1).burnTime(2000).failureChance(0.5F).failureOutput(item('minecraft:record_11'), 1).inherit(true).name('recipe_for_soundphiles')"),
             @Example(".input(item('minecraft:sponge')).output(item('minecraft:sponge')).bloomYield(2, 5).typePickaxe().langKey(item('minecraft:stick').getTranslationKey()).inherit(true).name('sponge_duplication')"),
             @Example(".input(item('minecraft:birch_boat')).bloom(item('minecraft:dark_oak_boat')).tierObsidian().failureChance(0.1).failureOutput(item('minecraft:spruce_boat'), 5).failureOutput(item('minecraft:jungle_boat'), 2).failureOutput(item('minecraft:boat'), 1).name('boat_smelting')"),
             @Example(".input(item('minecraft:sand')).output(item('minecraft:glass')).bloomYield(3, 5).experience(0.1F).burnTime(4000).tierGranite().tierObsidian().anvilHit(2).typePickaxe().failureChance(0.05).failureOutput(item('minecraft:nether_star'), 1).failureOutput(item('minecraft:gold_ingot'), 10).name('glasswork')")
@@ -46,11 +45,12 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.add0")
     public BloomeryRecipe add(String name, ItemStack output, IIngredient input) {
         return add(name, output, input, false);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.add0", example = @Example("'loreming_the_ipsum', item('minecraft:redstone'), item('minecraft:lava_bucket'), false"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.add0.inherit", example = @Example("'loreming_the_ipsum', item('minecraft:redstone'), item('minecraft:lava_bucket'), false"))
     public BloomeryRecipe add(String name, ItemStack output, IIngredient input, boolean inherit) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -60,11 +60,12 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
                 .register();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.add1")
     public BloomeryRecipe add(String name, ItemStack output, IIngredient input, int burnTime) {
         return add(name, output, input, burnTime, false);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.add1", example = @Example("'cooking_a_story', item('minecraft:written_book'), item('minecraft:book'), 200, true"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.add1.inherit", example = @Example("'cooking_a_story', item('minecraft:written_book'), item('minecraft:book'), 200, true"))
     public BloomeryRecipe add(String name, ItemStack output, IIngredient input, int burnTime, boolean inherit) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -75,38 +76,18 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
                 .register();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.addBloom0")
     public BloomeryRecipe addBloom(String name, ItemStack bloomOutput, IIngredient input) {
         return addBloom(name, bloomOutput, input, false);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.addBloom0", example = @Example("'cyanide', item('minecraft:poisonous_potato'), item('minecraft:potato'), true"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.addBloom0.inherit", example = @Example("'cyanide', item('minecraft:poisonous_potato'), item('minecraft:potato'), true"))
     public BloomeryRecipe addBloom(String name, ItemStack bloomOutput, IIngredient input, boolean inherit) {
         return recipeBuilder()
                 .inherit(inherit)
                 .output(bloomOutput)
                 .input(input)
                 .name(name)
-                .register();
-    }
-
-    public BloomeryRecipe addBloom(String name, ItemStack bloomOutput, int minYield, int maxYield, IIngredient input, int burnTime, float experience, float failureChance, ItemStack... failureItems) {
-        return addBloom(name, bloomOutput, minYield, maxYield, input, burnTime, experience, false, failureChance, failureItems);
-    }
-
-    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.bloomery.addBloom1", example = @Example("'good_name', item('minecraft:blaze_powder'), 2, 3, ore('cropCarrot'), 500, 0.3F, true, 0.0F"))
-    public BloomeryRecipe addBloom(String name, ItemStack bloomOutput, int minYield, int maxYield, IIngredient input, int burnTime, float experience, boolean inherit, float failureChance, ItemStack... failureItems) {
-        RecipeBuilder builder = recipeBuilder().inherit(inherit);
-        builder.bloomYield(minYield, maxYield)
-                .input(input)
-                .output(bloomOutput)
-                .name(name);
-        for (ItemStack stack : failureItems) {
-            builder.failureOutput(stack, 1);
-        }
-        return builder
-                .burnTime(burnTime)
-                .experience(experience)
-                .failureChance(failureChance)
                 .register();
     }
 
@@ -149,40 +130,38 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
         private ItemStack bloom = ItemStack.EMPTY;
         @Property
         private ItemStack slag = null;
-        @Property(comp = @Comp(gt = 0))
+        @Property(comp = @Comp(gt = 0), defaultValue = "21600")
         private int burnTime = 21600;
         @Property(comp = @Comp(gte = 0))
         private float experience;
-        @Property(comp = @Comp(gte = 0))
-        private int bloomYieldMin = 8;
-        @Property(comp = @Comp(gte = 0))
-        private int bloomYieldMax = 10;
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0), defaultValue = "12")
+        private int bloomYieldMin = 12;
+        @Property(comp = @Comp(gte = 0), defaultValue = "15")
+        private int bloomYieldMax = 15;
+        @Property(comp = @Comp(gte = 0, lte = 1), defaultValue = "0.25")
         private float failureChance = 0.25F;
         @Property
         private final List<BloomeryRecipeBase.FailureItem> failureOutput = new ArrayList<>(1);
         @Property
-        private final EnumSet<AnvilRecipe.EnumTier> anvilTiers = EnumSet.allOf(AnvilRecipe.EnumTier.class);
+        private final EnumSet<AnvilRecipe.EnumTier> anvilTiers = EnumSet.noneOf(AnvilRecipe.EnumTier.class);
         @Property(comp = @Comp(gt = 0))
         private int anvilHit = ModuleTechBloomeryConfig.BLOOM.HAMMER_HITS_IN_ANVIL_REQUIRED;
-        @Property
+        @Property(comp = @Comp(not = "null"), defaultValue = "hammer")
         private AnvilRecipe.EnumType anvilType = AnvilRecipe.EnumType.HAMMER;
         @Property
         private String langKey;
         @Property
         private boolean inherit;
 
-        private boolean tiersReset = false;
-
         @RecipeBuilderMethodDescription
         public RecipeBuilder bloom(ItemStack bloom) {
-            this.bloom = bloom == null ? ItemStack.EMPTY : bloom;
+            this.bloom = bloom;
             return this;
         }
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder slag(ItemStack slag) {
-            this.slag = slag == null ? ItemStack.EMPTY : slag;
+            this.slag = slag;
             return this;
         }
 
@@ -222,41 +201,18 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder anvilTier(AnvilRecipe.EnumTier tier) {
-            if (!tiersReset) {
-                anvilTiers.clear();
-                tiersReset = true;
-            }
             anvilTiers.add(tier);
             return this;
         }
 
         @RecipeBuilderMethodDescription(field = "anvilTier")
-        public RecipeBuilder tierGranite(boolean inherit) {
-            anvilTier(AnvilRecipe.EnumTier.GRANITE);
-            if (inherit) {
-                anvilTier(AnvilRecipe.EnumTier.IRONCLAD);
-                anvilTier(AnvilRecipe.EnumTier.OBSIDIAN);
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "anvilTier")
         public RecipeBuilder tierGranite() {
-            return tierGranite(false);
-        }
-
-        @RecipeBuilderMethodDescription(field = "anvilTier")
-        public RecipeBuilder tierIronclad(boolean inherit) {
-            anvilTier(AnvilRecipe.EnumTier.IRONCLAD);
-            if (inherit) {
-                anvilTier(AnvilRecipe.EnumTier.OBSIDIAN);
-            }
-            return this;
+            return anvilTier(AnvilRecipe.EnumTier.GRANITE);
         }
 
         @RecipeBuilderMethodDescription(field = "anvilTier")
         public RecipeBuilder tierIronclad() {
-            return tierIronclad(false);
+            return anvilTier(AnvilRecipe.EnumTier.IRONCLAD);
         }
 
         @RecipeBuilderMethodDescription(field = "anvilTier")
@@ -265,8 +221,8 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
         }
 
         @RecipeBuilderMethodDescription
-        public RecipeBuilder anvilType(AnvilRecipe.EnumType anvilType) {
-            this.anvilType = anvilType;
+        public RecipeBuilder anvilType(AnvilRecipe.EnumType type) {
+            anvilType = type;
             return this;
         }
 
@@ -299,6 +255,11 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_bloomery_";
+        }
+
+        @Override
         protected int getMaxItemInput() {
             return 1;
         }
@@ -310,6 +271,13 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
+            if (bloom == null) {
+                bloom = ItemStack.EMPTY;
+            }
+            if (slag == null) {
+                slag = ItemStack.EMPTY;
+            }
             int minOutput = !bloom.isEmpty() ? 0 : 1;
             if (slag == null) {
                 slag = bloom.isEmpty() ? new ItemStack(ModuleTechBloomery.Items.SLAG, 4) : ItemStack.EMPTY;
@@ -317,18 +285,17 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
             if (failureOutput.isEmpty() && failureChance > 0.0F) {
                 failureOutput.add(new BloomeryRecipeBase.FailureItem(new ItemStack(ModuleTechBloomery.Items.SLAG), 1));
             }
-            if (bloom.isEmpty() && bloomYieldMin == 0 && bloomYieldMax == 0) {
-                bloomYieldMin = 12;
-                bloomYieldMax = 15;
+            if (anvilTiers.isEmpty()) {
+                anvilTiers.addAll(EnumSet.allOf(AnvilRecipe.EnumTier.class));
             }
             validateItems(msg, 1, 1, minOutput, 1);
             msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
             msg.add(experience < 0, "experience must be a non negative float, yet it was {}", experience);
             msg.add(bloomYieldMin < 0 || bloomYieldMin > bloomYieldMax, "bloomYieldMin must be a non negative integer that is smaller than bloomYieldMax, yet it was {}", burnTime);
             msg.add(bloomYieldMax < 0, "bloomYieldMax must be a non negative integer, yet it was {}", burnTime);
-            msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
+            msg.add(failureChance < 0 || failureChance > 1, "failureChance must not be negative nor larger than 1.0, yet it was {}", failureChance);
+            msg.add(anvilType == null, "anvilType must not be null");
             msg.add(anvilHit <= 0, "anvilHit must be a non negative integer that is larger than 0, yet it was {}", anvilHit);
-            msg.add(super.name == null, "name cannot be null");
             msg.add(ModSupport.PYROTECH.get().bloomery.getRegistry().getValue(super.name) != null, "tried to register {}, but it already exists", super.name);
         }
 
@@ -336,7 +303,7 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
         @Override
         public @Nullable BloomeryRecipe register() {
             if (!validate()) return null;
-            BloomeryRecipeBuilder builder = new BloomeryRecipeBuilder(super.name, !output.isEmpty() ? output.get(0) : ItemStack.EMPTY, input.get(0).toMcIngredient());
+            BloomeryRecipeBuilder builder = new BloomeryRecipeBuilder(super.name, output.getOrEmpty(0), input.get(0).toMcIngredient());
             failureOutput.forEach(i -> builder.addFailureItem(i.getItemStack(), i.getWeight()));
             BloomeryRecipe recipe = builder
                     .setSlagItem(slag, slag.getCount())
@@ -354,15 +321,16 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
                 ((BloomeryRecipeBaseAccessor) recipe).grs$setOutputBloom(((BloomeryRecipeBaseAccessor) recipe).grs$getOutputBloom());
                 ModSupport.PYROTECH.get().witherForge.add(witherForgeRecipe);
             }
-            if (bloom.isEmpty()) {
-                ModSupport.PYROTECH.get().anvil.add(new BloomAnvilRecipe(
-                        recipe.getOutput(),
-                        com.codetaylor.mc.athenaeum.util.IngredientHelper.fromStackWithNBT(recipe.getOutputBloom()),
-                        anvilHit,
-                        anvilType,
-                        Arrays.copyOf(recipe.getAnvilTiers(), recipe.getAnvilTiers().length),
-                        recipe
-                ).setRegistryName(super.name));
+            if (bloom.isEmpty() && bloomYieldMax != 0) {
+                ModSupport.PYROTECH.get().anvil.add(
+                        new BloomAnvilRecipe(
+                                recipe.getOutput(),
+                                com.codetaylor.mc.athenaeum.util.IngredientHelper.fromStackWithNBT(recipe.getOutputBloom()),
+                                anvilHit,
+                                anvilType,
+                                recipe.getAnvilTiers(),
+                                recipe
+                        ).setRegistryName(super.name));
             }
             return recipe;
         }

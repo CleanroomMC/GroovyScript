@@ -85,6 +85,11 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_campfire_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Campfire Recipe";
         }
@@ -97,9 +102,9 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             msg.add(duration <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", duration);
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 

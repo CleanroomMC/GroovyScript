@@ -39,11 +39,12 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public StoneKilnRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, ItemStack failureOutput) {
         return add(name, input, output, burnTime, false, failureChance, failureOutput);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron_stone', item('minecraft:clay_ball'), item('minecraft:iron_ingot'), 1200, true, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone')"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.stone_kiln.add.inherit", example = @Example("'clay_to_iron_stone', item('minecraft:clay_ball'), item('minecraft:iron_ingot'), 1200, true, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone')"))
     public StoneKilnRecipe add(String name, IIngredient input, ItemStack output, int burnTime, boolean inherit, float failureChance, ItemStack... failureOutput) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -95,7 +96,7 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
         private final ItemStackList failureOutput = new ItemStackList();
         @Property(comp = @Comp(gt = 0))
         private int burnTime;
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float failureChance;
         @Property
         private boolean inherit;
@@ -141,6 +142,11 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_stone_kiln_";
+        }
+
+        @Override
         protected int getMaxItemInput() {
             return 1;
         }
@@ -152,11 +158,11 @@ public class StoneKiln extends ForgeRegistryWrapper<StoneKilnRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             this.failureOutput.trim();
             msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
-            msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(failureChance < 0 || failureChance > 1, "failureChance must not be negative nor larger than 1.0, yet it was {}", failureChance);
             msg.add(ModuleTechMachine.Registries.STONE_KILN_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 

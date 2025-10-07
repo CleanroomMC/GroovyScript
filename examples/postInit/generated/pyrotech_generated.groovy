@@ -5,7 +5,7 @@
 log 'mod \'pyrotech\' detected, running script'
 
 // Anvil:
-// When using hammer or pickaxe it can convert items.
+// Converts an item to a new item by hitting it with a hammer or pickaxe.
 
 mods.pyrotech.anvil.removeByInput(item('pyrotech:material:37'))
 mods.pyrotech.anvil.removeByOutput(item('minecraft:stone_slab:3') * 2)
@@ -60,7 +60,8 @@ mods.pyrotech.barrel.recipeBuilder()
 mods.pyrotech.barrel.add('iron_dirt_water_to_lava', ore('ingotIron'), ore('ingotIron'), item('minecraft:dirt'), item('minecraft:dirt'), fluid('water'), fluid('lava'), 1000)
 
 // Bloomery:
-// Converts item to bloom or a different item by burning it.
+// Converts item to a new item or a 'bloom' which are items that needs to be hit with hammer on anvil to get the output
+// with varying amounts.
 
 mods.pyrotech.bloomery.removeByInput(item('minecraft:gold_ore'))
 // mods.pyrotech.bloomery.removeByOutput(item('minecraft:iron_nugget'))
@@ -79,7 +80,7 @@ mods.pyrotech.bloomery.recipeBuilder()
     .input(item('minecraft:noteblock'))
     .output(item('minecraft:record_13'))
     .experience(0.25F)
-    .tierIronclad(true)
+    .tierIronclad()
     .bloomYield(1, 1)
     .burnTime(2000)
     .failureChance(0.5F)
@@ -129,10 +130,9 @@ mods.pyrotech.bloomery.recipeBuilder()
 mods.pyrotech.bloomery.add('loreming_the_ipsum', item('minecraft:redstone'), item('minecraft:lava_bucket'), false)
 mods.pyrotech.bloomery.add('cooking_a_story', item('minecraft:written_book'), item('minecraft:book'), 200, true)
 mods.pyrotech.bloomery.addBloom('cyanide', item('minecraft:poisonous_potato'), item('minecraft:potato'), true)
-mods.pyrotech.bloomery.addBloom('good_name', item('minecraft:blaze_powder'), 2, 3, ore('cropCarrot'), 500, 0.3F, true, 0.0F)
 
 // Refractory Crucible:
-// Melts an item into liquid.
+// Converts item into a liquid.
 
 mods.pyrotech.brick_crucible.removeByInput(item('minecraft:gravel'))
 mods.pyrotech.brick_crucible.removeByOutput(fluid('water') * 125)
@@ -149,7 +149,7 @@ mods.pyrotech.brick_crucible.recipeBuilder()
 mods.pyrotech.brick_crucible.add('lava_from_obsidian', ore('obsidian'), fluid('lava') * 1000, 2000)
 
 // Refractory Kiln:
-// Converts an item into a new one by burning it. Has a chance to fail.
+// Converts an item into a new item or one of the failure outputs if the recipe fails.
 
 mods.pyrotech.brick_kiln.removeByInput(item('minecraft:cobblestone'))
 mods.pyrotech.brick_kiln.removeByOutput(item('pyrotech:bucket_clay'))
@@ -168,7 +168,7 @@ mods.pyrotech.brick_kiln.recipeBuilder()
 mods.pyrotech.brick_kiln.add('beetroot_soup', item('minecraft:beetroot'), item('minecraft:beetroot_soup'), 1200, 0.1f, item('minecraft:beetroot_seeds'))
 
 // Refractory Oven:
-// When powered by burning fuel can convert items.
+// Converts item into a new item.
 
 mods.pyrotech.brick_oven.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.brick_oven.removeByOutput(item('minecraft:cooked_porkchop'))
@@ -185,7 +185,7 @@ mods.pyrotech.brick_oven.recipeBuilder()
 mods.pyrotech.brick_oven.add('lead_poisoning', item('minecraft:slime_ball'), item('minecraft:lead') * 16, 1000)
 
 // Refractory Sawmill:
-// Converts an item, likely wood, by cutting it to a smaller item and drops wood chips.
+// Converts an item into a new item with an item with durability and drops wood chips on given amount of time.
 
 mods.pyrotech.brick_sawmill.removeByInput(item('minecraft:planks:1'))
 mods.pyrotech.brick_sawmill.removeByOutput(item('pyrotech:material:23'))
@@ -204,7 +204,7 @@ mods.pyrotech.brick_sawmill.add('glowstone_to_dust', item('minecraft:glowstone')
 mods.pyrotech.brick_sawmill.add('bed_to_wool', item('minecraft:bed'), item('minecraft:wool') * 3, 500, 3)
 
 // Campfire:
-// When powered by burning logs can convert items.
+// Converts item into a new item on given amount of time.
 
 mods.pyrotech.campfire.removeByInput(item('minecraft:porkchop'))
 mods.pyrotech.campfire.removeByOutput(item('minecraft:cooked_porkchop'))
@@ -337,7 +337,7 @@ mods.pyrotech.drying_rack.recipeBuilder()
 mods.pyrotech.drying_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, true)
 
 // Mechanical Compacting Bin:
-// Compacting Bin but automatic.
+// Converts given amount of item into new item.
 
 mods.pyrotech.mechanical_compacting_bin.removeByInput(item('minecraft:snowball'))
 mods.pyrotech.mechanical_compacting_bin.removeByOutput(item('minecraft:bone_block'))
@@ -435,7 +435,7 @@ mods.pyrotech.pit_kiln.recipeBuilder()
 mods.pyrotech.pit_kiln.add('brick_to_iron', item('minecraft:brick'), item('minecraft:iron_ingot'), 1200, true, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone'))
 
 // Soaking Pot:
-// Converts an item into a new one by soaking it in a liquid. Can require a campfire.
+// Converts an item and liquid into a new item. Can require a campfire below.
 
 mods.pyrotech.soaking_pot.removeByInput(item('pyrotech:hide_washed'))
 mods.pyrotech.soaking_pot.removeByOutput(item('pyrotech:material', 54))
@@ -454,7 +454,7 @@ mods.pyrotech.soaking_pot.recipeBuilder()
 mods.pyrotech.soaking_pot.add('dirt_to_apple', item('minecraft:dirt'), fluid('water'), item('minecraft:apple'), 1200)
 
 // Stone Crucible:
-// Melts an item into liquid.
+// Converts an item into a liquid.
 
 mods.pyrotech.stone_crucible.removeByInput(item('minecraft:ice'))
 mods.pyrotech.stone_crucible.removeByOutput(fluid('water') * 500)
@@ -518,7 +518,7 @@ mods.pyrotech.stone_oven.recipeBuilder()
 mods.pyrotech.stone_oven.add('sand_to_dirt', item('minecraft:sand'), item('minecraft:dirt'), 1000, true)
 
 // Stone Sawmill:
-// Converts an item, likely wood, by cutting it to a smaller item and drops wood chips.
+// Converts an item into a new item with an item with durability and drops wood chips on given amount of time.
 
 mods.pyrotech.stone_sawmill.removeByInput(item('minecraft:planks:1'))
 mods.pyrotech.stone_sawmill.removeByOutput(item('pyrotech:material:23'))
@@ -534,7 +534,7 @@ mods.pyrotech.stone_sawmill.recipeBuilder()
     .register()
 
 mods.pyrotech.stone_sawmill.recipeBuilder()
-    .input(item('minecraft:stone_pickaxe'), ore('blockIron'))
+    .input(item('minecraft:stone_pickaxe'), item('pyrotech:sawmill_blade_bone'))
     .output(item('minecraft:iron_pickaxe'))
     .duration(5000)
     .name('stone_pickaxe_upgrade')
@@ -562,7 +562,8 @@ mods.pyrotech.tanning_rack.recipeBuilder()
 mods.pyrotech.tanning_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, item('minecraft:clay_ball'))
 
 // Wither Forge:
-// Converts item to bloom or a different item by burning it.
+// Converts item to a new item or a 'bloom' which are items that needs to be hit with hammer on anvil to get the output
+// with varying amounts.
 
 mods.pyrotech.wither_forge.removeByInput(item('minecraft:gold_ore'))
 // mods.pyrotech.wither_forge.removeByOutput(item('minecraft:iron_nugget'))
@@ -621,10 +622,8 @@ mods.pyrotech.wither_forge.addBloom('quartz_recipe', item('minecraft:quartz') * 
 mods.pyrotech.wither_forge.addBloom('feathery', item('minecraft:feather'), 10, 15, item('minecraft:chicken'), 200, 0.1F, 0.25F, item('minecraft:cooked_chicken'))
 
 // Worktable:
-// Crafting table with where you hit it with a tool to craft stuff.
+// Crafting table which asks you to hit it with a tool to craft stuff.
 
-mods.pyrotech.worktable.remove(resource('minecraft:stonebrick'))
-mods.pyrotech.worktable.remove('minecraft:mossy_stonebrick')
 mods.pyrotech.worktable.removeByOutput(item('pyrotech:iron_hunters_knife'))
 // mods.pyrotech.worktable.removeAll()
 

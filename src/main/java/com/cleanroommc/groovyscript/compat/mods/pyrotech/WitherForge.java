@@ -134,23 +134,23 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
         private ItemStack bloom = ItemStack.EMPTY;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.slag.value")
         private ItemStack slag = null;
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.burnTime.value", comp = @Comp(gt = 0))
+        @Property(value = "groovyscript.wiki.pyrotech.bloomery.burnTime.value", comp = @Comp(gt = 0), defaultValue = "21600")
         private int burnTime = 21600;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.experience.value", comp = @Comp(gte = 0))
         private float experience;
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.bloomYieldMin.value", comp = @Comp(gte = 0))
-        private int bloomYieldMin = 8;
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.bloomYieldMax.value", comp = @Comp(gte = 0))
-        private int bloomYieldMax = 10;
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.failureChance.value", comp = @Comp(gte = 0))
+        @Property(value = "groovyscript.wiki.pyrotech.bloomery.bloomYieldMin.value", comp = @Comp(gte = 0), defaultValue = "12")
+        private int bloomYieldMin = 12;
+        @Property(value = "groovyscript.wiki.pyrotech.bloomery.bloomYieldMax.value", comp = @Comp(gte = 0), defaultValue = "15")
+        private int bloomYieldMax = 15;
+        @Property(value = "groovyscript.wiki.pyrotech.bloomery.failureChance.value", comp = @Comp(gte = 0, lte = 1))
         private float failureChance = 0.25F;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.failureOutput.value")
         private final List<BloomeryRecipeBase.FailureItem> failureOutput = new ArrayList<>(1);
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilTiers.value")
         private final EnumSet<AnvilRecipe.EnumTier> anvilTiers = EnumSet.allOf(AnvilRecipe.EnumTier.class);
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilHit.value")
+        @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilHit.value", comp = @Comp(gt = 0))
         private int anvilHit = ModuleTechBloomeryConfig.BLOOM.HAMMER_HITS_IN_ANVIL_REQUIRED;
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilType.value")
+        @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilType.value", comp = @Comp(not = "null"))
         private AnvilRecipe.EnumType anvilType = AnvilRecipe.EnumType.HAMMER;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.langKey.value")
         private String langKey;
@@ -275,6 +275,11 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_wither_forge_";
+        }
+
+        @Override
         protected int getMaxItemInput() {
             return 1;
         }
@@ -286,6 +291,7 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             int minOutput = !bloom.isEmpty() ? 0 : 1;
             if (slag == null) {
                 slag = bloom.isEmpty() ? new ItemStack(ModuleTechBloomery.Items.SLAG, 4) : ItemStack.EMPTY;
@@ -298,8 +304,9 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
             msg.add(experience < 0, "experience must be a non negative float, yet it was {}", experience);
             msg.add(bloomYieldMin < 0 || bloomYieldMin > bloomYieldMax, "bloomYieldMin must be a non negative integer that is smaller than bloomYieldMax, yet it was {}", burnTime);
             msg.add(bloomYieldMax < 0, "bloomYieldMax must be a non negative integer, yet it was {}", burnTime);
-            msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
-            msg.add(super.name == null, "name cannot be null");
+            msg.add(failureChance < 0 || failureChance > 1, "failureChance must not be negative nor larger than 1.0, yet it was {}", failureChance);
+            msg.add(anvilType == null, "anvilType must not be null");
+            msg.add(anvilHit <= 0, "anvilHit must be a non negative integer that is larger than 0, yet it was {}", anvilHit);
             msg.add(ModSupport.PYROTECH.get().witherForge.getRegistry().getValue(super.name) != null, "tried to register {}, but it already exists", super.name);
         }
 
@@ -320,15 +327,16 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
                     .create();
             ((BloomeryRecipeBaseAccessor) recipe).grs$setOutputBloom(bloom.isEmpty() ? null : bloom);
             ModSupport.PYROTECH.get().witherForge.add(recipe);
-            if (bloom.isEmpty()) {
-                ModSupport.PYROTECH.get().anvil.add(new BloomAnvilRecipe(
-                        recipe.getOutput(),
-                        com.codetaylor.mc.athenaeum.util.IngredientHelper.fromStackWithNBT(recipe.getOutputBloom()),
-                        anvilHit,
-                        anvilType,
-                        Arrays.copyOf(recipe.getAnvilTiers(), recipe.getAnvilTiers().length),
-                        recipe
-                ).setRegistryName(super.name));
+            if (bloom.isEmpty() && bloomYieldMax != 0) {
+                ModSupport.PYROTECH.get().anvil.add(
+                        new BloomAnvilRecipe(
+                                recipe.getOutput(),
+                                com.codetaylor.mc.athenaeum.util.IngredientHelper.fromStackWithNBT(recipe.getOutputBloom()),
+                                anvilHit,
+                                anvilType,
+                                Arrays.copyOf(recipe.getAnvilTiers(), recipe.getAnvilTiers().length),
+                                recipe
+                        ).setRegistryName(super.name));
             }
             return recipe;
         }

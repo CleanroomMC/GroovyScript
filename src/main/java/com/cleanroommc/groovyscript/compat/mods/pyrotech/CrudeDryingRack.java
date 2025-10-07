@@ -12,7 +12,6 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.init.recipe.DryingRackRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CrudeDryingRackRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
-import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.StoneOvenRecipesAdd;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickOvenRecipe;
@@ -41,11 +40,12 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public CrudeDryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime) {
         return add(name, input, output, dryTime, false);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, true"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.crude_drying_rack.add.inherit", example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, true"))
     public CrudeDryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime, boolean inherit) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -109,6 +109,11 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_crude_drying_rack_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Crude Drying Rack Recipe";
         }
@@ -121,9 +126,9 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             msg.add(dryTime <= 0, "dryTime must be a non negative integer that is larger than 0, yet it was {}", dryTime);
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechBasic.Registries.CRUDE_DRYING_RACK_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -137,7 +142,7 @@ public class CrudeDryingRack extends ForgeRegistryWrapper<CrudeDryingRackRecipe>
                 ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "crude_drying_rack/" + super.name.getPath());
                 DryingRackRecipe dryingRackRecipe = DryingRackRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
                 ModSupport.PYROTECH.get().dryingRack.add(dryingRackRecipe);
-                if (ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class)) {
+                if (ModSupport.PYROTECH.get().stoneOven.isEnabled()) {
                     StoneOvenRecipe stoneOvenRecipe = StoneOvenRecipesAdd.INHERIT_TRANSFORMER.apply(dryingRackRecipe).setRegistryName(location);
                     ModSupport.PYROTECH.get().stoneOven.add(stoneOvenRecipe);
                     BrickOvenRecipe brickOvenRecipe = BrickOvenRecipesAdd.INHERIT_TRANSFORMER.apply(stoneOvenRecipe).setRegistryName(location);

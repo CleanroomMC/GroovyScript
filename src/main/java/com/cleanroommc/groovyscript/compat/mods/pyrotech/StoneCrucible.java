@@ -34,11 +34,12 @@ public class StoneCrucible extends ForgeRegistryWrapper<StoneCrucibleRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public StoneCrucibleRecipe add(String name, IIngredient input, FluidStack output, int burnTime) {
         return add(name, input, output, burnTime, false);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'water_from_cactus', ore('blockCactus'), fluid('water') * 1000, 600, true"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.stone_crucible.add.inherit", example = @Example("'water_from_cactus', ore('blockCactus'), fluid('water') * 1000, 600, true"))
     public StoneCrucibleRecipe add(String name, IIngredient input, FluidStack output, int burnTime, boolean inherit) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -102,16 +103,21 @@ public class StoneCrucible extends ForgeRegistryWrapper<StoneCrucibleRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_stone_crucible_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Stone Crucible Recipe";
         }
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg, 0, 0, 1, 1);
-            msg.add(burnTime <= 0,  "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
-            msg.add(super.name == null, "name cannot be null");
+            msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
             msg.add(ModuleTechMachine.Registries.STONE_CRUCIBLE_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 

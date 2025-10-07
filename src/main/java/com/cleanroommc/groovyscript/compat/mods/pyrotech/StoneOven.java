@@ -45,11 +45,12 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
         return new RecipeBuilder();
     }
 
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public StoneOvenRecipe add(String name, IIngredient input, ItemStack output, int duration) {
         return add(name, input, output, duration, false);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'sand_to_dirt', item('minecraft:sand'), item('minecraft:dirt'), 1000, true"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.stone_oven.add.inherit", example = @Example("'sand_to_dirt', item('minecraft:sand'), item('minecraft:dirt'), 1000, true"))
     public StoneOvenRecipe add(String name, IIngredient input, ItemStack output, int duration, boolean inherit) {
         return recipeBuilder()
                 .inherit(inherit)
@@ -113,15 +114,20 @@ public class StoneOven extends ForgeRegistryWrapper<StoneOvenRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_stone_oven_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Stone Oven Recipe";
         }
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             msg.add(duration <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", duration);
-            msg.add(super.name == null, "name cannot be null.");
             msg.add(ModuleTechMachine.Registries.STONE_OVEN_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
