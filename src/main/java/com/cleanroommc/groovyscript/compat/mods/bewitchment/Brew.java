@@ -80,7 +80,7 @@ public class Brew extends ForgeRegistryWrapper<com.bewitchment.api.registry.Brew
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder outputCheck(IIngredient outputCheck) {
-            // while IIngredient does implement Predicate<ItemStack>, making it this method redundant,
+            // while IIngredient does implement Predicate<ItemStack>, making this method redundant,
             // having it be explicit makes documentation clearer.
             this.outputCheck = outputCheck;
             return this;
