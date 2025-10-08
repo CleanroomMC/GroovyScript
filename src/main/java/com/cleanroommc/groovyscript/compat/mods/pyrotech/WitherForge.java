@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
             @Example(".input(item('minecraft:minecart')).output(item('minecraft:furnace_minecart')).slag(item('minecraft:iron_ingot')).experience(0.8F).bloomYield(1, 1).burnTime(2000).failureChance(0.5F).failureOutput(item('minecraft:tnt_minecart'), 1).name('minecart_smelting')"),
             @Example(".input(item('minecraft:fishing_rod') | item('minecraft:carrot_on_a_stick')).output(item('minecraft:cooked_fish')).bloomYield(5, 8).langKey(item('minecraft:fishing_rod').getTranslationKey()).name('fishing')"),
             @Example(".input(item('minecraft:paper')).bloom(item('minecraft:book')).tierGranite().tierObsidian().failureChance(0.1F).failureOutput(item('minecraft:milk_bucket'), 5).failureOutput(item('minecraft:bone'), 2).name('knowledge')"),
-            @Example(".input(item('minecraft:comparator')).output(item('minecraft:redstone')).bloomYield(12, 15).experience(0.6F).burnTime(4000).tierIronclad(true).anvilHit(5).typePickaxe().failureChance(0.15F).failureOutput(item('minecraft:glowstone_dust'), 5).failureOutput(item('minecraft:sugar'), 4).name('comparator_melting')")
+            @Example(".input(item('minecraft:comparator')).output(item('minecraft:redstone')).bloomYield(12, 15).experience(0.6F).burnTime(4000).tierGranite().tierIronclad().anvilHit(5).typePickaxe().failureChance(0.15F).failureOutput(item('minecraft:glowstone_dust'), 5).failureOutput(item('minecraft:sugar'), 4).name('comparator_melting')")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -147,15 +146,13 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.failureOutput.value")
         private final List<BloomeryRecipeBase.FailureItem> failureOutput = new ArrayList<>(1);
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilTiers.value")
-        private final EnumSet<AnvilRecipe.EnumTier> anvilTiers = EnumSet.allOf(AnvilRecipe.EnumTier.class);
+        private final EnumSet<AnvilRecipe.EnumTier> anvilTiers = EnumSet.noneOf(AnvilRecipe.EnumTier.class);
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilHit.value", comp = @Comp(gt = 0))
         private int anvilHit = ModuleTechBloomeryConfig.BLOOM.HAMMER_HITS_IN_ANVIL_REQUIRED;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilType.value", comp = @Comp(not = "null"))
         private AnvilRecipe.EnumType anvilType = AnvilRecipe.EnumType.HAMMER;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.langKey.value")
         private String langKey;
-
-        private boolean tiersReset = false;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder bloom(ItemStack bloom) {
@@ -204,41 +201,18 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder anvilTier(AnvilRecipe.EnumTier tier) {
-            if (!tiersReset) {
-                anvilTiers.clear();
-                tiersReset = true;
-            }
             anvilTiers.add(tier);
             return this;
         }
 
         @RecipeBuilderMethodDescription(field = "anvilTier")
-        public RecipeBuilder tierGranite(boolean inherit) {
-            anvilTier(AnvilRecipe.EnumTier.GRANITE);
-            if (inherit) {
-                anvilTier(AnvilRecipe.EnumTier.IRONCLAD);
-                anvilTier(AnvilRecipe.EnumTier.OBSIDIAN);
-            }
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription(field = "anvilTier")
         public RecipeBuilder tierGranite() {
-            return tierGranite(false);
-        }
-
-        @RecipeBuilderMethodDescription(field = "anvilTier")
-        public RecipeBuilder tierIronclad(boolean inherit) {
-            anvilTier(AnvilRecipe.EnumTier.IRONCLAD);
-            if (inherit) {
-                anvilTier(AnvilRecipe.EnumTier.OBSIDIAN);
-            }
-            return this;
+            return anvilTier(AnvilRecipe.EnumTier.GRANITE);
         }
 
         @RecipeBuilderMethodDescription(field = "anvilTier")
         public RecipeBuilder tierIronclad() {
-            return tierIronclad(false);
+            return anvilTier(AnvilRecipe.EnumTier.IRONCLAD);
         }
 
         @RecipeBuilderMethodDescription(field = "anvilTier")
@@ -292,12 +266,18 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateName();
-            int minOutput = !bloom.isEmpty() ? 0 : 1;
+            if (bloom == null) {
+                bloom = ItemStack.EMPTY;
+            }
+            int minOutput = bloom.isEmpty() ? 1 : 0;
             if (slag == null) {
                 slag = bloom.isEmpty() ? new ItemStack(ModuleTechBloomery.Items.SLAG, 4) : ItemStack.EMPTY;
             }
             if (failureOutput.isEmpty() && failureChance > 0.0F) {
                 failureOutput.add(new BloomeryRecipeBase.FailureItem(new ItemStack(ModuleTechBloomery.Items.SLAG), 1));
+            }
+            if (anvilTiers.isEmpty()) {
+                anvilTiers.addAll(EnumSet.allOf(AnvilRecipe.EnumTier.class));
             }
             validateItems(msg, 1, 1, minOutput, 1);
             msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
@@ -334,7 +314,7 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
                                 com.codetaylor.mc.athenaeum.util.IngredientHelper.fromStackWithNBT(recipe.getOutputBloom()),
                                 anvilHit,
                                 anvilType,
-                                Arrays.copyOf(recipe.getAnvilTiers(), recipe.getAnvilTiers().length),
+                                recipe.getAnvilTiers(),
                                 recipe
                         ).setRegistryName(super.name));
             }
