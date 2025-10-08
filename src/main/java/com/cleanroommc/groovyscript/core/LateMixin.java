@@ -13,11 +13,13 @@ public class LateMixin implements ILateMixinLoader {
     public static final List<String> modMixins = ImmutableList.of(
             "advancedmortars",
             "appliedenergistics2",
+            "armorplus",
             "astralsorcery",
             "betterwithaddons",
             "betterwithmods",
             "thebetweenlands",
             "bloodmagic",
+            "erebus",
             "botania",
             "calculator",
             "draconicevolution",

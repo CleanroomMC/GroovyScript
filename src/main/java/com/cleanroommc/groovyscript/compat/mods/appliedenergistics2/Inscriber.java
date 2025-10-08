@@ -7,6 +7,7 @@ import appeng.api.features.InscriberProcessType;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.helper.EnumHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -82,7 +83,7 @@ public class Inscriber extends VirtualizedRegistry<IInscriberRecipe> {
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder type(String type) {
-            this.type = InscriberProcessType.valueOf(type.toUpperCase(Locale.ROOT));
+            this.type = EnumHelper.valueOfNullable(InscriberProcessType.class, type, false);
             return this;
         }
 

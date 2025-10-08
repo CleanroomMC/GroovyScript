@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["CleanroomMC", "brachy84", "Rongmario"],
   "credits": "Apache for Groovy",
-  "logoFile": "",
+  "logoFile": "assets/groovyscript/textures/grs_logo.png",
   "screenshots": [],
   "dependencies": []
 }

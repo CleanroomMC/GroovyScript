@@ -171,12 +171,12 @@ public class GroovyScriptCodeConverter {
         return formatGenericHandler("dimension", dimensionType.getName(), colored);
     }
 
-    public static String asGroovyCode(EntityEntry entity, boolean colored) {
-        return formatResourceLocation("entity", entity.getRegistryName(), colored);
-    }
-
     public static String asGroovyCode(Entity entity, boolean colored) {
         return formatResourceLocation("entity", EntityList.getKey(entity), colored);
+    }
+
+    public static String asGroovyCode(EntityEntry entity, boolean colored) {
+        return formatForgeRegistryImpl("entity", entity, colored);
     }
 
     public static String asGroovyCode(CreativeTabs tab, boolean colored) {

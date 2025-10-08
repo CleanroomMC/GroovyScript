@@ -270,7 +270,7 @@ public class DescriptorHelper {
             var output = descriptorToMethod.get(target);
             if (output != null) return output;
             var methodSignatures = nameToSignatures.get(target);
-            if (methodSignatures.size() > 1) {
+            if (methodSignatures != null && methodSignatures.size() > 1) {
                 GroovyLog.msg("The target '{}' is a duplicate name, use one of the following descriptors instead", target)
                         .add("'" + String.join("', '", methodSignatures) + "'")
                         .warn()

@@ -15,6 +15,7 @@ import com.cleanroommc.groovyscript.server.Completions;
 import groovy.lang.ExpandoMetaClass;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.init.Blocks;
@@ -40,12 +41,13 @@ import java.util.*;
 
 public class ObjectMapperManager {
 
-    private static final Map<String, AbstractObjectMapper<?>> handlers = new Object2ObjectOpenHashMap<>();
-    private static final Map<String, List<AbstractObjectMapper<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
-    private static final Map<Class<? extends GroovyPropertyContainer>, Map<String, AbstractObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
     public static final String EMPTY = "empty";
     public static final String WILDCARD = "*";
     public static final String SPLITTER = ":";
+
+    private static final Map<String, AbstractObjectMapper<?>> handlers = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, List<AbstractObjectMapper<?>>> handlerConflicts = new Object2ObjectOpenHashMap<>();
+    private static final Map<Class<? extends GroovyPropertyContainer>, Map<String, AbstractObjectMapper<?>>> modHandlers = new Object2ObjectOpenHashMap<>();
 
     public static void registerObjectMapper(AbstractObjectMapper<?> mapper) {
         String key = mapper.getName();
@@ -75,6 +77,7 @@ public class ObjectMapperManager {
     }
 
     public static void init() {
+        ObjectParserHelper.init();
         registerObjectMapper(ItemStackMapper.INSTANCE);
         registerObjectMapper(BlockStateMapper.INSTANCE);
         ObjectMapper.builder("resource", ResourceLocation.class)
@@ -124,6 +127,11 @@ public class ObjectMapperManager {
                 .docOfType("block")
                 .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
+                .register();
+        ObjectMapper.builder("blockmaterial", Material.class)
+                .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.materials::get))
+                .completerOfNames(ObjectParserHelper.materials::keySet)
+                .docOfType("block material")
                 .register();
         /*ObjectMapper.builder("blockstate", IBlockState.class)
                 .parser(ObjectMappers::parseBlockState)
@@ -183,20 +191,24 @@ public class ObjectMapperManager {
                 .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .docOfType("villager profession")
                 .register();
-
-        final List<String> careerList = new ArrayList<>();
-        for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
-            if (profession != null) {
-                for (var career : ((VillagerProfessionAccessor) profession).getCareers()) {
-                    if (career != null) {
-                        careerList.add(career.getName());
-                    }
-                }
-            }
-        }
         ObjectMapper.builder("career", VillagerRegistry.VillagerCareer.class)
-                .parser(ObjectMappers::parseVillagerCareer)
-                .completerOfNames(() -> careerList)
+                .parser(IObjectParser.wrapStringGetter(x -> {
+                    for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
+                        for (var career : ((VillagerProfessionAccessor) profession).getCareers()) {
+                            if (x.equals(career.getName())) return career;
+                        }
+                    }
+                    return null;
+                }))
+                .completerOfNames(() -> {
+                    List<String> careers = new ArrayList<>();
+                    for (var profession : ForgeRegistries.VILLAGER_PROFESSIONS) {
+                        for (var career : ((VillagerProfessionAccessor) profession).getCareers()) {
+                            careers.add(career.getName());
+                        }
+                    }
+                    return careers;
+                })
                 .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .docOfType("villager career")
                 .register();
