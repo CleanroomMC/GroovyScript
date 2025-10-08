@@ -26,7 +26,7 @@
 // Anything that should be handled differently than always being "compileOnly" and also being "runtimeOnly" when debug enabled
 // should be handled in the main dependencies function.
 // Sorted alphabetically.
-final def mod_dependencies = [
+final Map<String, List<String>> mod_dependencies = [
         'actually-additions-228404:3117927'                   : [debug_actually_additions],
         'additionalenchantedminer-282837:3851282'             : [debug_additional_enchanted_miner],
         'advanced-rocketry-236542:4671856'                    : [debug_advanced_rocketry],
@@ -166,10 +166,10 @@ dependencies {
     // api "gregtech:gregtech:2.8.10-beta", { transitive false }
 
     // compiles all mods, and selectively enables mods being debugged
-    mod_dependencies.entrySet().forEach {
-        def mod = rfg.deobf('curse.maven:' + it.key)
+    mod_dependencies.each { k, v ->
+        def mod = rfg.deobf('curse.maven:' + k)
         compileOnly mod
-        if (it.value.any { it.toBoolean() }) {
+        if (v.any { it.toBoolean() }) {
             runtimeOnly mod
         }
     }
