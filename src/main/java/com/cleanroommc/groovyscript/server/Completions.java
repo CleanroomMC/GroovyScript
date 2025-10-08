@@ -10,14 +10,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Function;
 
 public class Completions extends ArrayList<CompletionItem> {
 
     private final int limit;
+    private String filter;
 
     public Completions(int limit) {
         this.limit = limit;
+        this.filter = null;
     }
 
     public int getLimit() {
@@ -26,6 +29,18 @@ public class Completions extends ArrayList<CompletionItem> {
 
     public boolean reachedLimit() {
         return size() >= this.limit;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter.toLowerCase(Locale.ENGLISH);
+    }
+
+    @Override
+    public boolean add(CompletionItem item) {
+        if (filter == null || item.getLabel().toLowerCase(Locale.ENGLISH).contains(filter)) {
+            return super.add(item);
+        }
+        return true;
     }
 
     public <V> void addAll(Iterable<V> values, Function<V, @Nullable CompletionItem> toCompletionItem) {
