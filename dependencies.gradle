@@ -131,18 +131,18 @@ final Map<String, List<String>> mod_dependencies = [
 // These mods will be enabled at runtime, but will not be compiled.
 // Sorted alphabetically.
 final Map<String, List<String>> runtime_dependencies = [
-        'com.cleanroommc:configanytime:3.0'                 : [debug_universal_tweaks],
-        'curse.maven:aainfo-573154:3627065'                 : [debug_actually_advanced_info],
+        'com.cleanroommc:configanytime:3.0'                 : [dev_universal_tweaks],
+        'curse.maven:aainfo-573154:3627065'                 : [dev_actually_advanced_info],
         'curse.maven:dropt-284973:3758733'                  : [debug_pyrotech],
         'curse.maven:jei-bees-248370:2490058'               : [debug_forestry],
         'curse.maven:just-enough-magiculture-940521:5796192': [debug_erebus],
         'curse.maven:just-enough-petroleum-291727:2549332'  : [debug_immersive_petroleum],
         'curse.maven:just-enough-resources-240630:4440935'  : [debug_erebus],
-        'curse.maven:mouse-tweaks-unofficial-461660:5876158': [debug_mouse_tweaks_unofficial],
-        'curse.maven:reid-629017:5502915'                   : [debug_roughly_enough_ids],
+        'curse.maven:mouse-tweaks-unofficial-461660:5876158': [dev_mouse_tweaks_unofficial],
+        'curse.maven:reid-629017:5502915'                   : [dev_roughly_enough_ids],
         'curse.maven:thaumic_jei-285492:2705304'            : [debug_thaumcraft],
-        'curse.maven:universal-tweaks-705000:5860191'       : [debug_universal_tweaks],
-        'curse.maven:vintagefix-871198:5536276'             : [debug_vintagefix],
+        'curse.maven:universal-tweaks-705000:5860191'       : [dev_universal_tweaks],
+        'curse.maven:vintagefix-871198:5536276'             : [dev_vintagefix],
 ]
 
 dependencies {
