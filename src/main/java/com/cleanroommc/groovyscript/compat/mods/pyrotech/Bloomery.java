@@ -275,10 +275,7 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
             if (bloom == null) {
                 bloom = ItemStack.EMPTY;
             }
-            if (slag == null) {
-                slag = ItemStack.EMPTY;
-            }
-            int minOutput = !bloom.isEmpty() ? 0 : 1;
+            int minOutput = bloom.isEmpty() ? 1 : 0;
             if (slag == null) {
                 slag = bloom.isEmpty() ? new ItemStack(ModuleTechBloomery.Items.SLAG, 4) : ItemStack.EMPTY;
             }
