@@ -85,7 +85,7 @@ jobs:
 
       - name: Set version
         if: env.UPDATED == 'false' # only change new version if it's not already updated
-        run: sed -i "s/modVersion.*=.*/modVersion = ${{ github.event.inputs.version }}/g" gradle.properties
+        run: sed -i -E "s/^[[:space:]]*modVersion[[:space:]]*=.*/modVersion = ${{ github.event.inputs.version }}/" buildscript.properties
 
       - name: Commit and push buildscript.properties
         if: env.UPDATED == 'false' # only push new version if it's not already updated
