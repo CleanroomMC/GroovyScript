@@ -197,6 +197,7 @@ public class CompletionProvider extends DocProvider {
                             break;
                         }
                     }
+                    items.setFilter(node.getText());
                     mapper.provideCompletion(index, params, items);
                 }
             }
