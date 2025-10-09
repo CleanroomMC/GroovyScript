@@ -25,7 +25,7 @@ public class TinkersConstruct extends GroovyPropertyContainer {
     public final Materials materials = new Materials();
 
     public static String asGroovyCode(Material material, boolean colored) {
-        return GroovyScriptCodeConverter.formatGenericHandler("material", material.identifier, colored);
+        return GroovyScriptCodeConverter.formatGenericHandler("toolMaterial", material.identifier, colored);
     }
 
     public static String asGroovyCode(String handler, ITrait trait, boolean colored) {
