@@ -3,25 +3,25 @@
 minecraft {
     injectedTags.put 'GROOVY_VERSION', groovy_version
 
-    if (project.debug_use_examples_folder.toBoolean()) {
+    if (project.dev_use_examples_folder.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.use_examples_folder=true')
     }
-    if (project.debug_run_ls.toBoolean()) {
+    if (project.dev_run_ls.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.run_ls=true')
     }
-    if (project.debug_generate_examples.toBoolean()) {
+    if (project.dev_generate_examples.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.generate_examples=true')
     }
-    if (project.debug_generate_wiki.toBoolean()) {
+    if (project.dev_generate_wiki.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.generate_wiki=true')
     }
-    if (project.debug_generate_and_crash.toBoolean()) {
+    if (project.dev_generate_and_crash.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.generate_and_crash=true')
     }
-    if (project.debug_log_missing_lang_keys.toBoolean()) {
+    if (project.dev_log_missing_lang_keys.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.log_missing_lang_keys=true')
     }
-    if (project.debug_disable_cache.toBoolean()) {
+    if (project.dev_disable_cache.toBoolean()) {
         extraRunJvmArguments.add('-Dgroovyscript.disable_cache=true')
     }
 
