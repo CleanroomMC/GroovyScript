@@ -14,7 +14,7 @@ on:
       release-type:
         description: 'Release type'
         type: choice
-        default: 'beta'
+        default: 'release'
         options:
           - 'release'
           - 'beta'
@@ -56,7 +56,7 @@ jobs:
       - name: Read current mod version
         id: read_version
         run: |
-          mod_version=$(grep "modVersion" gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          mod_version=$(grep "modVersion" buildscript.properties | cut -d'=' -f2 | tr -d '[:space:]')
           echo "Current mod version: $mod_version"
           if [ "$mod_version" == "${{inputs.version}}" ]; then
             echo "UPDATED=true" >> $GITHUB_ENV
@@ -87,13 +87,13 @@ jobs:
         if: env.UPDATED == 'false' # only change new version if it's not already updated
         run: sed -i "s/modVersion.*=.*/modVersion = ${{ github.event.inputs.version }}/g" gradle.properties
 
-      - name: Commit and push gradle.properties
+      - name: Commit and push buildscript.properties
         if: env.UPDATED == 'false' # only push new version if it's not already updated
         uses: stefanzweifel/git-auto-commit-action@v5.0.1
         with:
           commit_message: "Bump version to ${{ github.event.inputs.version }}"
           commit_options: "--no-verify"
-          file_pattern: gradle.properties
+          file_pattern: buildscript.properties
           tagging_message: "v${{ github.event.inputs.version }}"
 
       - name: Check for publishing
