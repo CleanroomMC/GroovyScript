@@ -26,4 +26,3 @@ public class ItemStackHashStrategy implements Hash.Strategy<ItemStack> {
         return a == b || (a != null && b != null && ItemStack.areItemsEqual(a, b));
     }
 }
-

@@ -77,8 +77,8 @@ public class GroovyScriptKeybinds {
 
     private static KeyBinding createKeybind(boolean setByDefault, Key key) {
         var binding = setByDefault
-                      ? new KeyBinding(key.getDescription(), key.getKeyConflictContext(), key.getKeyModifier(), key.getKeyCode(), CATEGORY)
-                      : new KeyBinding(key.getDescription(), key.getKeyConflictContext(), KeyModifier.NONE, Keyboard.KEY_NONE, CATEGORY);
+                ? new KeyBinding(key.getDescription(), key.getKeyConflictContext(), key.getKeyModifier(), key.getKeyCode(), CATEGORY)
+                : new KeyBinding(key.getDescription(), key.getKeyConflictContext(), KeyModifier.NONE, Keyboard.KEY_NONE, CATEGORY);
         ClientRegistry.registerKeyBinding(binding);
         return binding;
     }

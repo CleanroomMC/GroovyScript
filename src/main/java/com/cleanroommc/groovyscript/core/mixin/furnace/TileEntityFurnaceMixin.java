@@ -45,5 +45,4 @@ public class TileEntityFurnaceMixin {
             return; // we can only correctly do one transformation, so only the first transformer operates.
         }
     }
-
 }

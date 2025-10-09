@@ -54,5 +54,4 @@ public class CustomFurnaceManager {
     public record FuelConversionRecipe(IIngredient smelted, IIngredient fuel) {
 
     }
-
 }
