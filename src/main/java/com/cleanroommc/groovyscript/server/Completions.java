@@ -40,7 +40,7 @@ public class Completions extends ArrayList<CompletionItem> {
         if (filter == null || item.getLabel().toLowerCase(Locale.ENGLISH).contains(filter)) {
             return super.add(item);
         }
-        return true;
+        return false;
     }
 
     public <V> void addAll(Iterable<V> values, Function<V, @Nullable CompletionItem> toCompletionItem) {
