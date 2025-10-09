@@ -56,8 +56,8 @@ jobs:
       - name: Read current mod version
         id: read_version
         run: |
-          mod_version=$(grep "modVersion" buildscript.properties | cut -d'=' -f2 | tr -d '[:space:]')
-          echo "Current mod version: $mod_version"
+          mod_version=$(grep -E '^[[:space:]]*modVersion[[:space:]]*=' buildscript.properties | cut -d'=' -f2 | tr -d '[:space:]')
+          echo "Current mod version: -$mod_version-"
           if [ "$mod_version" == "${{inputs.version}}" ]; then
             echo "UPDATED=true" >> $GITHUB_ENV
           else
