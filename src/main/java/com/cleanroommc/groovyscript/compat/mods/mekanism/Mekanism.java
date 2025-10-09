@@ -80,11 +80,13 @@ public class Mekanism extends GroovyPropertyContainer {
                 })
                 .completerOfNamed(GasRegistry::getRegisteredGasses, Gas::getName)
                 .docOfType("gas stack")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
         container.objectMapperBuilder("infusionType", InfuseType.class)
                 .parser(IObjectParser.wrapStringGetter(InfuseRegistry::get, true))
                 .completerOfNames(InfuseRegistry.getInfuseMap()::keySet)
                 .docOfType("infusion type")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
 
         InfoParserRegistry.addInfoParser(InfoParserGas.instance);

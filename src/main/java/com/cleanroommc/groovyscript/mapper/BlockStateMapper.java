@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.mapper;
 
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import com.cleanroommc.groovyscript.server.CompletionParams;
 import com.cleanroommc.groovyscript.server.Completions;
 import net.minecraft.block.Block;
@@ -58,6 +59,11 @@ public class BlockStateMapper extends AbstractObjectMapper<IBlockState> {
                 }
             }
         }
+    }
+
+    @Override
+    public String getGroovyCode(IBlockState value) {
+        return GroovyScriptCodeConverter.asGroovyCode(value, false);
     }
 
     @Override

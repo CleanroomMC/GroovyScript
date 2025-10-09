@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fluids.FluidStack;
@@ -188,6 +189,10 @@ public class GroovyScriptCodeConverter {
 
     public static String asGroovyCode(Potion potion, boolean colored) {
         return formatResourceLocation("potion", Potion.REGISTRY.getNameForObject(potion), colored);
+    }
+
+    public static String asGroovyCode(SoundEvent sound, boolean colored) {
+        return formatForgeRegistryImpl("sound", sound, colored);
     }
 
     public static String asGroovyCode(PotionEffect potionEffect, boolean colored) {
