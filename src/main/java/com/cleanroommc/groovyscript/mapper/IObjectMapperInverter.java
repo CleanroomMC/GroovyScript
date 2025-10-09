@@ -9,10 +9,21 @@ import java.util.List;
  * This is used for {@link com.cleanroommc.groovyscript.mapper.ObjectMapper object mappers}.
  * <p>
  * A few examples of what this outputs would be
- * {@code item('minecraft:clay')}, {@code biome('minecraft:desert')}, or {@code blockstate('minecraft:log:axis=z:variant=oak')}.
+ * {@code item('minecraft:clay')}, {@code biome('minecraft:desert')}, or {@code blockstate('minecraft:log', 'axis=z', 'variant=oak')}.
  * <p>
- * The return value should exactly correspond to the Object Mapper that creates it,
- * thus, {@code item % item('minecraft:clay') === "item('minecraft:clay')"}
+ * For Object Mappers with only one creation method,
+ * the return value should exactly correspond to the Object Mapper that creates it:
+ * <br>
+ * {@code item % item('minecraft:clay') == "item('minecraft:clay')"}.
+ * <p>
+ * Some Object Mappers may have multiple alternative creation methods,
+ * in which case the return value can be any one of those alternatives,
+ * but must still create the same object:
+ * <br>
+ * {@code blockstate % blockstate('minecraft:log:0') == "blockstate('minecraft:log', 'axis=y', 'variant=oak')"}
+ * and
+ * <br>
+ * {@code blockstate % blockstate('minecraft:log', 'axis=y', 'variant=oak') == "blockstate('minecraft:log', 'axis=y', 'variant=oak')"}
  *
  * @param <T> the type of the objects being inverted
  */
