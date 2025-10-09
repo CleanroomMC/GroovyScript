@@ -3,7 +3,8 @@ groovyscript.command.copy.copied_start=Copied [
 groovyscript.command.copy.copied_end=] to the clipboard
 
 key.categories.groovyscript=GroovyScript
-key.groovyscript.reload=Reload Scripts
+keybind.groovyscript.reload=Reload Scripts
+keybind.groovyscript.copy=Copy focused
 
 groovyscript.jei.category.groovyscript:fluid_recipe.name=In world fluid recipes
 groovyscript.jei.category.groovyscript:explosion.name=Explosion recipes
@@ -79,7 +80,6 @@ groovyscript.wiki.required_mods.desc=This compat requires the following mods to 
 groovyscript.wiki.not_fully_documented=This compat is not fully documented. Some or all of its features are not present on the wiki. View the source code to gain an accurate understanding of the compat.
 groovyscript.wiki.add_to_list=Add the given recipe to the recipe list
 groovyscript.wiki.remove_from_list=Removes the given recipe from the recipe list
-
 
 groovyscript.wiki.requires=Requires %s.
 groovyscript.wiki.default=(Default `%s`).
@@ -816,6 +816,88 @@ groovyscript.wiki.thebetweenlands.steeping_pot.meta.value=Sets the color of the 
 groovyscript.wiki.thebetweenlands.steeping_pot.addAcceptedItem=Adds the given ItemStack to the accepted item list for the Silk Bundle
 groovyscript.wiki.thebetweenlands.steeping_pot.removeAcceptedItem=Removes the given ItemStack from the accepted item list for the Silk Bundle
 groovyscript.wiki.thebetweenlands.steeping_pot.removeAllAcceptedItem=Removes all entries from the accepted item list for the Silk Bundle
+
+
+# Bewitchment
+groovyscript.wiki.bewitchment.altar_upgrade.title=Altar Upgrades
+groovyscript.wiki.bewitchment.altar_upgrade.description=Controls the valid upgrades placed atop the Witches' Altar, a multiblock that gain Magic Power from nearby plants and logs based on their uniqueness. The upgrades modify the amount gained per second and the maximum Magic Power the Altar can hold.
+groovyscript.wiki.bewitchment.altar_upgrade.note0=Magic Power is increased once a second, with the multipliers stacking on top of the base regeneration rate of 8.
+groovyscript.wiki.bewitchment.altar_upgrade.note1=The Max Magic Power increase provided by wands is multiplied by 64.
+groovyscript.wiki.bewitchment.altar_upgrade.add=Register a new Altar Upgrade in the form `state`, `upgrade`
+groovyscript.wiki.bewitchment.altar_upgrade.addCup=Adds the given entry as a cup upgrade in the format `condition`, `gain`, `multiplier`
+groovyscript.wiki.bewitchment.altar_upgrade.addPentacle=Adds the given entry as a pentacle upgrade in the format `condition`, `gain`
+groovyscript.wiki.bewitchment.altar_upgrade.addSword=Adds the given entry as a sword upgrade in the format `condition`, `multiplier`
+groovyscript.wiki.bewitchment.altar_upgrade.addWand=Adds the given entry as a wand upgrade in the format `condition`, `multiplier`
+groovyscript.wiki.bewitchment.altar_upgrade.gain.value=Sets the gain value, which is used for cups and pentacles
+groovyscript.wiki.bewitchment.altar_upgrade.multiplier.value=Sets the multiplier value, which is used for cups, swords, and wands
+groovyscript.wiki.bewitchment.altar_upgrade.predicate.value=Sets the predicate used to check if the block/item matches
+groovyscript.wiki.bewitchment.altar_upgrade.type.value=Sets the type of Altar Upgrade being created
+groovyscript.wiki.bewitchment.altar_upgrade.gain.required=only if the type is cup or pentacle
+groovyscript.wiki.bewitchment.altar_upgrade.multiplier.required=only if the type is cup, sword, or wand
+groovyscript.wiki.bewitchment.altar_upgrade.remove=Removes the given Altar Upgrade entry
+groovyscript.wiki.bewitchment.altar_upgrade.removeByType=Removes all Altar Upgrades of the given type
+
+groovyscript.wiki.bewitchment.athame_loot.title=Athame Loot
+groovyscript.wiki.bewitchment.athame_loot.description=When killing a mob with the Athame in the main hand, drops a random amount between `0` and `stackSize + lootingLevel` of each item that the entity passes the predicate of.
+groovyscript.wiki.bewitchment.athame_loot.add=Register a new Athame Loot entry in the format `entity`, `stacks`
+
+groovyscript.wiki.bewitchment.brew.title=Witches' Cauldron Brew
+groovyscript.wiki.bewitchment.brew.description=After throwing a `bewitchment:mandrake_root` in the Witches' Cauldron while Magic Power is provided, all items thrown in will add their potion effects when extracted via a `minecraft:glass_bottle`. Each fill of the Cauldron can create 3 bottles. An ingredient can also refund an itemstack.
+groovyscript.wiki.bewitchment.brew.note0=In addition to any potion effects granted, if the items included in the potion contain specific items the output potion will have additional effects - `bewitchment:ravens_feather` will cause the potion to not create particles, `minecraft:gunpowder` will cause the potion to be a splash potion, `bewitchment:owlets_wing` will cause the potion to be a lingering potion, `minecraft:glowstone` will increase the potency up to a max of 2, and `minecraft:redstone` will increase the duration up to a max of 3.
+groovyscript.wiki.bewitchment.brew.note1=Bewitchment has a pair of events that are fired - `WitchesCauldronEvent.CreatePotionEvent` and `WitchesCauldronEvent.PotionCreatedEvent`. Both can be cancelled. The first allows modifying the player creating the potions, the maximum potency of the potions to a max of 3, the base level of potency from 1 to 2, and how many bottles can be made from the Cauldron. The latter allows modifying the player creating the potions, the amount of bottles made, and the ItemStack created. This event is used when the player is wearing Alchemist equipment or when pledged to the demon Leonard.
+groovyscript.wiki.bewitchment.brew.effect.value=Sets the potion effect the brew provides
+groovyscript.wiki.bewitchment.brew.outputCheck.value=Sets the check for if the output itemstack is granted
+groovyscript.wiki.bewitchment.brew.removeByPotion=Removes all recipes providing the given potion effect
+
+groovyscript.wiki.bewitchment.cauldron.title=Witches' Cauldron
+groovyscript.wiki.bewitchment.cauldron.description=Converts up to 10 input ingredients into up to 3 output itemstacks in the Witches' Cauldron while Magic Power is provided.
+groovyscript.wiki.bewitchment.cauldron.magic_power_note=Magic Power is consumed at a rate of `16 * {itemCount - 1}` every second and each time an item is added to the Cauldron.
+groovyscript.wiki.bewitchment.cauldron.note0=Some items cannot be used in the Witches' Cauldron due to conflicts with other effects - `bewitchment:wood_ash` cannot be used anywhere, while `bewitchment:mandrake_root` and `bewitchment:dimensional_sand` cannot be used as the first item.
+
+groovyscript.wiki.bewitchment.curse.title=Curses
+groovyscript.wiki.bewitchment.curse.description=Allows applying curses to a player to cause unique effects in the Brazier with a `bewitchment:taglock` targeting the desired player.
+
+groovyscript.wiki.bewitchment.distillery.title=Distillery
+groovyscript.wiki.bewitchment.distillery.description=Converts up to 6 input ingredients into up to 6 output itemstacks in the Distillery at the cost of 1 Magic Power per tick. Takes 10 seconds.
+
+groovyscript.wiki.bewitchment.fortune.title=Fortune
+groovyscript.wiki.bewitchment.fortune.description=Modifies potential Fortunes, with a random one being selected from the list when interacting with a Crystal Ball. Some amount of time will pass before the Fortune occurs, whereupon a customizable effect will happen.
+
+groovyscript.wiki.bewitchment.frostfire.title=Frostfire
+groovyscript.wiki.bewitchment.frostfire.description=Converts an input ingredient into an output itemstack once a second while inside a Frostfire block
+
+groovyscript.wiki.bewitchment.incense.title=Incense
+groovyscript.wiki.bewitchment.incense.description=Converts up to 8 input ingredients in the Brazier when activated by a Flint and Steel for any number of potion effects that apply whenever a player wakes up nearby.
+groovyscript.wiki.bewitchment.incense.removeByPotion=Removes all recipes providing the given potion effect
+groovyscript.wiki.bewitchment.incense.potion.value=Sets the potion effects provided upon waking up while the Incense is active
+groovyscript.wiki.bewitchment.incense.time.value=Sets the time the Brazier will remain active before being extinguished in seconds
+
+groovyscript.wiki.bewitchment.oven.title=Oven
+groovyscript.wiki.bewitchment.oven.description=Converts an input itemstack into an output itemstack, with the ability to have a chance to produce an optional itemstack, and if producing the optional itemstack will consume a `bewitchment:empty_jar`. Requires furnace fuel to run and takes 10 seconds per recipe.
+groovyscript.wiki.bewitchment.oven.byproduct.value=Sets the byproduct itemstack
+groovyscript.wiki.bewitchment.oven.byproductChance.value=Sets the chance the byproduct will be created
+groovyscript.wiki.bewitchment.oven.requiresJar.value=Sets if the recipe must consume a jar in order to produce the byproduct
+
+groovyscript.wiki.bewitchment.pet.title=Pets
+groovyscript.wiki.bewitchment.pet.description=Sets what animals are valid for summoning via the `FortuneMeetPet` effect
+
+groovyscript.wiki.bewitchment.ritual.title=Rituals
+groovyscript.wiki.bewitchment.ritual.description=Converts up to 10 input ingredients into a ritual. The ritual can output up to 5 items, can require specific small, medium, and large circle sizes, can require a specific type for each circle, can require a specific entity nearby as a sacrifice, can set the time the ritual takes, and can set the Magic Power consumed to start and run the ritual.
+groovyscript.wiki.bewitchment.ritual.note0=Due to the complexity of custom rituals, only the basic item output rituals can be constructed with the Recipe Builder. To create your own custom rituals, extend the class `com.bewitchment.api.registry.Ritual` and add it via `mods.bewitchment.ritual.add(Ritual)`.
+groovyscript.wiki.bewitchment.ritual.sacrifice.value=Sets what entities are valid sacrifices, if any
+groovyscript.wiki.bewitchment.ritual.canBePerformedRemotely.value=Sets if the ritual can be activated via a Waystone instead of immediately
+groovyscript.wiki.bewitchment.ritual.time.value=Sets the time in ticks the ritual takes to complete
+groovyscript.wiki.bewitchment.ritual.startingPower.value=Sets the starting Magic Power consumed by the ritual
+groovyscript.wiki.bewitchment.ritual.runningPower.value=Sets the Magic Power consumed every tick
+groovyscript.wiki.bewitchment.ritual.small.value=Sets the type of chalk used for the small circle
+groovyscript.wiki.bewitchment.ritual.medium.value=Sets the type of chalk used for the medium circle
+groovyscript.wiki.bewitchment.ritual.big.value=Sets the type of chalk used for the big circle
+
+groovyscript.wiki.bewitchment.sigil.title=Sigils
+groovyscript.wiki.bewitchment.sigil.description=Converts up to 25 itemstacks into a single output itemstack
+
+groovyscript.wiki.bewitchment.spinning_wheel.title=Spinning Wheel
+groovyscript.wiki.bewitchment.spinning_wheel.description=Converts up to 4 itemstacks into up to 2 output itemstacks in the Spinning Wheel at the cost of 1 Magic Power per tick. Takes 10 seconds.
 
 
 # Blood Arsenal

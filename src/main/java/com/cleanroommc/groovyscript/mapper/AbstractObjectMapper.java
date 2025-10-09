@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
-public abstract class AbstractObjectMapper<T> extends Closure<T> implements INamed, IDocumented, IObjectParser<T>, TextureBinder<T> {
+public abstract class AbstractObjectMapper<T> extends Closure<T> implements INamed, IDocumented, IObjectParser<T>, IObjectMapperInverter<T>, TextureBinder<T> {
 
     private final String name;
     private final GroovyContainer<?> mod;

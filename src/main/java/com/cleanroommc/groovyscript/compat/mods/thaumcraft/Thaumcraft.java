@@ -17,6 +17,8 @@ import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.item.ItemStack;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aspects.IEssentiaContainerItem;
+import thaumcraft.api.items.ItemsTC;
 
 import java.util.Collection;
 
@@ -42,18 +44,26 @@ public class Thaumcraft extends GroovyPropertyContainer {
         return asGroovyCode(aspectStack.getAspect(), colored) + GroovyScriptCodeConverter.formatMultiple(aspectStack.getAmount(), colored);
     }
 
+    public static String itemStackCrystalToAspectGroovyCode(ItemStack itemStack, boolean colored) {
+        if (itemStack.getItem() != ItemsTC.crystalEssence) return null;
+        var aspects = ((IEssentiaContainerItem) ItemsTC.crystalEssence).getAspects(itemStack);
+        return aspects.size() > 0 ? asGroovyCode(aspects.getAspects()[0], colored) : null;
+    }
+
     @Override
     public void initialize(GroovyContainer<?> container) {
         container.objectMapperBuilder("aspect", AspectStack.class)
                 .parser(IObjectParser.wrapStringGetter(Thaumcraft::getAspect, AspectStack::new))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
                 .docOfType("aspect stack")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
         container.objectMapperBuilder("crystal", ItemStack.class)
                 .parser(IObjectParser.wrapStringGetter(Thaumcraft::getAspect, ThaumcraftApiHelper::makeCrystal))
                 .completerOfNames(thaumcraft.api.aspects.Aspect.aspects::keySet)
                 .defaultValue(() -> ItemStack.EMPTY)
                 .docOfType("aspect crystal as item stack")
+                .toGroovyCode(x -> itemStackCrystalToAspectGroovyCode(x, false))
                 .register();
         ExpansionHelper.mixinClass(ItemStack.class, AspectItemStackExpansion.class);
         ExpansionHelper.mixinClass(ItemStack.class, WarpItemStackExpansion.class);

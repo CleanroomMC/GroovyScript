@@ -45,12 +45,14 @@ public class ObjectMapper<T> extends AbstractObjectMapper<T> {
     private final Supplier<Result<T>> defaultValue;
     private final Completer completer;
     private final TextureBinder<T> textureBinder;
+    private final Function<T, String> toGroovyCode;
     private final Function<T, List<String>> tooltip;
 
-    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation, TextureBinder<T> textureBinder, Function<T, List<String>> tooltip) {
+    private ObjectMapper(String name, GroovyContainer<?> mod, IObjectParser<T> handler, Supplier<Result<T>> defaultValue, Class<T> returnType, List<Class<?>[]> paramTypes, Completer completer, String documentation, TextureBinder<T> textureBinder, Function<T, String> toGroovyCode, Function<T, List<String>> tooltip) {
         super(name, mod, returnType);
         this.handler = handler;
         this.defaultValue = defaultValue;
+        this.toGroovyCode = toGroovyCode;
         this.tooltip = tooltip;
         this.completer = completer;
         this.documentation = documentation;
@@ -86,6 +88,11 @@ public class ObjectMapper<T> extends AbstractObjectMapper<T> {
     }
 
     @Override
+    public String getGroovyCode(T t) {
+        return this.toGroovyCode == null ? null : this.toGroovyCode.apply(t);
+    }
+
+    @Override
     public @NotNull List<String> getTooltip(T t) {
         if (this.tooltip != null) {
             return this.tooltip.apply(t);
@@ -111,6 +118,7 @@ public class ObjectMapper<T> extends AbstractObjectMapper<T> {
         private Supplier<Result<T>> defaultValue;
         private final Class<T> returnType;
         private final List<Class<?>[]> paramTypes = new ArrayList<>();
+        private Function<T, String> toGroovyCode;
         private Completer completer;
         private String documentation;
         private TextureBinder<T> textureBinder;
@@ -245,6 +253,17 @@ public class ObjectMapper<T> extends AbstractObjectMapper<T> {
         }
 
         /**
+         * Sets toGroovyCode. If present, this is what converts an object into a String representing the code that would reproduce that object. Default is null.
+         * 
+         * @param toGroovyCode a function that converts the output into the code that would create that output
+         * @return this builder
+         */
+        public Builder<T> toGroovyCode(Function<T, String> toGroovyCode) {
+            this.toGroovyCode = toGroovyCode;
+            return this;
+        }
+
+        /**
          * Adds a method signature. This is only used by LSP to provide helpful tooltips.
          *
          * @param paramTypes parameter types
@@ -349,6 +368,7 @@ public class ObjectMapper<T> extends AbstractObjectMapper<T> {
                     this.completer,
                     this.documentation,
                     this.textureBinder,
+                    this.toGroovyCode,
                     this.tooltip);
             ObjectMapperManager.registerObjectMapper(mapper);
         }

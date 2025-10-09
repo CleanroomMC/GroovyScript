@@ -25,123 +25,124 @@
 // A hash map of curse maven mods to debug options that will enable it in runtime.
 // Anything that should be handled differently than always being "compileOnly" and also being "runtimeOnly" when debug enabled
 // should be handled in the main dependencies function.
-// Sorted by alphabetical name of the `project.debug_[this]` value
-final def mod_dependencies = [
-        'actually-additions-228404:3117927'                   : [project.debug_actually_additions],
-        'additionalenchantedminer-282837:3851282'             : [project.debug_additional_enchanted_miner],
-        'advancedmortars-283777:2780626'                      : [project.debug_adv_mortars],
-        'advanced-rocketry-236542:4671856'                    : [project.debug_advanced_rocketry],
-        'libvulpes-236541:3801015'                            : [project.debug_advanced_rocketry],
-        'aether-255308:3280119'                               : [project.debug_aether],
-        'alchemistry-293425:3186612'                          : [project.debug_alchemistry],
-        'alchemylib-293426:2761706'                           : [project.debug_alchemistry],
-        'shadowfacts-forgelin-248453:2785465'                 : [project.debug_alchemistry, project.debug_future_mc, project.debug_industrial_foregoing, project.debug_magneticraft],
-        'ae2-extended-life-570458:4553942'                    : [project.debug_applied_energistics_2, project.debug_lazy_ae2],
-        'arcane-archives-311357:3057332'                      : [project.debug_arcane_archives],
-        'guidebook-253874:2989594'                            : [project.debug_arcane_archives],
-        'mystical_lib-277064:3483816'                         : [project.debug_arcane_archives, project.debug_roots],
-        'lemonlib-306926:2639879'                             : [project.debug_arcane_world, project.debug_arcane_world_rotn],
-        'arcane-world-302852:2972860'                         : [project.debug_arcane_world],
-        'arcane-world-rotn-edition-475553:3523150'            : [project.debug_arcane_world_rotn],
-        'armor-plus-237366:2952741'                           : [project.debug_armor_plus],
-        'thedragonlib-248055:2580332'                         : [project.debug_armor_plus],
-        'astralsorcery-sorcery-241721:3044416'                : [project.debug_astral],
-        'baubles-227083:2518667'                              : [project.debug_blood_arsenal, project.debug_astral, project.debug_botania, project.debug_botania_tweaks, project.debug_botanic_additions, project.debug_essentialcraft_4, project.debug_extra_botany, project.debug_thaum],
-        'the-aurorian-352137:4981736'                         : [project.debug_aurorian],
-        'avaritia_1_10-261348:3143349'                        : [project.debug_avaritia],
-        'atum-2-59621:3116599'                                : [project.debug_atum],
-        'better-with-addons-268326:2899407'                   : [project.debug_better_with_addons],
-        'bwm-core-294335:2624990'                             : [project.debug_better_with_addons, project.debug_better_with_mods],
-        'bwm-suite-246760:3289033'                            : [project.debug_better_with_addons, project.debug_better_with_mods],
-        'blood-arsenal-228823:2904183'                        : [project.debug_blood_arsenal],
-        'blood-magic-224791:2822288'                          : [project.debug_blood_arsenal, project.debug_blood_magic],
-        'guide-api-228832:2645992'                            : [project.debug_blood_arsenal, project.debug_blood_magic, project.debug_woot],
-        'botania-225643:3330934'                              : [project.debug_botania, project.debug_botania_tweaks, project.debug_botanic_additions, project.debug_extra_botany],
-        'botania-tweaks-295114:3092102'                       : [project.debug_botania_tweaks],
-        'botanic-additions-310637:2939405'                    : [project.debug_botanic_additions],
-        'hammer-lib-247401:5259462'                           : [project.debug_botanic_additions],
-        'calculator-225104:2847174'                           : [project.debug_calculator],
-        'sonar-core-239418:2645156'                           : [project.debug_calculator],
-        'chisel-235279:2915375'                               : [project.debug_chisel],
-        'ctm-267602:2915363'                                  : [project.debug_chisel],
-        'compact-machines-224218:2707509'                     : [project.debug_compact_machines],
-        'cyclic-239286:4075832'                               : [project.debug_cyclic],
-        'brandons_core-231382:3408276'                        : [project.debug_draconic_evolution],
-        'draconic_evolution-223565:3431261'                   : [project.debug_draconic_evolution],
-        'redstone_flux-270789:2920436'                        : [project.debug_draconic_evolution, project.debug_thermal],
-        'the-erebus-220698:3211974'                           : [project.debug_erebus],
-        'essentialcraft-4-unofficial-254817:5416404'          : [project.debug_essentialcraft_4],
-        'dummycore-unofficial-266491:2611426'                 : [project.debug_essentialcraft_4],
-        'cyclops-core-232758:3159497'                         : [project.debug_evilcraft, project.debug_integrated_dynamics],
-        'evilcraft-74610:2811267'                             : [project.debug_evilcraft],
-        'cucumber-272335:2645867'                             : [project.debug_extended_crafting, project.debug_mystical_agriculture],
-        'extended-crafting-nomifactory-edition-398267:3613140': [project.debug_extended_crafting],
-        'extrabotany-299086:3112313'                          : [project.debug_extra_botany],
-        'extra-utilities-2-225561:2678374'                    : [project.debug_extra_utilities_2],
-        'factory-tech-278822:3845293'                         : [project.debug_factory_tech],
-        'forestry-59751:2918418'                              : [project.debug_forestry],
-        'future-mc-310059:5626387'                            : [project.debug_future_mc],
-        'horse-power-270466:2705433'                          : [project.debug_horse_power],
-        'llibrary-243298:2504999'                             : [project.debug_ice_and_fire_old, project.debug_ice_and_fire_rotn],
-        'immersive_engineering-231951:2974106'                : [project.debug_immersive_engineering, project.debug_immersive_petroleum, project.debug_immersive_technology],
-        'immersive-petroleum-268250:3382321'                  : [project.debug_immersive_petroleum],
-        'mct-immersive-technology-359407:5108047'             : [project.debug_immersive_technology],
-        'tesla-core-lib-254602:3438487'                       : [project.debug_industrial_foregoing],
-        'industrialforegoing-266515:2745321'                  : [project.debug_industrial_foregoing],
-        'inspirations-284007:2843007'                         : [project.debug_inspirations],
-        'mantle-74924:2713386'                                : [project.debug_inspirations, project.debug_tinkers],
-        'common-capabilities-247007:3053017'                  : [project.debug_integrated_dynamics],
-        'integrated-dynamics-236307:3159505'                  : [project.debug_integrated_dynamics],
-        'lazy-ae2-322347:3254160'                             : [project.debug_lazy_ae2],
-        'libnine-322344:3509087'                              : [project.debug_lazy_ae2],
-        'magneticraft-224808:3791484'                         : [project.debug_magneticraft],
-        'modelloader-277663:2744735'                          : [project.debug_magneticraft],
-        'mekanism-268560:2835175'                             : [project.debug_mekanism],
-        'mystical_agriculture-246640:2704562'                 : [project.debug_mystical_agriculture],
-        'natures-aura-306626:2882138'                         : [project.debug_natures_aura],
-        'packmode-278398:2567799'                             : [project.debug_packmode],
-        'primal-tech-290612:2801696'                          : [project.debug_primal_tech],
-        'pneumaticcraft-repressurized-281849:2978408'         : [project.debug_pneumaticcraft],
-        'projecte-226410:2702991'                             : [project.debug_projecte],
-        'athenaeum-284350:4633750'                            : [project.debug_pyrotech],
-        'pyrotech-306676:4956838'                             : [project.debug_pyrotech],
-        'random-things-59816:2905241'                         : [project.debug_random_things],
-        'mystical_world-282940:3460961'                       : [project.debug_roots],
-        'patchouli-306770:3162874'                            : [project.debug_roots, project.debug_natures_aura, project.debug_prodigytech],
-        'prodigytech-297414:2769520'                          : [project.debug_prodigytech],
-        'roots-246183:3905074'                                : [project.debug_roots],
-        'rustic-256141:3107974'                               : [project.debug_rustic],
-        'silents-gems-220311:2804966'                         : [project.debug_silents_gems],
-        'silents-lib-242998:2851111'                          : [project.debug_silents_gems],
-        'reborncore-237903:3330308'                           : [project.debug_tech_reborn],
-        'techreborn-233564:2966851'                           : [project.debug_tech_reborn],
-        'thaumcraft-223628:2629023'                           : [project.debug_thaum],
-        'cofh_core-69162:2920433'                             : [project.debug_thermal],
-        'cofh_world-271384:2920434'                           : [project.debug_thermal],
-        'thermal_expansion-69163:2926431'                     : [project.debug_thermal],
-        'thermal_foundation-222880:2926428'                   : [project.debug_thermal],
-        'constructs-armory-287683:3174535'                    : [project.debug_tinkers],
-        'tinkers-complement-272671:2843439'                   : [project.debug_tinkers],
-        'tinkers_construct-74072:2902483'                     : [project.debug_tinkers],
-        'woot-244049:2712670'                                 : [project.debug_woot],
+// Sorted alphabetically.
+final Map<String, List<String>> mod_dependencies = [
+        'actually-additions-228404:3117927'                   : [debug_actually_additions],
+        'additionalenchantedminer-282837:3851282'             : [debug_additional_enchanted_miner],
+        'advanced-rocketry-236542:4671856'                    : [debug_advanced_rocketry],
+        'advancedmortars-283777:2780626'                      : [debug_advanced_mortars],
+        'ae2-extended-life-570458:4553942'                    : [debug_applied_energistics_2, debug_lazy_ae2],
+        'aether-255308:3280119'                               : [debug_aether],
+        'alchemistry-293425:3186612'                          : [debug_alchemistry],
+        'alchemylib-293426:2761706'                           : [debug_alchemistry],
+        'arcane-archives-311357:3057332'                      : [debug_arcane_archives],
+        'arcane-world-302852:2972860'                         : [debug_arcane_world],
+        'arcane-world-rotn-edition-475553:3523150'            : [debug_arcane_world_rotn],
+        'armor-plus-237366:2952741'                           : [debug_armor_plus],
+        'astralsorcery-sorcery-241721:3044416'                : [debug_astral],
+        'athenaeum-284350:4633750'                            : [debug_pyrotech],
+        'atum-2-59621:3116599'                                : [debug_atum_2],
+        'avaritia_1_10-261348:3143349'                        : [debug_avaritia],
+        'baubles-227083:2518667'                              : [debug_blood_arsenal, debug_astral, debug_bewitchment, debug_botania, debug_botania_tweaks, debug_botanic_additions, debug_essentialcraft_4, debug_extra_botany, debug_thaumcraft],
+        'better-with-addons-268326:2899407'                   : [debug_better_with_addons],
+        'bewitchment-legacy-285439:6379256'                   : [debug_bewitchment],
+        'blood-arsenal-228823:2904183'                        : [debug_blood_arsenal],
+        'blood-magic-224791:2822288'                          : [debug_blood_arsenal, debug_blood_magic],
+        'botania-225643:3330934'                              : [debug_botania, debug_botania_tweaks, debug_botanic_additions, debug_extra_botany],
+        'botania-tweaks-295114:3092102'                       : [debug_botania_tweaks],
+        'botanic-additions-310637:2939405'                    : [debug_botanic_additions],
+        'brandons_core-231382:3408276'                        : [debug_draconic_evolution],
+        'bwm-core-294335:2624990'                             : [debug_better_with_addons, debug_better_with_mods],
+        'bwm-suite-246760:3289033'                            : [debug_better_with_addons, debug_better_with_mods],
+        'calculator-225104:2847174'                           : [debug_calculator],
+        'chisel-235279:2915375'                               : [debug_chisel],
+        'cofh_core-69162:2920433'                             : [debug_thermal_expansion],
+        'cofh_world-271384:2920434'                           : [debug_thermal_expansion],
+        'common-capabilities-247007:3053017'                  : [debug_integrated_dynamics],
+        'compact-machines-224218:2707509'                     : [debug_compact_machines],
+        'constructs-armory-287683:3174535'                    : [debug_tinkers_construct],
+        'ctm-267602:2915363'                                  : [debug_chisel],
+        'cucumber-272335:2645867'                             : [debug_extended_crafting, debug_mystical_agriculture],
+        'cyclic-239286:4075832'                               : [debug_cyclic],
+        'cyclops-core-232758:3159497'                         : [debug_evilcraft, debug_integrated_dynamics],
+        'draconic_evolution-223565:3431261'                   : [debug_draconic_evolution],
+        'dummycore-unofficial-266491:2611426'                 : [debug_essentialcraft_4],
+        'essentialcraft-4-unofficial-254817:5416404'          : [debug_essentialcraft_4],
+        'evilcraft-74610:2811267'                             : [debug_evilcraft],
+        'extended-crafting-nomifactory-edition-398267:3613140': [debug_extended_crafting],
+        'extra-utilities-2-225561:2678374'                    : [debug_extra_utilities_2],
+        'extrabotany-299086:3112313'                          : [debug_extra_botany],
+        'factory-tech-278822:3845293'                         : [debug_factory_tech],
+        'forestry-59751:2918418'                              : [debug_forestry],
+        'future-mc-310059:5626387'                            : [debug_future_mc],
+        'guide-api-228832:2645992'                            : [debug_blood_arsenal, debug_blood_magic, debug_woot],
+        'guidebook-253874:2989594'                            : [debug_arcane_archives],
+        'hammer-lib-247401:5259462'                           : [debug_botanic_additions],
+        'horse-power-270466:2705433'                          : [debug_horse_power],
+        'immersive-petroleum-268250:3382321'                  : [debug_immersive_petroleum],
+        'immersive_engineering-231951:2974106'                : [debug_immersive_engineering, debug_immersive_petroleum, debug_immersive_technology],
+        'industrialforegoing-266515:2745321'                  : [debug_industrial_foregoing],
+        'inspirations-284007:2843007'                         : [debug_inspirations],
+        'integrated-dynamics-236307:3159505'                  : [debug_integrated_dynamics],
+        'lazy-ae2-322347:3254160'                             : [debug_lazy_ae2],
+        'lemonlib-306926:2639879'                             : [debug_arcane_world, debug_arcane_world_rotn],
+        'libnine-322344:3509087'                              : [debug_lazy_ae2],
+        'libvulpes-236541:3801015'                            : [debug_advanced_rocketry],
+        'llibrary-243298:2504999'                             : [debug_ice_and_fire_old, debug_ice_and_fire_rotn],
+        'magneticraft-224808:3791484'                         : [debug_magneticraft],
+        'mantle-74924:2713386'                                : [debug_inspirations, debug_tinkers_construct],
+        'mct-immersive-technology-359407:5108047'             : [debug_immersive_technology],
+        'mekanism-268560:2835175'                             : [debug_mekanism],
+        'modelloader-277663:2744735'                          : [debug_magneticraft],
+        'mystical_agriculture-246640:2704562'                 : [debug_mystical_agriculture],
+        'mystical_lib-277064:3483816'                         : [debug_arcane_archives, debug_roots],
+        'mystical_world-282940:3460961'                       : [debug_roots],
+        'natures-aura-306626:2882138'                         : [debug_natures_aura],
+        'packmode-278398:2567799'                             : [debug_packmode],
+        'patchouli-306770:3162874'                            : [debug_bewitchment, debug_roots, debug_natures_aura, debug_prodigytech],
+        'pneumaticcraft-repressurized-281849:2978408'         : [debug_pneumaticcraft],
+        'primal-tech-290612:2801696'                          : [debug_primal_tech],
+        'prodigytech-297414:2769520'                          : [debug_prodigytech],
+        'projecte-226410:2702991'                             : [debug_projecte],
+        'pyrotech-306676:4956838'                             : [debug_pyrotech],
+        'random-things-59816:2905241'                         : [debug_random_things],
+        'reborncore-237903:3330308'                           : [debug_tech_reborn],
+        'redstone_flux-270789:2920436'                        : [debug_draconic_evolution, debug_thermal_expansion],
+        'roots-246183:3905074'                                : [debug_roots],
+        'rustic-256141:3107974'                               : [debug_rustic],
+        'shadowfacts-forgelin-248453:2785465'                 : [debug_alchemistry, debug_future_mc, debug_industrial_foregoing, debug_magneticraft],
+        'silents-gems-220311:2804966'                         : [debug_silents_gems],
+        'silents-lib-242998:2851111'                          : [debug_silents_gems],
+        'sonar-core-239418:2645156'                           : [debug_calculator],
+        'techreborn-233564:2966851'                           : [debug_tech_reborn],
+        'tesla-core-lib-254602:3438487'                       : [debug_industrial_foregoing],
+        'thaumcraft-223628:2629023'                           : [debug_thaumcraft],
+        'the-aurorian-352137:4981736'                         : [debug_aurorian],
+        'the-erebus-220698:3211974'                           : [debug_erebus],
+        'thedragonlib-248055:2580332'                         : [debug_armor_plus],
+        'thermal_expansion-69163:2926431'                     : [debug_thermal_expansion],
+        'thermal_foundation-222880:2926428'                   : [debug_thermal_expansion],
+        'tinkers-complement-272671:2843439'                   : [debug_tinkers_construct],
+        'tinkers_construct-74072:2902483'                     : [debug_tinkers_construct],
+        'woot-244049:2712670'                                 : [debug_woot],
 ]
 
 // Maps mods from CurseMaven to the properties that enable the mod.
 // These mods will be enabled at runtime, but will not be compiled.
 // Sorted alphabetically.
 final Map<String, List<String>> runtime_dependencies = [
-        'com.cleanroommc:configanytime:3.0'                 : [project.debug_universal_tweaks],
-        'curse.maven:aainfo-573154:3627065'                 : [project.debug_actually_advanced_info],
-        'curse.maven:dropt-284973:3758733'                  : [project.debug_pyrotech],
-        'curse.maven:jei-bees-248370:2490058'               : [project.debug_forestry],
-        'curse.maven:just-enough-magiculture-940521:5796192': [project.debug_erebus],
-        'curse.maven:just-enough-petroleum-291727:2549332'  : [project.debug_immersive_petroleum],
-        'curse.maven:just-enough-resources-240630:4440935'  : [project.debug_erebus],
-        'curse.maven:mouse-tweaks-unofficial-461660:5876158': [project.debug_mouse_tweaks_unofficial],
-        'curse.maven:reid-629017:5502915'                   : [project.debug_roughly_enough_ids],
-        'curse.maven:thaumic_jei-285492:2705304'            : [project.debug_thaum],
-        'curse.maven:universal-tweaks-705000:5860191'       : [project.debug_universal_tweaks],
-        'curse.maven:vintagefix-871198:5536276'             : [project.debug_vintagefix],
+        'com.cleanroommc:configanytime:3.0'                 : [dev_universal_tweaks],
+        'curse.maven:aainfo-573154:3627065'                 : [dev_actually_advanced_info],
+        'curse.maven:dropt-284973:3758733'                  : [debug_pyrotech],
+        'curse.maven:jei-bees-248370:2490058'               : [debug_forestry],
+        'curse.maven:just-enough-magiculture-940521:5796192': [debug_erebus],
+        'curse.maven:just-enough-petroleum-291727:2549332'  : [debug_immersive_petroleum],
+        'curse.maven:just-enough-resources-240630:4440935'  : [debug_erebus],
+        'curse.maven:mouse-tweaks-unofficial-461660:5876158': [dev_mouse_tweaks_unofficial],
+        'curse.maven:reid-629017:5502915'                   : [dev_roughly_enough_ids],
+        'curse.maven:thaumic_jei-285492:2705304'            : [debug_thaumcraft],
+        'curse.maven:universal-tweaks-705000:5860191'       : [dev_universal_tweaks],
+        'curse.maven:vintagefix-871198:5536276'             : [dev_vintagefix],
 ]
 
 dependencies {
@@ -166,10 +167,10 @@ dependencies {
     // api "gregtech:gregtech:2.8.10-beta", { transitive false }
 
     // compiles all mods, and selectively enables mods being debugged
-    mod_dependencies.entrySet().forEach {
-        def mod = rfg.deobf('curse.maven:' + it.key)
+    mod_dependencies.each { k, v ->
+        def mod = rfg.deobf('curse.maven:' + k)
         compileOnly mod
-        if (it.value.any { it.toBoolean() }) {
+        if (v.any { it.toBoolean() }) {
             runtimeOnly mod
         }
     }
@@ -182,7 +183,7 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:angry-pixel-the-betweenlands-mod-243363:4479688')
-    if (project.debug_betweenlands.toBoolean()) {
+    if (debug_betweenlands.toBoolean()) {
         // TODO: allow development toggling of the coremod
         //  until this is resolved, download and install the jar from
         //  https://www.curseforge.com/minecraft/mc-mods/angry-pixel-the-betweenlands-mod/files/4479688
@@ -190,13 +191,13 @@ dependencies {
     }
 
     compileOnly rfg.deobf('curse.maven:better-with-everything-896908:5202745')
-    if (!(project.debug_better_with_addons.toBoolean() || project.debug_better_with_mods.toBoolean()) && project.debug_better_with_everything.toBoolean()) {
+    if (!(debug_better_with_addons.toBoolean() || debug_better_with_mods.toBoolean()) && debug_better_with_everything.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:better-with-everything-896908:5202745')
     }
 
     compileOnly 'com.enderio:endercore:0.5.78'
     compileOnly 'crazypants:enderio:5.3.72'
-    if (project.debug_enderio.toBoolean()) {
+    if (debug_enderio.toBoolean()) {
         runtimeOnly 'com.enderio:endercore:0.5.78'
         runtimeOnly 'crazypants:enderio:5.3.72'
     }
@@ -204,23 +205,23 @@ dependencies {
     // WARNING: rotn must be placed before normal, otherwise you will not be able to properly detect sources for the LightningForge
     compileOnly rfg.deobf('curse.maven:ice-and-fire-rotn-edition-457668:5738729')
     compileOnly rfg.deobf('curse.maven:iceandfire-264231:2939529')
-    if (project.debug_ice_and_fire_rotn.toBoolean()) {
+    if (debug_ice_and_fire_rotn.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:ice-and-fire-rotn-edition-457668:5738729')
-    } else if (project.debug_ice_and_fire_old.toBoolean()) {
+    } else if (debug_ice_and_fire_old.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:iceandfire-264231:2939529')
     }
 
     // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either. Check FluidGenerator compat to confirm
     compileOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
     compileOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
-    if (project.debug_industrial_craft_2_experimental.toBoolean()) {
+    if (debug_industrial_craft_2_experimental.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:industrialcraft_experimental-242638:3838713')
-    } else if (project.debug_industrial_craft_2_classic.toBoolean()) {
+    } else if (debug_industrial_craft_2_classic.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:industrialcraft_classic-242942:3093607')
     }
 
     compileOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
-    if (project.debug_tech_reborn.toBoolean()) {
+    if (debug_tech_reborn.toBoolean()) {
         runtimeOnly rfg.deobf('TechReborn:TechReborn-ModCompatibility-1.12.2:1.4.0.76:universal')
     }
 

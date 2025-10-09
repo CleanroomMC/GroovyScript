@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.mapper;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.Result;
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
@@ -57,7 +56,7 @@ public class ObjectMappers {
         return Result.some(new ResourceLocation(GroovyScript.getRunConfig().getPackId(), mainArg));
     }
 
-    public static @NotNull Result<IIngredient> parseOreDict(String mainArg, Object... args) {
+    public static @NotNull Result<OreDictIngredient> parseOreDict(String mainArg, Object... args) {
         if (args.length > 0) {
             return Result.error("Arguments not valid for object mapper. Use 'ore(String)'");
         }

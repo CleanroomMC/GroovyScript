@@ -7,9 +7,7 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.device.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.dynamo.*;
 import com.cleanroommc.groovyscript.compat.mods.thermalexpansion.machine.*;
-
-import java.util.Arrays;
-import java.util.Locale;
+import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 
 public class ThermalExpansion extends GroovyPropertyContainer {
 
@@ -53,8 +51,9 @@ public class ThermalExpansion extends GroovyPropertyContainer {
     public void initialize(GroovyContainer<?> container) {
         container.objectMapperBuilder("compactorMode", CompactorManager.Mode.class)
                 .parser(IObjectParser.wrapEnum(CompactorManager.Mode.class, false))
-                .completerOfNamed(() -> Arrays.asList(CompactorManager.Mode.values()), v -> v.name().toUpperCase(Locale.ROOT))
+                .completerOfEnum(CompactorManager.Mode.class, false)
                 .defaultValue(() -> CompactorManager.Mode.ALL)
+                .toGroovyCode(x -> GroovyScriptCodeConverter.formatGenericHandler("compactorMode", x.name(), false))
                 .register();
     }
 }

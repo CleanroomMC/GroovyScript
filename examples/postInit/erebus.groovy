@@ -10,7 +10,7 @@ log.info 'mod \'erebus\' detected, running script'
 // takes 10 seconds, and is fueled by erebus wall plants.
 
 // mods.erebus.composter.removeFromBlacklist(item('erebus:wall_plants', 1))
-mods.erebus.composter.removeFromMaterial(material('sponge'))
+mods.erebus.composter.removeFromMaterial(blockmaterial('sponge'))
 mods.erebus.composter.removeFromRegistry(item('minecraft:stick'))
 // mods.erebus.composter.removeAllFromBlacklist()
 // mods.erebus.composter.removeAllFromMaterial()
@@ -18,7 +18,7 @@ mods.erebus.composter.removeFromRegistry(item('minecraft:stick'))
 
 mods.erebus.composter.addBlacklist(item('erebus:wall_plants', 7))
 mods.erebus.composter.addBlacklist(item('erebus:wall_plants_cultivated', 7))
-mods.erebus.composter.addMaterial(material('tnt'))
+mods.erebus.composter.addMaterial(blockmaterial('tnt'))
 mods.erebus.composter.addRegistry(item('minecraft:gold_ingot'))
 
 // Offering Altar:

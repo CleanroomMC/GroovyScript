@@ -56,6 +56,7 @@ public class Botania extends GroovyPropertyContainer {
                 .completerOfNames(() -> BotaniaAPI.brewMap.keySet())
                 .defaultValue(() -> BotaniaAPI.fallbackBrew)
                 .docOfType("brew")
+                .toGroovyCode(x -> asGroovyCode(x, false))
                 .register();
 
         InfoParserRegistry.addInfoParser(InfoParserBrew.instance);
