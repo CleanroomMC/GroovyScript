@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumHand;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,10 +21,5 @@ public class InfoHandCommand extends BaseInfoCommand {
     void gatherInfo(InfoParserPackage info, EntityPlayer player) {
         info.setStack(player.getHeldItem(EnumHand.MAIN_HAND));
         if (info.getStack().isEmpty()) info.setStack(player.getHeldItem(EnumHand.OFF_HAND));
-
-        if (info.getStack().getItem() instanceof ItemBlock itemBlock) {
-            info.setBlock(itemBlock.getBlock());
-            info.setBlockState(itemBlock.getBlock().getStateFromMeta(info.getStack().getMetadata()));
-        }
     }
 }

@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
+import com.cleanroommc.groovyscript.helper.RayTracingHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,9 +20,9 @@ public class InfoLookingCommand extends BaseInfoCommand {
     @Override
     void gatherInfo(InfoParserPackage info, EntityPlayer player) {
         // get the entity being looked at and then the block position because entity should be preferred
-        info.setEntity(getEntityLookingAt(player));
+        info.setEntity(RayTracingHelper.getEntityLookingAt(player));
         if (info.getEntity() == null) {
-            info.copyFromPos(getBlockLookingAt(player));
+            info.copyFromPos(RayTracingHelper.getBlockLookingAt(player));
         }
     }
 }

@@ -1,15 +1,18 @@
 package com.cleanroommc.groovyscript.api.infocommand;
 
+import com.cleanroommc.groovyscript.event.GsHandEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,6 +106,10 @@ public class InfoParserPackage {
 
     public void setStack(@NotNull ItemStack stack) {
         this.stack = stack;
+        if (!stack.isEmpty() && stack.getItem() instanceof ItemBlock itemBlock) {
+            setBlock(itemBlock.getBlock());
+            setBlockState(itemBlock.getBlock().getStateFromMeta(stack.getMetadata()));
+        }
     }
 
     public boolean isPrettyNbt() {
@@ -165,6 +172,8 @@ public class InfoParserPackage {
     }
 
     public void parse(boolean enabled) {
+        MinecraftForge.EVENT_BUS.post(new GsHandEvent(this));
+
         InfoParserRegistry.getInfoParsers().forEach(x -> x.parse(this, enabled));
     }
 }

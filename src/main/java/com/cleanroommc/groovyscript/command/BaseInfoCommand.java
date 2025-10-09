@@ -2,22 +2,14 @@ package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserRegistry;
-import com.cleanroommc.groovyscript.event.GsHandEvent;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
-import com.google.common.base.Predicates;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,56 +19,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class BaseInfoCommand extends CommandBase {
-
-    /**
-     * gets the block being looked at, stopping on fluid blocks
-     */
-    protected static BlockPos getBlockLookingAt(EntityPlayer player) {
-        double distance = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
-        Vec3d eyes = player.getPositionEyes(0.0F);
-        Vec3d look = player.getLook(0.0F);
-        Vec3d end = eyes.add(look.x * distance, look.y * distance, look.z * distance);
-
-        RayTraceResult result = player.getEntityWorld().rayTraceBlocks(eyes, end, true);
-        if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-            return result.getBlockPos();
-        }
-        return null;
-    }
-
-    /**
-     * gets the closest entity being looked at
-     */
-    protected static Entity getEntityLookingAt(EntityPlayer player) {
-        Entity entity = null;
-        double d0 = 0.0D;
-
-        double distance = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
-        Vec3d eyes = player.getPositionEyes(0.0F);
-        Vec3d look = player.getLook(0.0F);
-        Vec3d end = eyes.add(look.x * distance, look.y * distance, look.z * distance);
-
-        List<Entity> list = player.world.getEntitiesInAABBexcluding(
-                player,
-                player.getEntityBoundingBox()
-                        .expand(look.x * distance, look.y * distance, look.z * distance)
-                        .grow(1.0D, 1.0D, 1.0D),
-                Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
-
-        for (Entity entity1 : list) {
-            AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.3);
-            RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(eyes, end);
-
-            if (raytraceresult != null) {
-                double d1 = eyes.squareDistanceTo(raytraceresult.hitVec);
-                if (d1 < d0 || d0 == 0.0D) {
-                    entity = entity1;
-                    d0 = d1;
-                }
-            }
-        }
-        return entity;
-    }
 
     @Override
     public @NotNull String getUsage(@NotNull ICommandSender sender) {
@@ -140,9 +82,6 @@ public abstract class BaseInfoCommand extends CommandBase {
 
             // add different data to the info parser depending on the command being used
             gatherInfo(info, player);
-
-            GsHandEvent event = new GsHandEvent(info);
-            MinecraftForge.EVENT_BUS.post(event);
 
             info.parse(enabled);
             print(player, messages, argList);

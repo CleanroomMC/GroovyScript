@@ -15,11 +15,10 @@ import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHoo
 import com.cleanroommc.groovyscript.event.EventHandler;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
+import com.cleanroommc.groovyscript.keybinds.GroovyScriptKeybinds;
 import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
-import com.cleanroommc.groovyscript.network.CReload;
 import com.cleanroommc.groovyscript.network.NetworkHandler;
-import com.cleanroommc.groovyscript.network.NetworkUtils;
 import com.cleanroommc.groovyscript.registry.ReloadableRegistryManager;
 import com.cleanroommc.groovyscript.sandbox.*;
 import com.cleanroommc.groovyscript.sandbox.mapper.GroovyDeobfMapper;
@@ -30,19 +29,15 @@ import com.google.gson.JsonObject;
 import groovy.lang.GroovySystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.item.Item;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.settings.KeyConflictContext;
-import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
@@ -52,14 +47,14 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,9 +89,6 @@ public class GroovyScript {
     private static ModContainer scriptMod;
     private static Thread languageServerThread;
 
-    private static KeyBinding reloadKey;
-    private static long timeSinceLastUse;
-
     public static final Random RND = new Random();
 
     @Mod.EventHandler
@@ -116,21 +108,28 @@ public class GroovyScript {
         GroovyScript.sandbox = new GroovyScriptSandbox();
         ModSupport.INSTANCE.setup(event.getASMHarvestedData());
 
-        if (NetworkUtils.isDedicatedClient()) {
-            // this resource pack must be added in construction
-            ((DefaultResourcePackAccessor) Minecraft.getMinecraft()).get().add(new GroovyResourcePack());
-            reloadKey = new KeyBinding("key.groovyscript.reload", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_R, "key.categories.groovyscript");
-            ClientRegistry.registerKeyBinding(reloadKey);
-        }
-
         FluidRegistry.enableUniversalBucket();
         getRunConfig().initPackmode();
     }
 
     @Mod.EventHandler
+    @SideOnly(Side.CLIENT)
+    public void onClientConstruction(FMLConstructionEvent event) {
+        MinecraftForge.EVENT_BUS.register(GroovyScriptKeybinds.class);
+        // this resource pack must be added in construction
+        ((DefaultResourcePackAccessor) Minecraft.getMinecraft()).get().add(new GroovyResourcePack());
+    }
+
+    @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
         if (ModSupport.TINKERS_CONSTRUCT.isLoaded()) TinkersConstruct.init();
-        if (event.getSide().isClient() && Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
+    }
+
+    @Mod.EventHandler
+    @SideOnly(Side.CLIENT)
+    public void onClientInit(FMLInitializationEvent event) {
+        GroovyScriptKeybinds.initialize();
+        if (Boolean.parseBoolean(System.getProperty("groovyscript.run_ls"))) {
             runLanguageServer();
         }
     }
@@ -192,15 +191,6 @@ public class GroovyScript {
     public void onServerLoad(FMLServerStartingEvent event) {
         event.registerServerCommand(new GSCommand());
         VanillaModule.INSTANCE.command.onStartServer(event.getServer());
-    }
-
-    @SubscribeEvent
-    public static void onInput(InputEvent.KeyInputEvent event) {
-        long time = Minecraft.getSystemTime();
-        if (Minecraft.getMinecraft().isIntegratedServerRunning() && reloadKey.isPressed() && time - timeSinceLastUse >= 1000 && Minecraft.getMinecraft().player.getPermissionLevel() >= 4) {
-            NetworkHandler.sendToServer(new CReload());
-            timeSinceLastUse = time;
-        }
     }
 
     public static @NotNull String getScriptPath() {
