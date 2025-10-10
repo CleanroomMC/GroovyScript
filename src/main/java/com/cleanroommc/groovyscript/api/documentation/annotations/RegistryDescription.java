@@ -1,5 +1,7 @@
 package com.cleanroommc.groovyscript.api.documentation.annotations;
 
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -71,10 +73,10 @@ public @interface RegistryDescription {
     String linkGenerator() default "";
 
     /**
-     * @return the name of the stage all the compat with the registry uses. Defaults to {@code "postInit"}
+     * @return the stage all the compat with the registry uses. Defaults to {@link LoadStage#POST_INIT}
      * @see com.cleanroommc.groovyscript.sandbox.LoadStage
      */
-    String location() default "postInit";
+    LoadStage location() default LoadStage.POST_INIT;
 
     /**
      * An override to {@link MethodDescription} or {@link RecipeBuilderDescription} declarations,

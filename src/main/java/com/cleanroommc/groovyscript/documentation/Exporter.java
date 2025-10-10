@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.resources.I18n;
 
@@ -105,7 +106,7 @@ public class Exporter {
         }
     }
 
-    public static void generateExamples(String target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+    public static void generateExamples(LoadStage target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         StringBuilder header = new StringBuilder();
         StringBuilder body = new StringBuilder();
 
@@ -125,10 +126,10 @@ public class Exporter {
             var annotation = named.getClass().getAnnotation(RegistryDescription.class);
             if (annotation == null) {
                 SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
-            } else {
-                if (annotation.location().equals(target)) {
-                    registries.add(named);
-                }
+                continue;
+            }
+            if (annotation.location() == target) {
+                registries.add(named);
             }
         }
 
@@ -153,7 +154,7 @@ public class Exporter {
                 .append(body);
 
         try {
-            File file = new File(new File(Documentation.EXAMPLES, target), mod.getModId() + ".groovy");
+            File file = new File(new File(Documentation.EXAMPLES, target.getName()), mod.getModId() + ".groovy");
             Files.write(file.toPath(), header.toString().getBytes());
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
