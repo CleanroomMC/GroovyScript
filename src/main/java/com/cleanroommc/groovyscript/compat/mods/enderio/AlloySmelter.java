@@ -152,7 +152,7 @@ public class AlloySmelter extends VirtualizedRegistry<IManyToOneRecipe> {
                 .filter(r -> r instanceof IManyToOneRecipe)
                 .map(r -> (IManyToOneRecipe) r)
                 .collect(Collectors.toList());
-        return new SimpleObjectStream<>(list)
+        return new SimpleObjectStream<>(list, false)
                 .setRemover(this::remove);
     }
 

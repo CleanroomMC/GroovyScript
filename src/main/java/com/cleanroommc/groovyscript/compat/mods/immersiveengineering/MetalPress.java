@@ -177,7 +177,7 @@ public class MetalPress extends VirtualizedRegistry<MetalPressRecipe> {
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<MetalPressRecipe> streamRecipes() {
         List<MetalPressRecipe> recipes = new ArrayList<>(MetalPressRecipe.recipeList.values());
-        return new SimpleObjectStream<>(recipes).setRemover(this::remove);
+        return new SimpleObjectStream<>(recipes, false).setRemover(this::remove);
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
