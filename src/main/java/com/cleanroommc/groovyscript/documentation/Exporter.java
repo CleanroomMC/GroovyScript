@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
-import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -25,7 +24,7 @@ public class Exporter {
 
     private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
-    public static void generateWiki(IFormat format, File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+    public static void generateWiki(File targetFolder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         List<String> fileLinks = new ArrayList<>();
 
         Set<INamed> registries = new HashSet<>();
@@ -47,7 +46,7 @@ public class Exporter {
                     String location = String.format("%s.md", registry.getName());
                     fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
                     try {
-                        File file = new File(folder, location);
+                        File file = new File(targetFolder, location);
                         Files.write(file.toPath(), example.documentationBlock().trim().concat("\n").getBytes());
                     } catch (IOException e) {
                         GroovyScript.LOGGER.throwing(e);
@@ -60,7 +59,7 @@ public class Exporter {
         StringBuilder index = new StringBuilder()
                 .append("---")
                 .append("\n")
-                .append(format.removeTableOfContentsText())
+                .append(Documentation.DEFAULT_FORMAT.removeTableOfContentsText())
                 .append("\n") // Removes the table of contents from the sidebar of indexes.
                 .append("---")
                 .append("\n\n\n")
@@ -90,15 +89,15 @@ public class Exporter {
         });
 
         try {
-            File file = new File(folder, INDEX_FILE_NAME);
+            File file = new File(targetFolder, INDEX_FILE_NAME);
             Files.write(file.toPath(), index.toString().getBytes());
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
 
-        if (format.requiresNavFile()) {
+        if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
             try {
-                File file = new File(folder, NAV_FILE_NAME);
+                File file = new File(targetFolder, NAV_FILE_NAME);
                 Files.write(file.toPath(), navigation.toString().getBytes());
             } catch (IOException e) {
                 GroovyScript.LOGGER.throwing(e);

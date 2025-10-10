@@ -71,7 +71,7 @@ public class Documentation {
                 if (!mod.isLoaded()) continue;
                 File target = new File(WIKI, mod.getModId());
                 if (target.exists() || Files.createDirectories(target.toPath()) != null) {
-                    Exporter.generateWiki(DEFAULT_FORMAT, target, mod);
+                    Exporter.generateWiki(target, mod);
                 } else {
                     GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
                 }
