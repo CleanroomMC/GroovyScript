@@ -112,11 +112,11 @@ public class Exporter {
         }
     }
 
-    public static void generateExamples(File targetFile, LoadStage target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
-        generateExamples(targetFile, target, mod, mod.get().getRegistries());
+    public static void generateExamples(File targetFile, LoadStage loadStage, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+        generateExamples(targetFile, loadStage, mod, mod.get().getRegistries());
     }
 
-    public static void generateExamples(File targetFile, LoadStage target, IGroovyContainer container, Collection<INamed> registryCollection) {
+    public static void generateExamples(File targetFile, LoadStage loadStage, IGroovyContainer container, Collection<INamed> registryCollection) {
         StringBuilder header = new StringBuilder();
         StringBuilder body = new StringBuilder();
 
@@ -138,7 +138,7 @@ public class Exporter {
                 SKIPPED_CLASSES.put(container.getModId() + "." + named.getName(), named.getClass());
                 continue;
             }
-            if (annotation.location() == target) {
+            if (annotation.location() == loadStage) {
                 registries.add(named);
             }
         }
