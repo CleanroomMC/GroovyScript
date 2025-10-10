@@ -132,6 +132,7 @@ public class ObjectMapperManager {
                 .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.materials::get))
                 .completerOfNames(ObjectParserHelper.materials::keySet)
                 .docOfType("block material")
+                .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .register();
         /*ObjectMapper.builder("blockstate", IBlockState.class)
                 .parser(ObjectMappers::parseBlockState)
