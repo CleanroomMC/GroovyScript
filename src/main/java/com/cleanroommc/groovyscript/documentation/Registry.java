@@ -1,9 +1,8 @@
 package com.cleanroommc.groovyscript.documentation;
 
+import com.cleanroommc.groovyscript.api.IGroovyContainer;
 import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.documentation.helper.AdmonitionBuilder;
 import com.cleanroommc.groovyscript.documentation.helper.CodeBlockBuilder;
 import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
@@ -28,7 +27,7 @@ public class Registry {
     public static final String BASE_ACCESS_COMPAT = "mods";
     private static final Pattern PERIOD_END_PATTERN = Pattern.compile("\\.$");
 
-    private final GroovyContainer<? extends GroovyPropertyContainer> mod;
+    private final IGroovyContainer container;
     private final INamed registry;
     private final String baseTranslationKey;
     private final String reference;
@@ -39,10 +38,10 @@ public class Registry {
     private final EnumMap<MethodDescription.Type, List<MethodAnnotation<MethodDescription>>> methods;
     private final List<String> imports = new ArrayList<>();
 
-    public Registry(GroovyContainer<? extends GroovyPropertyContainer> mod, INamed registry) {
-        this.mod = mod;
+    public Registry(IGroovyContainer container, INamed registry) {
+        this.container = container;
         this.registry = registry;
-        var location = mod.getModId() + "." + registry.getName();
+        var location = container.getModId() + "." + registry.getName();
         this.baseTranslationKey = BASE_LANG_LOCATION + "." + location;
         this.reference = BASE_ACCESS_COMPAT + "." + location;
         this.registryClass = registry.getClass();
@@ -154,7 +153,7 @@ public class Registry {
     private String generateHeader() {
         StringBuilder out = new StringBuilder();
         out.append("---\n").append("title: \"").append(getTitle()).append("\"\n");
-        if (Documentation.DEFAULT_FORMAT.hasTitleTemplate()) out.append("titleTemplate: \"").append(mod).append(" | CleanroomMC").append("\"\n");
+        if (Documentation.DEFAULT_FORMAT.hasTitleTemplate()) out.append("titleTemplate: \"").append(container).append(" | CleanroomMC").append("\"\n");
         out.append("description: \"").append(getDescription()).append("\"\n");
         String link = getFileSourceCodeLink();
         if (!link.isEmpty()) out.append("source_code_link: \"").append(link).append("\"\n");
@@ -163,7 +162,7 @@ public class Registry {
     }
 
     private String generateTitle() {
-        return String.format("# %s (%s)\n\n", getTitle(), mod);
+        return String.format("# %s (%s)\n\n", getTitle(), container);
     }
 
     private String generateDescription() {
@@ -199,7 +198,7 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n").append(I18n.format("groovyscript.wiki.import_instructions")).append("\n\n");
 
-        List<String> packages = mod.getAliases()
+        List<String> packages = container.getAliases()
                 .stream()
                 .flatMap(modID -> registry.getAliases().stream().map(alias -> String.format("%s.%s.%s", Registry.BASE_ACCESS_COMPAT, modID, alias)))
                 .collect(Collectors.toList());

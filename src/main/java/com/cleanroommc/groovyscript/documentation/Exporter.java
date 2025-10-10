@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.IGroovyContainer;
 import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
@@ -27,13 +28,17 @@ public class Exporter {
     private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
     public static void generateWiki(File targetFolder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+        generateWiki(targetFolder, mod, mod.get().getRegistries());
+    }
+
+    public static void generateWiki(File targetFolder, IGroovyContainer container, Collection<INamed> registryCollection) {
         List<String> fileLinks = new ArrayList<>();
 
         Set<INamed> registries = new HashSet<>();
-        for (INamed named : mod.get().getRegistries()) {
+        for (INamed named : registryCollection) {
             var annotation = named.getClass().getAnnotation(RegistryDescription.class);
             if (annotation == null) {
-                SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
+                SKIPPED_CLASSES.put(container.getModId() + "." + named.getName(), named.getClass());
             } else {
                 registries.add(named);
             }
@@ -44,7 +49,7 @@ public class Exporter {
         registries.stream()
                 .sorted(ComparisonHelper::iNamed)
                 .forEach(registry -> {
-                    Registry example = new Registry(mod, registry);
+                    Registry example = new Registry(container, registry);
                     String location = String.format("%s.md", registry.getName());
                     fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
                     try {
@@ -66,7 +71,7 @@ public class Exporter {
                 .append("---")
                 .append("\n\n\n")
                 .append("# ")
-                .append(mod)
+                .append(container)
                 .append("\n\n")
                 .append("## ")
                 .append(I18n.format("groovyscript.wiki.categories"))
@@ -83,7 +88,7 @@ public class Exporter {
                 .append("\n") // Removes navigation files from the search index
                 .append("---")
                 .append("\n\n\n")
-                .append(String.format("* [%s](./%s)\n", mod, INDEX_FILE_NAME));
+                .append(String.format("* [%s](./%s)\n", container, INDEX_FILE_NAME));
 
         fileLinks.forEach(line -> {
             index.append(line).append("\n\n");
@@ -108,6 +113,10 @@ public class Exporter {
     }
 
     public static void generateExamples(File targetFile, LoadStage target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+        generateExamples(targetFile, target, mod, mod.get().getRegistries());
+    }
+
+    public static void generateExamples(File targetFile, LoadStage target, IGroovyContainer container, Collection<INamed> registryCollection) {
         StringBuilder header = new StringBuilder();
         StringBuilder body = new StringBuilder();
 
@@ -118,15 +127,15 @@ public class Exporter {
                 .append("// Auto generated groovyscript example file")
                 .append("\n")
                 .append("// MODS_LOADED: ")
-                .append(mod.getModId())
+                .append(container.getModId())
                 .append("\n");
 
         // Iterate through every registry of the mod once, in alphabetical order.
         Set<INamed> registries = new HashSet<>();
-        for (INamed named : mod.get().getRegistries()) {
+        for (INamed named : registryCollection) {
             var annotation = named.getClass().getAnnotation(RegistryDescription.class);
             if (annotation == null) {
-                SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
+                SKIPPED_CLASSES.put(container.getModId() + "." + named.getName(), named.getClass());
                 continue;
             }
             if (annotation.location() == target) {
@@ -139,8 +148,8 @@ public class Exporter {
         registries.stream()
                 .sorted(ComparisonHelper::iNamed)
                 .forEach(registry -> {
-                    GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
-                    Registry example = new Registry(mod, registry);
+                    GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", container.toString(), registry.getName()).debug().post();
+                    Registry example = new Registry(container, registry);
                     imports.addAll(example.getImports());
                     body.append(example.exampleBlock());
                 });
@@ -150,7 +159,7 @@ public class Exporter {
 
         // Print that the script was loaded at the end of the header, after any imports have been added.
         header.append("\n")
-                .append(String.format(PRINT_MOD_DETECTED, mod.getModId()))
+                .append(String.format(PRINT_MOD_DETECTED, container.getModId()))
                 .append("\n\n")
                 .append(body);
 
