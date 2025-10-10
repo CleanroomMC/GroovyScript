@@ -31,12 +31,17 @@ public class Documentation {
     public static final IFormat DEFAULT_FORMAT = OutputFormat.VITEPRESS;
 
     public static void generate() {
-        if (GenerationFlags.GENERATE_EXAMPLES) generateExamples();
-        if (GenerationFlags.GENERATE_WIKI) generateWiki();
+        if (GenerationFlags.GENERATE_EXAMPLES) generateExamples(false);
+        if (GenerationFlags.GENERATE_WIKI) generateWiki(false);
+        logMissing();
         if (GenerationFlags.GENERATE_AND_CRASH) FMLCommonHandler.instance().exitJava(0, false);
     }
 
     public static void generateExamples() {
+        generateExamples(true);
+    }
+
+    private static void generateExamples(boolean log) {
         try {
             Files.createDirectories(EXAMPLES.toPath());
             for (LoadStage stage : LoadStage.getLoadStages()) {
@@ -51,10 +56,15 @@ public class Documentation {
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
-        logMissing();
+        if (log) logMissing();
     }
 
     public static void generateWiki() {
+        generateWiki(true);
+    }
+
+
+    private static void generateWiki(boolean log) {
         try {
             Files.createDirectories(WIKI.toPath());
             for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
@@ -69,7 +79,7 @@ public class Documentation {
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
-        logMissing();
+        if (log) logMissing();
     }
 
     private static void logMissing() {
