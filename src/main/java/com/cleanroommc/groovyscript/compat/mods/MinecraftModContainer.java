@@ -77,9 +77,10 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
         var minecraftCompatFolder = new File(new File(Documentation.WIKI, "minecraft"), "helpers");
         try {
             Files.createDirectories(minecraftCompatFolder.toPath());
+            Exporter.generateWiki(minecraftCompatFolder, this);
+            Exporter.exportFile(new File(minecraftCompatFolder, "index.md"), "wiki/vanilla/index.md");
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
-        Exporter.generateWiki(minecraftCompatFolder, this);
     }
 }
