@@ -17,15 +17,21 @@ public interface IContainerDocumentation {
      *
      * @param suggestedFile the default file that the example code is suggested to be generated in.
      * @param stage         the load stage the examples are being generated for.
+     * @return if the normal generation method should occur
      * @see com.cleanroommc.groovyscript.documentation.Exporter#generateExamples(File, LoadStage, GroovyContainer)
      */
-    void generateExamples(File suggestedFile, LoadStage stage);
+    default boolean generateExamples(File suggestedFile, LoadStage stage) {
+        return true;
+    }
 
     /**
      * Generate pages for the wiki in this method.
      *
      * @param suggestedFolder the default folder that the wiki is suggested to be generated in.
+     * @return if the normal generation method should occur
      * @see com.cleanroommc.groovyscript.documentation.Exporter#generateWiki(File, GroovyContainer)
      */
-    void generateWiki(File suggestedFolder);
+    default boolean generateWiki(File suggestedFolder) {
+        return true;
+    }
 }

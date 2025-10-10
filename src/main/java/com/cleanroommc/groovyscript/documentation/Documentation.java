@@ -1,7 +1,6 @@
 package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.IContainerDocumentation;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
@@ -55,9 +54,7 @@ public class Documentation {
                 for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                     if (!mod.isLoaded()) continue;
                     File file = new File(generatedFolder, mod.getModId() + ".groovy");
-                    if (mod instanceof IContainerDocumentation doc) {
-                        doc.generateExamples(file, stage);
-                    } else {
+                    if (!(mod instanceof IContainerDocumentation doc) || doc.generateExamples(file, stage)) {
                         Exporter.generateExamples(file, stage, mod);
                     }
                 }
@@ -72,7 +69,6 @@ public class Documentation {
         generateWiki(true);
     }
 
-
     private static void generateWiki(boolean log) {
         try {
             Files.createDirectories(WIKI.toPath());
@@ -80,14 +76,9 @@ public class Documentation {
             for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                 if (!mod.isLoaded()) continue;
                 File target = new File(MODS, mod.getModId());
-                if (mod instanceof IContainerDocumentation doc) {
-                    doc.generateWiki(target);
-                } else {
-                    if (target.exists() || Files.createDirectories(target.toPath()) != null) {
-                        Exporter.generateWiki(target, mod);
-                    } else {
-                        GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
-                    }
+                if (!(mod instanceof IContainerDocumentation doc) || doc.generateWiki(target)) {
+                    Files.createDirectories(target.toPath());
+                    Exporter.generateWiki(target, mod);
                 }
             }
         } catch (IOException e) {

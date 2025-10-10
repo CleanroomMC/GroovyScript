@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.api.documentation.IContainerDocumentation;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.Exporter;
-import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -68,12 +67,7 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
     public void onCompatLoaded(GroovyContainer<?> container) {}
 
     @Override
-    public void generateExamples(File suggestedFile, LoadStage stage) {
-        Exporter.generateExamples(suggestedFile, stage, this);
-    }
-
-    @Override
-    public void generateWiki(File suggestedFolder) {
+    public boolean generateWiki(File suggestedFolder) {
         var minecraftCompatFolder = new File(new File(Documentation.WIKI, "minecraft"), "helpers");
         try {
             Files.createDirectories(minecraftCompatFolder.toPath());
@@ -82,5 +76,6 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
+        return false;
     }
 }
