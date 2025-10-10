@@ -50,7 +50,8 @@ public class Documentation {
 
                 for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                     if (!mod.isLoaded()) continue;
-                    Exporter.generateExamples(stage, mod);
+                    File file = new File(new File(Documentation.EXAMPLES, target.getName()), mod.getModId() + ".groovy");
+                    Exporter.generateExamples(file, stage, mod);
                 }
             }
         } catch (IOException e) {

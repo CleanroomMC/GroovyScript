@@ -105,7 +105,7 @@ public class Exporter {
         }
     }
 
-    public static void generateExamples(LoadStage target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
+    public static void generateExamples(File targetFile, LoadStage target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
         StringBuilder header = new StringBuilder();
         StringBuilder body = new StringBuilder();
 
@@ -153,8 +153,7 @@ public class Exporter {
                 .append(body);
 
         try {
-            File file = new File(new File(Documentation.EXAMPLES, target.getName()), mod.getModId() + ".groovy");
-            Files.write(file.toPath(), header.toString().getBytes());
+            Files.write(targetFile.toPath(), header.toString().getBytes());
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
