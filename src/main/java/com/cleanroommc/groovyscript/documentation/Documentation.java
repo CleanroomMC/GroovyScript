@@ -45,12 +45,14 @@ public class Documentation {
         try {
             Files.createDirectories(EXAMPLES.toPath());
             for (LoadStage stage : LoadStage.getLoadStages()) {
-                File target = new File(EXAMPLES, stage.getName());
-                Files.createDirectories(target.toPath());
+                File stageFolder = new File(EXAMPLES, stage.getName());
+                File generatedFolder = new File(stageFolder, "generated");
+                Files.createDirectories(stageFolder.toPath());
+                Files.createDirectories(generatedFolder.toPath());
 
                 for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                     if (!mod.isLoaded()) continue;
-                    File file = new File(new File(Documentation.EXAMPLES, target.getName()), mod.getModId() + ".groovy");
+                    File file = new File(generatedFolder, mod.getModId() + ".groovy");
                     Exporter.generateExamples(file, stage, mod);
                 }
             }
