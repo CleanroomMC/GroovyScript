@@ -29,9 +29,6 @@ public class Registry {
 
     private final IGroovyContainer container;
     private final INamed registry;
-    private final String baseTranslationKey;
-    private final String reference;
-    private final Class<?> registryClass;
     private final RegistryDescription description;
     private final Map<String, String> types;
     private final List<Builder> recipeBuilders;
@@ -41,13 +38,9 @@ public class Registry {
     public Registry(IGroovyContainer container, INamed registry) {
         this.container = container;
         this.registry = registry;
-        var location = container.getModId() + "." + registry.getName();
-        this.baseTranslationKey = BASE_LANG_LOCATION + "." + location;
-        this.reference = BASE_ACCESS_COMPAT + "." + location;
-        this.registryClass = registry.getClass();
-        this.description = registryClass.getAnnotation(RegistryDescription.class);
-        this.types = generateTypes(registryClass);
-        var methodSignatures = generateOfClass(registryClass);
+        this.description = registry.getClass().getAnnotation(RegistryDescription.class);
+        this.types = generateTypes(registry.getClass());
+        var methodSignatures = generateOfClass(registry.getClass());
 
         List<MethodAnnotation<RecipeBuilderDescription>> recipeBuilderMethods = new ArrayList<>();
         this.methods = new EnumMap<>(MethodDescription.Type.class);
@@ -61,6 +54,7 @@ public class Registry {
             methods.get(entry.annotation().type()).add(entry);
             addImports(entry.annotation().example());
         }
+        var location = container.getModId() + "." + registry.getName();
         this.recipeBuilders = recipeBuilderMethods
                 .stream()
                 .sorted(ComparisonHelper::recipeBuilder)
@@ -101,6 +95,14 @@ public class Registry {
         return methodSignatures;
     }
 
+    private String getBaseLangKey() {
+        return BASE_LANG_LOCATION + "." + container.getModId() + "." + registry.getName();
+    }
+
+    private String getReference() {
+        return BASE_ACCESS_COMPAT + "." + container.getModId() + "." + registry.getName();
+    }
+
     private void addImports(Example... examples) {
         for (var example : examples) Collections.addAll(imports, example.imports());
     }
@@ -110,16 +112,16 @@ public class Registry {
     }
 
     public String getFileSourceCodeLink() {
-        return LinkGeneratorHooks.convert(description.linkGenerator(), registryClass);
+        return LinkGeneratorHooks.convert(description.linkGenerator(), registry.getClass());
     }
 
     public String getTitle() {
-        return LangHelper.translate(description.title().isEmpty() ? String.format("%s.title", baseTranslationKey) : description.title());
+        return LangHelper.translate(description.title().isEmpty() ? String.format("%s.title", getBaseLangKey()) : description.title());
     }
 
     public String getDescription() {
         return LangHelper.ensurePeriod(
-                LangHelper.translate(description.description().isEmpty() ? String.format("%s.description", baseTranslationKey) : description.description())
+                LangHelper.translate(description.description().isEmpty() ? String.format("%s.description", getBaseLangKey()) : description.description())
                         .replace("\"", "\\\""));
     }
 
@@ -203,8 +205,8 @@ public class Registry {
                 .flatMap(modID -> registry.getAliases().stream().map(alias -> String.format("%s.%s.%s", Registry.BASE_ACCESS_COMPAT, modID, alias)))
                 .collect(Collectors.toList());
 
-        int target = packages.indexOf(reference);
-        packages.set(target, reference + "/*()!*/");
+        int target = packages.indexOf(getReference());
+        packages.set(target, getReference() + "/*()!*/");
 
         out.append(
                 new CodeBlockBuilder()
@@ -308,7 +310,7 @@ public class Registry {
 
     public String methodDescription(MethodAnnotation<MethodDescription> method) {
         String lang = method.annotation().description();
-        String registryDefault = String.format("%s.%s", baseTranslationKey, method.method().getName());
+        String registryDefault = String.format("%s.%s", getBaseLangKey(), method.method().getName());
         String globalDefault = String.format("%s.%s", Registry.BASE_LANG_LOCATION, method.method().getName());
         if (lang.isEmpty()) {
             // If the `globalDefault` is not defined, we always want to use `registryDefault` for logging the missing key.
@@ -327,11 +329,11 @@ public class Registry {
 
     private String methodExample(Method method, String example) {
         if (method.getParameterTypes().length == 0) return methodExample(method);
-        return String.format("%s.%s(%s)", reference, method.getName(), example);
+        return String.format("%s.%s(%s)", getReference(), method.getName(), example);
     }
 
     private String methodExample(Method method) {
-        return String.format("%s.%s()", reference, method.getName());
+        return String.format("%s.%s()", getReference(), method.getName());
     }
 
     private String examples(MethodAnnotation<MethodDescription> method) {
@@ -341,7 +343,7 @@ public class Registry {
                 .forEach(example -> {
                     if (example.commented()) out.append("// ");
                     if (!example.def().isEmpty()) out.append("def ").append(example.def()).append(" = ");
-                    out.append(reference).append(".").append(method.method().getName());
+                    out.append(getReference()).append(".").append(method.method().getName());
                     if (example.value().isEmpty()) out.append("()");
                     else out.append("(").append(example.value()).append(")");
                     out.append("\n");
