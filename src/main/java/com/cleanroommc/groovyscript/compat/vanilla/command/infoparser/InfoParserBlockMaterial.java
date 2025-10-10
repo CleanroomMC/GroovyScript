@@ -5,18 +5,18 @@ import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
 import net.minecraft.block.material.Material;
 import org.jetbrains.annotations.NotNull;
 
-public class InfoParserMaterial extends GenericInfoParser<Material> {
+public class InfoParserBlockMaterial extends GenericInfoParser<Material> {
 
-    public static final InfoParserMaterial instance = new InfoParserMaterial();
+    public static final InfoParserBlockMaterial instance = new InfoParserBlockMaterial();
 
     @Override
     public String id() {
-        return "material";
+        return "blockmaterial";
     }
 
     @Override
     public String name() {
-        return "Material";
+        return "Block Material";
     }
 
     @Override
