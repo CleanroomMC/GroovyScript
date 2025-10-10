@@ -163,7 +163,9 @@ public class Exporter {
     public static void logSkippedClasses() {
         if (SKIPPED_CLASSES.isEmpty()) return;
         GroovyLog.Msg log = GroovyLog.msg("Skipped documenting the following potentially valid locations (this may be the correct behavior!)");
-        SKIPPED_CLASSES.forEach((key, value) -> log.add(key + ": " + value.getName()));
+        SKIPPED_CLASSES.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(String.CASE_INSENSITIVE_ORDER))
+                .forEach(entry -> log.add(entry.getKey() + ": " + entry.getValue().getName()));
         log.debug().post();
         SKIPPED_CLASSES.clear();
     }
