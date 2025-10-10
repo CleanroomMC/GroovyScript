@@ -1,16 +1,24 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.documentation.IContainerDocumentation;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
+import com.cleanroommc.groovyscript.documentation.Documentation;
+import com.cleanroommc.groovyscript.documentation.Exporter;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-public final class MinecraftModContainer extends GroovyContainer<VanillaModule> {
+public final class MinecraftModContainer extends GroovyContainer<VanillaModule> implements IContainerDocumentation {
 
     private static final String modId = "minecraft";
     private static final String containerName = "Minecraft";
@@ -58,4 +66,20 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
 
     @Override
     public void onCompatLoaded(GroovyContainer<?> container) {}
+
+    @Override
+    public void generateExamples(File suggestedFile, LoadStage stage) {
+        Exporter.generateExamples(suggestedFile, stage, this);
+    }
+
+    @Override
+    public void generateWiki(File suggestedFolder) {
+        var minecraftCompatFolder = new File(new File(Documentation.WIKI, "minecraft"), "helpers");
+        try {
+            Files.createDirectories(minecraftCompatFolder.toPath());
+        } catch (IOException e) {
+            GroovyScript.LOGGER.throwing(e);
+        }
+        Exporter.generateWiki(minecraftCompatFolder, this);
+    }
 }
