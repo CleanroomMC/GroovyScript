@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: botania_tweaks
 
-log.info 'mod \'botania_tweaks\' detected, running script'
+log 'mod \'botania_tweaks\' detected, running script'
 
 // Agglomeration Plate:
 // Converts any number of input itemstacks into an item output, consuming mana to do so. Occurs in-world above a

@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: advancedrocketry
 
-log.info 'mod \'advancedrocketry\' detected, running script'
+log 'mod \'advancedrocketry\' detected, running script'
 
 // Centrifuge:
 // Converts an input fluid into up to 12 output items and up to 4 output fluids, consuming RF.

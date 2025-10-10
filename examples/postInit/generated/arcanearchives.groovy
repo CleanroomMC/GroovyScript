@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: arcanearchives
 
-log.info 'mod \'arcanearchives\' detected, running script'
+log 'mod \'arcanearchives\' detected, running script'
 
 // Gem Cutting Table:
 // Converts any number of itemstacks into a single output itemstack via selecting the desired output itemstack in the GUI.

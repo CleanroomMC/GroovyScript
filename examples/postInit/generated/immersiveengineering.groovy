@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: immersiveengineering
 
-log.info 'mod \'immersiveengineering\' detected, running script'
+log 'mod \'immersiveengineering\' detected, running script'
 
 // Alloy Kiln:
 // Converts two input itemstacks into an output itemstack, consuming fuel (based on burn time).

@@ -4,7 +4,7 @@
 
 import mezz.jei.api.ingredients.VanillaTypes
 
-log.info 'mod \'jei\' detected, running script'
+log 'mod \'jei\' detected, running script'
 
 // Category Catalysts:
 // Modify the items shown on the left of JEI Categories which indicate where the recipe takes place.

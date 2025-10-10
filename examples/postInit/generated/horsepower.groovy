@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: horsepower
 
-log.info 'mod \'horsepower\' detected, running script'
+log 'mod \'horsepower\' detected, running script'
 
 // Horse Chopping Block:
 // Converts an itemstack input into an itemstack output, with the chance of an additional output after a configurable

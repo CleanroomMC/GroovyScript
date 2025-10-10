@@ -22,7 +22,7 @@ public class Exporter {
 
     private static final String INDEX_FILE_NAME = "index.md";
     private static final String NAV_FILE_NAME = "!navigation.md";
-    private static final String PRINT_MOD_DETECTED = "log.info 'mod \\'%s\\' detected, running script'";
+    private static final String PRINT_MOD_DETECTED = "log 'mod \\'%s\\' detected, running script'";
 
     private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 

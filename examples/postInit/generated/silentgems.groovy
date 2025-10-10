@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: silentgems
 
-log.info 'mod \'silentgems\' detected, running script'
+log 'mod \'silentgems\' detected, running script'
 
 // Chaos Altar:
 // Converts an input itemstack into an output itemstack with an optional catalyst, consuming a specified amount of Chaos

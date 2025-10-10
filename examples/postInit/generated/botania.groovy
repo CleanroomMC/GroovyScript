@@ -4,7 +4,7 @@
 
 import net.minecraft.util.text.TextFormatting
 
-log.info 'mod \'botania\' detected, running script'
+log 'mod \'botania\' detected, running script'
 
 // Petal Apothecary:
 // Converts item inputs into an item output consuming water and a seed.

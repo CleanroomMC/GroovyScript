@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: iceandfire
 
-log.info 'mod \'iceandfire\' detected, running script'
+log 'mod \'iceandfire\' detected, running script'
 
 // Fire Dragonforge:
 // Converts two input itemstacks into an output itemstack in a multiblock Dragonforge Fire Multiblock while there is a

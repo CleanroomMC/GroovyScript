@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: randomthings
 
-log.info 'mod \'randomthings\' detected, running script'
+log 'mod \'randomthings\' detected, running script'
 
 // Anvil Crafting:
 // Converts two itemstacks into an itemstack in the Vanilla Anvil.

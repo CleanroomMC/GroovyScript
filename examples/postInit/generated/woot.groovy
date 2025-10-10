@@ -4,7 +4,7 @@
 
 import ipsis.woot.util.WootMobName
 
-log.info 'mod \'woot\' detected, running script'
+log 'mod \'woot\' detected, running script'
 
 // Drops:
 // Controls extra drops given by mobs. Chance and Size are both arrays 4 long, containing the values for levels 0/1/2/3

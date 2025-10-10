@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: integrateddynamics
 
-log.info 'mod \'integrateddynamics\' detected, running script'
+log 'mod \'integrateddynamics\' detected, running script'
 
 // Drying Basin:
 // Takes either an item or fluid input and gives either an item or fluid output after a duration.

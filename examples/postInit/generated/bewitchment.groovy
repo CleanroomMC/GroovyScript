@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: bewitchment
 
-log.info 'mod \'bewitchment\' detected, running script'
+log 'mod \'bewitchment\' detected, running script'
 
 // Altar Upgrades:
 // Controls the valid upgrades placed atop the Witches' Altar, a multiblock that gain Magic Power from nearby plants and

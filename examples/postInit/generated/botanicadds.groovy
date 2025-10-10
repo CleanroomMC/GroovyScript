@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: botanicadds
 
-log.info 'mod \'botanicadds\' detected, running script'
+log 'mod \'botanicadds\' detected, running script'
 
 // Gaia Plate:
 // Converts an number of input items into an output itemstack, consuming a given amount of mana when dropped in-world atop

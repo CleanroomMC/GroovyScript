@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: atum
 
-log.info 'mod \'atum\' detected, running script'
+log 'mod \'atum\' detected, running script'
 
 // Kiln:
 // Smelts an input item into an output itemstack and giving experience similar to a Furnace, but can process up to 4 stacks

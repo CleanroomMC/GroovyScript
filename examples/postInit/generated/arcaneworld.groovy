@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: arcaneworld
 
-log.info 'mod \'arcaneworld\' detected, running script'
+log 'mod \'arcaneworld\' detected, running script'
 
 // Ritual:
 // Converts up to 5 input itemstacks into a wide number of possible effects, including spawning entities, opening a portal

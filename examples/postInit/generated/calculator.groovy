@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: calculator
 
-log.info 'mod \'calculator\' detected, running script'
+log 'mod \'calculator\' detected, running script'
 
 // Algorithm Separator:
 // Converts an input itemstack into two output itemstacks.

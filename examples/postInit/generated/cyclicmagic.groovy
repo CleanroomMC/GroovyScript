@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: cyclicmagic
 
-log.info 'mod \'cyclicmagic\' detected, running script'
+log 'mod \'cyclicmagic\' detected, running script'
 
 // DeHydrator:
 // Converts an input itemstack into an output itemstack.

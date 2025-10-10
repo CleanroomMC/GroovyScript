@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: mekanism
 
-log.info 'mod \'mekanism\' detected, running script'
+log 'mod \'mekanism\' detected, running script'
 
 // Infusion:
 // Add new infusion types and itemstacks to those types.

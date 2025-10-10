@@ -5,7 +5,7 @@
 import com.rwtema.extrautils2.power.IWorldPowerMultiplier
 import com.rwtema.extrautils2.tile.TilePassiveGenerator
 
-log.info 'mod \'extrautils2\' detected, running script'
+log 'mod \'extrautils2\' detected, running script'
 
 // Crusher:
 // Converts an input itemstack into an output itemstack with a chance of an additional itemstack output, consuming energy.

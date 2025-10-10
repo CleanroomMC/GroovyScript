@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: prodigytech
 
-log.info 'mod \'prodigytech\' detected, running script'
+log 'mod \'prodigytech\' detected, running script'
 
 // Atomic Reshaper:
 // Uses Hot Air and Primordium to convert items. Can have a weighted random based output.

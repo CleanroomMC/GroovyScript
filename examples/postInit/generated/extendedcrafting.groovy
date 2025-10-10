@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: extendedcrafting
 
-log.info 'mod \'extendedcrafting\' detected, running script'
+log 'mod \'extendedcrafting\' detected, running script'
 
 // Combination Crafting:
 // Converts one main item and any number of additional items into an output itemstack, with a configurable rf cost and

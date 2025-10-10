@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: extrabotany
 
-log.info 'mod \'extrabotany\' detected, running script'
+log 'mod \'extrabotany\' detected, running script'
 
 // Livingrock Pedestal:
 // Converts an input item into an output itemstack when placed inside a Livingrock Pedestal and interacted with by an Extra

@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: thaumcraft
 
-log.info 'mod \'thaumcraft\' detected, running script'
+log 'mod \'thaumcraft\' detected, running script'
 
 // Arcane Workbench:
 // A special crafting table, allowing additional requirements in the form of Vis Crystals, Vis, and having a specific

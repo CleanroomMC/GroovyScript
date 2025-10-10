@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: pneumaticcraft
 
-log.info 'mod \'pneumaticcraft\' detected, running script'
+log 'mod \'pneumaticcraft\' detected, running script'
 
 // Amadron:
 // Uses an Amadron Tablet and linked inventories in world to trade via drones.

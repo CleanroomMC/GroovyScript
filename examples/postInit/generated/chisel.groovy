@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: chisel
 
-log.info 'mod \'chisel\' detected, running script'
+log 'mod \'chisel\' detected, running script'
 
 // Carving:
 // Sets a group of items any item can be converted between freely, in world and in a GUI.

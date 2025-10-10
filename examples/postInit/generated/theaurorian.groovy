@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: theaurorian
 
-log.info 'mod \'theaurorian\' detected, running script'
+log 'mod \'theaurorian\' detected, running script'
 
 // Moonlight Forge:
 // Combines two items to get a third item. Only works at night, and works faster the higher it is placed in the world.

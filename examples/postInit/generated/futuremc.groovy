@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: futuremc
 
-log.info 'mod \'futuremc\' detected, running script'
+log 'mod \'futuremc\' detected, running script'
 
 // Blast Furnace:
 // Converts an input itemstack into an output itemstack at the cost of burnable fuel.

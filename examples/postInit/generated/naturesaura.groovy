@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: naturesaura
 
-log.info 'mod \'naturesaura\' detected, running script'
+log 'mod \'naturesaura\' detected, running script'
 
 // Natural Altar Infusion:
 // Converts an input itemstack into an itemstack in a multiblock structure, with an optional catalyst block, costing aura

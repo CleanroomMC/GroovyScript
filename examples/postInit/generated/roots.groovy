@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: roots
 
-log.info 'mod \'roots\' detected, running script'
+log 'mod \'roots\' detected, running script'
 
 // Animal Harvest:
 // Animal Harvest is a ritual that drops items from nearby mob's based on that mobs loottable without harming the mob. Only

@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: thebetweenlands
 
-log.info 'mod \'thebetweenlands\' detected, running script'
+log 'mod \'thebetweenlands\' detected, running script'
 
 // Animator:
 // Converts an input item, Life amount from Life Crystals, and Fuel from Sulfur into an output itemstack, summoning an

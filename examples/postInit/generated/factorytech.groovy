@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: factorytech
 
-log.info 'mod \'factorytech\' detected, running script'
+log 'mod \'factorytech\' detected, running script'
 
 // Fluid Agitator:
 // Converts either one or two input fluidstacks and up to one input itemstack into an output itemstack, output fluidstack,

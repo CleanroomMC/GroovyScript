@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: alchemistry
 
-log.info 'mod \'alchemistry\' detected, running script'
+log 'mod \'alchemistry\' detected, running script'
 
 // Atomizer:
 // Converts a non-element into its component elements.

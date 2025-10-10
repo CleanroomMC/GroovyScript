@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: industrialforegoing
 
-log.info 'mod \'industrialforegoing\' detected, running script'
+log 'mod \'industrialforegoing\' detected, running script'
 
 // Bioreactor:
 // Converts an input item into Biofuel, with the amount of Biofuel generated being based on the number of concurrent

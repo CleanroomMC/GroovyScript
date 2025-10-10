@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: immersivepetroleum
 
-log.info 'mod \'immersivepetroleum\' detected, running script'
+log 'mod \'immersivepetroleum\' detected, running script'
 
 // Distillation Tower:
 // Converts an input fluidstack into any number of output fluidstacks and any number of output itemstacks, with each

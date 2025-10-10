@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: rustic
 
-log.info 'mod \'rustic\' detected, running script'
+log 'mod \'rustic\' detected, running script'
 
 // Alchemy Condenser:
 // Converts some number of input itemstacks and a fluidstack into a single output stack after a time in a small multiblock

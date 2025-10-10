@@ -4,7 +4,7 @@
 
 import appeng.capabilities.Capabilities
 
-log.info 'mod \'appliedenergistics2\' detected, running script'
+log 'mod \'appliedenergistics2\' detected, running script'
 
 // P2P Attunement:
 // Controls using specific items, any items from a mod, or any items with a Capability to convert a P2P into a specific

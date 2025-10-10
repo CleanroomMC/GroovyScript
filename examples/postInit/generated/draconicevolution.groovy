@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: draconicevolution
 
-log.info 'mod \'draconicevolution\' detected, running script'
+log 'mod \'draconicevolution\' detected, running script'
 
 // Energy Core:
 // A multiblock with 8 tiers for storing large amounts of energy.

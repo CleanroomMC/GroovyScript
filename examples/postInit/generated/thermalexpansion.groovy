@@ -4,7 +4,7 @@
 
 import cofh.thermalexpansion.util.managers.machine.InsolatorManager
 
-log.info 'mod \'thermalexpansion\' detected, running script'
+log 'mod \'thermalexpansion\' detected, running script'
 
 // Alchemical Imbuer:
 // Converts an input fluidstack and input itemstack into an output fluidstack, costing power and taking time based on the

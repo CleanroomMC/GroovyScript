@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: bloodarsenal
 
-log.info 'mod \'bloodarsenal\' detected, running script'
+log 'mod \'bloodarsenal\' detected, running script'
 
 // Sanguine Infusion:
 // Converts an input infusion itemstack and up to 8 input surrounding itemstacks into an output itemstack, consuming Life

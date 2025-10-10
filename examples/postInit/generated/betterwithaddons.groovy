@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: betterwithaddons
 
-log.info 'mod \'betterwithaddons\' detected, running script'
+log 'mod \'betterwithaddons\' detected, running script'
 
 // Drying Unit:
 // Converts an input item into an output itemstack if placed within the appropriate multiblock. The multiblock is Sandstone

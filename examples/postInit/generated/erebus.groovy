@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: erebus
 
-log.info 'mod \'erebus\' detected, running script'
+log 'mod \'erebus\' detected, running script'
 
 // Organic Composter:
 // Converts valid items into compost. The Blacklist blocks all ItemStacks on it from being used, the Material list allows

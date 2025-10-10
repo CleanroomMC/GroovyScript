@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: pyrotech
 
-log.info 'mod \'pyrotech\' detected, running script'
+log 'mod \'pyrotech\' detected, running script'
 
 // Anvil:
 // When using hammer or pickaxe it can convert items.

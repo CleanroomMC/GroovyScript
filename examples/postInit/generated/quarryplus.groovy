@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: quarryplus
 
-log.info 'mod \'quarryplus\' detected, running script'
+log 'mod \'quarryplus\' detected, running script'
 
 // Workbench Plus:
 // Converts up to 27 itemstacks into an output itemstack at the cost of power.

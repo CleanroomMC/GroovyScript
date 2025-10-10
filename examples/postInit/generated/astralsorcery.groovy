@@ -5,7 +5,7 @@
 import hellfirepvp.astralsorcery.common.constellation.MoonPhase
 import net.minecraft.util.math.MathHelper
 
-log.info 'mod \'astralsorcery\' detected, running script'
+log 'mod \'astralsorcery\' detected, running script'
 
 // Chalice Interaction:
 // When two chalices containing different fluids are placed nearby, fluid may be consumed to produce an output itemstack.

@@ -4,7 +4,7 @@
 
 import com.cout970.magneticraft.api.registries.machines.hydraulicpress.HydraulicPressMode
 
-log.info 'mod \'magneticraft\' detected, running script'
+log 'mod \'magneticraft\' detected, running script'
 
 // Crushing Table:
 // Converts an input itemstack into an output itemstack when placed on top of the Crushing Table and interacted with by a

@@ -2,7 +2,7 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: armorplus
 
-log.info 'mod \'armorplus\' detected, running script'
+log 'mod \'armorplus\' detected, running script'
 
 // Champion Bench:
 // A normal crafting recipe, but with a 9x9 grid and in the Champion Bench.
