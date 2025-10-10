@@ -9,6 +9,7 @@ public class StandardInfoParserRegistry {
         InfoParserRegistry.addInfoParser(InfoParserFluid.instance);
         InfoParserRegistry.addInfoParser(InfoParserBlock.instance);
         InfoParserRegistry.addInfoParser(InfoParserBlockState.instance);
+        InfoParserRegistry.addInfoParser(InfoParserMaterial.instance);
         InfoParserRegistry.addInfoParser(InfoParserOreDict.instance);
         InfoParserRegistry.addInfoParser(InfoParserNBT.instance);
         InfoParserRegistry.addInfoParser(InfoParserEntity.instance);
