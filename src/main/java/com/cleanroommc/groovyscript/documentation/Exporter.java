@@ -12,7 +12,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.client.resources.I18n;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -156,6 +158,16 @@ public class Exporter {
             Files.write(targetFile.toPath(), header.toString().getBytes());
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
+        }
+    }
+
+    public static void exportFile(File file, String resource) throws IOException {
+        try (InputStream inputStream = Exporter.class.getClassLoader().getResourceAsStream(resource);
+             FileOutputStream outputStream = new FileOutputStream(file)) {
+            int i;
+            while ((i = inputStream.read()) != -1) {
+                outputStream.write(i);
+            }
         }
     }
 
