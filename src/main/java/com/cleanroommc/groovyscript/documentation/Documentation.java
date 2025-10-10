@@ -27,6 +27,7 @@ public class Documentation {
 
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptFile().getParentFile(), "build"), "wiki");
+    public static final File MODS = new File(WIKI, "mods");
 
     public static final IFormat DEFAULT_FORMAT = OutputFormat.VITEPRESS;
 
@@ -70,11 +71,12 @@ public class Documentation {
     private static void generateWiki(boolean log) {
         try {
             Files.createDirectories(WIKI.toPath());
+            Files.createDirectories(MODS.toPath());
             for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                 if (!mod.isLoaded()) continue;
-                File target = new File(WIKI, mod.getModId());
                 if (target.exists() || Files.createDirectories(target.toPath()) != null) {
                     Exporter.generateWiki(target, mod);
+                File target = new File(MODS, mod.getModId());
                 } else {
                     GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
                 }
