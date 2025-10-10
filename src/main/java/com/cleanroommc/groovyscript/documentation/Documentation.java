@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.IContainerDocumentation;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
@@ -54,7 +55,11 @@ public class Documentation {
                 for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                     if (!mod.isLoaded()) continue;
                     File file = new File(generatedFolder, mod.getModId() + ".groovy");
-                    Exporter.generateExamples(file, stage, mod);
+                    if (mod instanceof IContainerDocumentation doc) {
+                        doc.generateExamples(file, stage);
+                    } else {
+                        Exporter.generateExamples(file, stage, mod);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -74,11 +79,15 @@ public class Documentation {
             Files.createDirectories(MODS.toPath());
             for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
                 if (!mod.isLoaded()) continue;
-                if (target.exists() || Files.createDirectories(target.toPath()) != null) {
-                    Exporter.generateWiki(target, mod);
                 File target = new File(MODS, mod.getModId());
+                if (mod instanceof IContainerDocumentation doc) {
+                    doc.generateWiki(target);
                 } else {
-                    GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
+                    if (target.exists() || Files.createDirectories(target.toPath()) != null) {
+                        Exporter.generateWiki(target, mod);
+                    } else {
+                        GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
+                    }
                 }
             }
         } catch (IOException e) {
