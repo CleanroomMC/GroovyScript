@@ -97,6 +97,7 @@ public class GroovyScript {
             LOGGER.throwing(new IllegalStateException("Sandbox data should have been initialised by now, but isn't! Trying to initialize again."));
             SandboxData.initialize((File) FMLInjectionData.data()[6], LOGGER);
         }
+        SandboxData.onLateInit();
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(EventHandler.class);
         NetworkHandler.init();
@@ -105,6 +106,7 @@ public class GroovyScript {
         GroovyDeobfMapper.init();
         LinkGeneratorHooks.init();
         ReloadableRegistryManager.init();
+        ((GroovyLogImpl) GroovyLog.get()).setPassedEarly();
         GroovyScript.sandbox = new GroovyScriptSandbox();
         ModSupport.INSTANCE.setup(event.getASMHarvestedData());
 
@@ -142,7 +144,6 @@ public class GroovyScript {
     @ApiStatus.Internal
     public static void initializeRunConfig(File minecraftHome) {
         SandboxData.initialize(minecraftHome, LOGGER);
-        reloadRunConfig(true);
     }
 
     @ApiStatus.Internal
@@ -225,37 +226,7 @@ public class GroovyScript {
     }
 
     public static RunConfig getRunConfig() {
-        return runConfig;
-    }
-
-    @ApiStatus.Internal
-    public static void reloadRunConfig(boolean init) {
-        JsonElement element = JsonHelper.loadJson(getRunConfigFile());
-        if (element == null || !element.isJsonObject()) element = new JsonObject();
-        JsonObject json = element.getAsJsonObject();
-        if (runConfig == null) {
-            if (!Files.exists(getRunConfigFile().toPath())) {
-                json = RunConfig.createDefaultJson();
-                runConfig = createRunConfig(json);
-            } else {
-                runConfig = new RunConfig(json);
-            }
-        }
-        runConfig.reload(json, init);
-    }
-
-    private static RunConfig createRunConfig(JsonObject json) {
-        JsonHelper.saveJson(getRunConfigFile(), json);
-        File main = new File(getScriptFile().getPath() + File.separator + "postInit" + File.separator + "main.groovy");
-        if (!Files.exists(main.toPath())) {
-            try {
-                main.getParentFile().mkdirs();
-                Files.write(main.toPath(), "\nlog.info('Hello World!')\n".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return new RunConfig(json);
+        return SandboxData.getRunConfig();
     }
 
     public static void postScriptRunResult(ICommandSender sender, boolean onlyLogFails, boolean running, boolean packmode, long time) {

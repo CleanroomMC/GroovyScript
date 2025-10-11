@@ -38,7 +38,7 @@ public class TextureDecorationProvider extends DocProvider {
     public static final int ICON_Y = 0;
     private static final Map<String, TextureDecoration<?>> textures = new Object2ObjectOpenHashMap<>();
 
-    public static final File cacheRoot = new File(SandboxData.getCachePath(), "texdecs");
+    public static final File cacheRoot = new File(SandboxData.getCacheBasePath(), "texdecs");
 
     static {
         cacheRoot.mkdirs();

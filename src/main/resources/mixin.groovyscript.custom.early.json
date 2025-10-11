@@ -1,0 +1,10 @@
+{
+  "package": "mixins",
+  "refmap": "mixins.groovyscript.refmap.json",
+  "plugin": "com.cleanroommc.groovyscript.core.EarlyMixinPlugin",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "client": []
+}

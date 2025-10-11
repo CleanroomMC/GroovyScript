@@ -63,7 +63,7 @@ public class GroovySecurityManager {
         banPackage("javax.net");
         banPackage("javax.security");
         banPackage("javax.script");
-        banPackage("org.spongepowered");
+        //banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
         banPackage("net.minecraftforge.gradle");
         banClasses(Runtime.class, ClassLoader.class, Scanner.class);
@@ -130,7 +130,11 @@ public class GroovySecurityManager {
     }
 
     public boolean isValid(ClassNode classNode) {
-        return this.whiteListedClasses.contains(classNode.name) || (!bannedClasses.contains(classNode.name) && !hasBlacklistAnnotation(classNode.visibleAnnotations) && isValidPackage(classNode.name));
+        return isValid(classNode, classNode.name.replace('/', '.'));
+    }
+
+    public boolean isValid(ClassNode classNode, String name) {
+        return this.whiteListedClasses.contains(name) || (!bannedClasses.contains(name) && !hasBlacklistAnnotation(classNode.visibleAnnotations) && isValidPackage(name));
     }
 
     public boolean isValid(Class<?> clazz) {
