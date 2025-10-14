@@ -39,19 +39,21 @@ public class Builder {
     };
 
     private final String location;
+    private final String langLocation;
     private final Method builderMethod;
     private final RecipeBuilderDescription annotation;
     private final Map<String, FieldDocumentation> fields;
     private final Map<String, List<MethodAnnotation<RecipeBuilderMethodDescription>>> methods;
     private final List<MethodAnnotation<RecipeBuilderRegistrationMethod>> registrationMethods;
 
-    public Builder(Method builderMethod, RecipeBuilderDescription annotation, String location) {
+    public Builder(Method builderMethod, RecipeBuilderDescription annotation, String location, String langLocation) {
         this.builderMethod = builderMethod;
         this.location = location;
+        this.langLocation = langLocation;
         this.annotation = annotation;
         Class<?> builderClass = annotation.clazz() == void.class ? builderMethod.getReturnType() : annotation.clazz();
         var methodSignatures = generateOfClass(builderClass, annotation);
-        this.fields = gatherFields(builderClass, annotation, Registry.BASE_LANG_LOCATION + "." + location);
+        this.fields = gatherFields(builderClass, annotation, langLocation);
         this.methods = gatherMethods(methodSignatures, fields);
         this.registrationMethods = gatherRegistrationMethods(methodSignatures);
     }
@@ -355,7 +357,7 @@ public class Builder {
 
     private String title() {
         String lang = annotation.title();
-        String registryDefault = String.format("%s.%s.%s.title", Registry.BASE_LANG_LOCATION, location, builderMethod.getName());
+        String registryDefault = String.format("%s.%s.title", langLocation, builderMethod.getName());
         String globalDefault = String.format("%s.recipe_builder.title", Registry.BASE_LANG_LOCATION);
 
         if (lang.isEmpty()) {
@@ -369,7 +371,7 @@ public class Builder {
     public String creationMethod() {
         StringBuilder out = new StringBuilder();
         String lang = annotation.description();
-        String registryDefault = String.format("%s.%s.%s.description", Registry.BASE_LANG_LOCATION, location, builderMethod.getName());
+        String registryDefault = String.format("%s.%s.description", langLocation, builderMethod.getName());
         String globalDefault = String.format("%s.recipe_builder.description", Registry.BASE_LANG_LOCATION);
 
         if (lang.isEmpty()) {
@@ -378,7 +380,7 @@ public class Builder {
             else lang = globalDefault;
         }
 
-        var example = Registry.BASE_ACCESS_COMPAT + "." + location + "." + DescriptorHelper.shortSignature(builderMethod);
+        var example = location + "." + DescriptorHelper.shortSignature(builderMethod);
 
         out.append("- ").append(LangHelper.ensurePeriod(LangHelper.translate(lang))).append("\n\n");
         out.append(new CodeBlockBuilder().line(example).indentation(1).toString());
@@ -387,7 +389,7 @@ public class Builder {
 
     private String createBuilder(Example example, boolean canBeCommented) {
         StringBuilder out = new StringBuilder();
-        var methodLocation = Registry.BASE_ACCESS_COMPAT + "." + location + "." + builderMethod.getName();
+        var methodLocation = location + "." + builderMethod.getName();
         var error = GroovyLog.msg("Error creating example for " + methodLocation).error();
 
         var prependComment = canBeCommented && example.commented();

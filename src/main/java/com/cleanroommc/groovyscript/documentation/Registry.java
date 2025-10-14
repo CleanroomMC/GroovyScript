@@ -54,11 +54,10 @@ public class Registry {
             methods.get(entry.annotation().type()).add(entry);
             addImports(entry.annotation().example());
         }
-        var location = container.getModId() + "." + registry.getName();
         this.recipeBuilders = recipeBuilderMethods
                 .stream()
                 .sorted(ComparisonHelper::recipeBuilder)
-                .map(x -> new Builder(x.method(), x.annotation(), location))
+                .map(x -> new Builder(x.method(), x.annotation(), getReference(), getBaseLangKey()))
                 .collect(Collectors.toList());
         methods.values().forEach(value -> value.sort(ComparisonHelper::method));
     }
