@@ -129,13 +129,13 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("// ").append(getTitle()).append(":").append("\n");
         out.append("// ").append(WordUtils.wrap(getDescription(), Documentation.MAX_LINE_LENGTH, "\n// ", false)).append("\n\n");
+        out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
         out.append(documentMethodDescriptionType(MethodDescription.Type.REMOVAL));
         if (!recipeBuilders.isEmpty()) {
             for (var builder : recipeBuilders) out.append(builder.builderExampleFile()).append("\n");
             out.append("\n");
         }
         out.append(documentMethodDescriptionType(MethodDescription.Type.ADDITION));
-        out.append(documentMethodDescriptionType(MethodDescription.Type.VALUE));
         out.append(documentMethodDescriptionType(MethodDescription.Type.QUERY));
         return out.toString();
     }
