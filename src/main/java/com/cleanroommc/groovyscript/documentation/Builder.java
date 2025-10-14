@@ -14,6 +14,7 @@ import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -66,6 +67,8 @@ public class Builder {
                 methodSignatures.addAnnotation(entry, entry.method());
             }
         }
+        getAnnotationsFromClassRecursive(RecipeBuilderMethodDescription.class, clazz).forEach(x -> methodSignatures.addAnnotation(x, x.method()));
+        getAnnotationsFromClassRecursive(RecipeBuilderRegistrationMethod.class, clazz).forEach(x -> methodSignatures.addAnnotation(x, x.method()));
         return methodSignatures;
     }
 
