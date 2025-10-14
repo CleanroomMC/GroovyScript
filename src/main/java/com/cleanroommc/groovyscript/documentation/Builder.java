@@ -69,11 +69,11 @@ public class Builder {
         return methodSignatures;
     }
 
-    private static List<Property> getPropertyAnnotationsFromClassRecursive(Class<?> clazz) {
-        List<Property> list = new ArrayList<>();
-        Collections.addAll(list, clazz.getAnnotationsByType(Property.class));
+    private static <T extends Annotation> List<T> getAnnotationsFromClassRecursive(Class<T> annotation, Class<?> clazz) {
+        List<T> list = new ArrayList<>();
+        Collections.addAll(list, clazz.getAnnotationsByType(annotation));
         Class<?> superclass = clazz.getSuperclass();
-        if (superclass != null) list.addAll(getPropertyAnnotationsFromClassRecursive(superclass));
+        if (superclass != null) list.addAll(getAnnotationsFromClassRecursive(annotation, superclass));
         return list;
     }
 
@@ -87,7 +87,7 @@ public class Builder {
                     // Attached to the builder method's override of the requirements field, an uncommon location for specific overrides
                     Arrays.stream(annotation.override().requirement()).filter(r -> r.property().equals(field.getName())),
                     // Attached to the class or any parent classes, to create/override requirements set in the parent
-                    getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
+                    getAnnotationsFromClassRecursive(Property.class, builderClass).stream().filter(r -> r.property().equals(field.getName())),
                     // Attached to the field, the typical place for property information to be created
                     Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
                         if (r.property().isEmpty() || r.property().equals(field.getName())) return true;
