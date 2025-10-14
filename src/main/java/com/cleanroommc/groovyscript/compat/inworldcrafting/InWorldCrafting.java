@@ -3,10 +3,12 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.registry.NamedRegistry;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import java.util.List;
 
 public class InWorldCrafting extends NamedRegistry implements IScriptReloadable {
 
@@ -17,26 +19,18 @@ public class InWorldCrafting extends NamedRegistry implements IScriptReloadable 
     public final Burning burning = new Burning();
     public final PistonPush pistonPush = new PistonPush();
 
+    private final List<IScriptReloadable> registries = ImmutableList.of(fluidToFluid, fluidToItem, fluidToBlock, explosion, burning, pistonPush);
+
     @GroovyBlacklist
     @Override
     public void onReload() {
-        this.fluidToFluid.onReload();
-        this.fluidToItem.onReload();
-        this.fluidToBlock.onReload();
-        this.explosion.onReload();
-        this.burning.onReload();
-        this.pistonPush.onReload();
+        registries.forEach(IScriptReloadable::onReload);
     }
 
     @GroovyBlacklist
     @Override
     public void afterScriptLoad() {
-        this.fluidToFluid.afterScriptLoad();
-        this.fluidToItem.afterScriptLoad();
-        this.fluidToBlock.afterScriptLoad();
-        this.explosion.afterScriptLoad();
-        this.burning.afterScriptLoad();
-        this.pistonPush.afterScriptLoad();
+        registries.forEach(IScriptReloadable::afterScriptLoad);
     }
 
     public static EntityItem spawnItem(World world, BlockPos pos, ItemStack item) {
