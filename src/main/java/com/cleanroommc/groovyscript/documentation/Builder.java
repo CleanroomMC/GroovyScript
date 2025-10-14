@@ -60,10 +60,10 @@ public class Builder {
         if (annotation != null) {
             var override = annotation.override();
             for (var entry : override.method()) {
-                methodSignatures.addAnnotation(entry.method(), entry);
+                methodSignatures.addAnnotation(entry, entry.method());
             }
             for (var entry : override.register()) {
-                methodSignatures.addAnnotation(entry.method(), entry);
+                methodSignatures.addAnnotation(entry, entry.method());
             }
         }
         return methodSignatures;

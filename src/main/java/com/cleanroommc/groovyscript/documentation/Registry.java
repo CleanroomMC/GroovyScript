@@ -86,10 +86,10 @@ public class Registry {
         if (description != null) {
             var override = description.override();
             for (var annotation : override.method()) {
-                methodSignatures.addAnnotation(annotation.method(), annotation);
+                methodSignatures.addAnnotation(annotation, annotation.method());
             }
             for (var annotation : override.recipeBuilder()) {
-                methodSignatures.addAnnotation(annotation.method(), annotation);
+                methodSignatures.addAnnotation(annotation, annotation.method());
             }
         }
         return methodSignatures;
