@@ -28,7 +28,7 @@ public class Exporter {
     private static final String INDEX_FILE_NAME = "index" + MARKDOWN_FILE_EXTENSION;
     private static final String NAV_FILE_NAME = "!navigation" + MARKDOWN_FILE_EXTENSION;
     private static final String EXAMPLE_GENERATION_NOTE = "// Auto generated groovyscript example file\n";
-    private static final String INDEX_FILE_TEXT = "---\n%s\n---\n\n\n# %s\n\n%s";
+    private static final String INDEX_FILE_TEXT = "---\n%s\n---\n\n\n# %s\n\n%s\n\n";
     private static final String BULLET_POINT_LINK = "* [%s](./%s)";
     private static final String NAVIGATION_FILE_TEXT = "---\nsearch:\n  exclude: true\n---\n\n\n" + BULLET_POINT_LINK + "\n%s";
 
