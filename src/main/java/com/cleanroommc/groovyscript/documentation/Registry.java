@@ -114,7 +114,7 @@ public class Registry implements IRegistryDocumentation {
                 list.add(x.getKey());
             }
         }
-        list.sort(ComparisonHelper::splitString);
+        list.sort(ComparisonHelper::packages);
         return list;
     }
 

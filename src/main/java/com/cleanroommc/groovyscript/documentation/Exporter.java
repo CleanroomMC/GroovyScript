@@ -122,7 +122,7 @@ public class Exporter {
     private static String getImportBlock(List<String> imports) {
         if (imports.isEmpty()) return "";
         var list = new ArrayList<>(new ObjectOpenHashSet<>(imports));
-        list.sort(ComparisonHelper::splitString);
+        list.sort(ComparisonHelper::packages);
         var sb = new StringBuilder();
         for (var x : list) {
             sb.append("\nimport ").append(x);

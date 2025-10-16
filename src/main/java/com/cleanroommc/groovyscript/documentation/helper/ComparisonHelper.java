@@ -9,7 +9,6 @@ import com.google.common.collect.ComparisonChain;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
-import java.util.stream.IntStream;
 
 /**
  * A helper class for comparing various documentation elements against each other.
@@ -91,13 +90,15 @@ public final class ComparisonHelper {
                 .result();
     }
 
-    public static int splitString(String left, String right) {
-        return ComparisonChain.start()
-                .compare(StringUtils.countMatches(left, '.'), StringUtils.countMatches(right, '.'))
-                .compare(StringUtils.split(left, '.'), StringUtils.split(right, '.'),
-                         (a, b) -> IntStream.range(0, Math.min(a.length, b.length)).map(x -> string(a[x], b[x])).filter(x -> x != 0).findFirst().orElse(0))
-                .compare(left, right, ComparisonHelper::string)
-                .result();
+    public static int packages(String left, String right) {
+        var a = StringUtils.split(left, '.');
+        var b = StringUtils.split(right, '.');
+        var chain = ComparisonChain.start().compare(a.length, b.length);
+        int bound = Math.min(a.length, b.length);
+        for (int x = 0; x < bound; x++) {
+            chain = chain.compare(a[x], b[x], ComparisonHelper::string);
+        }
+        return chain.result();
     }
 
     public static int stringCase(String left, String right) {
