@@ -1,12 +1,13 @@
+
+// Auto generated groovyscript example file
 // MODS_LOADED: prodigytech
 
 import lykrast.prodigytech.common.item.IZorrasteelEquipment
 import lykrast.prodigytech.common.recipe.ZorraAltarManager
 
-if (!isLoaded('prodigytech')) return
-println 'mod \'prodigytech\' detected, running script'
+log 'mod \'prodigytech\' detected, running script'
 
-// Create an item at the location 'placeholdername:prodigy_stick' enchantable in the Zorra Altar
+// Create an item at the location 'groovyscriptdev:prodigy_stick' enchantable in the Zorra Altar
 // Note: due to the PT's implementation it is difficult to make other mod's items enchantable
 // This merely registers the item, the post-init script adds the specific enchantments
 class ProdigyStick extends Item implements IZorrasteelEquipment {
@@ -18,4 +19,3 @@ class ProdigyStick extends Item implements IZorrasteelEquipment {
 }
 
 content.registerItem('prodigy_stick', new ProdigyStick())
-

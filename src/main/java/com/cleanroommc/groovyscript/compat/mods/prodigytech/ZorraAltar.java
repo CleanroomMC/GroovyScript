@@ -1,21 +1,27 @@
 package com.cleanroommc.groovyscript.compat.mods.prodigytech;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.documentation.IRegistryDocumentation;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
+import com.cleanroommc.groovyscript.helper.GroovyHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lykrast.prodigytech.common.recipe.ZorraAltarManager;
 import lykrast.prodigytech.common.util.Config;
 import net.minecraft.enchantment.Enchantment;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 
 @RegistryDescription
-public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> {
+public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> implements IRegistryDocumentation {
 
     @GroovyBlacklist
     private static final Map<String, ZorraAltarManager> managers = new Object2ObjectOpenHashMap<>();
@@ -23,6 +29,29 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
     ZorraAltar() {
         managers.put("sword", ZorraAltarManager.SWORD);
         managers.put("bow", ZorraAltarManager.BOW);
+    }
+
+    @Override
+    public @NotNull String generateExamples(ContainerHolder container, LoadStage loadStage, List<String> imports) {
+        if (loadStage == LoadStage.PRE_INIT) {
+            imports.add("lykrast.prodigytech.common.item.IZorrasteelEquipment");
+            imports.add("lykrast.prodigytech.common.recipe.ZorraAltarManager");
+            return String.format("""
+                                         // Create an item at the location '%s:prodigy_stick' enchantable in the Zorra Altar
+                                         // Note: due to the PT's implementation it is difficult to make other mod's items enchantable
+                                         // This merely registers the item, the post-init script adds the specific enchantments
+                                         class ProdigyStick extends Item implements IZorrasteelEquipment {
+                                             static registry = mods.prodigytech.zorra_altar.createRegistry('stick')
+                                         
+                                             ZorraAltarManager getManager() {
+                                                 return registry
+                                             }
+                                         }
+                                         
+                                         content.registerItem('prodigy_stick', new ProdigyStick())
+                                         """, GroovyHelper.getPackId());
+        }
+        return "";
     }
 
     public ZorraAltarManager createRegistry(String key) {
