@@ -48,8 +48,16 @@ public class Documentation {
         }
     }
 
-    public static File generatedFolder(LoadStage stage) {
+    public static File generatedExampleFolder(LoadStage stage) {
         return new File(new File(EXAMPLES, stage.getName()), "generated");
+    }
+
+    public static File generatedExampleFile(File parent, String location) {
+        return new File(parent, location + "_generated" + GROOVY_FILE_EXTENSION);
+    }
+
+    public static File generatedExampleFile(LoadStage stage, String location) {
+        return generatedExampleFile(generatedExampleFolder(stage), location);
     }
 
     public static void generateExamples() {
@@ -58,11 +66,11 @@ public class Documentation {
 
     private static void generateExamples(boolean log) {
         for (LoadStage stage : LoadStage.getLoadStages()) {
-            File generatedFolder = generatedFolder(stage);
+            File generatedFolder = generatedExampleFolder(stage);
             ensureDirectoryExists(generatedFolder);
             for (var container : ModSupport.getAllContainers()) {
                 if (!container.isLoaded()) continue;
-                File file = new File(generatedFolder, container.getModId() + GROOVY_FILE_EXTENSION);
+                File file = generatedExampleFile(generatedFolder, container.getModId());
                 if (!(container instanceof IContainerDocumentation doc) || doc.generateExamples(file, stage)) {
                     Exporter.generateExamples(file, stage, ContainerHolder.of(container));
                 }
