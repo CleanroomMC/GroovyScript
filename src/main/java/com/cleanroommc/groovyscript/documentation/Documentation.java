@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.api.documentation.IContainerDocumentation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import com.cleanroommc.groovyscript.documentation.format.OutputFormat;
+import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
 import com.cleanroommc.groovyscript.documentation.helper.GenerationFlags;
 import com.cleanroommc.groovyscript.documentation.helper.LangHelper;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
@@ -63,7 +64,7 @@ public class Documentation {
                 if (!container.isLoaded()) continue;
                 File file = new File(generatedFolder, container.getModId() + GROOVY_FILE_EXTENSION);
                 if (!(container instanceof IContainerDocumentation doc) || doc.generateExamples(file, stage)) {
-                    Exporter.generateExamples(file, stage, container);
+                    Exporter.generateExamples(file, stage, ContainerHolder.of(container));
                 }
             }
         }
@@ -79,7 +80,7 @@ public class Documentation {
             if (!container.isLoaded()) continue;
             File target = new File(WIKI_MODS, container.getModId());
             if (!(container instanceof IContainerDocumentation doc) || doc.generateWiki(target)) {
-                Exporter.generateWiki(target, container);
+                Exporter.generateWiki(target, ContainerHolder.of(container));
             }
         }
         if (log) logMissing();

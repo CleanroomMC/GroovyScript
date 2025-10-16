@@ -1,0 +1,81 @@
+package com.cleanroommc.groovyscript.documentation.helper;
+
+import com.google.common.collect.ComparisonChain;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.IntFunction;
+
+/**
+ * This is used to create markdown sections on the wiki index page.
+ * <p>
+ * Contains a header (which will be formatted as h2),
+ * a subtitle, and some number of entries.
+ * <p>
+ * It will only be added to the index file if there is
+ * at least one entry to display,
+ * and the order it will be added to the index file is based on its priority.
+ *
+ * @see LinkIndex
+ */
+public class MarkdownSection implements Comparable<MarkdownSection> {
+
+    public static final int DEFAULT_PRIORITY = 1000;
+
+    private final String header;
+    private final IntFunction<String> subtitle;
+    private final List<String> entries;
+    private final int priority;
+
+    /**
+     * Calls {@link #MarkdownSection(String, IntFunction, int)} with a priority of {@link MarkdownSection#DEFAULT_PRIORITY}.
+     *
+     * @param header   the header text of the section
+     * @param subtitle function that creates the subtitle based on the number of entries
+     * @see #MarkdownSection(String, IntFunction, int) Section
+     */
+    public MarkdownSection(String header, IntFunction<String> subtitle) {
+        this(header, subtitle, DEFAULT_PRIORITY);
+    }
+
+    /**
+     * @param header   the header text of the section
+     * @param subtitle function that creates the subtitle based on the number of entries
+     * @param priority the priority this Section has on the index page for sorting purposes
+     */
+    public MarkdownSection(String header, IntFunction<String> subtitle, int priority) {
+        this.header = header;
+        this.subtitle = subtitle;
+        this.entries = new ArrayList<>();
+        this.priority = priority;
+
+    }
+
+    /**
+     * @param entry typically a markdown bullet point link
+     */
+    public void addEntry(String entry) {
+        this.entries.add(entry);
+    }
+
+    public boolean hasEntries() {
+        return !entries.isEmpty();
+    }
+
+    public List<String> getEntries() {
+        return entries;
+    }
+
+    public String get() {
+        return "## " + header + "\n\n" + subtitle.apply(entries.size()) + "\n\n" + String.join("\n\n", entries);
+    }
+
+    @Override
+    public int compareTo(@NotNull MarkdownSection o) {
+        return ComparisonChain.start()
+                .compare(priority, o.priority)
+                .compare(header, o.header)
+                .result();
+    }
+}

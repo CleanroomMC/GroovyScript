@@ -1,19 +1,21 @@
 package com.cleanroommc.groovyscript.documentation;
 
-import com.cleanroommc.groovyscript.api.IGroovyContainer;
+import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.INamed;
+import com.cleanroommc.groovyscript.api.documentation.IRegistryDocumentation;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
-import com.cleanroommc.groovyscript.documentation.helper.AdmonitionBuilder;
-import com.cleanroommc.groovyscript.documentation.helper.CodeBlockBuilder;
-import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
-import com.cleanroommc.groovyscript.documentation.helper.LangHelper;
+import com.cleanroommc.groovyscript.documentation.helper.*;
 import com.cleanroommc.groovyscript.documentation.helper.descriptor.DescriptorHelper;
 import com.cleanroommc.groovyscript.documentation.helper.descriptor.MethodAnnotation;
 import com.cleanroommc.groovyscript.documentation.linkgenerator.LinkGeneratorHooks;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.text.WordUtils;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
@@ -21,21 +23,21 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Registry {
+public class Registry implements IRegistryDocumentation {
 
     public static final String BASE_LANG_LOCATION = "groovyscript.wiki";
-    public static final String BASE_ACCESS_COMPAT = "mods";
     private static final Pattern PERIOD_END_PATTERN = Pattern.compile("\\.$");
 
-    private final IGroovyContainer container;
+    private final ContainerHolder container;
     private final INamed registry;
     private final RegistryDescription description;
     private final Map<String, String> types;
     private final List<Builder> recipeBuilders;
     private final EnumMap<MethodDescription.Type, List<MethodAnnotation<MethodDescription>>> methods;
     private final List<String> imports = new ArrayList<>();
+    private final List<String> aliases;
 
-    public Registry(IGroovyContainer container, INamed registry) {
+    public Registry(ContainerHolder container, INamed registry) {
         this.container = container;
         this.registry = registry;
         this.description = registry.getClass().getAnnotation(RegistryDescription.class);
@@ -60,6 +62,7 @@ public class Registry {
                 .map(x -> new Builder(x.method(), x.annotation(), getReference(), getBaseLangKey()))
                 .collect(Collectors.toList());
         methods.values().forEach(value -> value.sort(ComparisonHelper::method));
+        aliases = generateAliases(container, registry);
     }
 
     /**
@@ -94,12 +97,62 @@ public class Registry {
         return methodSignatures;
     }
 
+    private static List<String> generateAliases(ContainerHolder container, INamed registry) {
+        List<String> list = new ArrayList<>();
+        for (String modID : container.aliases()) {
+            if (modID.isEmpty()) {
+                list.addAll(registry.getAliases());
+                continue;
+            }
+            for (String alias : registry.getAliases()) {
+                String format = String.format("%s.%s", modID, alias);
+                list.add(format);
+            }
+        }
+        for (var x : GroovyScript.getSandbox().getBindings().entrySet()) {
+            if (x.getValue() == registry) {
+                list.add(x.getKey());
+            }
+        }
+        list.sort(ComparisonHelper::splitString);
+        return list;
+    }
+
+    @Override
+    public String getName() {
+        return registry.getName();
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return aliases;
+    }
+
+    @Override
+    public @NotNull String generateExamples(ContainerHolder container, LoadStage loadStage, List<String> imports) {
+        if (description.location() == loadStage) {
+            imports.addAll(getImports());
+            return exampleBlock();
+        }
+        return "";
+    }
+
+    @Override
+    public void generateWiki(ContainerHolder container, File suggestedFolder, LinkIndex linkIndex) {
+        Exporter.writeNormalWikiFile(suggestedFolder, linkIndex, getName(), getTitle(), documentationBlock());
+    }
+
+    @Override
+    public int priority() {
+        return description.priority();
+    }
+
     private String getBaseLangKey() {
-        return BASE_LANG_LOCATION + "." + container.getModId() + "." + registry.getName();
+        return BASE_LANG_LOCATION + "." + container.id() + "." + registry.getName();
     }
 
     private String getReference() {
-        return BASE_ACCESS_COMPAT + "." + container.getModId() + "." + registry.getName();
+        return container.access() + "." + registry.getName();
     }
 
     private void addImports(Example... examples) {
@@ -154,7 +207,7 @@ public class Registry {
     private String generateHeader() {
         StringBuilder out = new StringBuilder();
         out.append("---\n").append("title: \"").append(getTitle()).append("\"\n");
-        if (Documentation.DEFAULT_FORMAT.hasTitleTemplate()) out.append("titleTemplate: \"").append(container).append(" | CleanroomMC").append("\"\n");
+        if (Documentation.DEFAULT_FORMAT.hasTitleTemplate()) out.append("titleTemplate: \"").append(container.name()).append(" | CleanroomMC").append("\"\n");
         out.append("description: \"").append(getDescription()).append("\"\n");
         String link = getFileSourceCodeLink();
         if (!link.isEmpty()) out.append("source_code_link: \"").append(link).append("\"\n");
@@ -163,7 +216,7 @@ public class Registry {
     }
 
     private String generateTitle() {
-        return String.format("# %s (%s)\n\n", getTitle(), container);
+        return String.format("# %s (%s)\n\n", getTitle(), container.name());
     }
 
     private String generateDescription() {
@@ -199,22 +252,20 @@ public class Registry {
         StringBuilder out = new StringBuilder();
         out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n").append(I18n.format("groovyscript.wiki.import_instructions")).append("\n\n");
 
-        List<String> packages = container.getAliases()
-                .stream()
-                .flatMap(modID -> registry.getAliases().stream().map(alias -> String.format("%s.%s.%s", Registry.BASE_ACCESS_COMPAT, modID, alias)))
-                .collect(Collectors.toList());
+        List<String> packages = getAliases();
 
         int target = packages.indexOf(getReference());
-        packages.set(target, getReference() + "/*()!*/");
-
-        out.append(
-                new CodeBlockBuilder()
-                        .line(packages)
-                        .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
-                        // Highlighting and focusing are based on the line count, and is 1-indexed
-                        .highlight(String.valueOf(1 + target))
-                        .focus(1 + target)
-                        .toString());
+        if (target == -1) {
+            GroovyLog.get().warn("Couldn't find identifier %s in packagess %s", getReference(), String.join(", ", packages));
+        } else {
+            packages.set(target, getReference() + "/*()!*/");
+            out.append(new CodeBlockBuilder()
+                               .line(packages)
+                               .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
+                               // Highlighting and focusing are based on the line count, and is 1-indexed
+                               .highlight(String.valueOf(1 + target))
+                               .focus(1 + target));
+        }
         return out.toString();
     }
 

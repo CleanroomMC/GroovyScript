@@ -2,169 +2,87 @@ package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IGroovyContainer;
 import com.cleanroommc.groovyscript.api.INamed;
+import com.cleanroommc.groovyscript.api.documentation.IRegistryDocumentation;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
+import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
+import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.resources.I18n;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class Exporter {
 
     private static final String INDEX_FILE_NAME = "index.md";
     private static final String NAV_FILE_NAME = "!navigation.md";
-    private static final String PRINT_MOD_DETECTED = "log 'mod \\'%s\\' detected, running script'";
+    private static final String EXAMPLE_HEADER = "\n// Auto generated groovyscript example file\n// MODS_LOADED: %1$s\n%2$s\nlog 'mod \\'%1$s\\' detected, running script'\n\n";
 
     private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
-    public static void generateWiki(File targetFolder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
-        generateWiki(targetFolder, mod, mod.get().getRegistries());
-    }
+    public static void generateWiki(File targetFolder, ContainerHolder container) {
+        var linkIndex = new LinkIndex();
 
-    public static void generateWiki(File targetFolder, IGroovyContainer container, Collection<INamed> registryCollection) {
-        List<String> fileLinks = new ArrayList<>();
-
-        Set<INamed> registries = new HashSet<>();
-        for (INamed named : registryCollection) {
-            var annotation = named.getClass().getAnnotation(RegistryDescription.class);
-            if (annotation == null) {
-                SKIPPED_CLASSES.put(container.getModId() + "." + named.getName(), named.getClass());
-            } else {
-                registries.add(named);
-            }
-        }
+        var registries = getRegistries(container, x -> x.skipDefaultWiki(container));
 
         if (registries.isEmpty()) return;
 
-        registries.stream()
-                .sorted(ComparisonHelper::iNamed)
-                .forEach(registry -> {
-                    Registry example = new Registry(container, registry);
-                    String location = String.format("%s.md", registry.getName());
-                    fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
-                    try {
-                        File file = new File(targetFolder, location);
-                        Files.write(file.toPath(), example.documentationBlock().trim().concat("\n").getBytes());
-                    } catch (IOException e) {
-                        GroovyScript.LOGGER.throwing(e);
-                    }
-                });
+        Documentation.ensureDirectoryExists(targetFolder);
 
-        // TODO add bracket handlers
-        //  maybe also add commands?
-
-        StringBuilder index = new StringBuilder()
-                .append("---")
-                .append("\n")
-                .append(Documentation.DEFAULT_FORMAT.removeTableOfContentsText())
-                .append("\n") // Removes the table of contents from the sidebar of indexes.
-                .append("---")
-                .append("\n\n\n")
-                .append("# ")
-                .append(container)
-                .append("\n\n")
-                .append("## ")
-                .append(I18n.format("groovyscript.wiki.categories"))
-                .append("\n\n")
-                .append(I18n.format("groovyscript.wiki.subcategories_count", registries.size()))
-                .append("\n\n");
-
-        StringBuilder navigation = new StringBuilder()
-                .append("---")
-                .append("\n")
-                .append("search:")
-                .append("\n")
-                .append("  exclude: true")
-                .append("\n") // Removes navigation files from the search index
-                .append("---")
-                .append("\n\n\n")
-                .append(String.format("* [%s](./%s)\n", container, INDEX_FILE_NAME));
-
-        fileLinks.forEach(line -> {
-            index.append(line).append("\n\n");
-            navigation.append(line).append("\n");
-        });
-
-        try {
-            File file = new File(targetFolder, INDEX_FILE_NAME);
-            Files.write(file.toPath(), index.toString().getBytes());
-        } catch (IOException e) {
-            GroovyScript.LOGGER.throwing(e);
+        for (var registry : registries) {
+            GroovyLog.msg("Generating wiki for the container {} and registry '{}'.", container.name(), registry.getName()).debug().post();
+            registry.generateWiki(container, targetFolder, linkIndex);
         }
+
+        String indexText = String.format("---\n%s\n---\n\n\n# %s\n\n%s", Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), container.name(), linkIndex.get());
+        write(new File(targetFolder, INDEX_FILE_NAME), indexText);
 
         if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
-            try {
-                File file = new File(targetFolder, NAV_FILE_NAME);
-                Files.write(file.toPath(), navigation.toString().getBytes());
-            } catch (IOException e) {
-                GroovyScript.LOGGER.throwing(e);
-            }
+            String navigation = String.format("---\nsearch:\n  exclude: true\n---\n\n\n* [%s](./%s)\n%s", container.name(), INDEX_FILE_NAME, linkIndex.getLinks());
+            write(new File(targetFolder, NAV_FILE_NAME), navigation);
         }
     }
 
-    public static void generateExamples(File targetFile, LoadStage loadStage, GroovyContainer<? extends GroovyPropertyContainer> mod) {
-        generateExamples(targetFile, loadStage, mod, mod.get().getRegistries());
+    public static void writeNormalWikiFile(File targetFolder, LinkIndex linkIndex, String id, String title, String doc) {
+        String location = id + ".md";
+        linkIndex.add(String.format("* [%s](./%s)", title, location));
+        write(new File(targetFolder, location), doc.trim().concat("\n"));
     }
 
-    public static void generateExamples(File targetFile, LoadStage loadStage, IGroovyContainer container, Collection<INamed> registryCollection) {
-        StringBuilder header = new StringBuilder();
+    public static void generateExamples(File targetFile, LoadStage loadStage, ContainerHolder container) {
         StringBuilder body = new StringBuilder();
 
         List<String> imports = new ArrayList<>();
 
-        // Preprocessor to only run script if the mod is loaded
-        header.append("\n")
-                .append("// Auto generated groovyscript example file")
-                .append("\n")
-                .append("// MODS_LOADED: ")
-                .append(container.getModId())
-                .append("\n");
-
-        // Iterate through every registry of the mod once, in alphabetical order.
-        Set<INamed> registries = new HashSet<>();
-        for (INamed named : registryCollection) {
-            var annotation = named.getClass().getAnnotation(RegistryDescription.class);
-            if (annotation == null) {
-                SKIPPED_CLASSES.put(container.getModId() + "." + named.getName(), named.getClass());
-                continue;
-            }
-            if (annotation.location() == loadStage) {
-                registries.add(named);
-            }
-        }
+        var registries = getRegistries(container, x -> x.skipDefaultExamples(container));
 
         if (registries.isEmpty()) return;
 
-        registries.stream()
-                .sorted(ComparisonHelper::iNamed)
-                .forEach(registry -> {
-                    GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", container.toString(), registry.getName()).debug().post();
-                    Registry example = new Registry(container, registry);
-                    imports.addAll(example.getImports());
-                    body.append(example.exampleBlock());
-                });
+        for (var registry : registries) {
+            GroovyLog.msg("Generating examples for the container {} and registry '{}'.", container.name(), registry.getName()).debug().post();
+            body.append(registry.generateExamples(container, loadStage, imports));
+        }
 
-        if (!imports.isEmpty()) header.append("\n");
-        imports.stream().distinct().sorted().forEach(i -> header.append("import ").append(i).append("\n"));
+        if (body.length() == 0) return;
 
-        // Print that the script was loaded at the end of the header, after any imports have been added.
-        header.append("\n")
-                .append(String.format(PRINT_MOD_DETECTED, container.getModId()))
-                .append("\n\n")
-                .append(body);
+        String header = String.format(EXAMPLE_HEADER, container.id(), getImportBlock(imports));
 
+        write(targetFile, header + body);
+    }
+
+    public static void write(File file, String text) {
         try {
-            Files.write(targetFile.toPath(), header.toString().getBytes());
+            Files.write(file.toPath(), text.getBytes());
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
@@ -178,6 +96,34 @@ public class Exporter {
                 outputStream.write(i);
             }
         }
+    }
+
+    private static List<IRegistryDocumentation> getRegistries(ContainerHolder container, Predicate<IRegistryDocumentation> check) {
+        List<IRegistryDocumentation> registries = new ArrayList<>();
+        for (INamed named : container.registries()) {
+            if (named instanceof IRegistryDocumentation doc) {
+                registries.add(doc);
+                if (check.test(doc)) continue;
+            }
+            if (named.getClass().isAnnotationPresent(RegistryDescription.class)) {
+                registries.add(new Registry(container, named));
+                continue;
+            }
+            SKIPPED_CLASSES.put(container.id() + "." + named.getName(), named.getClass());
+        }
+        registries.sort(ComparisonHelper::iRegistryDocumentation);
+        return registries;
+    }
+
+    private static String getImportBlock(List<String> imports) {
+        if (imports.isEmpty()) return "";
+        var list = new ArrayList<>(new ObjectOpenHashSet<>(imports));
+        list.sort(ComparisonHelper::splitString);
+        var sb = new StringBuilder();
+        for (var x : list) {
+            sb.append("\nimport ").append(x);
+        }
+        return sb + "\n";
     }
 
     public static void logSkippedClasses() {
