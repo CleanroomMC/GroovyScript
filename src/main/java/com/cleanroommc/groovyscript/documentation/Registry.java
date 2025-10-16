@@ -152,7 +152,7 @@ public class Registry implements IRegistryDocumentation {
     }
 
     private String getReference() {
-        return container.access() + "." + registry.getName();
+        return GroovyScript.getSandbox().getBindings().get(registry.getName()) == registry ? registry.getName() : container.access() + "." + registry.getName();
     }
 
     private void addImports(Example... examples) {
