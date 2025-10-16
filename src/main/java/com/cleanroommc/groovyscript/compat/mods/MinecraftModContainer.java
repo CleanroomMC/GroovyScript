@@ -5,6 +5,7 @@ import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.Exporter;
 import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
@@ -29,10 +30,7 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
             t.addPropertyFieldsOf(t, false);
             return t;
         });
-        Set<String> aliasSet = new ObjectOpenHashSet<>();
-        aliasSet.add("mc");
-        aliasSet.add("vanilla");
-        aliasSet.add(modId);
+        Set<String> aliasSet = new ObjectOpenHashSet<>(Alias.generateOf(containerName).andGenerate("Vanilla").and("mc").and("MC"));
         this.aliases = Collections.unmodifiableSet(aliasSet);
         ModSupport.INSTANCE.registerContainer(this);
     }
