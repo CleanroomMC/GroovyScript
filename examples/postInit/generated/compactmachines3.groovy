@@ -7,9 +7,9 @@ log 'mod \'compactmachines3\' detected, running script'
 // Miniaturization:
 // Consumes a 3d structure in-world based on keys when an item is thrown into the field.
 
-mods.compactmachines3.miniaturization.removeByCatalyst(item('minecraft:redstone'))
 mods.compactmachines3.miniaturization.removeByInput(item('minecraft:ender_pearl'))
 mods.compactmachines3.miniaturization.removeByOutput(item('compactmachines3:machine:3'))
+mods.compactmachines3.miniaturization.removeByCatalyst(item('minecraft:redstone'))
 // mods.compactmachines3.miniaturization.removeAll()
 
 mods.compactmachines3.miniaturization.recipeBuilder()

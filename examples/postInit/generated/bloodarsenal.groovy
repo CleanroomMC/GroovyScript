@@ -10,11 +10,11 @@ log 'mod \'bloodarsenal\' detected, running script'
 // an infusion item, adds or upgrades a modifier to the given stasis tool, with the ability to increase the quantity of
 // inputs consumed based on level.
 
-// mods.bloodarsenal.sanguine_infusion.removeBlacklist(WayofTime.bloodmagic.iface.ISigil.class)
 mods.bloodarsenal.sanguine_infusion.removeByInput(item('minecraft:feather'))
 mods.bloodarsenal.sanguine_infusion.removeByInput(item('bloodmagic:bound_axe'))
-// mods.bloodarsenal.sanguine_infusion.removeByModifierKey('beneficial_potion')
 mods.bloodarsenal.sanguine_infusion.removeByOutput(item('bloodarsenal:stasis_pickaxe'))
+// mods.bloodarsenal.sanguine_infusion.removeBlacklist(WayofTime.bloodmagic.iface.ISigil.class)
+// mods.bloodarsenal.sanguine_infusion.removeByModifierKey('beneficial_potion')
 // mods.bloodarsenal.sanguine_infusion.removeAll()
 // mods.bloodarsenal.sanguine_infusion.removeAllBlacklist()
 

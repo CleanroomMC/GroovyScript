@@ -67,9 +67,9 @@ mods.immersiveengineering.blast_furnace_fuel.recipeBuilder()
 // Converts any number of input itemstacks into an output itemstack, using a blueprint with the category nbt tag as a
 // catalyst.
 
-mods.immersiveengineering.blueprint_crafting.removeByCategory('electrode')
 mods.immersiveengineering.blueprint_crafting.removeByInput('components', item('immersiveengineering:metal:38'), item('immersiveengineering:metal:38'), item('immersiveengineering:metal'))
 mods.immersiveengineering.blueprint_crafting.removeByOutput('components', item('immersiveengineering:material:8'))
+mods.immersiveengineering.blueprint_crafting.removeByCategory('electrode')
 // mods.immersiveengineering.blueprint_crafting.removeAll()
 
 mods.immersiveengineering.blueprint_crafting.recipeBuilder()
@@ -136,8 +136,8 @@ mods.immersiveengineering.crusher.recipeBuilder()
 // Adds a Mineral Mix with the given name, weight, fail chance, ores, and allowed dimensions. A Mineral Mix can be mined by
 // an Excavator Multiblock and scanned via a Core Sample Drill.
 
-mods.immersiveengineering.excavator.removeByMineral('silt')
 mods.immersiveengineering.excavator.removeByOres(ore('oreAluminum'))
+mods.immersiveengineering.excavator.removeByMineral('silt')
 // mods.immersiveengineering.excavator.removeAll()
 
 mods.immersiveengineering.excavator.recipeBuilder()
@@ -177,9 +177,9 @@ mods.immersiveengineering.fermenter.recipeBuilder()
 // Metal Press:
 // Converts an input itemstack into an output itemstack, with a mold catalyst, consuming power.
 
+mods.immersiveengineering.metal_press.removeByMold(item('immersiveengineering:mold:4'))
 mods.immersiveengineering.metal_press.removeByInput(item('minecraft:iron_ingot'))
 mods.immersiveengineering.metal_press.removeByInput(item('immersiveengineering:mold'), item('immersiveengineering:metal:8'))
-mods.immersiveengineering.metal_press.removeByMold(item('immersiveengineering:mold:4'))
 mods.immersiveengineering.metal_press.removeByOutput(item('immersiveengineering:material:2'))
 mods.immersiveengineering.metal_press.removeByOutput(item('immersiveengineering:mold'), item('immersiveengineering:metal:31'))
 // mods.immersiveengineering.metal_press.removeAll()
@@ -195,8 +195,8 @@ mods.immersiveengineering.metal_press.recipeBuilder()
 // Mixer:
 // Converts any number of input itemstacks and a fluidstack into an output fluidstack, consuming power.
 
-mods.immersiveengineering.mixer.removeByInput(fluid('water'), item('minecraft:speckled_melon'))
 mods.immersiveengineering.mixer.removeByInput(item('minecraft:sand'), item('minecraft:sand'), item('minecraft:clay_ball'), item('minecraft:gravel'))
+mods.immersiveengineering.mixer.removeByInput(fluid('water'), item('minecraft:speckled_melon'))
 mods.immersiveengineering.mixer.removeByOutput(fluid('potion').withNbt([Potion:'minecraft:night_vision']))
 // mods.immersiveengineering.mixer.removeAll()
 
@@ -226,8 +226,8 @@ mods.immersiveengineering.refinery.recipeBuilder()
 // Converts an input itemstack into either an output itemstack, fluidstack, or both, using energy.
 
 mods.immersiveengineering.squeezer.removeByInput(item('minecraft:wheat_seeds'))
-mods.immersiveengineering.squeezer.removeByOutput(fluid('plantoil'))
 mods.immersiveengineering.squeezer.removeByOutput(item('immersiveengineering:material:18'))
+mods.immersiveengineering.squeezer.removeByOutput(fluid('plantoil'))
 // mods.immersiveengineering.squeezer.removeAll()
 
 mods.immersiveengineering.squeezer.recipeBuilder()

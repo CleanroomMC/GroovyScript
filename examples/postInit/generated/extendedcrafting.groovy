@@ -32,9 +32,9 @@ mods.extendedcrafting.combination_crafting.recipeBuilder()
 // Converts any number of a single item into an output itemstack, with a configurable rf cost, consumption per tick amount,
 // catalyst, and if the catalyst is consumed.
 
-mods.extendedcrafting.compression_crafting.removeByCatalyst(item('extendedcrafting:material:11'))
 mods.extendedcrafting.compression_crafting.removeByInput(item('minecraft:gold_ingot'))
 mods.extendedcrafting.compression_crafting.removeByOutput(item('extendedcrafting:singularity:6'))
+mods.extendedcrafting.compression_crafting.removeByCatalyst(item('extendedcrafting:material:11'))
 // mods.extendedcrafting.compression_crafting.removeAll()
 
 mods.extendedcrafting.compression_crafting.recipeBuilder()

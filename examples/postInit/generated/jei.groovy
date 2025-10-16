@@ -36,16 +36,16 @@ mods.jei.category.hideCategory('minecraft.fuel')
 
 // mods.jei.description.remove(item('thaumcraft:triple_meat_treat'))
 
-mods.jei.description.add(item('minecraft:clay'), ['wow', 'this', 'is', 'neat'])
 mods.jei.description.add(item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe')
+mods.jei.description.add(item('minecraft:clay'), ['wow', 'this', 'is', 'neat'])
 
 // Ingredient Sidebar:
 // Modify what ingredients show up in the search menu sidebar.
 
 mods.jei.ingredient.hide(fluid('water'))
 mods.jei.ingredient.hide(item('minecraft:stone:1'), item('minecraft:stone:3'))
-mods.jei.ingredient.hide(VanillaTypes.ITEM, item('minecraft:bed:*'))
 // mods.jei.ingredient.hide(mekanism.client.jei.MekanismJEI.TYPE_GAS, gas('tritium'))
+mods.jei.ingredient.hide(VanillaTypes.ITEM, item('minecraft:bed:*'))
 // mods.jei.ingredient.hideByType(VanillaTypes.ITEM)
 // mods.jei.ingredient.hideByType(VanillaTypes.FLUID)
 // mods.jei.ingredient.hideByType(VanillaTypes.ENCHANT)

@@ -101,7 +101,7 @@ public final class ComparisonHelper {
         return chain.result();
     }
 
-    public static int string(String left, String right) {
+    private static int string(String left, String right) {
         return ComparisonChain.start()
                 .compare(left.length(), right.length())
                 .compare(left, right, String::compareToIgnoreCase)
@@ -118,9 +118,8 @@ public final class ComparisonHelper {
     private static int comparePriorityAndMethod(int leftPriority, int rightPriority, Method leftMethod, Method rightName) {
         return ComparisonChain.start()
                 .compare(leftPriority, rightPriority)
-                .compare(leftMethod.getName(), rightName.getName(), String::compareToIgnoreCase)
-                .compare(DescriptorHelper.simpleParameters(leftMethod), DescriptorHelper.simpleParameters(rightName), String::compareToIgnoreCase)
+                .compare(leftMethod.getName(), rightName.getName(), ComparisonHelper::string)
+                .compare(DescriptorHelper.simpleParameters(leftMethod), DescriptorHelper.simpleParameters(rightName), ComparisonHelper::packages)
                 .result();
-
     }
 }

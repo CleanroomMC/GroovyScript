@@ -10,8 +10,8 @@ log 'mod \'pneumaticcraft\' detected, running script'
 mods.pneumaticcraft.amadron.removeByInput(item('minecraft:rotten_flesh'))
 mods.pneumaticcraft.amadron.removeByOutput(item('minecraft:emerald'))
 // mods.pneumaticcraft.amadron.removeAll()
-// mods.pneumaticcraft.amadron.removeAllPeriodic()
 // mods.pneumaticcraft.amadron.removeAllStatic()
+// mods.pneumaticcraft.amadron.removeAllPeriodic()
 
 mods.pneumaticcraft.amadron.recipeBuilder()
     .input(item('minecraft:clay') * 3)
@@ -113,8 +113,8 @@ mods.pneumaticcraft.liquid_fuel.recipeBuilder()
 // Converts a fluidstack and an item with a variable damage value into each other, requiring temperature to operate the
 // process, optionally consuming dye, and allowing either only melting or only solidifying.
 
-// mods.pneumaticcraft.plastic_mixer.removeByFluid(fluid('plastic'))
 // mods.pneumaticcraft.plastic_mixer.removeByItem(item('pneumaticcraft:plastic'))
+// mods.pneumaticcraft.plastic_mixer.removeByFluid(fluid('plastic'))
 // mods.pneumaticcraft.plastic_mixer.removeAll()
 
 mods.pneumaticcraft.plastic_mixer.recipeBuilder()

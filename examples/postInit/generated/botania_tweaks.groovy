@@ -11,10 +11,10 @@ log 'mod \'botania_tweaks\' detected, running script'
 // is finished. Upon finishing the recipe, the center, sides, and corners can each be converted into a replacement
 // blockstate, if a replacement blockstate was set.
 
-// mods.botania_tweaks.agglomeration_plate.removeByCenter(blockstate('botania:livingrock'))
-// mods.botania_tweaks.agglomeration_plate.removeByCorner(blockstate('botania:livingrock'))
 // mods.botania_tweaks.agglomeration_plate.removeByEdge(blockstate('minecraft:lapis_block'))
 // mods.botania_tweaks.agglomeration_plate.removeByInput(item('botania:manaresource:2'))
+// mods.botania_tweaks.agglomeration_plate.removeByCenter(blockstate('botania:livingrock'))
+// mods.botania_tweaks.agglomeration_plate.removeByCorner(blockstate('botania:livingrock'))
 mods.botania_tweaks.agglomeration_plate.removeByOutput(item('botania:manaresource:4'))
 // mods.botania_tweaks.agglomeration_plate.removeAll()
 

@@ -13,10 +13,10 @@ mods.mekanism.infusion.removeByType(infusionType('carbon'))
 // mods.mekanism.infusion.removeAll()
 
 mods.mekanism.infusion.addType('groovy_example', resource('groovyscriptdev:blocks/mekanism_infusion_texture'))
-mods.mekanism.infusion.add(infusionType('diamond'), 100, item('minecraft:clay'))
-mods.mekanism.infusion.add(infusionType('carbon'), 100, item('minecraft:gold_ingot'))
 mods.mekanism.infusion.add('groovy_example', 10, item('minecraft:ice'))
 mods.mekanism.infusion.add('groovy_example', 20, item('minecraft:packed_ice'))
+mods.mekanism.infusion.add(infusionType('diamond'), 100, item('minecraft:clay'))
+mods.mekanism.infusion.add(infusionType('carbon'), 100, item('minecraft:gold_ingot'))
 
 // Chemical Infuser:
 // Combines two input gas stacks into a output gas stack.

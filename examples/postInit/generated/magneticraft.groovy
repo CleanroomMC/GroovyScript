@@ -69,8 +69,8 @@ mods.magneticraft.grinder.recipeBuilder()
 // Hydraulic Press:
 // Converts an input itemstack into an output itemstack when set to a given mode in a Hydraulic Press Multiblock.
 
-mods.magneticraft.hydraulic_press.removeByInput(item('minecraft:iron_ingot'))
 mods.magneticraft.hydraulic_press.removeByMode(HydraulicPressMode.MEDIUM)
+mods.magneticraft.hydraulic_press.removeByInput(item('minecraft:iron_ingot'))
 mods.magneticraft.hydraulic_press.removeByOutput(item('minecraft:cobblestone'))
 // mods.magneticraft.hydraulic_press.removeAll()
 

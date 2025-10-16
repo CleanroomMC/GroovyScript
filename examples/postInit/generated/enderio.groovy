@@ -173,8 +173,8 @@ mods.enderio.soul_binder.recipeBuilder()
 // Converts an input itemstack into an output fluidstack with an optional output itemstack in drain mode, or converts an
 // input itemstack and fluidstack into an output itemstack in fill mode.
 
-mods.enderio.tank.removeDrain(item('minecraft:experience_bottle'), fluid('xpjuice'))
 mods.enderio.tank.removeFill(item('minecraft:glass_bottle'), fluid('xpjuice'))
+mods.enderio.tank.removeDrain(item('minecraft:experience_bottle'), fluid('xpjuice'))
 // mods.enderio.tank.removeAll()
 
 mods.enderio.tank.recipeBuilder()

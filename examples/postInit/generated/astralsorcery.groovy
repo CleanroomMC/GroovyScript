@@ -26,11 +26,19 @@ mods.astralsorcery.chalice_interaction.recipeBuilder()
 // Create a custom Constellation.
 
 mods.astralsorcery.constellation.remove(constellation('bootes'))
-mods.astralsorcery.constellation.removeConstellationMapEffect(constellation('discidia'))
 mods.astralsorcery.constellation.removeSignatureItems(constellation('discidia'))
+mods.astralsorcery.constellation.removeConstellationMapEffect(constellation('discidia'))
 // mods.astralsorcery.constellation.removeAll()
-// mods.astralsorcery.constellation.removeAllConstellationMapEffect()
 // mods.astralsorcery.constellation.removeAllSignatureItems()
+// mods.astralsorcery.constellation.removeAllConstellationMapEffect()
+
+mods.astralsorcery.constellation.signatureItems()
+    .constellation(constellation('square'))
+    .addItem(ore('gemDiamond'))
+    .addItem(item('minecraft:water_bucket'))
+    .addItem(item('minecraft:rabbit_foot'))
+    .addItem(item('minecraft:fish'))
+    .register()
 
 mods.astralsorcery.constellation.constellationBuilder()
     .major()
@@ -55,14 +63,6 @@ mods.astralsorcery.constellation.constellationMapEffectBuilder()
     .constellation(constellation('square'))
     .enchantmentEffect(enchantment('minecraft:luck_of_the_sea'), 1, 3)
     .potionEffect(potion('minecraft:luck'), 1, 2)
-    .register()
-
-mods.astralsorcery.constellation.signatureItems()
-    .constellation(constellation('square'))
-    .addItem(ore('gemDiamond'))
-    .addItem(item('minecraft:water_bucket'))
-    .addItem(item('minecraft:rabbit_foot'))
-    .addItem(item('minecraft:fish'))
     .register()
 
 
@@ -157,9 +157,9 @@ mods.astralsorcery.light_transmutation.recipeBuilder()
 // Converts an input item into fluid, with a chance at breaking every time fluid is produced. The amount of fluid produced
 // per interval can be increased via starlight.
 
-mods.astralsorcery.lightwell.removeByCatalyst(item('minecraft:ice'))
 mods.astralsorcery.lightwell.removeByInput(item('minecraft:packed_ice'))
 mods.astralsorcery.lightwell.removeByOutput(fluid('lava'))
+mods.astralsorcery.lightwell.removeByCatalyst(item('minecraft:ice'))
 // mods.astralsorcery.lightwell.removeAll()
 
 mods.astralsorcery.lightwell.recipeBuilder()
@@ -194,8 +194,8 @@ mods.astralsorcery.perk_tree_config.setXpFunction({ int i, long prev -> prev + 1
 // Research Pages:
 // Add custom Research Pages to the Astral Sorcery Book.
 
-mods.astralsorcery.research.disconnectNodes('MY_TEST_RESEARCH', 'ALTAR1')
 mods.astralsorcery.research.removeNode('CPAPER')
+mods.astralsorcery.research.disconnectNodes('MY_TEST_RESEARCH', 'ALTAR1')
 
 mods.astralsorcery.research.researchBuilder()
     .name('MY_TEST_RESEARCH')
@@ -217,8 +217,8 @@ mods.astralsorcery.research.researchBuilder()
     .register()
 
 
-mods.astralsorcery.research.connectNodes('MY_TEST_RESEARCH2', 'ENHANCED_COLLECTOR')
 mods.astralsorcery.research.moveNode('SOOTYMARBLE', 5, 6)
+mods.astralsorcery.research.connectNodes('MY_TEST_RESEARCH2', 'ENHANCED_COLLECTOR')
 
 // Starlight Altar:
 // Allows creation of shaped recipes in the Astral Sorcery Crafting Altar chain.

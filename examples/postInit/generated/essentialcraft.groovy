@@ -32,8 +32,8 @@ mods.essentialcraft.magician_table.recipeBuilder()
 // A machine used to quadruple ores using MRU and lava. Also adds the same recipes for Magmatic Furnace, which is used to
 // double ores using MRU.
 
-mods.essentialcraft.magmatic_smeltery.removeByInput(ore('oreIron'))
 mods.essentialcraft.magmatic_smeltery.removeByInput('oreDiamond')
+mods.essentialcraft.magmatic_smeltery.removeByInput(ore('oreIron'))
 // mods.essentialcraft.magmatic_smeltery.removeAll()
 
 mods.essentialcraft.magmatic_smeltery.recipeBuilder()

@@ -165,9 +165,9 @@ mods.prodigytech.rotary_grinder.recipeBuilder()
 // Performs recipes using Gold Dust, has a recipe catalyst, and uses up Circuit Boards and an optional extra input for each
 // recipe.
 
-mods.prodigytech.solderer.removeByAdditive(item('minecraft:iron_ingot'))
 mods.prodigytech.solderer.removeByOutput(item('prodigytech:circuit_refined'))
 mods.prodigytech.solderer.removeByPattern(item('prodigytech:pattern_circuit_refined'))
+mods.prodigytech.solderer.removeByAdditive(item('minecraft:iron_ingot'))
 // mods.prodigytech.solderer.removeAll()
 // mods.prodigytech.solderer.removeWithoutAdditive()
 

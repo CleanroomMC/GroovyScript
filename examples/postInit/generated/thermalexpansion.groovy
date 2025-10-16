@@ -108,12 +108,12 @@ mods.thermalexpansion.charger.recipeBuilder()
 // Converts an input itemstack into an output itemstack, with different modes each requiring a different augment to be
 // installed, costing power and taking time based on the power cost.
 
-mods.thermalexpansion.compactor.removeByInput(compactorMode('coin'), item('thermalfoundation:material:130'))
-mods.thermalexpansion.compactor.removeByInput(item('minecraft:iron_ingot'))
 // mods.thermalexpansion.compactor.removeByMode(compactorMode('plate'))
-mods.thermalexpansion.compactor.removeByOutput(compactorMode('coin'), item('thermalfoundation:coin:102'))
+mods.thermalexpansion.compactor.removeByInput(item('minecraft:iron_ingot'))
+mods.thermalexpansion.compactor.removeByInput(compactorMode('coin'), item('thermalfoundation:material:130'))
 mods.thermalexpansion.compactor.removeByOutput(item('minecraft:blaze_rod'))
 mods.thermalexpansion.compactor.removeByOutput(item('thermalfoundation:material:24'))
+mods.thermalexpansion.compactor.removeByOutput(compactorMode('coin'), item('thermalfoundation:coin:102'))
 // mods.thermalexpansion.compactor.removeAll()
 
 mods.thermalexpansion.compactor.recipeBuilder()
@@ -219,11 +219,11 @@ mods.thermalexpansion.enervation.add(item('minecraft:clay'), 100)
 // Igneous Extruder:
 // Converts a variable amount of lava and water into a specific output itemstack.
 
-// mods.thermalexpansion.extruder.removeByInput(false, fluid('lava'))
-// mods.thermalexpansion.extruder.removeByInput(fluid('water'))
-mods.thermalexpansion.extruder.removeByOutput(true, item('minecraft:gravel'))
-mods.thermalexpansion.extruder.removeByOutput(item('minecraft:obsidian'))
 // mods.thermalexpansion.extruder.removeByType(true)
+// mods.thermalexpansion.extruder.removeByInput(fluid('water'))
+// mods.thermalexpansion.extruder.removeByInput(false, fluid('lava'))
+mods.thermalexpansion.extruder.removeByOutput(item('minecraft:obsidian'))
+mods.thermalexpansion.extruder.removeByOutput(true, item('minecraft:gravel'))
 // mods.thermalexpansion.extruder.removeAll()
 
 mods.thermalexpansion.extruder.recipeBuilder()
@@ -247,11 +247,11 @@ mods.thermalexpansion.extruder.add(1000, item('minecraft:gold_block'), 100, 1000
 // Converts an input itemstack into an output itemstack, with the ability to undo the the recipe. Mainly used for
 // compressing ingots into blocks and splitting blocks into ingots.
 
-mods.thermalexpansion.factorizer.removeByInput(false, item('minecraft:diamond'))
-mods.thermalexpansion.factorizer.removeByInput(item('minecraft:coal:1'))
-// mods.thermalexpansion.factorizer.removeByOutput(false, item('minecraft:coal:1'))
-mods.thermalexpansion.factorizer.removeByOutput(item('minecraft:emerald_block'))
 // mods.thermalexpansion.factorizer.removeByType(true)
+mods.thermalexpansion.factorizer.removeByInput(item('minecraft:coal:1'))
+mods.thermalexpansion.factorizer.removeByInput(false, item('minecraft:diamond'))
+mods.thermalexpansion.factorizer.removeByOutput(item('minecraft:emerald_block'))
+// mods.thermalexpansion.factorizer.removeByOutput(false, item('minecraft:coal:1'))
 // mods.thermalexpansion.factorizer.removeAll()
 
 mods.thermalexpansion.factorizer.recipeBuilder()
@@ -287,9 +287,9 @@ mods.thermalexpansion.fisher_bait.add(item('minecraft:clay'), 100)
 // Redstone Furnace:
 // Converts an input itemstack into an output itemstack, costing power and taking time based on the power cost.
 
+mods.thermalexpansion.furnace.removeFood(item('minecraft:rabbit:*'))
 mods.thermalexpansion.furnace.removeByInput(item('minecraft:cactus:*'))
 mods.thermalexpansion.furnace.removeByOutput(item('minecraft:cooked_porkchop'))
-mods.thermalexpansion.furnace.removeFood(item('minecraft:rabbit:*'))
 // mods.thermalexpansion.furnace.removeAll()
 // mods.thermalexpansion.furnace.removeAllFood()
 
@@ -567,14 +567,14 @@ mods.thermalexpansion.steam.add(item('minecraft:clay'), 100)
 // Arboreal Extractor:
 // Controls what items and blocks can be turned into what fluids. Output can be boosted via Fertilizer items.
 
-mods.thermalexpansion.tapper.removeBlockByInput(item('minecraft:log'))
 mods.thermalexpansion.tapper.removeItemByInput(item('minecraft:log:1'))
+mods.thermalexpansion.tapper.removeBlockByInput(item('minecraft:log'))
 // mods.thermalexpansion.tapper.removeAll()
-// mods.thermalexpansion.tapper.removeAllBlocks()
 // mods.thermalexpansion.tapper.removeAllItems()
+// mods.thermalexpansion.tapper.removeAllBlocks()
 
-mods.thermalexpansion.tapper.addBlock(item('minecraft:clay'), fluid('lava') * 150)
 mods.thermalexpansion.tapper.addItem(item('minecraft:clay'), fluid('lava') * 300)
+mods.thermalexpansion.tapper.addBlock(item('minecraft:clay'), fluid('lava') * 150)
 
 // Arboreal Extractor Fertilizer:
 // Controls what items can be used in the fertilizer slot of the Arboreal Extractor Fertilizer and how effective they are.
@@ -588,8 +588,8 @@ mods.thermalexpansion.tapper_fertilizer.add(item('minecraft:clay'), 1000)
 // Controls what valid log blocks and leaf blocks are to define a tree structure which the Arboreal Extractor can function
 // on. The \"tree\" must contain some number of leaves adjacent to the log blocks to be valid.
 
-mods.thermalexpansion.tapper_tree.removeByLeaf(blockstate('minecraft:leaves', 'variant=birch'))
 mods.thermalexpansion.tapper_tree.removeByLog(blockstate('minecraft:log', 'variant=spruce'))
+mods.thermalexpansion.tapper_tree.removeByLeaf(blockstate('minecraft:leaves', 'variant=birch'))
 // mods.thermalexpansion.tapper_tree.removeAll()
 
 mods.thermalexpansion.tapper_tree.add(blockstate('minecraft:clay'), blockstate('minecraft:gold_block'))

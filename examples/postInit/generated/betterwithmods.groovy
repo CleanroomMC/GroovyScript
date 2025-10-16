@@ -77,8 +77,8 @@ mods.betterwithmods.crucible.recipeBuilder()
 // Heat:
 // Creates new levels or adds new blocks to old heat levels.
 
-mods.betterwithmods.heat.add(4, item('minecraft:redstone_block'), item('minecraft:redstone_torch'))
 mods.betterwithmods.heat.add(3, 'torch')
+mods.betterwithmods.heat.add(4, item('minecraft:redstone_block'), item('minecraft:redstone_torch'))
 
 // mods.betterwithmods.heat.removeAll()
 
@@ -106,8 +106,8 @@ mods.betterwithmods.hopper.recipeBuilder()
 // Hopper Filters:
 // Items placed in the middle slot of the Filtered Hopper to restrict what is capable of passing through.
 
-mods.betterwithmods.hopper_filters.removeByFilter(item('minecraft:trapdoor'))
 mods.betterwithmods.hopper_filters.removeByName('betterwithmods:ladder')
+mods.betterwithmods.hopper_filters.removeByFilter(item('minecraft:trapdoor'))
 // mods.betterwithmods.hopper_filters.removeAll()
 
 mods.betterwithmods.hopper_filters.recipeBuilder()

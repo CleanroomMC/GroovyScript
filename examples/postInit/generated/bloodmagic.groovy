@@ -8,10 +8,10 @@ log 'mod \'bloodmagic\' detected, running script'
 // Converts two items into an output itemstack by using Arcane Ashes in-world. Has a configurable texture for the
 // animation.
 
-mods.bloodmagic.alchemy_array.removeByCatalyst(item('bloodmagic:slate:2'))
 mods.bloodmagic.alchemy_array.removeByInput(item('bloodmagic:component:13'))
-mods.bloodmagic.alchemy_array.removeByInputAndCatalyst(item('bloodmagic:component:7'), item('bloodmagic:slate:1'))
 mods.bloodmagic.alchemy_array.removeByOutput(item('bloodmagic:sigil_void'))
+mods.bloodmagic.alchemy_array.removeByCatalyst(item('bloodmagic:slate:2'))
+mods.bloodmagic.alchemy_array.removeByInputAndCatalyst(item('bloodmagic:component:7'), item('bloodmagic:slate:1'))
 // mods.bloodmagic.alchemy_array.removeAll()
 
 mods.bloodmagic.alchemy_array.recipeBuilder()
@@ -85,8 +85,8 @@ mods.bloodmagic.blood_altar.recipeBuilder()
 // components, size, explosion strength, and Life Essence cost.
 
 mods.bloodmagic.meteor.remove(item('minecraft:diamond_block'))
-mods.bloodmagic.meteor.removeByCatalyst(item('minecraft:iron_block'))
 mods.bloodmagic.meteor.removeByInput(item('minecraft:gold_block'))
+mods.bloodmagic.meteor.removeByCatalyst(item('minecraft:iron_block'))
 // mods.bloodmagic.meteor.removeAll()
 
 mods.bloodmagic.meteor.recipeBuilder()
@@ -110,9 +110,9 @@ mods.bloodmagic.meteor.recipeBuilder()
 // Sacrificial:
 // How much Life Essence is gained when using the Sacrificial Dagger on a mob.
 
+mods.bloodmagic.sacrificial.remove('minecraft:villager')
 mods.bloodmagic.sacrificial.remove(entity('minecraft:villager'))
 mods.bloodmagic.sacrificial.remove(resource('minecraft:villager'))
-mods.bloodmagic.sacrificial.remove('minecraft:villager')
 // mods.bloodmagic.sacrificial.removeAll()
 
 mods.bloodmagic.sacrificial.recipeBuilder()

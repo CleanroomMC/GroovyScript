@@ -174,8 +174,8 @@ mods.thaumcraft.research.researchCategoryBuilder()
     .register()
 
 
-// mods.thaumcraft.research.addResearchLocation(resource('thaumcraft:research/new.json'))
 mods.thaumcraft.research.addScannable('KNOWLEDGETYPEHUMOR', item('minecraft:pumpkin'))
+// mods.thaumcraft.research.addResearchLocation(resource('thaumcraft:research/new.json'))
 
 // Smelting Bonus:
 // Additional item output when smelting a given item in the Infernal Furnace Multiblock.

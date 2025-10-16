@@ -9,9 +9,9 @@ log 'mod \'silentgems\' detected, running script'
 // from a Chaos Altar. Chaos is consumed at a maximum of 400 per tick, meaning the time taken corresponds to the Chaos
 // cost.
 
-mods.silentgems.chaos_altar.removeByCatalyst(item('minecraft:slime_ball'))
 mods.silentgems.chaos_altar.removeByInput(item('silentgems:gem'))
 mods.silentgems.chaos_altar.removeByOutput(item('silentgems:craftingmaterial'))
+mods.silentgems.chaos_altar.removeByCatalyst(item('minecraft:slime_ball'))
 // mods.silentgems.chaos_altar.removeAll()
 
 mods.silentgems.chaos_altar.recipeBuilder()

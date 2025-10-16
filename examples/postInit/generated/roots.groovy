@@ -8,8 +8,8 @@ log 'mod \'roots\' detected, running script'
 // Animal Harvest is a ritual that drops items from nearby mob's based on that mobs loottable without harming the mob. Only
 // applies to allowed mobs.
 
-mods.roots.animal_harvest.removeByEntity(entity('minecraft:pig'))
 mods.roots.animal_harvest.removeByName(resource('roots:chicken'))
+mods.roots.animal_harvest.removeByEntity(entity('minecraft:pig'))
 // mods.roots.animal_harvest.removeAll()
 
 mods.roots.animal_harvest.recipeBuilder()
@@ -47,9 +47,9 @@ mods.roots.animal_harvest_fish.recipeBuilder()
 // Bark Carving is a special set of alternate drops for blocks when broken with an item containing the tool type 'knife'.
 // Amount dropped is up to 2 + fortune/looting level higher than the set amount.
 
+mods.roots.bark_carving.removeByName(resource('roots:wildwood'))
 mods.roots.bark_carving.removeByBlock(item('minecraft:log:1'))
 mods.roots.bark_carving.removeByInput(item('minecraft:log'))
-mods.roots.bark_carving.removeByName(resource('roots:wildwood'))
 mods.roots.bark_carving.removeByOutput(item('roots:bark_dark_oak'))
 // mods.roots.bark_carving.removeAll()
 
@@ -73,8 +73,8 @@ mods.roots.bark_carving.recipeBuilder()
 // Chrysopoeia:
 // Chrysopoeia is a spell that transmutes items held in the main hand.
 
-mods.roots.chrysopoeia.removeByInput(item('minecraft:rotten_flesh'))
 mods.roots.chrysopoeia.removeByName(resource('roots:gold_from_silver'))
+mods.roots.chrysopoeia.removeByInput(item('minecraft:rotten_flesh'))
 mods.roots.chrysopoeia.removeByOutput(item('minecraft:iron_nugget'))
 // mods.roots.chrysopoeia.removeAll()
 
@@ -111,11 +111,11 @@ mods.roots.fey_crafter.recipeBuilder()
 // block. Additionally, using the spell Growth Infusion's Floral Reproduction modifier will duplicate the flower,
 // regardless of the soil block.
 
+mods.roots.flower_generation.removeByName(resource('roots:dandelion'))
 mods.roots.flower_generation.removeByFlower(block('minecraft:red_flower'))
+mods.roots.flower_generation.removeByFlower(item('minecraft:red_flower:3'))
 mods.roots.flower_generation.removeByFlower(block('minecraft:red_flower'), 1)
 mods.roots.flower_generation.removeByFlower(blockstate('minecraft:red_flower:2'))
-mods.roots.flower_generation.removeByFlower(item('minecraft:red_flower:3'))
-mods.roots.flower_generation.removeByName(resource('roots:dandelion'))
 // mods.roots.flower_generation.removeAll()
 
 mods.roots.flower_generation.recipeBuilder()
@@ -144,9 +144,9 @@ mods.roots.life_essence.add(entity('minecraft:wither_skeleton'))
 mods.roots.modifiers.disable(spell('spell_geas'))
 // mods.roots.modifiers.disableAll()
 
+mods.roots.modifiers.enable('extended_geas')
 mods.roots.modifiers.enable(modifier('roots:weakened_response'))
 mods.roots.modifiers.enable(resource('roots:animal_savior'))
-mods.roots.modifiers.enable('extended_geas')
 
 // Mortar And Pestle:
 // When right clicking a mortar containing the input items with a pestle, it will display a few colored sparkles, consume
@@ -197,8 +197,8 @@ mods.roots.moss.add(item('minecraft:stained_glass:3'), item('minecraft:stained_g
 // Pacifist:
 // Pacifist is a list of entities which killing will give the player the advancement 'Untrue Pacifist'.
 
-mods.roots.pacifist.removeByEntity(entity('minecraft:cow'))
 mods.roots.pacifist.removeByName(resource('minecraft:chicken'))
+mods.roots.pacifist.removeByEntity(entity('minecraft:cow'))
 // mods.roots.pacifist.removeAll()
 
 mods.roots.pacifist.recipeBuilder()
@@ -273,8 +273,8 @@ mods.roots.rituals.recipeBuilder()
 // Right clicking a Runic Shear on a block to convert it into a replacement block and drop items.
 
 mods.roots.runic_shear_block.removeByName(resource('roots:wildewheet'))
-mods.roots.runic_shear_block.removeByOutput(item('roots:spirit_herb'))
 mods.roots.runic_shear_block.removeByState(blockstate('minecraft:beetroots:age=3'))
+mods.roots.runic_shear_block.removeByOutput(item('roots:spirit_herb'))
 // mods.roots.runic_shear_block.removeAll()
 
 mods.roots.runic_shear_block.recipeBuilder()
@@ -295,8 +295,8 @@ mods.roots.runic_shear_block.recipeBuilder()
 // Runic Shear Entity:
 // Right clicking a Runic Shear on an entity. The entity will have a cooldown, preventing spamming.
 
-mods.roots.runic_shear_entity.removeByEntity(entity('minecraft:chicken'))
 mods.roots.runic_shear_entity.removeByName(resource('roots:slime_strange_ooze'))
+mods.roots.runic_shear_entity.removeByEntity(entity('minecraft:chicken'))
 mods.roots.runic_shear_entity.removeByOutput(item('roots:fey_leather'))
 // mods.roots.runic_shear_entity.removeAll()
 
@@ -344,8 +344,8 @@ mods.roots.spells.recipeBuilder()
 // Summon Creature:
 // When running a Summon Creature Ritual, the input items placed on Catalyst Plate will summon the target entity.
 
-mods.roots.summon_creature.removeByEntity(entity('minecraft:chicken'))
 mods.roots.summon_creature.removeByName(resource('roots:cow'))
+mods.roots.summon_creature.removeByEntity(entity('minecraft:chicken'))
 // mods.roots.summon_creature.removeAll()
 
 mods.roots.summon_creature.recipeBuilder()
@@ -359,8 +359,8 @@ mods.roots.summon_creature.recipeBuilder()
 // When running the Transmutation, convert nearby blocks that match a set of conditions into either a block or items.
 
 mods.roots.transmutation.removeByName(resource('roots:redstone_block_to_glowstone'))
-mods.roots.transmutation.removeByOutput(blockstate('minecraft:log:variant=jungle'))
 mods.roots.transmutation.removeByOutput(item('minecraft:dye:3'))
+mods.roots.transmutation.removeByOutput(blockstate('minecraft:log:variant=jungle'))
 // mods.roots.transmutation.removeAll()
 
 mods.roots.transmutation.recipeBuilder()

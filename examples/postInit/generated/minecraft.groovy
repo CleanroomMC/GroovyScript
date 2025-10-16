@@ -12,8 +12,8 @@ minecraft.command.registerCommand('groovy_test', { server, sender, args -> sende
 // A normal crafting recipe that takes place in the Vanilla Crafting Table, converting up to 9 items in a shapeless or
 // specific shaped arrangement into an output itemstack.
 
-crafting.remove(resource('minecraft:stonebrick'))
 crafting.remove('minecraft:mossy_stonebrick')
+crafting.remove(resource('minecraft:stonebrick'))
 crafting.removeByOutput(item('minecraft:gold_ingot'))
 // crafting.removeAll()
 
@@ -145,17 +145,17 @@ crafting.shapelessBuilder()
 
 
 // crafting.addShaped(item('minecraft:gold_block'), [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[null, null, null],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
-// crafting.addShaped(resource('example:resource_location'), item('minecraft:clay'), [[item('minecraft:cobblestone')],[item('minecraft:nether_star')],[item('minecraft:cobblestone')]])
 // crafting.addShaped('gold_v_to_clay', item('minecraft:clay'), [[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:gold_ingot'),null]])
+// crafting.addShaped(resource('example:resource_location'), item('minecraft:clay'), [[item('minecraft:cobblestone')],[item('minecraft:nether_star')],[item('minecraft:cobblestone')]])
 // crafting.addShapeless(item('minecraft:clay'), [item('minecraft:cobblestone'),item('minecraft:nether_star'),item('minecraft:gold_ingot')])
-// crafting.addShapeless(resource('example:resource_location2'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
 // crafting.addShapeless('precious_to_clay', item('minecraft:clay'), [item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')])
+// crafting.addShapeless(resource('example:resource_location2'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
 // crafting.replaceShaped(item('minecraft:chest'), [[ore('logWood'),ore('logWood'),ore('logWood')],[ore('logWood'),null,ore('logWood')],[ore('logWood'),ore('logWood'),ore('logWood')]])
-// crafting.replaceShaped(resource('minecraft:sea_lantern'), item('minecraft:clay'), [[item('minecraft:glowstone')],[item('minecraft:glowstone')],[item('minecraft:glowstone')]])
 // crafting.replaceShaped('gold_to_diamonds', item('minecraft:diamond') * 8, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
+// crafting.replaceShaped(resource('minecraft:sea_lantern'), item('minecraft:clay'), [[item('minecraft:glowstone')],[item('minecraft:glowstone')],[item('minecraft:glowstone')]])
 // crafting.replaceShapeless(item('minecraft:ender_eye'), [item('minecraft:ender_pearl'),item('minecraft:nether_star')])
-// crafting.replaceShapeless(resource('minecraft:pink_dye_from_peony'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
 // crafting.replaceShapeless('minecraft:pink_dye_from_pink_tulp', item('minecraft:clay'), [item('minecraft:nether_star')])
+// crafting.replaceShapeless(resource('minecraft:pink_dye_from_peony'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
 
 // Furnace:
 // Converts an input item into an output itemstack after a configurable amount of time, with the ability to give experience
@@ -184,8 +184,8 @@ furnace.addFuelConversion(item('minecraft:diamond'), item('minecraft:bucket').tr
 
 minecraft.game_rule.setWarnNewGameRule(true)
 
-minecraft.game_rule.add(['mobGriefing': 'false', 'keepInventory': 'true'])
 minecraft.game_rule.add('doDaylightCycle', 'false')
+minecraft.game_rule.add(['mobGriefing': 'false', 'keepInventory': 'true'])
 
 // Ore Dictionary:
 // Manipulate the Ore Dictionary and what itemstacks are part of what oredicts.
@@ -198,16 +198,16 @@ ore_dict.remove('netherStar', item('minecraft:nether_star'))
 ore_dict.add('ingotGold', item('minecraft:nether_star'))
 ore_dict.add('netherStar', item('minecraft:gold_ingot'))
 
+ore_dict.getOres('ingot*')
 ore_dict.getOres(~/.*/)
 ore_dict.getOres(~/.*Gold/)
 ore_dict.getOres(~/.*or.*/)
-ore_dict.getOres('ingot*')
 
 // Starting Inventory:
 // Sets the starting inventory of the player, including armor slots and offhand.
 
-minecraft.player.setReplaceDefaultInventory(true)
 // minecraft.player.setTestStartingItems(true)
+minecraft.player.setReplaceDefaultInventory(true)
 
 minecraft.player.addStartingItem(item('minecraft:diamond'))
 minecraft.player.addStartingItem(item('minecraft:clay_ball'))

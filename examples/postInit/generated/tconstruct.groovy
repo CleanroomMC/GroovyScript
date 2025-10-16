@@ -8,8 +8,8 @@ log 'mod \'tconstruct\' detected, running script'
 // Modifies what fluids can be mixed together in the Smeltery.
 
 mods.tconstruct.alloying.removeByInputs(fluid('cobalt')*2,fluid('ardite')*2)
-mods.tconstruct.alloying.removeByInputsAndOutput(fluid('knightslime')*72,fluid('iron')*72,fluid('stone')*144,fluid('purpleslime')*125)
 mods.tconstruct.alloying.removeByOutput(fluid('pigiron'))
+mods.tconstruct.alloying.removeByInputsAndOutput(fluid('knightslime')*72,fluid('iron')*72,fluid('stone')*144,fluid('purpleslime')*125)
 // mods.tconstruct.alloying.removeAll()
 
 mods.tconstruct.alloying.recipeBuilder()

@@ -120,8 +120,8 @@ mods.actuallyadditions.empowerer.recipeBuilder()
 // A weighted oredict for the block obtained via firing a Mining Lens at a block of Netherrack. The oredict must have a
 // block, or the world will hang.
 
-mods.actuallyadditions.nether_mining_lens.removeByOre(ore('oreQuartz'))
 mods.actuallyadditions.nether_mining_lens.removeByOre('oreQuartz')
+mods.actuallyadditions.nether_mining_lens.removeByOre(ore('oreQuartz'))
 // mods.actuallyadditions.nether_mining_lens.removeAll()
 
 mods.actuallyadditions.nether_mining_lens.recipeBuilder()
@@ -139,8 +139,8 @@ mods.actuallyadditions.nether_mining_lens.recipeBuilder()
 // Turns a fluid into power at a rate.
 
 mods.actuallyadditions.oil_gen.removeByInput(fluid('canolaoil').getFluid())
-mods.actuallyadditions.oil_gen.removeByInput(fluid('canolaoil'))
 mods.actuallyadditions.oil_gen.removeByInput('refinedcanolaoil')
+mods.actuallyadditions.oil_gen.removeByInput(fluid('canolaoil'))
 // mods.actuallyadditions.oil_gen.removeAll()
 
 mods.actuallyadditions.oil_gen.recipeBuilder()
@@ -160,8 +160,8 @@ mods.actuallyadditions.oil_gen.recipeBuilder()
 // A weighted oredict for the block obtained via firing a Mining Lens at a block of Stone. The oredict must have a block,
 // or the world will hang.
 
-mods.actuallyadditions.stone_mining_lens.removeByOre(ore('oreCoal'))
 mods.actuallyadditions.stone_mining_lens.removeByOre('oreLapis')
+mods.actuallyadditions.stone_mining_lens.removeByOre(ore('oreCoal'))
 // mods.actuallyadditions.stone_mining_lens.removeAll()
 
 mods.actuallyadditions.stone_mining_lens.recipeBuilder()

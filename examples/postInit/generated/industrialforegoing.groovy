@@ -39,10 +39,10 @@ mods.industrialforegoing.fluid_dictionary.add(fluid('latex'), fluid('essence'), 
 // Converts power into ores, with a given weight, between a minimum and maximum Y value, in any whitelisted biome or not in
 // any blacklisted biome, and with a specific color of laser lens impacting the probability.
 
-mods.industrialforegoing.laser_drill.removeByBlacklist(biome('minecraft:sky'))
 mods.industrialforegoing.laser_drill.removeByLens(5)
 // mods.industrialforegoing.laser_drill.removeByLens(item('industrialforegoing:laser_lens:5'))
 mods.industrialforegoing.laser_drill.removeByOutput(item('minecraft:coal_ore'))
+mods.industrialforegoing.laser_drill.removeByBlacklist(biome('minecraft:sky'))
 mods.industrialforegoing.laser_drill.removeByWhitelist(biome('minecraft:hell'))
 // mods.industrialforegoing.laser_drill.removeAll()
 
@@ -65,9 +65,9 @@ mods.industrialforegoing.ore_fermenter.add(fluid('if.ore_fluid_raw').withNbt(['O
 // Washing Factory:
 // Converts an input itemstack and input fluidstack into an output fluidstack.
 
-// mods.industrialforegoing.ore_raw.removeByInput(fluid('meat'))
-mods.industrialforegoing.ore_raw.removeByOre(ore('oreRedstone'))
 // mods.industrialforegoing.ore_raw.removeByOre('oreRedstone')
+mods.industrialforegoing.ore_raw.removeByOre(ore('oreRedstone'))
+// mods.industrialforegoing.ore_raw.removeByInput(fluid('meat'))
 // mods.industrialforegoing.ore_raw.removeByOutput(fluid('if.ore_fluid_raw').withNbt(['Ore': 'oreRedstone']),)
 // mods.industrialforegoing.ore_raw.removeAll()
 

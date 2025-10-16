@@ -26,10 +26,10 @@ mods.inspirations.anvil_smashing.recipeBuilder()
 // Converts up to 1 itemstack and up to 1 fluid into up to 1 itemstack or up to 1 fluid, with a boiling boolean and
 // variable amount of fluid consumed or produced.
 
-mods.inspirations.cauldron.removeByFluidInput(fluid('mushroom_stew'))
-mods.inspirations.cauldron.removeByFluidOutput(fluid('beetroot_soup'))
 mods.inspirations.cauldron.removeByInput(item('minecraft:ghast_tear'))
 mods.inspirations.cauldron.removeByOutput(item('minecraft:piston'))
+mods.inspirations.cauldron.removeByFluidInput(fluid('mushroom_stew'))
+mods.inspirations.cauldron.removeByFluidOutput(fluid('beetroot_soup'))
 // mods.inspirations.cauldron.removeAll()
 
 mods.inspirations.cauldron.recipeBuilder()
@@ -42,17 +42,16 @@ mods.inspirations.cauldron.recipeBuilder()
     .levels(3)
     .register()
 
-mods.inspirations.cauldron.recipeBuilderBrewing()
-    .input(item('minecraft:diamond_block'))
-    .inputPotion(potionType('minecraft:fire_resistance'))
-    .outputPotion(potionType('minecraft:strength'))
-    .register()
-
 mods.inspirations.cauldron.recipeBuilderDye()
     .input(item('minecraft:gold_block'))
     .output(item('minecraft:diamond_block'))
     .dye('blue')
     .levels(2)
+    .register()
+
+mods.inspirations.cauldron.recipeBuilderMix()
+    .output(item('minecraft:clay'))
+    .fluidInput(fluid('milk'), fluid('lava'))
     .register()
 
 mods.inspirations.cauldron.recipeBuilderFill()
@@ -62,16 +61,17 @@ mods.inspirations.cauldron.recipeBuilderFill()
     .sound(sound('minecraft:block.anvil.destroy'))
     .register()
 
-mods.inspirations.cauldron.recipeBuilderMix()
-    .output(item('minecraft:clay'))
-    .fluidInput(fluid('milk'), fluid('lava'))
-    .register()
-
 mods.inspirations.cauldron.recipeBuilderPotion()
     .input(item('minecraft:gold_block'))
     .output(item('minecraft:diamond_block'))
     .inputPotion(potionType('minecraft:fire_resistance'))
     .levels(2)
+    .register()
+
+mods.inspirations.cauldron.recipeBuilderBrewing()
+    .input(item('minecraft:diamond_block'))
+    .inputPotion(potionType('minecraft:fire_resistance'))
+    .outputPotion(potionType('minecraft:strength'))
     .register()
 
 mods.inspirations.cauldron.recipeBuilderStandard()

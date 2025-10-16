@@ -61,8 +61,8 @@ mods.extrautils2.furnace.recipeBuilder()
 // Generators:
 // Converts up to two input itemstacks and an input fluidstack into energy over time.
 
-mods.extrautils2.generator.remove('extrautils2:generator_lava', fluid('lava'))
 mods.extrautils2.generator.remove('extrautils2:generator_culinary', item('minecraft:apple'))
+mods.extrautils2.generator.remove('extrautils2:generator_lava', fluid('lava'))
 mods.extrautils2.generator.removeByGenerator('extrautils2:generator_death')
 // mods.extrautils2.generator.removeAll()
 
@@ -100,11 +100,11 @@ mods.extrautils2.generator.recipeBuilder()
 // Grid Power Generators:
 // Passively produces Grid Power into the Owner's GP network.
 
+mods.extrautils2.grid_power_passive_generator.setScaling(resource('generators:creative'), 500.0F, 0.5F, 1000.0F, 0.25F, 1500.0F, 0.05F)
 mods.extrautils2.grid_power_passive_generator.setBasePower(resource('generators:creative'), 5f)
 mods.extrautils2.grid_power_passive_generator.setBasePower(resource('generators:player_wind_up'), 100f)
 mods.extrautils2.grid_power_passive_generator.setPowerLevel(resource('generators:solar'), { TilePassiveGenerator generator, World world -> 100f })
 mods.extrautils2.grid_power_passive_generator.setPowerMultiplier(resource('generators:wind'), IWorldPowerMultiplier.CONSTANT)
-mods.extrautils2.grid_power_passive_generator.setScaling(resource('generators:creative'), 500.0F, 0.5F, 1000.0F, 0.25F, 1500.0F, 0.05F)
 
 // Resonator:
 // Converts and input itemstack into an output itemstack, consuming Grid Power from the Owner's GP network. Can also

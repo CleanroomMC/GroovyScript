@@ -8,10 +8,10 @@ log 'mod \'naturesaura\' detected, running script'
 // Converts an input itemstack into an itemstack in a multiblock structure, with an optional catalyst block, costing aura
 // and taking a configurable duration.
 
-mods.naturesaura.altar.removeByCatalyst(item('naturesaura:crushing_catalyst'))
-mods.naturesaura.altar.removeByInput(item('minecraft:rotten_flesh'))
 mods.naturesaura.altar.removeByName(resource('naturesaura:infused_iron'))
+mods.naturesaura.altar.removeByInput(item('minecraft:rotten_flesh'))
 mods.naturesaura.altar.removeByOutput(item('minecraft:soul_sand'))
+mods.naturesaura.altar.removeByCatalyst(item('naturesaura:crushing_catalyst'))
 // mods.naturesaura.altar.removeAll()
 
 mods.naturesaura.altar.recipeBuilder()
@@ -44,10 +44,10 @@ mods.naturesaura.altar.recipeBuilder()
 // Converts up to 16 times the input itemstack into output itemstacks by consuming a catalyst item from the ground in a
 // multiblock structure.
 
-// mods.naturesaura.offering.removeByCatalyst(item('naturesaura:calling_spirit'))
-mods.naturesaura.offering.removeByInput(item('minecraft:nether_star'))
 mods.naturesaura.offering.removeByName(resource('naturesaura:token_euphoria'))
+mods.naturesaura.offering.removeByInput(item('minecraft:nether_star'))
 mods.naturesaura.offering.removeByOutput(item('naturesaura:sky_ingot'))
+// mods.naturesaura.offering.removeByCatalyst(item('naturesaura:calling_spirit'))
 // mods.naturesaura.offering.removeAll()
 
 mods.naturesaura.offering.recipeBuilder()
@@ -75,8 +75,8 @@ mods.naturesaura.offering.recipeBuilder()
 // Converts multiple input items into an output itemstack after a duration when a sapling grows in the middle of a
 // multiblock structure.
 
-mods.naturesaura.ritual.removeByInput(item('naturesaura:infused_stone'))
 mods.naturesaura.ritual.removeByName(resource('naturesaura:eye_improved'))
+mods.naturesaura.ritual.removeByInput(item('naturesaura:infused_stone'))
 mods.naturesaura.ritual.removeByOutput(item('naturesaura:eye'))
 mods.naturesaura.ritual.removeBySapling(item('minecraft:sapling:3'))
 // mods.naturesaura.ritual.removeAll()
@@ -108,10 +108,10 @@ mods.naturesaura.ritual.recipeBuilder()
 // Altar of Birthing:
 // Converts multiple input itemstacks into a summoned entity, costing aura and taking time.
 
+mods.naturesaura.spawning.removeByName(resource('naturesaura:cow'))
+mods.naturesaura.spawning.removeByInput(item('minecraft:bone'))
 mods.naturesaura.spawning.removeByEntity(entity('minecraft:polar_bear'))
 mods.naturesaura.spawning.removeByEntity(resource('minecraft:cave_spider'))
-mods.naturesaura.spawning.removeByInput(item('minecraft:bone'))
-mods.naturesaura.spawning.removeByName(resource('naturesaura:cow'))
 // mods.naturesaura.spawning.removeAll()
 
 mods.naturesaura.spawning.recipeBuilder()

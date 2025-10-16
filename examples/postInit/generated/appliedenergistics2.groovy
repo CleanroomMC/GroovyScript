@@ -10,15 +10,15 @@ log 'mod \'appliedenergistics2\' detected, running script'
 // Controls using specific items, any items from a mod, or any items with a Capability to convert a P2P into a specific
 // tunnel type.
 
-mods.appliedenergistics2.attunement.remove(Capabilities.FORGE_ENERGY, tunnel('fe_power'))
-mods.appliedenergistics2.attunement.remove(item('minecraft:lever'), tunnel('redstone'))
 mods.appliedenergistics2.attunement.remove('thermaldynamics', tunnel('fe_power'))
+mods.appliedenergistics2.attunement.remove(item('minecraft:lever'), tunnel('redstone'))
+mods.appliedenergistics2.attunement.remove(Capabilities.FORGE_ENERGY, tunnel('fe_power'))
 mods.appliedenergistics2.attunement.removeByTunnel(tunnel('item'))
 // mods.appliedenergistics2.attunement.removeAll()
 
-mods.appliedenergistics2.attunement.add(Capabilities.FORGE_ENERGY, tunnel('item'))
-mods.appliedenergistics2.attunement.add(item('minecraft:clay'), tunnel('item'))
 mods.appliedenergistics2.attunement.add('thermaldynamics', tunnel('redstone'))
+mods.appliedenergistics2.attunement.add(item('minecraft:clay'), tunnel('item'))
+mods.appliedenergistics2.attunement.add(Capabilities.FORGE_ENERGY, tunnel('item'))
 
 // Cannon Ammo:
 // Item and weight, where weight is a factor in how much damage is dealt.

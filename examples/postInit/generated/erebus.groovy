@@ -9,17 +9,17 @@ log 'mod \'erebus\' detected, running script'
 // any Blocks using the valid Materials to be converted, and the Registry contains any valid ItemStacks. The conversion
 // takes 10 seconds, and is fueled by erebus wall plants.
 
-// mods.erebus.composter.removeFromBlacklist(item('erebus:wall_plants', 1))
 mods.erebus.composter.removeFromMaterial(blockmaterial('sponge'))
 mods.erebus.composter.removeFromRegistry(item('minecraft:stick'))
-// mods.erebus.composter.removeAllFromBlacklist()
+// mods.erebus.composter.removeFromBlacklist(item('erebus:wall_plants', 1))
 // mods.erebus.composter.removeAllFromMaterial()
 // mods.erebus.composter.removeAllFromRegistry()
+// mods.erebus.composter.removeAllFromBlacklist()
 
-mods.erebus.composter.addBlacklist(item('erebus:wall_plants', 7))
-mods.erebus.composter.addBlacklist(item('erebus:wall_plants_cultivated', 7))
 mods.erebus.composter.addMaterial(blockmaterial('tnt'))
 mods.erebus.composter.addRegistry(item('minecraft:gold_ingot'))
+mods.erebus.composter.addBlacklist(item('erebus:wall_plants', 7))
+mods.erebus.composter.addBlacklist(item('erebus:wall_plants_cultivated', 7))
 
 // Offering Altar:
 // Converts up to 3 input itemstacks into an output itemstack.
@@ -42,10 +42,10 @@ mods.erebus.offering_altar.recipeBuilder()
 // Smoothie-matic:
 // Converts a container item, up to 4 input items, and up to 4 input fluidstacks into an output itemstack.
 
-mods.erebus.smoothie.removeByContainer(item('minecraft:bucket'))
 mods.erebus.smoothie.removeByInput(fluid('honey'))
 mods.erebus.smoothie.removeByInput(item('erebus:materials', 18))
 mods.erebus.smoothie.removeByOutput(item('erebus:materials', 21))
+mods.erebus.smoothie.removeByContainer(item('minecraft:bucket'))
 // mods.erebus.smoothie.removeAll()
 
 mods.erebus.smoothie.recipeBuilder()

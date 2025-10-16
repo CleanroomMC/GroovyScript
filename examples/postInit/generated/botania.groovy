@@ -72,9 +72,9 @@ mods.botania.magnet.addToBlacklist(item('minecraft:diamond'))
 // Mana Infusion:
 // Toss an item into a mana pool with an optional catalyst blockstate below the pool.
 
-mods.botania.mana_infusion.removeByCatalyst(blockstate('botania:alchemycatalyst'))
 mods.botania.mana_infusion.removeByInput(item('minecraft:ender_pearl'))
 mods.botania.mana_infusion.removeByOutput(item('botania:managlass'))
+mods.botania.mana_infusion.removeByCatalyst(blockstate('botania:alchemycatalyst'))
 // mods.botania.mana_infusion.removeAll()
 
 mods.botania.mana_infusion.recipeBuilder()
@@ -88,9 +88,9 @@ mods.botania.mana_infusion.recipeBuilder()
 // Orechid:
 // Converts stone blocks into one of a few ore blocks at the cost of mana.
 
+mods.botania.orechid.removeByOutput('oreCoal')
 // mods.botania.orechid.removeByOutput(ore('oreQuartz'))
 // mods.botania.orechid.removeByOutput(ore('oreEmerald'))
-mods.botania.orechid.removeByOutput('oreCoal')
 // mods.botania.orechid.removeAll()
 
 mods.botania.orechid.add(ore('blockGold'), 1800)
@@ -99,9 +99,9 @@ mods.botania.orechid.add(ore('oreEmerald'), 1350)
 // Orechid Ignem:
 // Converts netherrack blocks into one of a few ore blocks at the cost of mana.
 
+mods.botania.orechid_ignem.removeByOutput('oreQuartz')
 // mods.botania.orechid_ignem.removeByOutput(ore('oreQuartz'))
 // mods.botania.orechid_ignem.removeByOutput(ore('oreEmerald'))
-mods.botania.orechid_ignem.removeByOutput('oreQuartz')
 // mods.botania.orechid_ignem.removeAll()
 
 mods.botania.orechid_ignem.add(ore('blockGold'), 1800)
@@ -159,17 +159,17 @@ mods.botania.category.add('first', resource('minecraft:textures/items/clay_ball.
 mods.botania.page.removeByEntry('botania.entry.runeAltar')
 // mods.botania.page.removeAll()
 
-// mods.botania.page.createBrewingPage('groovy.exampleBrewingPage', 'bottomText', 'bottomText', mods.botania.brewrecipe.recipeBuilder().input(item('minecraft:clay'), ore('ingotGold'), ore('gemDiamond')).brew(brew('absorption')).register())
-mods.botania.page.createCraftingPage('groovy.exampleCraftingPage', 'minecraft:clay')
-// mods.botania.page.createElvenTradePage('groovy.exampleElvenTradePage', mods.botania.elventrade.recipeBuilder().input(ore('ingotGold'), ore('ingotIron')).output(item('botania:manaresource:7')).register())
-mods.botania.page.createEntityPage('groovy.exampleEntityPage', 5, entity('minecraft:wither_skeleton'))
-mods.botania.page.createEntityPage('groovy.exampleEntityPage', 100, 'minecraft:wither_skeleton')
-mods.botania.page.createImagePage('groovy.exampleImagePage', 'minecraft:textures/items/apple.png')
-// mods.botania.page.createInfusionPage('groovy.exampleInfusionPage', mods.botania.manainfusion.recipeBuilder().input(ore('ingotGold')).output(item('botania:manaresource', 1)).mana(500).catalyst(blockstate('minecraft:stone')).register())
-mods.botania.page.createLoreTextPage('groovy.exampleLoreTextPage')
-// mods.botania.page.createPetalPage('groovy.examplePetalPage', mods.botania.apothecary.recipeBuilder().input(ore('blockGold'), ore('ingotIron'), item('minecraft:apple')).output(item('minecraft:golden_apple')).register())
 // mods.botania.page.createRunePage('groovy.exampleRunePage', mods.botania.runealtar.recipeBuilder().input(ore('gemEmerald'), item('minecraft:apple')).output(item('minecraft:diamond')).mana(500).register())
 mods.botania.page.createTextPage('groovy.exampleTextPage')
+mods.botania.page.createImagePage('groovy.exampleImagePage', 'minecraft:textures/items/apple.png')
+// mods.botania.page.createPetalPage('groovy.examplePetalPage', mods.botania.apothecary.recipeBuilder().input(ore('blockGold'), ore('ingotIron'), item('minecraft:apple')).output(item('minecraft:golden_apple')).register())
+mods.botania.page.createEntityPage('groovy.exampleEntityPage', 100, 'minecraft:wither_skeleton')
+mods.botania.page.createEntityPage('groovy.exampleEntityPage', 5, entity('minecraft:wither_skeleton'))
+// mods.botania.page.createBrewingPage('groovy.exampleBrewingPage', 'bottomText', 'bottomText', mods.botania.brewrecipe.recipeBuilder().input(item('minecraft:clay'), ore('ingotGold'), ore('gemDiamond')).brew(brew('absorption')).register())
+mods.botania.page.createCraftingPage('groovy.exampleCraftingPage', 'minecraft:clay')
+// mods.botania.page.createInfusionPage('groovy.exampleInfusionPage', mods.botania.manainfusion.recipeBuilder().input(ore('ingotGold')).output(item('botania:manaresource', 1)).mana(500).catalyst(blockstate('minecraft:stone')).register())
+mods.botania.page.createLoreTextPage('groovy.exampleLoreTextPage')
+// mods.botania.page.createElvenTradePage('groovy.exampleElvenTradePage', mods.botania.elventrade.recipeBuilder().input(ore('ingotGold'), ore('ingotIron')).output(item('botania:manaresource:7')).register())
 
 // Lexicon Entry:
 // Entry creates a new entry in a given category.
