@@ -23,5 +23,3 @@ mods.botanicadds.gaia_plate.recipeBuilder()
     .output(item('minecraft:gold_ingot'))
     .mana(100)
     .register()
-
-

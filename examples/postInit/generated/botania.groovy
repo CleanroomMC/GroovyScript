@@ -185,5 +185,3 @@ mods.botania.entry.entryBuilder()
     .knowledgeType(newType)
     .page(mods.botania.lexicon.page.createTextPage('groovy.exampleTextPage'))
     .register()
-
-

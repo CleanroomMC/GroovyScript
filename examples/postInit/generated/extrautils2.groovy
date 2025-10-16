@@ -2,8 +2,8 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: extrautils2
 
-import com.rwtema.extrautils2.power.IWorldPowerMultiplier
 import com.rwtema.extrautils2.tile.TilePassiveGenerator
+import com.rwtema.extrautils2.power.IWorldPowerMultiplier
 
 log 'mod \'extrautils2\' detected, running script'
 
@@ -133,5 +133,3 @@ mods.extrautils2.resonator.recipeBuilder()
     .ownerTag()
     .energy(5000)
     .register()
-
-

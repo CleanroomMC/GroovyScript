@@ -248,5 +248,3 @@ mods.immersiveengineering.squeezer.recipeBuilder()
     .fluidOutput(fluid('water'))
     .energy(100)
     .register()
-
-

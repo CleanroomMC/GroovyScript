@@ -114,5 +114,3 @@ mods.armorplus.work_bench.shapelessBuilder()
     .output(item('minecraft:clay') * 8)
     .input(item('minecraft:stone'), item('minecraft:stone'), item('minecraft:stone'))
     .register()
-
-

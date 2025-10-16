@@ -380,5 +380,3 @@ mods.roots.transmutation.recipeBuilder()
     .start(blockstate('minecraft:diamond_block'))
     .state(blockstate('minecraft:gold_block'))
     .register()
-
-

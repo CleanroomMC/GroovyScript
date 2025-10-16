@@ -88,5 +88,3 @@ mods.inspirations.cauldron.recipeBuilderTransform()
     .fluidOutput(fluid('milk'))
     .levels(2)
     .register()
-
-

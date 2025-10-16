@@ -209,5 +209,3 @@ mods.pneumaticcraft.xp_fluid.recipeBuilder()
     .fluidInput(fluid('lava'))
     .ratio(5)
     .register()
-
-

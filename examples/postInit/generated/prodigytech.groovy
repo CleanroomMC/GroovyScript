@@ -192,4 +192,3 @@ mods.prodigytech.solderer.recipeBuilder()
 mods.prodigytech.zorra_altar.addEnchantment('sword', enchantment('minecraft:power'), 10)
 mods.prodigytech.zorra_altar.addEnchantment('stick', enchantment('minecraft:knockback'), 20)
 mods.prodigytech.zorra_altar.removeEnchantment('sword', enchantment('minecraft:sharpness'))
-

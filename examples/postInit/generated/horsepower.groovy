@@ -129,5 +129,3 @@ mods.horsepower.press.recipeBuilder()
     .input(item('minecraft:diamond'))
     .fluidOutput(fluid('lava') * 500)
     .register()
-
-

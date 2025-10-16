@@ -278,4 +278,3 @@ mods.pyrotech.tanning_rack.recipeBuilder()
 
 
 mods.pyrotech.tanning_rack.add('apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, item('minecraft:clay_ball'))
-

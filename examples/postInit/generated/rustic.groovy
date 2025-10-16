@@ -96,5 +96,3 @@ mods.rustic.evaporating_basin.recipeBuilder()
     .fluidInput(fluid('lava') * 50)
     .output(item('minecraft:iron_ingot'))
     .register()
-
-

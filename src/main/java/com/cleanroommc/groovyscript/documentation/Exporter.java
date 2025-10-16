@@ -60,7 +60,7 @@ public class Exporter {
     public static void writeNormalWikiFile(File targetFolder, LinkIndex linkIndex, String id, String title, String doc) {
         String location = id + MARKDOWN_FILE_EXTENSION;
         linkIndex.add(String.format(BULLET_POINT_LINK, title, location));
-        write(new File(targetFolder, location), doc.trim().concat("\n"));
+        write(new File(targetFolder, location), doc.trim() + "\n");
     }
 
     public static void generateExamples(File targetFile, LoadStage loadStage, ContainerHolder container) {
@@ -81,7 +81,7 @@ public class Exporter {
 
         String header = EXAMPLE_GENERATION_NOTE + container.header().apply(getImportBlock(imports)) + "\n\n";
 
-        write(targetFile, header + body);
+        write(targetFile, "\n" + header + body.toString().trim() + "\n");
     }
 
     public static void write(File file, String text) {

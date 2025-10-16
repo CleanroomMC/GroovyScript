@@ -245,5 +245,3 @@ mods.enderio.vat.recipeBuilder()
     .energy(1000)
     .tierAny()
     .register()
-
-

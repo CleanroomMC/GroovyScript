@@ -384,5 +384,3 @@ mods.factorytech.temperer.recipeBuilder()
     .output(item('minecraft:clay'))
     .time(30)
     .register()
-
-

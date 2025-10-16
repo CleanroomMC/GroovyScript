@@ -169,5 +169,3 @@ mods.advancedrocketry.small_plate_presser.recipeBuilder()
     .input(item('minecraft:cobblestone'))
     .output(item('minecraft:diamond'))
     .register()
-
-

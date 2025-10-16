@@ -94,4 +94,3 @@ mods.tconstruct.melting.recipeBuilder()
 // mods.tconstruct.smeltery_fuel.removeAll()
 
 mods.tconstruct.smeltery_fuel.addFuel(fluid('water'), 250)
-

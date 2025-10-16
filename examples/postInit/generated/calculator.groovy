@@ -260,5 +260,3 @@ mods.calculator.stone_separator.recipeBuilder()
     .input(item('minecraft:clay'))
     .output(item('minecraft:diamond'), item('minecraft:diamond'))
     .register()
-
-

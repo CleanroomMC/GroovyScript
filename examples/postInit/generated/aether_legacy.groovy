@@ -57,4 +57,3 @@ mods.aether_legacy.freezer_fuel.removeByItem(item('aether_legacy:icestone'))
 // mods.aether_legacy.freezer_fuel.removeAll()
 
 mods.aether_legacy.freezer_fuel.add(item('minecraft:packed_ice'), 1000)
-

@@ -98,5 +98,3 @@ mods.cyclicmagic.solidifier.recipeBuilder()
     .fluidInput(fluid('lava') * 500)
     .output(item('minecraft:clay') * 2)
     .register()
-
-

@@ -2,8 +2,8 @@
 // Auto generated groovyscript example file
 // MODS_LOADED: astralsorcery
 
-import hellfirepvp.astralsorcery.common.constellation.MoonPhase
 import net.minecraft.util.math.MathHelper
+import hellfirepvp.astralsorcery.common.constellation.MoonPhase
 
 log 'mod \'astralsorcery\' detected, running script'
 
@@ -129,6 +129,8 @@ mods.astralsorcery.infusion_altar.recipeBuilder()
 // Converts an input Block or IBlockState into an output IBlockState after being sent a given amount of starlight, with the
 // ability to require a specific constellation of starlight.
 
+mods.astralsorcery.light_transmutation.setStarmetalReplacementState(blockstate('minecraft:clay'))
+
 mods.astralsorcery.light_transmutation.removeByInput(block('minecraft:netherrack'))
 mods.astralsorcery.light_transmutation.removeByInput(blockstate('minecraft:sandstone'))
 mods.astralsorcery.light_transmutation.removeByOutput(block('minecraft:lapis_block'))
@@ -150,8 +152,6 @@ mods.astralsorcery.light_transmutation.recipeBuilder()
     .cost(0)
     .register()
 
-
-mods.astralsorcery.light_transmutation.setStarmetalReplacementState(blockstate('minecraft:clay'))
 
 // Lightwell:
 // Converts an input item into fluid, with a chance at breaking every time fluid is produced. The amount of fluid produced
@@ -298,4 +298,3 @@ mods.astralsorcery.treasure_shrine_registry.remove(ore('oreDiamond'))
 // mods.astralsorcery.treasure_shrine_registry.removeAll()
 
 mods.astralsorcery.treasure_shrine_registry.add(ore('blockDiamond'), 10000)
-

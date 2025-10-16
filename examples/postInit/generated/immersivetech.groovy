@@ -259,5 +259,3 @@ mods.immersivetech.steam_turbine.recipeBuilder()
     .fluidOutput(fluid('lava') * 50)
     .time(50)
     .register()
-
-

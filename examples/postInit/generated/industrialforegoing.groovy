@@ -111,5 +111,3 @@ mods.industrialforegoing.straw.recipeBuilder()
     .fluidInput(fluid('if.pink_slime'))
     .effect(new PotionEffect(potion('minecraft:strength'), 1800, 3))
     .register()
-
-

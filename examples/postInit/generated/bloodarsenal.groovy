@@ -47,4 +47,3 @@ mods.bloodarsenal.sanguine_infusion.recipeBuilder()
 
 
 // mods.bloodarsenal.sanguine_infusion.addBlacklist(WayofTime.bloodmagic.iface.ISigil.class)
-

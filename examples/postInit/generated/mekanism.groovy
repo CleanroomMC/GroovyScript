@@ -279,4 +279,3 @@ mods.mekanism.washer.recipeBuilder()
 
 
 // mods.mekanism.washer.add(gas('water'), gas('hydrogen'))
-

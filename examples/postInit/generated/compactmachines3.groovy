@@ -128,5 +128,3 @@ mods.compactmachines3.miniaturization.recipeBuilder()
            '  ccc  ',
            '   a   ')
     .register()
-
-

@@ -21,5 +21,3 @@ mods.extrabotany.pedestal.recipeBuilder()
     .input(item('minecraft:gold_ingot'))
     .output(item('minecraft:diamond') * 2)
     .register()
-
-

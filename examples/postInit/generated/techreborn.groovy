@@ -583,5 +583,3 @@ mods.techreborn.wire_mill.recipeBuilder()
     .time(5)
     .perTick(32)
     .register()
-
-

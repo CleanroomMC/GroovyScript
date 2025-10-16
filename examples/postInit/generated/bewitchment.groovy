@@ -219,5 +219,3 @@ mods.bewitchment.spinning_wheel.recipeBuilder()
     .input(item('minecraft:string'), item('minecraft:string'), item('minecraft:string'), item('minecraft:string'))
     .output(item('minecraft:gold_ingot') * 4, item('minecraft:web'))
     .register()
-
-

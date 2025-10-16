@@ -78,5 +78,3 @@ mods.threng.etcher.recipeBuilder()
     .input(item('minecraft:gold_ingot'))
     .output(item('minecraft:diamond'))
     .register()
-
-

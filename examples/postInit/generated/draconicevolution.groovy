@@ -33,5 +33,3 @@ mods.draconicevolution.fusion.recipeBuilder()
     .energy(100000)
     .tierChaotic()
     .register()
-
-

@@ -188,5 +188,3 @@ mods.actuallyadditions.treasure_chest.recipeBuilder()
     .min(16)
     .max(32)
     .register()
-
-

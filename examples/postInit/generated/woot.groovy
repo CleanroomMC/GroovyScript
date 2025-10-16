@@ -104,5 +104,3 @@ mods.woot.stygian_iron_anvil.recipeBuilder()
     .output(item('minecraft:clay'))
     .preserveBase()
     .register()
-
-

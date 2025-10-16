@@ -87,5 +87,3 @@ mods.essentialcraft.wind_rune.recipeBuilder()
     .output(item('minecraft:diamond_block'))
     .espe(500)
     .register()
-
-

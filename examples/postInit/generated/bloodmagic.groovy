@@ -170,5 +170,3 @@ mods.bloodmagic.tranquility.recipeBuilder()
     .tranquility('LAVA')
     .value(500)
     .register()
-
-

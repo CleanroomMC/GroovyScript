@@ -78,4 +78,3 @@ mods.appliedenergistics2.spatial.remove('net.minecraft.tileentity.TileEntityChes
 // mods.appliedenergistics2.spatial.removeAll()
 
 mods.appliedenergistics2.spatial.add('net.minecraft.tileentity.TileEntityStructure')
-

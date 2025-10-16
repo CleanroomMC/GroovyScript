@@ -65,5 +65,3 @@ mods.atum.spinning_wheel.recipeBuilder()
     .output(item('minecraft:clay') * 4)
     .rotations(5)
     .register()
-
-

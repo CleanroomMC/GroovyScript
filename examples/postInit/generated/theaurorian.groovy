@@ -29,5 +29,3 @@ mods.theaurorian.scrapper.recipeBuilder()
     .input(item('minecraft:stone_sword'))
     .output(item('minecraft:cobblestone'))
     .register()
-
-

@@ -58,5 +58,3 @@ mods.botania_tweaks.agglomeration_plate.recipeBuilder()
     .edgeReplacement(blockstate('minecraft:lapis_block'))
     .cornerReplacement(blockstate('botania:livingrock:variant=default'))
     .register()
-
-

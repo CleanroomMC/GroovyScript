@@ -85,5 +85,3 @@ mods.arcaneworld.ritual.recipeBuilderWeather()
     .translationKey('groovyscript.demo_weather_thunder')
     .weatherThunder()
     .register()
-
-

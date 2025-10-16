@@ -26,5 +26,3 @@ mods.silentgems.chaos_altar.recipeBuilder()
     .catalyst(item('minecraft:diamond'))
     .cost(5000)
     .register()
-
-

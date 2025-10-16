@@ -136,5 +136,3 @@ mods.naturesaura.spawning.recipeBuilder()
     .aura(10)
     .time(10)
     .register()
-
-

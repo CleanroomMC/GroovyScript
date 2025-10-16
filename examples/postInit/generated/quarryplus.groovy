@@ -15,5 +15,3 @@ mods.quarryplus.workbench_plus.recipeBuilder()
     .input(item('minecraft:diamond'),item('minecraft:gold_ingot'))
     .energy(10000)
     .register()
-
-

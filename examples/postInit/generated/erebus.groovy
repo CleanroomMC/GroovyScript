@@ -71,5 +71,3 @@ mods.erebus.smoothie.recipeBuilder()
     .fluidInput(fluid('lava') * 500, fluid('formic_acid') * 500, fluid('honey') * 500, fluid('milk') * 500)
     .output(item('minecraft:clay') * 5)
     .register()
-
-

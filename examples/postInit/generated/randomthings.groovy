@@ -43,5 +43,3 @@ mods.randomthings.imbuing.recipeBuilder()
     .input(item('minecraft:clay'), item('minecraft:gold_ingot'), item('minecraft:diamond'))
     .output(item('minecraft:gold_ingot'))
     .register()
-
-

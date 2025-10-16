@@ -67,5 +67,3 @@ mods.evilcraft.environmental_accumulator.recipeBuilder()
     .inputWeather(weather('lightning'))
     .outputWeather(weather('lightning'))
     .register()
-
-

@@ -83,5 +83,3 @@ mods.primal_tech.wooden_basin.recipeBuilder()
     .fluidInput(fluid('water'))
     .output(item('minecraft:diamond') * 4)
     .register()
-
-

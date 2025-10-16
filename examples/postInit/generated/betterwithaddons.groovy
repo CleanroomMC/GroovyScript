@@ -281,5 +281,3 @@ mods.betterwithaddons.water_net.recipeBuilder()
     .input(item('minecraft:gold_ingot'))
     .output(item('minecraft:clay') * 4, item('minecraft:diamond'), item('minecraft:diamond') * 2)
     .register()
-
-

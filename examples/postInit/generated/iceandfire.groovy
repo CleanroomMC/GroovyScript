@@ -62,5 +62,3 @@ mods.iceandfire.ice_forge.recipeBuilder()
 //    .input(item('minecraft:diamond'), item('minecraft:gold_ingot'))
 //    .output(item('minecraft:clay'))
 //    .register()
-
-

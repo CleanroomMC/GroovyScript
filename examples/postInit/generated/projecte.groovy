@@ -40,5 +40,3 @@ mods.projecte.transmutation.recipeBuilder()
     .input(blockstate('minecraft:gold_block'))
     .output(blockstate('minecraft:diamond_block'))
     .register()
-
-

@@ -77,10 +77,10 @@ mods.betterwithmods.crucible.recipeBuilder()
 // Heat:
 // Creates new levels or adds new blocks to old heat levels.
 
-// mods.betterwithmods.heat.removeAll()
-
 mods.betterwithmods.heat.add(4, item('minecraft:redstone_block'), item('minecraft:redstone_torch'))
 mods.betterwithmods.heat.add(3, 'torch')
+
+// mods.betterwithmods.heat.removeAll()
 
 // Filtered Hopper:
 // Recipes for the Filtered Hopper to process. The filter targeted must allow the input item in to function.
@@ -192,5 +192,3 @@ mods.betterwithmods.turntable.recipeBuilder()
     .output(item('minecraft:gold_ingot'))
     .rotations(2)
     .register()
-
-

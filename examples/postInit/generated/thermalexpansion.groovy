@@ -649,4 +649,3 @@ mods.thermalexpansion.xp_collector.remove(item('minecraft:soul_sand'))
 // mods.thermalexpansion.xp_collector.removeAll()
 
 mods.thermalexpansion.xp_collector.add(item('minecraft:clay'), 100, 30)
-

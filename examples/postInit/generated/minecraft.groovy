@@ -221,4 +221,3 @@ minecraft.player.setStartingItems(true, item('minecraft:clay').withNbt([display:
 
 minecraft.rarity.set(textformat('AQUA'), item('minecraft:diamond'))
 minecraft.rarity.set(textformat('RESET'), item('minecraft:enchanted_book'))
-

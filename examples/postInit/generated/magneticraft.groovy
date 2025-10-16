@@ -211,5 +211,3 @@ mods.magneticraft.thermopile.recipeBuilder()
     .conductivity(70)
     .temperature(700)
     .register()
-
-

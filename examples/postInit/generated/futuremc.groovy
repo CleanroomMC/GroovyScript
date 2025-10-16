@@ -112,5 +112,3 @@ mods.futuremc.stonecutter.recipeBuilder()
     .input(item('minecraft:gold_ingot'))
     .output(item('minecraft:clay'))
     .register()
-
-

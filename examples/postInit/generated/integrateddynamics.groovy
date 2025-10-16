@@ -72,5 +72,3 @@ mods.integrateddynamics.squeezer.recipeBuilder()
     .input(item('minecraft:diamond'))
     .fluidOutput(fluid('lava') * 10)
     .register()
-
-

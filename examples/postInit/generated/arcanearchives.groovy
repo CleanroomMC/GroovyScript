@@ -21,5 +21,3 @@ mods.arcanearchives.gem_cutting_table.recipeBuilder()
     .input(item('minecraft:stone'),item('minecraft:gold_ingot'),item('minecraft:gold_nugget'))
     .output(item('minecraft:clay') * 4)
     .register()
-
-

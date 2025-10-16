@@ -62,5 +62,3 @@ mods.immersivepetroleum.reservoir.recipeBuilder()
     .biome('cold')
     .biomeBlacklist()
     .register()
-
-

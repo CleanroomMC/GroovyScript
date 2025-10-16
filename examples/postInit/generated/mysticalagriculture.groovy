@@ -21,5 +21,3 @@ mods.mysticalagriculture.reprocessor.recipeBuilder()
     .input(item('minecraft:diamond'))
     .output(item('minecraft:gold_ingot'))
     .register()
-
-

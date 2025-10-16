@@ -125,5 +125,3 @@ mods.alchemistry.liquifier.recipeBuilder()
     .input(item('minecraft:magma'))
     .fluidOutput(fluid('lava') * 750)
     .register()
-
-

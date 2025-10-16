@@ -202,4 +202,3 @@ mods.thaumcraft.warp.removeWarp(item('thaumcraft:void_hoe'))
 // mods.thaumcraft.warp.removeAll()
 
 mods.thaumcraft.warp.addWarp(item('minecraft:pumpkin'), 3)
-
