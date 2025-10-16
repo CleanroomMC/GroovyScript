@@ -47,8 +47,8 @@ mods.bewitchment.altar_upgrade.recipeBuilder()
 mods.bewitchment.athame_loot.removeByOutput(item('bewitchment:spectral_dust'))
 // mods.bewitchment.athame_loot.removeAll()
 
-mods.bewitchment.athame_loot.add(entity('minecraft:cow'), item('minecraft:clay') * 5, item('minecraft:iron_sword'))
 mods.bewitchment.athame_loot.add(entity('minecraft:pig'), item('minecraft:gold_ingot'))
+mods.bewitchment.athame_loot.add(entity('minecraft:cow'), item('minecraft:clay') * 5, item('minecraft:iron_sword'))
 
 // Witches' Cauldron Brew:
 // After throwing a `bewitchment:mandrake_root` in the Witches' Cauldron while Magic Power is provided, all items thrown in

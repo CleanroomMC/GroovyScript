@@ -115,11 +115,12 @@ public final class ComparisonHelper {
                 .result();
     }
 
-    private static int comparePriorityAndMethod(int leftPriority, int rightPriority, Method leftMethod, Method rightName) {
+    private static int comparePriorityAndMethod(int leftPriority, int rightPriority, Method leftMethod, Method rightMethod) {
         return ComparisonChain.start()
                 .compare(leftPriority, rightPriority)
-                .compare(leftMethod.getName(), rightName.getName(), ComparisonHelper::string)
-                .compare(DescriptorHelper.simpleParameters(leftMethod), DescriptorHelper.simpleParameters(rightName), ComparisonHelper::packages)
+                .compare(leftMethod.getName(), rightMethod.getName(), ComparisonHelper::string)
+                .compare(DescriptorHelper.simpleParameters(leftMethod), DescriptorHelper.simpleParameters(rightMethod), ComparisonHelper::packages)
+                .compareFalseFirst(leftMethod.isVarArgs(), rightMethod.isVarArgs())
                 .result();
     }
 }
