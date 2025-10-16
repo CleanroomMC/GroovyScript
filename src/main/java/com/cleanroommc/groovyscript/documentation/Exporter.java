@@ -27,7 +27,7 @@ public class Exporter {
     private static final String MARKDOWN_FILE_EXTENSION = ".md";
     private static final String INDEX_FILE_NAME = "index" + MARKDOWN_FILE_EXTENSION;
     private static final String NAV_FILE_NAME = "!navigation" + MARKDOWN_FILE_EXTENSION;
-    private static final String EXAMPLE_HEADER = "\n// Auto generated groovyscript example file\n// MODS_LOADED: %1$s\n%2$s\nlog 'mod \\'%1$s\\' detected, running script'\n\n";
+    private static final String EXAMPLE_GENERATION_NOTE = "// Auto generated groovyscript example file\n";
     private static final String INDEX_FILE_TEXT = "---\n%s\n---\n\n\n# %s\n\n%s";
     private static final String BULLET_POINT_LINK = "* [%s](./%s)";
     private static final String NAVIGATION_FILE_TEXT = "---\nsearch:\n  exclude: true\n---\n\n\n" + BULLET_POINT_LINK + "\n%s";
@@ -79,7 +79,7 @@ public class Exporter {
 
         if (body.length() == 0) return;
 
-        String header = String.format(EXAMPLE_HEADER, container.id(), getImportBlock(imports));
+        String header = EXAMPLE_GENERATION_NOTE + container.header().apply(getImportBlock(imports)) + "\n\n";
 
         write(targetFile, header + body);
     }

@@ -1,8 +1,7 @@
 
 // Auto generated groovyscript example file
-// MODS_LOADED: minecraft
 
-log 'mod \'minecraft\' detected, running script'
+log 'running Vanilla Minecraft example'
 
 // Custom Commands:
 // Create custom commands, either generally or specifically for the client.

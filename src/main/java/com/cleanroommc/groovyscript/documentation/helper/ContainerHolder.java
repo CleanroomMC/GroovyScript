@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Holds data for the container being documented.
@@ -18,20 +19,29 @@ import java.util.List;
  * @param id         the container id
  * @param name       the name of the container
  * @param access     the default method to access the container
+ * @param header     a function that takes the import block to allow adding text before and/or after it
  * @param aliases    all aliases the container has
  * @param registries all registries the container has
  */
 @Desugar
-public record ContainerHolder(String id, String name, String access, Collection<String> aliases, Collection<INamed> registries) {
+public record ContainerHolder(String id, String name, String access, Function<String, String> header,
+                              Collection<String> aliases, Collection<INamed> registries) {
 
     public static final String BASE_ACCESS_COMPAT = "mods";
+
+    private static final String HEADER = """
+            // MODS_LOADED: %1$s
+            %2$s
+            log 'mod \\'%1$s\\' detected, running script'""";
 
     public static ContainerHolder of(GroovyContainer<? extends GroovyPropertyContainer> mod) {
         return of(mod, mod.get().getRegistries());
     }
 
     public static ContainerHolder of(IGroovyContainer container, Collection<INamed> registries) {
-        return new ContainerHolder(container.getModId(), container.getContainerName(), BASE_ACCESS_COMPAT + "." + container.getModId(), ContainerHolder.expandAliases(container.getAliases()), new ObjectOpenHashSet<>(registries));
+        return new ContainerHolder(container.getModId(), container.getContainerName(), BASE_ACCESS_COMPAT + "." + container.getModId(),
+                                   importBlock -> String.format(HEADER, container.getModId(), importBlock),
+                                   ContainerHolder.expandAliases(container.getAliases()), new ObjectOpenHashSet<>(registries));
     }
 
     /**
