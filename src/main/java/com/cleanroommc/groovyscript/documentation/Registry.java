@@ -27,6 +27,7 @@ public class Registry implements IRegistryDocumentation {
 
     public static final String BASE_LANG_LOCATION = "groovyscript.wiki";
     private static final Pattern PERIOD_END_PATTERN = Pattern.compile("\\.$");
+    private static final int TOO_MANY_PACKAGES = 12;
 
     private final ContainerHolder container;
     private final INamed registry;
@@ -247,7 +248,8 @@ public class Registry implements IRegistryDocumentation {
 
     private String generateIdentifier() {
         StringBuilder out = new StringBuilder();
-        out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n").append(I18n.format("groovyscript.wiki.import_instructions")).append("\n\n");
+        out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n");
+        out.append(I18n.format("groovyscript.wiki.import_default", getReference())).append("\n\n");
 
         List<String> packages = getAliases();
 
@@ -263,7 +265,12 @@ public class Registry implements IRegistryDocumentation {
                     .highlight(String.valueOf(1 + target))
                     .focus(1 + target)
                     .toString();
-            out.append(codeBlock);
+            if (packages.size() >= TOO_MANY_PACKAGES) {
+                out.append(new AdmonitionBuilder().hasTitle(true).title(I18n.format("groovyscript.wiki.all_packages_title")).note("\n").note(I18n.format("groovyscript.wiki.import_instructions")).note("\n").note(codeBlock.trim()).note("\n").format(Admonition.Format.COLLAPSED).type(Admonition.Type.ABSTRACT).generate());
+                out.append("\n\n");
+            } else {
+                out.append(codeBlock);
+            }
         }
         return out.toString();
     }
