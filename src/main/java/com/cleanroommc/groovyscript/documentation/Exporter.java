@@ -24,9 +24,13 @@ import java.util.function.Predicate;
 
 public class Exporter {
 
-    private static final String INDEX_FILE_NAME = "index.md";
-    private static final String NAV_FILE_NAME = "!navigation.md";
+    private static final String MARKDOWN_FILE_EXTENSION = ".md";
+    private static final String INDEX_FILE_NAME = "index" + MARKDOWN_FILE_EXTENSION;
+    private static final String NAV_FILE_NAME = "!navigation" + MARKDOWN_FILE_EXTENSION;
     private static final String EXAMPLE_HEADER = "\n// Auto generated groovyscript example file\n// MODS_LOADED: %1$s\n%2$s\nlog 'mod \\'%1$s\\' detected, running script'\n\n";
+    private static final String INDEX_FILE_TEXT = "---\n%s\n---\n\n\n# %s\n\n%s";
+    private static final String BULLET_POINT_LINK = "* [%s](./%s)";
+    private static final String NAVIGATION_FILE_TEXT = "---\nsearch:\n  exclude: true\n---\n\n\n" + BULLET_POINT_LINK + "\n%s";
 
     private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
@@ -44,18 +48,18 @@ public class Exporter {
             registry.generateWiki(container, targetFolder, linkIndex);
         }
 
-        String indexText = String.format("---\n%s\n---\n\n\n# %s\n\n%s", Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), container.name(), linkIndex.get());
+        String indexText = String.format(INDEX_FILE_TEXT, Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), container.name(), linkIndex.get());
         write(new File(targetFolder, INDEX_FILE_NAME), indexText);
 
         if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
-            String navigation = String.format("---\nsearch:\n  exclude: true\n---\n\n\n* [%s](./%s)\n%s", container.name(), INDEX_FILE_NAME, linkIndex.getLinks());
+            String navigation = String.format(NAVIGATION_FILE_TEXT, container.name(), INDEX_FILE_NAME, linkIndex.getLinks());
             write(new File(targetFolder, NAV_FILE_NAME), navigation);
         }
     }
 
     public static void writeNormalWikiFile(File targetFolder, LinkIndex linkIndex, String id, String title, String doc) {
-        String location = id + ".md";
-        linkIndex.add(String.format("* [%s](./%s)", title, location));
+        String location = id + MARKDOWN_FILE_EXTENSION;
+        linkIndex.add(String.format(BULLET_POINT_LINK, title, location));
         write(new File(targetFolder, location), doc.trim().concat("\n"));
     }
 
