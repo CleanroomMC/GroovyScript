@@ -37,19 +37,19 @@ public class ZorraAltar extends VirtualizedRegistry<ZorraAltar.ZorraRecipeData> 
             imports.add("lykrast.prodigytech.common.item.IZorrasteelEquipment");
             imports.add("lykrast.prodigytech.common.recipe.ZorraAltarManager");
             return String.format("""
-                                         // Create an item at the location '%s:prodigy_stick' enchantable in the Zorra Altar
-                                         // Note: due to the PT's implementation it is difficult to make other mod's items enchantable
-                                         // This merely registers the item, the post-init script adds the specific enchantments
-                                         class ProdigyStick extends Item implements IZorrasteelEquipment {
-                                             static registry = mods.prodigytech.zorra_altar.createRegistry('stick')
-                                         
-                                             ZorraAltarManager getManager() {
-                                                 return registry
-                                             }
-                                         }
-                                         
-                                         content.registerItem('prodigy_stick', new ProdigyStick())
-                                         """, GroovyHelper.getPackId());
+                    // Create an item at the location '%s:prodigy_stick' enchantable in the Zorra Altar
+                    // Note: due to the PT's implementation it is difficult to make other mod's items enchantable
+                    // This merely registers the item, the post-init script adds the specific enchantments
+                    class ProdigyStick extends Item implements IZorrasteelEquipment {
+                        static registry = mods.prodigytech.zorra_altar.createRegistry('stick')
+
+                        ZorraAltarManager getManager() {
+                            return registry
+                        }
+                    }
+
+                    content.registerItem('prodigy_stick', new ProdigyStick())
+                    """, GroovyHelper.getPackId());
         }
         return "";
     }

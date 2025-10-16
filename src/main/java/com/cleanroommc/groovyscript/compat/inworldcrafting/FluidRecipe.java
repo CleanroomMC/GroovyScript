@@ -283,7 +283,9 @@ public abstract class FluidRecipe {
         @Property("groovyscript.wiki.in_world_crafting.afterRecipe.value")
         protected Closure<?> afterRecipe;
 
-        @RecipeBuilderMethodDescription(field = {"input", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "input", "chances"
+        })
         public RecipeBuilder<T> input(IIngredient ingredient, float consumeChance) {
             this.input.add(ingredient);
             this.chances.add(MathHelper.clamp(consumeChance, 0.0f, 1.0f));
@@ -291,7 +293,9 @@ public abstract class FluidRecipe {
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {"input", "chances"})
+        @RecipeBuilderMethodDescription(field = {
+                "input", "chances"
+        })
         public AbstractRecipeBuilder<T> input(IIngredient ingredient) {
             return input(ingredient, 1.0f);
         }

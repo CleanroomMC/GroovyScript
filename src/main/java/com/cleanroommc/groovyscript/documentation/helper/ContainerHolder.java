@@ -39,9 +39,13 @@ public record ContainerHolder(String id, String name, String access, Function<St
     }
 
     public static ContainerHolder of(IGroovyContainer container, Collection<INamed> registries) {
-        return new ContainerHolder(container.getModId(), container.getContainerName(), BASE_ACCESS_COMPAT + "." + container.getModId(),
-                                   importBlock -> String.format(HEADER, container.getModId(), importBlock),
-                                   ContainerHolder.expandAliases(container.getAliases()), new ObjectOpenHashSet<>(registries));
+        return new ContainerHolder(
+                container.getModId(),
+                container.getContainerName(),
+                BASE_ACCESS_COMPAT + "." + container.getModId(),
+                importBlock -> String.format(HEADER, container.getModId(), importBlock),
+                ContainerHolder.expandAliases(container.getAliases()),
+                new ObjectOpenHashSet<>(registries));
     }
 
     /**

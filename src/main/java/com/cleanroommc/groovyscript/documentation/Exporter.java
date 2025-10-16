@@ -93,8 +93,7 @@ public class Exporter {
     }
 
     public static void exportFile(File file, String resource) throws IOException {
-        try (InputStream inputStream = Exporter.class.getClassLoader().getResourceAsStream(resource);
-             FileOutputStream outputStream = new FileOutputStream(file)) {
+        try (InputStream inputStream = Exporter.class.getClassLoader().getResourceAsStream(resource); FileOutputStream outputStream = new FileOutputStream(file)) {
             int i;
             while ((i = inputStream.read()) != -1) {
                 outputStream.write(i);

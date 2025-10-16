@@ -65,7 +65,8 @@ public class LinkIndex {
      * @return the full text of the sections
      */
     public String get() {
-        return sections.values().stream()
+        return sections.values()
+                .stream()
                 .filter(MarkdownSection::hasEntries)
                 .sorted()
                 .map(MarkdownSection::get)
@@ -76,7 +77,8 @@ public class LinkIndex {
      * @return the list of links directly, without a header/subtitle
      */
     public String getLinks() {
-        return sections.values().stream()
+        return sections.values()
+                .stream()
                 .filter(MarkdownSection::hasEntries)
                 .sorted()
                 .map(MarkdownSection::getEntries)

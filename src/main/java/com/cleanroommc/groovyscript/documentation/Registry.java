@@ -256,12 +256,14 @@ public class Registry implements IRegistryDocumentation {
             GroovyLog.get().warn("Couldn't find identifier %s in packagess %s", getReference(), String.join(", ", packages));
         } else {
             packages.set(target, getReference() + "/*()!*/");
-            out.append(new CodeBlockBuilder()
-                               .line(packages)
-                               .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
-                               // Highlighting and focusing are based on the line count, and is 1-indexed
-                               .highlight(String.valueOf(1 + target))
-                               .focus(1 + target));
+            var codeBlock = new CodeBlockBuilder()
+                    .line(packages)
+                    .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
+                    // Highlighting and focusing are based on the line count, and is 1-indexed
+                    .highlight(String.valueOf(1 + target))
+                    .focus(1 + target)
+                    .toString();
+            out.append(codeBlock);
         }
         return out.toString();
     }

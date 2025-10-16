@@ -135,7 +135,9 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         @Property(comp = @Comp(gte = 0, lte = 1), defaultValue = "1.0f")
         private float fluidConsumptionChance = 1.0f;
 
-        @RecipeBuilderMethodDescription(field = {"fluidInput", "fluidConsumptionChance"})
+        @RecipeBuilderMethodDescription(field = {
+                "fluidInput", "fluidConsumptionChance"
+        })
         public RecipeBuilder fluidInput(FluidStack fluidStack, float fluidConsumptionChance) {
             fluidInput(fluidStack);
             return fluidConsumptionChance(fluidConsumptionChance);

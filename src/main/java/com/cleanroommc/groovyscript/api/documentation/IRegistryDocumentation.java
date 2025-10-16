@@ -1,9 +1,9 @@
 package com.cleanroommc.groovyscript.api.documentation;
 
 import com.cleanroommc.groovyscript.api.INamed;
-import com.cleanroommc.groovyscript.documentation.helper.MarkdownSection;
-import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
 import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
+import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
+import com.cleanroommc.groovyscript.documentation.helper.MarkdownSection;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import org.jetbrains.annotations.NotNull;
 
