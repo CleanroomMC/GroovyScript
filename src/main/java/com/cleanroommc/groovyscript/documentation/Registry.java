@@ -194,14 +194,11 @@ public class Registry implements IRegistryDocumentation {
 
     private String documentMethodDescriptionType(MethodDescription.Type type) {
         StringBuilder out = new StringBuilder();
-        var hasExamples = false;
         for (var entry : methods.get(type)) {
-            var examples = examples(entry);
-            out.append(examples);
-            if (!hasExamples && !examples.isEmpty()) hasExamples = true;
+            out.append(examples(entry));
         }
-        if (hasExamples) out.append("\n");
-        return out.toString();
+        if (out.toString().isEmpty()) return "";
+        return out + "\n";
     }
 
     private String generateHeader() {
