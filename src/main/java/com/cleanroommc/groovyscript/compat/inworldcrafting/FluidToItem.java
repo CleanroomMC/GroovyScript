@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -18,6 +19,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
 
     @Override
@@ -39,6 +41,7 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         return false;
     }
 
+    @MethodDescription
     public boolean removeByInput(FluidStack fluid) {
         if (IngredientHelper.isEmpty(fluid)) {
             GroovyLog.msg("Error removing in world fluid to item recipe")
@@ -57,6 +60,7 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         return true;
     }
 
+    @MethodDescription
     public boolean removeByInput(FluidStack fluid, ItemStack... input) {
         if (GroovyLog.msg("Error removing in world fluid to item recipe")
                 .add(IngredientHelper.isEmpty(fluid), () -> "input fluid must not be empty")
@@ -75,14 +79,17 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         return true;
     }
 
+    @MethodDescription
     public boolean removeAll() {
         return FluidRecipe.removeIf(fluidRecipe -> fluidRecipe.getClass() == Recipe.class, fluidRecipe -> addBackup((Recipe) fluidRecipe));
     }
 
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water'), 0.22f).input(item('minecraft:netherrack')).input(item('minecraft:gold_ingot'), 0.1f).output(item('minecraft:nether_star'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription
     public SimpleObjectStream<Recipe> streamRecipes() {
         return new SimpleObjectStream<>(FluidRecipe.findRecipesOfType(Recipe.class)).setRemover(this::remove);
     }
@@ -120,15 +127,21 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         }
     }
 
+    @Property(property = "input", comp = @Comp(gte = 1, lte = Recipe.MAX_ITEM_INPUT))
+    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends FluidRecipe.RecipeBuilder<FluidToItem.Recipe> {
 
+        @Property(comp = @Comp(gte = 0, lte = 1), defaultValue = "1.0f")
         private float fluidConsumptionChance = 1.0f;
 
+        @RecipeBuilderMethodDescription(field = {"fluidInput", "fluidConsumptionChance"})
         public RecipeBuilder fluidInput(FluidStack fluidStack, float fluidConsumptionChance) {
             fluidInput(fluidStack);
             return fluidConsumptionChance(fluidConsumptionChance);
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder fluidConsumptionChance(float fluidConsumptionChance) {
             this.fluidConsumptionChance = fluidConsumptionChance;
             return this;
@@ -148,6 +161,7 @@ public class FluidToItem extends VirtualizedRegistry<FluidToItem.Recipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable FluidToItem.Recipe register() {
             Recipe recipe = new Recipe(
                     this.fluidInput.get(0).getFluid(),

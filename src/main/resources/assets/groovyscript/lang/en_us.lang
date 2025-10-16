@@ -204,6 +204,37 @@ groovyscript.wiki.minecraft.game_rule.setWarnNewGameRule=Sets if creating new Ga
 groovyscript.wiki.minecraft.game_rule.add=Adds a new entry in the format `name`, `value`, with `value` being a String that can represent a number (`-1`, `5`) or boolean (`true`, `false`)
 groovyscript.wiki.minecraft.game_rule.addMap=Adds a map of GameRule name to values
 
+# In-World Crafting
+groovyscript.wiki.in_world_crafting.chances.value=Sets the chance each input has to be consumed
+groovyscript.wiki.in_world_crafting.chances.required=exactly equal to the number of elements in `input`
+groovyscript.wiki.in_world_crafting.startCondition.value=Sets an additional check that must be passed before the recipe runs, with the Closure taking 2 parameters, `World world` and `BlockPos blockPos`
+groovyscript.wiki.in_world_crafting.afterRecipe.value=Sets a closure that will run after the recipe completes, with the Closure taking 2 parameters, `World world` and `BlockPos blockPos`
+
+groovyscript.wiki.in_world_crafting.burning.title=Burning Conversion
+groovyscript.wiki.in_world_crafting.burning.description=Converts an input item into an output itemstack after some number of ticks while burning. This also makes the input item effectively fireproof.
+groovyscript.wiki.in_world_crafting.burning.ticks.value=Sets the time in ticks the item must be burning before it converts
+
+groovyscript.wiki.in_world_crafting.explosion.title=Explosion Conversion
+groovyscript.wiki.in_world_crafting.explosion.description=Converts an input itemstack into an output itemstack, with an optional fail rate.
+groovyscript.wiki.in_world_crafting.explosion.chance.value=Sets the chance the conversion occurs instead of the input being destroyed
+
+groovyscript.wiki.in_world_crafting.fluid_to_block.title=Fluid and ItemStack To Block Conversion
+groovyscript.wiki.in_world_crafting.fluid_to_block.description=Converts any number of input itemstacks and a fluid source block into a block in-world, with each input having a chance to be consumed. Allows an additional closure check to start the recipe and a closure run after the recipe is finished.
+groovyscript.wiki.in_world_crafting.fluid_to_block.outputBlock.value=Sets the blockstate being output
+
+groovyscript.wiki.in_world_crafting.fluid_to_fluid.title=Fluid and ItemStack To Fluid Conversion
+groovyscript.wiki.in_world_crafting.fluid_to_fluid.description=Converts any number of input itemstacks and a fluid source block into a fluid block in-world, with each input having a chance to be consumed. Allows an additional closure check to start the recipe and a closure run after the recipe is finished.
+
+groovyscript.wiki.in_world_crafting.fluid_to_item.title=Fluid and ItemStack To ItemStack Conversion
+groovyscript.wiki.in_world_crafting.fluid_to_item.description=Converts any number of input itemstacks and a fluid source block into an itemstack in-world, with each input having a chance to be consumed and a chance to consume the fluid block. Allows an additional closure check to start the recipe and a closure run after the recipe is finished.
+groovyscript.wiki.in_world_crafting.fluid_to_item.fluidConsumptionChance.value=Sets the chance the fluid is consumed
+
+groovyscript.wiki.in_world_crafting.piston_push.title=Piston Pushing Conversion
+groovyscript.wiki.in_world_crafting.piston_push.description=Converts an input item into an output item when a piston pushes the item into a block, with an optional minimum harvest level requirement for the block. Amount converted in each entity item per push is configurable.
+groovyscript.wiki.in_world_crafting.piston_push.maxConversionsPerPush.value=Sets the maximum number of items converted from an itemstack in one press
+groovyscript.wiki.in_world_crafting.piston_push.minHarvestLevel.value=Sets the minimum harvest level required of the block being pushed against
+groovyscript.wiki.in_world_crafting.piston_push.startCondition.value=Sets an additional check that must be passed before the recipe runs, with the Closure taking 3 parameters, `EntityItem entityItem`, `ItemStack itemStack`, and `IBlockState pushingAgainst`
+
 
 # Actually Additions
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.title=Atomic Reconstructor

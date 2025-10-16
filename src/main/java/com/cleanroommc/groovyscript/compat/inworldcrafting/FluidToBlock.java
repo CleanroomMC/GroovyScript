@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -18,6 +19,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
 
     @Override
@@ -39,6 +41,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         return false;
     }
 
+    @MethodDescription
     public boolean removeByInput(FluidStack fluid) {
         if (IngredientHelper.isEmpty(fluid)) {
             GroovyLog.msg("Error removing in world fluid to block recipe")
@@ -57,6 +60,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         return true;
     }
 
+    @MethodDescription
     public boolean removeByInput(FluidStack fluid, ItemStack... input) {
         if (GroovyLog.msg("Error removing in world fluid to block recipe")
                 .add(IngredientHelper.isEmpty(fluid), () -> "input fluid must not be empty")
@@ -75,14 +79,17 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         return true;
     }
 
+    @MethodDescription
     public boolean removeAll() {
         return FluidRecipe.removeIf(fluidRecipe -> fluidRecipe.getClass() == Recipe.class, fluidRecipe -> addBackup((Recipe) fluidRecipe));
     }
 
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).input(item('minecraft:clay_ball')).output(block('minecraft:diamond_block'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription
     public SimpleObjectStream<Recipe> streamRecipes() {
         return new SimpleObjectStream<>(FluidRecipe.findRecipesOfType(Recipe.class)).setRemover(this::remove);
     }
@@ -111,15 +118,20 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         }
     }
 
+    @Property(property = "input", comp = @Comp(gte = 1, lte = Recipe.MAX_ITEM_INPUT))
+    @Property(property = "fluidInput", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends FluidRecipe.RecipeBuilder<FluidToBlock.Recipe> {
 
+        @Property(comp = @Comp(not = "null"))
         private IBlockState outputBlock;
 
+        @RecipeBuilderMethodDescription(field = "outputBlock")
         public RecipeBuilder output(IBlockState blockState) {
             this.outputBlock = blockState;
             return this;
         }
 
+        @RecipeBuilderMethodDescription(field = "outputBlock")
         public RecipeBuilder output(Block block) {
             return output(block.getDefaultState());
         }
@@ -138,6 +150,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable FluidToBlock.Recipe register() {
             Recipe recipe = new Recipe(
                     this.fluidInput.get(0).getFluid(),

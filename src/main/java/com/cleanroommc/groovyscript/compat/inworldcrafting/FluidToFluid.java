@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,6 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
 
     @Override
@@ -37,6 +39,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         return false;
     }
 
+    @MethodDescription
     public boolean removeByInput(FluidStack fluid) {
         if (IngredientHelper.isEmpty(fluid)) {
             GroovyLog.msg("Error removing in world fluid to fluid recipe")
@@ -55,6 +58,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         return true;
     }
 
+    @MethodDescription
     public boolean removeByInput(FluidStack fluid, ItemStack... input) {
         if (GroovyLog.msg("Error removing in world fluid to fluid recipe")
                 .add(IngredientHelper.isEmpty(fluid), () -> "input fluid must not be empty")
@@ -73,14 +77,17 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         return true;
     }
 
+    @MethodDescription
     public boolean removeAll() {
         return FluidRecipe.removeIf(fluidRecipe -> fluidRecipe.getClass() == Recipe.class, fluidRecipe -> addBackup((Recipe) fluidRecipe));
     }
 
+    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).input(item('minecraft:diamond') * 2).fluidOutput(fluid('lava'))"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
+    @MethodDescription
     public SimpleObjectStream<Recipe> streamRecipes() {
         return new SimpleObjectStream<>(FluidRecipe.findRecipesOfType(Recipe.class)).setRemover(this::remove);
     }
@@ -124,6 +131,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Recipe register() {
             Recipe recipe = new Recipe(
                     this.fluidInput.get(0).getFluid(),

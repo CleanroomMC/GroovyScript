@@ -4,6 +4,9 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Comp;
+import com.cleanroommc.groovyscript.api.documentation.annotations.Property;
+import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderMethodDescription;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.sandbox.ClosureHelper;
 import groovy.lang.Closure;
@@ -273,10 +276,14 @@ public abstract class FluidRecipe {
 
     public abstract static class RecipeBuilder<T extends FluidRecipe> extends AbstractRecipeBuilder<T> {
 
+        @Property(value = "groovyscript.wiki.in_world_crafting.chances.value", comp = @Comp(unique = "groovyscript.wiki.in_world_crafting.chances.required"))
         protected final FloatList chances = new FloatArrayList();
+        @Property("groovyscript.wiki.in_world_crafting.startCondition.value")
         protected Closure<Boolean> startCondition;
+        @Property("groovyscript.wiki.in_world_crafting.afterRecipe.value")
         protected Closure<?> afterRecipe;
 
+        @RecipeBuilderMethodDescription(field = {"input", "chances"})
         public RecipeBuilder<T> input(IIngredient ingredient, float consumeChance) {
             this.input.add(ingredient);
             this.chances.add(MathHelper.clamp(consumeChance, 0.0f, 1.0f));
@@ -284,15 +291,18 @@ public abstract class FluidRecipe {
         }
 
         @Override
+        @RecipeBuilderMethodDescription(field = {"input", "chances"})
         public AbstractRecipeBuilder<T> input(IIngredient ingredient) {
             return input(ingredient, 1.0f);
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder<T> startCondition(Closure<Boolean> startCondition) {
             this.startCondition = startCondition;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder<T> afterRecipe(Closure<Boolean> afterRecipe) {
             this.afterRecipe = afterRecipe;
             return this;
