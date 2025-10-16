@@ -108,7 +108,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         }
     }
 
-    @MethodDescription(example = @Example("'demo', sound('minecraft:block.glass.break')"), type = MethodDescription.Type.VALUE)
+    @MethodDescription(example = @Example("'demo', sound('minecraft:block.glass.break')"), type = MethodDescription.Type.ADDITION)
     public void setSound(String group, SoundEvent sound) {
         ICarvingGroup carvingGroup = getRegistry().getGroup(group);
         if (carvingGroup == null) {
@@ -121,7 +121,7 @@ public class Carving extends VirtualizedRegistry<Pair<String, ItemStack>> {
         setSound(carvingGroup, sound);
     }
 
-    @MethodDescription(type = MethodDescription.Type.VALUE)
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void setSound(ICarvingGroup group, SoundEvent sound) {
         getRegistry().setVariationSound(group.getName(), sound);
         soundStorage.addBackup(Pair.of(group.getName(), group.getSound()));

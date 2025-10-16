@@ -16,6 +16,4 @@ mods.chisel.carving.addGroup('demo')
 mods.chisel.carving.addVariation('demo', item('chisel:antiblock:3'))
 mods.chisel.carving.addVariation('demo', item('minecraft:sea_lantern'))
 mods.chisel.carving.addVariation('demo', item('minecraft:diamond_block'))
-
 mods.chisel.carving.setSound('demo', sound('minecraft:block.glass.break'))
-
