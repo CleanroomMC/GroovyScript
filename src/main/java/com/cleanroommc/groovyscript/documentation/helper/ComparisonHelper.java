@@ -36,7 +36,7 @@ public final class ComparisonHelper {
         return ComparisonChain.start()
                 .compare(left.priority(), right.priority())
                 .compareFalseFirst(left.commented(), right.commented())
-                .compare(left.value(), right.value(), ComparisonHelper::stringCase)
+                .compare(left.value(), right.value(), ComparisonHelper::string)
                 .result();
     }
 
@@ -99,13 +99,6 @@ public final class ComparisonHelper {
             chain = chain.compare(a[x], b[x], ComparisonHelper::string);
         }
         return chain.result();
-    }
-
-    public static int stringCase(String left, String right) {
-        return ComparisonChain.start()
-                .compare(left.length(), right.length())
-                .compare(left, right)
-                .result();
     }
 
     public static int string(String left, String right) {
