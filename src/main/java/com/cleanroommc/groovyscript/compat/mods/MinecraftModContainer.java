@@ -66,7 +66,7 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
     private ContainerHolder getContainer() {
         var aliases = ContainerHolder.expandAliases(getAliases());
         aliases.addAll(getAliases());
-        return new ContainerHolder(getModId(), getContainerName(), getModId(), importBlock -> importBlock + "\nlog 'running Vanilla Minecraft example'", aliases, new ObjectOpenHashSet<>(get().getRegistries()));
+        return new ContainerHolder(getModId(), "Vanilla Registries", getModId(), importBlock -> importBlock + "\nlog 'running Vanilla Minecraft example'", aliases, new ObjectOpenHashSet<>(get().getRegistries()));
     }
 
     @Override
