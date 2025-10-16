@@ -273,7 +273,7 @@ public class Registry implements IRegistryDocumentation {
                     .note("\n")
                     .note(codeBlock.trim())
                     .note("\n")
-                    .type(Admonition.Type.ABSTRACT);
+                    .type(Admonition.Type.QUOTE);
             if (packages.size() >= TOO_MANY_PACKAGES) admonition.format(Admonition.Format.COLLAPSED);
             out.append(admonition.generate()).append("\n\n");
         }
