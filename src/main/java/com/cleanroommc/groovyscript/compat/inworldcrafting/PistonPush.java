@@ -121,7 +121,7 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (this.maxConversionsPerPush < 0 || this.maxConversionsPerPush > 64) {
+            if (this.maxConversionsPerPush <= 0 || this.maxConversionsPerPush > 64) {
                 GroovyLog.get().warn("Piston push recipe chance should be greater than 0 and equal or less than 64.");
                 this.maxConversionsPerPush = MathHelper.clamp(this.maxConversionsPerPush, 1, 64);
             }
