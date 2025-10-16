@@ -265,12 +265,17 @@ public class Registry implements IRegistryDocumentation {
                     .highlight(String.valueOf(1 + target))
                     .focus(1 + target)
                     .toString();
-            if (packages.size() >= TOO_MANY_PACKAGES) {
-                out.append(new AdmonitionBuilder().hasTitle(true).title(I18n.format("groovyscript.wiki.all_packages_title")).note("\n").note(I18n.format("groovyscript.wiki.import_instructions")).note("\n").note(codeBlock.trim()).note("\n").format(Admonition.Format.COLLAPSED).type(Admonition.Type.ABSTRACT).generate());
-                out.append("\n\n");
-            } else {
-                out.append(codeBlock);
-            }
+            var admonition = new AdmonitionBuilder()
+                    .hasTitle(true)
+                    .title(I18n.format("groovyscript.wiki.all_packages_title"))
+                    .note("\n")
+                    .note(I18n.format("groovyscript.wiki.import_instructions"))
+                    .note("\n")
+                    .note(codeBlock.trim())
+                    .note("\n")
+                    .type(Admonition.Type.ABSTRACT);
+            if (packages.size() >= TOO_MANY_PACKAGES) admonition.format(Admonition.Format.COLLAPSED);
+            out.append(admonition.generate()).append("\n\n");
         }
         return out.toString();
     }
