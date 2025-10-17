@@ -12,7 +12,8 @@ import java.util.function.IntFunction;
  * This is used to create markdown sections on the wiki index page.
  * <p>
  * Contains a header (which will be formatted as h2),
- * a subtitle, and some number of entries.
+ * an optional normal text comment below it, and some number of entries.
+ * The comment is a function that can be formatted based on the number of entries.
  * <p>
  * It will only be added to the index file if there is
  * at least one entry to display,
@@ -25,29 +26,29 @@ public class MarkdownSection implements Comparable<MarkdownSection> {
     public static final int DEFAULT_PRIORITY = 1000;
 
     private final String header;
-    private final IntFunction<String> subtitle;
+    private final IntFunction<String> comment;
     private final List<String> entries;
     private final int priority;
 
     /**
      * Calls {@link #MarkdownSection(String, IntFunction, int)} with a priority of {@link MarkdownSection#DEFAULT_PRIORITY}.
      *
-     * @param header   the header text of the section
-     * @param subtitle function that creates the subtitle based on the number of entries
+     * @param header  the header text of the section
+     * @param comment function that creates the comment based on the number of entries
      * @see #MarkdownSection(String, IntFunction, int) Section
      */
-    public MarkdownSection(String header, IntFunction<String> subtitle) {
-        this(header, subtitle, DEFAULT_PRIORITY);
+    public MarkdownSection(String header, IntFunction<String> comment) {
+        this(header, comment, DEFAULT_PRIORITY);
     }
 
     /**
      * @param header   the header text of the section
-     * @param subtitle function that creates the subtitle based on the number of entries
+     * @param comment  function that creates the comment based on the number of entries
      * @param priority the priority this Section has on the index page for sorting purposes
      */
-    public MarkdownSection(String header, IntFunction<String> subtitle, int priority) {
+    public MarkdownSection(String header, IntFunction<String> comment, int priority) {
         this.header = header;
-        this.subtitle = subtitle;
+        this.comment = comment;
         this.entries = new ArrayList<>();
         this.priority = priority;
 
@@ -76,7 +77,7 @@ public class MarkdownSection implements Comparable<MarkdownSection> {
         var sb = new StringBuilder();
         sb.append(StringUtils.repeat('#', headerLevel));
         sb.append(" ").append(header).append("\n\n");
-        var sub = subtitle.apply(entries.size());
+        var sub = comment.apply(entries.size());
         if (!sub.isEmpty()) sb.append(sub).append("\n\n");
         entries.forEach(entry -> sb.append(entry).append("\n\n"));
         return sb.toString();
