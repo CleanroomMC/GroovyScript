@@ -28,6 +28,7 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
         this.modProperty = Suppliers.memoize(() -> {
             VanillaModule t = VanillaModule.INSTANCE;
             t.addPropertyFieldsOf(t, false);
+            t.inWorldCrafting.addPropertyFieldsOf(t.inWorldCrafting, false);
             return t;
         });
         Set<String> aliasSet = new ObjectOpenHashSet<>(Alias.generateOf(containerName).andGenerate("Vanilla").and("mc").and("MC"));

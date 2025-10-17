@@ -1,16 +1,19 @@
 package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
+import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.api.IScriptReloadable;
 import com.cleanroommc.groovyscript.api.documentation.IRegistryDocumentation;
+import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.cleanroommc.groovyscript.documentation.Exporter;
 import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
 import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
-import com.cleanroommc.groovyscript.registry.NamedRegistry;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -19,9 +22,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
-public class InWorldCrafting extends NamedRegistry implements IScriptReloadable, IRegistryDocumentation {
+public class InWorldCrafting extends GroovyPropertyContainer implements INamed, IScriptReloadable, IRegistryDocumentation {
 
     private static final String NAME = "In-World Crafting";
     private static final String LOCATION = "in_world_crafting";
@@ -33,24 +38,42 @@ public class InWorldCrafting extends NamedRegistry implements IScriptReloadable,
     public final Burning burning = new Burning();
     public final PistonPush pistonPush = new PistonPush();
 
-    private final List<IScriptReloadable> registries = ImmutableList.of(fluidToFluid, fluidToItem, fluidToBlock, explosion, burning, pistonPush);
+    private final String name;
+    private final List<String> aliases;
 
-    @GroovyBlacklist
-    @Override
-    public void onReload() {
-        registries.forEach(IScriptReloadable::onReload);
-    }
+    private final List<IScriptReloadable> reloadable = ImmutableList.of(fluidToFluid, fluidToItem, fluidToBlock, explosion, burning, pistonPush);
 
-    @GroovyBlacklist
-    @Override
-    public void afterScriptLoad() {
-        registries.forEach(IScriptReloadable::afterScriptLoad);
+    public InWorldCrafting() {
+        this.aliases = Collections.unmodifiableList(Alias.generateOfClass(this));
+        this.name = this.aliases.get(0).toLowerCase(Locale.ENGLISH);
     }
 
     public static EntityItem spawnItem(World world, BlockPos pos, ItemStack item) {
         EntityItem entityItem = new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, item);
         world.spawnEntity(entityItem);
         return entityItem;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public List<String> getAliases() {
+        return aliases;
+    }
+
+    @GroovyBlacklist
+    @Override
+    public void onReload() {
+        reloadable.forEach(IScriptReloadable::onReload);
+    }
+
+    @GroovyBlacklist
+    @Override
+    public void afterScriptLoad() {
+        reloadable.forEach(IScriptReloadable::afterScriptLoad);
     }
 
     private ContainerHolder getContainerHolder() {
@@ -73,7 +96,7 @@ public class InWorldCrafting extends NamedRegistry implements IScriptReloadable,
 
     @Override
     public @NotNull String generateExamples(ContainerHolder container, LoadStage loadStage, List<String> imports) {
-        File inWorldCrafting = new File(Documentation.generatedFolder(loadStage), LOCATION + Documentation.GROOVY_FILE_EXTENSION);
+        File inWorldCrafting = Documentation.generatedExampleFile(loadStage, LOCATION);
         Exporter.generateExamples(inWorldCrafting, loadStage, getContainerHolder());
         return "";
     }
