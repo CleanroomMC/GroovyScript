@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.github.bsideup.jabel.Desugar;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,7 +44,7 @@ public record ContainerHolder(String id, String name, String access, Function<St
                 BASE_ACCESS_COMPAT + "." + container.getModId(),
                 importBlock -> String.format(HEADER, container.getModId(), importBlock),
                 ContainerHolder.expandAliases(container.getAliases()),
-                new ObjectOpenHashSet<>(registries));
+                registries);
     }
 
     /**

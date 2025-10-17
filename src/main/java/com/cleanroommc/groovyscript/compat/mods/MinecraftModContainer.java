@@ -9,13 +9,11 @@ import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import com.google.common.collect.ImmutableSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
 
 public final class MinecraftModContainer extends GroovyContainer<VanillaModule> implements IContainerDocumentation {
 
@@ -31,8 +29,7 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
             t.inWorldCrafting.addPropertyFieldsOf(t.inWorldCrafting, false);
             return t;
         });
-        Set<String> aliasSet = new ObjectOpenHashSet<>(Alias.generateOf(containerName).andGenerate("Vanilla").and("mc").and("MC"));
-        this.aliases = Collections.unmodifiableSet(aliasSet);
+        this.aliases = ImmutableSet.copyOf(Alias.generateOf(containerName).andGenerate("Vanilla").and("mc").and("MC"));
         ModSupport.INSTANCE.registerContainer(this);
     }
 
@@ -67,7 +64,7 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
     private ContainerHolder getContainer() {
         var aliases = ContainerHolder.expandAliases(getAliases());
         aliases.addAll(getAliases());
-        return new ContainerHolder(getModId(), "Vanilla Registries", getModId(), importBlock -> importBlock + "\nlog 'running Vanilla Minecraft example'", aliases, new ObjectOpenHashSet<>(get().getRegistries()));
+        return new ContainerHolder(getModId(), "Vanilla Registries", getModId(), importBlock -> importBlock + "\nlog 'running Vanilla Minecraft example'", aliases, get().getRegistries());
     }
 
     @Override

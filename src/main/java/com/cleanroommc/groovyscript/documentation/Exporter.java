@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
 import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
 import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
+import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
@@ -103,7 +104,7 @@ public class Exporter {
 
     private static List<IRegistryDocumentation> getRegistries(ContainerHolder container, Predicate<IRegistryDocumentation> check) {
         List<IRegistryDocumentation> registries = new ArrayList<>();
-        for (INamed named : container.registries()) {
+        for (INamed named : ImmutableSet.copyOf(container.registries())) {
             if (named instanceof IRegistryDocumentation doc) {
                 registries.add(doc);
                 if (check.test(doc)) continue;
