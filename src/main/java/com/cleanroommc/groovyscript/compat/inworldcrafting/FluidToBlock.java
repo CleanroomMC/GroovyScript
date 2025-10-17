@@ -28,11 +28,22 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         getBackupRecipes().forEach(FluidRecipe::add);
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".fluidInput(fluid('water')).input(item('minecraft:clay_ball')).output(block('minecraft:diamond_block'))"),
+            @Example(".fluidInput(fluid('water')).input(item('minecraft:clay'), 0.5f).output(block('minecraft:gold_block'))"),
+            @Example(".fluidInput(fluid('water')).input(item('minecraft:diamond'), item('minecraft:iron_ingot')).output(block('minecraft:clay')).startCondition({ world, pos -> pos.getY() > 50 })"),
+    })
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.add_to_list", priority = 500)
     public void add(Recipe recipe) {
         addScripted(recipe);
         FluidRecipe.add(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.remove_from_list", priority = 500)
     public boolean remove(Recipe recipe) {
         if (FluidRecipe.remove(recipe)) {
             addBackup(recipe);
@@ -41,7 +52,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         return false;
     }
 
-    @MethodDescription
+    @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public boolean removeByInput(FluidStack fluid) {
         if (IngredientHelper.isEmpty(fluid)) {
             GroovyLog.msg("Error removing in world fluid to block recipe")
@@ -60,7 +71,7 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         return true;
     }
 
-    @MethodDescription
+    @MethodDescription(example = @Example(value = "fluid('water'), item('minecraft:clay')", commented = true))
     public boolean removeByInput(FluidStack fluid, ItemStack... input) {
         if (GroovyLog.msg("Error removing in world fluid to block recipe")
                 .add(IngredientHelper.isEmpty(fluid), () -> "input fluid must not be empty")
@@ -79,17 +90,12 @@ public class FluidToBlock extends VirtualizedRegistry<FluidToBlock.Recipe> {
         return true;
     }
 
-    @MethodDescription
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public boolean removeAll() {
         return FluidRecipe.removeIf(fluidRecipe -> fluidRecipe.getClass() == Recipe.class, fluidRecipe -> addBackup((Recipe) fluidRecipe));
     }
 
-    @RecipeBuilderDescription(example = @Example(".fluidInput(fluid('water')).input(item('minecraft:clay_ball')).output(block('minecraft:diamond_block'))"))
-    public RecipeBuilder recipeBuilder() {
-        return new RecipeBuilder();
-    }
-
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Recipe> streamRecipes() {
         return new SimpleObjectStream<>(FluidRecipe.findRecipesOfType(Recipe.class)).setRemover(this::remove);
     }

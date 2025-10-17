@@ -43,7 +43,11 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
         this.burningRecipes.sort(Comparator.comparingInt(BurningRecipe::getTicks));
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:netherrack')).output(item('minecraft:nether_star'))"))
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:netherrack')).output(item('minecraft:nether_star'))"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).ticks(100)"),
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).ticks(10).startCondition({ stack -> stack.getItem().getCount() > 5 })")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

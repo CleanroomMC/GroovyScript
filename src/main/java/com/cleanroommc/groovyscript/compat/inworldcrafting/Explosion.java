@@ -38,7 +38,11 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
         return this.explosionRecipes;
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:nether_star')).chance(0.4f)"))
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:nether_star')).chance(0.4f)"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).startCondition({ entityItem, itemStack -> entityItem.posY <= 60 })"),
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

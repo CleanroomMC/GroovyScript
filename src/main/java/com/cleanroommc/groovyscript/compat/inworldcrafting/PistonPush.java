@@ -39,7 +39,11 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
         return this.pistonPushRecipes;
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).minHarvestLevel(2).maxConversionsPerPush(3)"))
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).minHarvestLevel(2).maxConversionsPerPush(3)"),
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot'))"),
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot')).startCondition({entityItem, itemStack, pushingAgainst -> pushingAgainst.getBlock() == block('minecraft:clay') })"),
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
