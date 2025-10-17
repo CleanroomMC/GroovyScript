@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
-import akka.actor.Kill;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
@@ -14,10 +13,8 @@ import com.zeitheron.hammercore.utils.match.item.ItemContainer;
 import groovy.lang.Closure;
 import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import it.unimi.dsi.fastutil.floats.FloatList;
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.api.ingredients.IIngredients;
 import net.minecraft.block.Block;

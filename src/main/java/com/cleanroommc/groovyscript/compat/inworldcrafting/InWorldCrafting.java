@@ -13,7 +13,6 @@ import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
