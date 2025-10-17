@@ -11,7 +11,7 @@ import java.util.function.IntFunction;
 /**
  * This is used to create markdown sections on the wiki index page.
  * <p>
- * Contains a header (which will be formatted as h2),
+ * Contains a header (which will be formatted as h2 via {@link #get()}, but can be configured {@link #get(int)}),
  * an optional normal text comment below it, and some number of entries.
  * The comment is a function that can be formatted based on the number of entries.
  * <p>
