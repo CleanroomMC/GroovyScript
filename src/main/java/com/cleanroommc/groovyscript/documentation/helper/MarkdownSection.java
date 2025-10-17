@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.documentation.helper;
 
 import com.google.common.collect.ComparisonChain;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -68,7 +69,17 @@ public class MarkdownSection implements Comparable<MarkdownSection> {
     }
 
     public String get() {
-        return "## " + header + "\n\n" + subtitle.apply(entries.size()) + "\n\n" + String.join("\n\n", entries);
+        return get(2);
+    }
+
+    public String get(int headerLevel) {
+        var sb = new StringBuilder();
+        sb.append(StringUtils.repeat('#', headerLevel));
+        sb.append(" ").append(header).append("\n\n");
+        var sub = subtitle.apply(entries.size());
+        if (!sub.isEmpty()) sb.append(sub).append("\n\n");
+        entries.forEach(entry -> sb.append(entry).append("\n\n"));
+        return sb.toString();
     }
 
     @Override
