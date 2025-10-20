@@ -6,15 +6,29 @@ import net.minecraft.network.PacketBuffer;
 
 public class CReload implements IPacket {
 
-    @Override
-    public void encode(PacketBuffer buf) {}
+    private boolean reloadJei;
+
+    public CReload() {
+        this(true);
+    }
+
+    public CReload(boolean reloadJei) {
+        this.reloadJei = reloadJei;
+    }
 
     @Override
-    public void decode(PacketBuffer buf) {}
+    public void encode(PacketBuffer buf) {
+        buf.writeBoolean(this.reloadJei);
+    }
+
+    @Override
+    public void decode(PacketBuffer buf) {
+        this.reloadJei = buf.readBoolean();
+    }
 
     @Override
     public IPacket executeServer(NetHandlerPlayServer handler) {
-        GSCommand.runReload(handler.player, handler.player.getServer());
+        GSCommand.runReload(handler.player, handler.player.getServer(), reloadJei);
         return null;
     }
 }
