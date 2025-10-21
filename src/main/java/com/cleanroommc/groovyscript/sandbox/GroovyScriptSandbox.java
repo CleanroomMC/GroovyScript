@@ -63,6 +63,7 @@ public class GroovyScriptSandbox {
 
         getImportCustomizer().addStaticStars(GroovyHelper.class.getName(), MathHelper.class.getName());
         getImportCustomizer().addImports(
+                "com.cleanroommc.groovyscript.api.IIngredient",
                 "net.minecraft.world.World",
                 "net.minecraft.block.state.IBlockState",
                 "net.minecraft.block.Block",
