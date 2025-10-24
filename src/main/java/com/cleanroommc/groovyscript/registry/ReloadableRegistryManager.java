@@ -12,6 +12,7 @@ import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.Internal;
 import mezz.jei.JustEnoughItems;
+import mezz.jei.gui.textures.Textures;
 import mezz.jei.ingredients.IngredientFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipe;
@@ -154,7 +155,11 @@ public class ReloadableRegistryManager {
                 });
             }
 
-            jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
+            try {
+                jeiProxy.getStarter().getClass().getDeclaredMethod("load", List.class, Textures.class, boolean.class).invoke(jeiProxy.getStarter(), jeiProxy.getPlugins(), jeiProxy.getTextures(), true);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+                jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
+            }
             time = System.currentTimeMillis() - time;
             if (msgPlayer) {
                 Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Reloading JEI took " + time + "ms"));
