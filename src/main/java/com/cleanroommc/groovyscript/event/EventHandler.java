@@ -99,11 +99,11 @@ public class EventHandler {
             PackmodeSaveData saveData = PackmodeSaveData.get(event.player.world);
             if (Packmode.hasPackmode() && saveData.isDedicatedServer()) {
                 // if the world is a dedicated server or a lan server the packmode should be synced with each player
-                NetworkHandler.sendToPlayer(new SReloadScripts(saveData.getPackmode(), true, true), (EntityPlayerMP) event.player);
+                NetworkHandler.sendToPlayer(new SReloadScripts(saveData.getPackmode(), true, true, true), (EntityPlayerMP) event.player);
             } else if (!Packmode.getPackmode().equals(saveData.getPackmode()) && !saveData.isDedicatedServer()) {
                 // otherwise we are on a single player world, and we can just set and reload the packmode
                 SReloadScripts.updatePackmode(event.player, saveData.getPackmode());
-                NetworkHandler.sendToPlayer(new SReloadScripts(null, true, true), (EntityPlayerMP) event.player);
+                NetworkHandler.sendToPlayer(new SReloadScripts(null, true, true, true), (EntityPlayerMP) event.player);
             }
         }
     }

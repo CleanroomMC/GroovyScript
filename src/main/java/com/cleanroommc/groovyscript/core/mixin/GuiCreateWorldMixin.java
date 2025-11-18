@@ -57,7 +57,7 @@ public class GuiCreateWorldMixin extends GuiScreen {
         if (Packmode.needsPackmode()) {
             Packmode.updatePackmode(this.packmodeButton.getPackmode());
             GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
-            ReloadableRegistryManager.reloadJei(false);
+            ReloadableRegistryManager.reloadJei(false, false);
         }
     }
 

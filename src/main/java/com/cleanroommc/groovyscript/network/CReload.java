@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.network;
 
 import com.cleanroommc.groovyscript.command.GSCommand;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
 
@@ -28,7 +29,7 @@ public class CReload implements IPacket {
 
     @Override
     public IPacket executeServer(NetHandlerPlayServer handler) {
-        GSCommand.runReload(handler.player, handler.player.getServer(), reloadJei);
+        GSCommand.runReload(handler.player, handler.player.getServer(), ImmutableList.of());
         return null;
     }
 }

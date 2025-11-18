@@ -138,11 +138,15 @@ public class ReloadableRegistryManager {
     }
 
     /**
-     * Reloads JEI completely. Is called after groovy scripts are ran.
+     * Reloads JEI, called after groovy scripts are ran.
+     * <p>
+     * Attempt to use a "load" method added by HEI which offers improved
+     * performance by allowing just recipes to be reloaded.
+     * Falls back to restarting JEI entirely if the method fails.
      */
     @ApiStatus.Internal
     @SideOnly(Side.CLIENT)
-    public static void reloadJei(boolean msgPlayer) {
+    public static void reloadJei(boolean msgPlayer, boolean recipesOnly) {
         if (ModSupport.JEI.isLoaded()) {
             JeiProxyAccessor jeiProxy = (JeiProxyAccessor) JustEnoughItems.getProxy();
             long time = System.currentTimeMillis();
@@ -156,7 +160,7 @@ public class ReloadableRegistryManager {
             }
 
             try {
-                jeiProxy.getStarter().getClass().getDeclaredMethod("load", List.class, Textures.class, boolean.class).invoke(jeiProxy.getStarter(), jeiProxy.getPlugins(), jeiProxy.getTextures(), true);
+                jeiProxy.getStarter().getClass().getDeclaredMethod("load", List.class, Textures.class, boolean.class).invoke(jeiProxy.getStarter(), jeiProxy.getPlugins(), jeiProxy.getTextures(), recipesOnly);
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
                 jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
             }
