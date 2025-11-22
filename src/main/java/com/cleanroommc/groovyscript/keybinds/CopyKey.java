@@ -21,6 +21,7 @@ import java.util.List;
 public class CopyKey extends GroovyScriptKeybinds.Key {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final List<String> ARGS = ImmutableList.of("all");
 
     public CopyKey() {
         super("copy", KeyModifier.CONTROL, Keyboard.KEY_C);
@@ -97,7 +98,7 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
     public void runOperation() {
         var player = mc.player;
         List<ITextComponent> messages = new ArrayList<>();
-        InfoParserPackage info = new InfoParserPackage(mc.getIntegratedServer(), player, ImmutableList.of("all"), messages, false);
+        InfoParserPackage info = new InfoParserPackage(mc.getIntegratedServer(), player, ARGS, messages, false);
         gatherInfo(info, player);
         info.parse(true);
         print(player, messages);
