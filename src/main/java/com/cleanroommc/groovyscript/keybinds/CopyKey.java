@@ -82,7 +82,7 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
 
     @Override
     public boolean isValid() {
-        return mc.isIntegratedServerRunning() && mc.player != null;
+        return mc.isIntegratedServerRunning();
     }
 
     // only runs if isIntegratedServerRunning() is true, so getIntegratedServer() cannot be null
