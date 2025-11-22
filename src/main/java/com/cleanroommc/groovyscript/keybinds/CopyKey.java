@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.keybinds;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
-import com.cleanroommc.groovyscript.helper.RayTracingHelper;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.google.common.collect.ImmutableList;
 import mezz.jei.api.IRecipesGui;
@@ -11,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.settings.KeyModifier;
@@ -34,17 +32,7 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
 
     private static void gatherInfo(InfoParserPackage info, EntityPlayer player) {
         if (mc.inGameHasFocus) {
-            info.setStack(player.getHeldItem(EnumHand.MAIN_HAND));
-            if (info.getStack().isEmpty()) info.setStack(player.getHeldItem(EnumHand.OFF_HAND));
-            if (info.getStack().isEmpty()) {
-                info.setEntity(RayTracingHelper.getEntityLookingAt(player));
-                if (info.getEntity() == null) {
-                    info.copyFromPos(RayTracingHelper.getBlockLookingAt(player));
-                    if (info.getPos() == null) {
-                        info.setEntity(player);
-                    }
-                }
-            }
+            info.copyFromPlayer(player);
         } else {
             if (mc.currentScreen instanceof GuiContainer container && container.hoveredSlot != null) {
                 info.setStack(container.hoveredSlot.getStack());

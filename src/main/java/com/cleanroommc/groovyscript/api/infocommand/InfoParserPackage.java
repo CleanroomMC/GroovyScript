@@ -10,6 +10,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
@@ -154,6 +155,27 @@ public class InfoParserPackage {
 
     public void setTileEntity(@Nullable TileEntity tileEntity) {
         this.tileEntity = tileEntity;
+    }
+
+    public void copyFromPlayer(@NotNull EntityPlayer player) {
+        // mainhand -> offhand -> entity being looked at -> block being looked at -> self
+        var stack = player.getHeldItem(EnumHand.MAIN_HAND);
+        if (stack.isEmpty()) stack = player.getHeldItem(EnumHand.OFF_HAND);
+        if (stack.isEmpty()) {
+            var entity = RayTracingHelper.getEntityLookingAt(player);
+            if (entity == null) {
+                var rayTrace = RayTracingHelper.getBlockLookingAt(player);
+                if (rayTrace == null) {
+                    setEntity(player);
+                } else {
+                    copyFromPos(rayTrace);
+                }
+            } else {
+                setEntity(entity);
+            }
+        } else {
+            setStack(stack);
+        }
     }
 
     public void copyFromPos(BlockPos pos) {
