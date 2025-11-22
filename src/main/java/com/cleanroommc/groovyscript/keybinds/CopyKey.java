@@ -82,9 +82,13 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
         }
     }
 
+    public static boolean isCapturingKeyboard() {
+        return mc.currentScreen != null && mc.currentScreen.isFocused();
+    }
+
     @Override
     public boolean isValid() {
-        return mc.isIntegratedServerRunning();
+        return mc.isIntegratedServerRunning() && mc.player != null && !isCapturingKeyboard();
     }
 
     // only runs if isIntegratedServerRunning() is true, so getIntegratedServer() cannot be null
