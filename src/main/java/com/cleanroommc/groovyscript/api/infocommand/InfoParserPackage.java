@@ -186,9 +186,8 @@ public class InfoParserPackage {
         this.block = blockState.getBlock();
         this.tileEntity = player.world.getTileEntity(pos);
 
-        var stack = block.getPickBlock(blockState, rayTrace, player.world, pos, player);
+        stack = block.getPickBlock(blockState, rayTrace, player.world, pos, player);
         if (stack.isEmpty()) stack = new ItemStack(block, 1, block.getMetaFromState(blockState));
-        setStack(stack);
     }
 
     public void parse() {
