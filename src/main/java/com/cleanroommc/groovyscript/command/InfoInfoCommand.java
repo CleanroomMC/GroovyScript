@@ -1,9 +1,7 @@
 package com.cleanroommc.groovyscript.command;
 
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
-import com.cleanroommc.groovyscript.helper.RayTracingHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumHand;
 import org.jetbrains.annotations.NotNull;
 
 public class InfoInfoCommand extends BaseInfoCommand {
