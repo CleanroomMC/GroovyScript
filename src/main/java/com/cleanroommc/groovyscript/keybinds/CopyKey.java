@@ -89,16 +89,16 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
 
     @Override
     public boolean isValid() {
-        return mc.isIntegratedServerRunning() && mc.player != null && !isCapturingKeyboard();
+        return mc.player != null && !isCapturingKeyboard();
     }
 
-    // only runs if isIntegratedServerRunning() is true, so getIntegratedServer() cannot be null
-    @SuppressWarnings("DataFlowIssue")
     @Override
     public void runOperation() {
         var player = mc.player;
         List<ITextComponent> messages = new ArrayList<>();
-        InfoParserPackage info = new InfoParserPackage(mc.getIntegratedServer(), player, ARGS, messages, false);
+        var server = mc.isIntegratedServerRunning() ? mc.getIntegratedServer() : player.getServer();
+        if (server == null) return; // unsure how this would happen, should be mutually exclusive
+        InfoParserPackage info = new InfoParserPackage(server, player, ARGS, messages, false);
         gatherInfo(info, player);
         info.parse(true);
         print(player, messages);
