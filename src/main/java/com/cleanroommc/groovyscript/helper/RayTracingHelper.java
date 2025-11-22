@@ -16,7 +16,7 @@ public class RayTracingHelper {
     /**
      * gets the block being looked at, stopping on fluid blocks
      */
-    public static BlockPos getBlockLookingAt(EntityPlayer player) {
+    public static RayTraceResult getBlockLookingAt(EntityPlayer player) {
         double distance = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
         Vec3d eyes = player.getPositionEyes(0.0F);
         Vec3d look = player.getLook(0.0F);
@@ -24,7 +24,7 @@ public class RayTracingHelper {
 
         RayTraceResult result = player.getEntityWorld().rayTraceBlocks(eyes, end, true);
         if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-            return result.getBlockPos();
+            return result;
         }
         return null;
     }
