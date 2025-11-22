@@ -34,10 +34,19 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
         if (mc.inGameHasFocus) {
             info.copyFromPlayer(player);
         } else {
-            if (mc.currentScreen instanceof GuiContainer container && container.hoveredSlot != null) {
-                info.setStack(container.hoveredSlot.getStack());
+            var jei = ModSupport.JEI.isLoaded();
+            if (mc.currentScreen instanceof GuiContainer container) {
+                var slot = container.getSlotUnderMouse();
+                if (slot != null) {
+                    info.setStack(slot.getStack());
+                } else if (jei && info.getStack().isEmpty()) {
+                    // check sidebars of normal guis
+                    info.setStack(getJeiStack());
+                }
+            } else if (jei && getJeiRecipesObject() != null) {
+                // have to check this separately for if IRecipesGui is open, since its GuiScreen not GuiContainer
+                info.setStack(getJeiStack());
             }
-            if (info.getStack().isEmpty() && ModSupport.JEI.isLoaded()) info.setStack(getJeiStack());
         }
     }
 
@@ -49,13 +58,18 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
     }
 
     private static Object getJeiObject() {
-        if (mc.currentScreen instanceof IRecipesGui gui) {
-            var entry = gui.getIngredientUnderMouse();
-            if (entry != null) return entry;
-        }
-        var entry = JeiPlugin.jeiRuntime.getBookmarkOverlay().getIngredientUnderMouse();
+        var entry = getJeiRecipesObject();
+        if (entry != null) return entry;
+        entry = JeiPlugin.jeiRuntime.getBookmarkOverlay().getIngredientUnderMouse();
         if (entry != null) return entry;
         return JeiPlugin.jeiRuntime.getIngredientListOverlay().getIngredientUnderMouse();
+    }
+
+    private static Object getJeiRecipesObject() {
+        if (mc.currentScreen instanceof IRecipesGui gui) {
+            return gui.getIngredientUnderMouse();
+        }
+        return null;
     }
 
     private static void print(EntityPlayer player, List<ITextComponent> messages) {
