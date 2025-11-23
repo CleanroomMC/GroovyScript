@@ -84,7 +84,7 @@ public class InWorldCrafting extends GroovyPropertyContainer implements INamed, 
                 list.add(ContainerHolder.BASE_ACCESS_COMPAT + "." + minecraftAlias + "." + alias);
             }
         }
-        return new ContainerHolder(LOCATION, NAME, LOCATION, importBlock -> importBlock + "\nlog 'running In-World Crafting example'", list, getRegistries());
+        return ContainerHolder.of(LOCATION, NAME, LOCATION, "running In-World Crafting example", list, getRegistries());
     }
 
     @Override

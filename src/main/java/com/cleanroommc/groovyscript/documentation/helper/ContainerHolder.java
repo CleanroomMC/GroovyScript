@@ -33,6 +33,15 @@ public record ContainerHolder(String id, String name, String access, Function<St
             %2$s
             log 'mod \\'%1$s\\' detected, running script'""";
 
+    public static ContainerHolder of(String id,
+                                     String name,
+                                     String access,
+                                     String log,
+                                     Collection<String> aliases,
+                                     Collection<INamed> registries) {
+        return new ContainerHolder(id, name, access, importBlock -> importBlock + "%nlog '" + log + "'", aliases, registries);
+    }
+
     public static ContainerHolder of(GroovyContainer<? extends GroovyPropertyContainer> mod) {
         return of(mod, mod.get().getRegistries());
     }
