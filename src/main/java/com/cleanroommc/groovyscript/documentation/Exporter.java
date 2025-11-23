@@ -7,8 +7,8 @@ import com.cleanroommc.groovyscript.api.documentation.IRegistryDocumentation;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
 import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
+import com.cleanroommc.groovyscript.documentation.helper.Heading;
 import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
-import com.cleanroommc.groovyscript.documentation.helper.MarkdownSection;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -37,7 +37,7 @@ public class Exporter {
     private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
     public static void generateWiki(File targetFolder, ContainerHolder container) {
-        var linkIndex = new LinkIndex(MarkdownSection.fromContainer(container));
+        var linkIndex = new LinkIndex(Heading.fromContainer(container));
 
         var registries = getRegistries(container, x -> x.skipDefaultWiki(container));
 
@@ -50,7 +50,7 @@ public class Exporter {
             registry.generateWiki(container, targetFolder, linkIndex);
         }
 
-        String indexText = String.format(INDEX_FILE_TEXT, Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), MarkdownSection.containerIndex(container).get(1), linkIndex.get());
+        String indexText = String.format(INDEX_FILE_TEXT, Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), Heading.containerIndex(container).get(1), linkIndex.get());
         write(new File(targetFolder, INDEX_FILE_NAME), indexText);
 
         if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {

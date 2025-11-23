@@ -2,8 +2,8 @@ package com.cleanroommc.groovyscript.api.documentation;
 
 import com.cleanroommc.groovyscript.api.INamed;
 import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
+import com.cleanroommc.groovyscript.documentation.helper.Heading;
 import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
-import com.cleanroommc.groovyscript.documentation.helper.MarkdownSection;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,14 +29,14 @@ public interface IRegistryDocumentation extends INamed {
      * <p>
      * In most situations simply adding it to the default section via {@link LinkIndex#add(String)}
      * suffices, but for certain reasons a separate section may be desired.
-     * If so, the section must be created via {@link LinkIndex#register(String, MarkdownSection)}
+     * If so, the section must be created via {@link LinkIndex#register(String, Heading)}
      * and can then be added to directly {@link LinkIndex#add(String, String)}.
      *
      * @param container       the container the registry is part of
      * @param suggestedFolder the suggested folder for the wiki files to be generated within.
      *                        This is only a suggestion, and can be ignored
      * @param linkIndex      each category will generate a header, description, and some number of entries for the index page
-     * @see MarkdownSection
+     * @see Heading
      * @see LinkIndex
      * @see com.cleanroommc.groovyscript.documentation.Exporter#writeNormalWikiFile
      */

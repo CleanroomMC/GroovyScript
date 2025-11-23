@@ -214,11 +214,11 @@ public class Registry implements IRegistryDocumentation {
     }
 
     private String generateTitle() {
-        return new MarkdownSection(getTitle() + " " + container.name()).get(1);
+        return new Heading(getTitle() + " " + container.name()).get(1);
     }
 
     private String generateDescription() {
-        var md = new MarkdownSection(I18n.format("groovyscript.wiki.description"), getDescription());
+        var md = new Heading(I18n.format("groovyscript.wiki.description"), getDescription());
 
         if (!description.isFullyDocumented()) {
             md.addEntry(
@@ -243,7 +243,7 @@ public class Registry implements IRegistryDocumentation {
     }
 
     private String generateIdentifier() {
-        var md = new MarkdownSection(I18n.format("groovyscript.wiki.identifier"), I18n.format("groovyscript.wiki.import_default", getReference()));
+        var md = new Heading(I18n.format("groovyscript.wiki.identifier"), I18n.format("groovyscript.wiki.import_default", getReference()));
 
         List<String> packages = getAliases();
 
@@ -275,7 +275,7 @@ public class Registry implements IRegistryDocumentation {
     }
 
     private String recipeBuilder() {
-        var md = new MarkdownSection(I18n.format("groovyscript.wiki.recipe_builder"));
+        var md = new Heading(I18n.format("groovyscript.wiki.recipe_builder"));
 
         md.addEntry(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle()));
         md.addEntry(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder()));
@@ -298,7 +298,7 @@ public class Registry implements IRegistryDocumentation {
             out.append(documentMethods(I18n.format("groovyscript.wiki.editing_values"), MethodDescription.Type.VALUE));
         }
         if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilders.isEmpty()) {
-            out.append(new MarkdownSection(LangHelper.translate(description.category().adding())).get());
+            out.append(new Heading(LangHelper.translate(description.category().adding())).get());
             if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
                 out.append(documentMethods(methods.get(MethodDescription.Type.ADDITION))).append("\n");
             }
@@ -319,7 +319,7 @@ public class Registry implements IRegistryDocumentation {
 
     public String documentMethods(String header, MethodDescription.Type type) {
         Set<Method> describedMethods = new ObjectOpenHashSet<>();
-        var md = new MarkdownSection(header);
+        var md = new Heading(header);
         for (var method : methods.get(type)) {
             // only add the method description if it is the first for the targeted method
             if (describedMethods.add(method.method())) {

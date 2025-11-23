@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * This is used to create markdown sections on the wiki index page.
+ * This is used to create headings on the wiki index page.
  * <p>
- * Contains a header (which will be formatted as h2 via {@link #get()}, but can be configured {@link #get(int)}),
+ * Contains header text (which will be formatted as h2 via {@link #get()}, but can be configured {@link #get(int)}),
  * an optional normal text comment below it, and some number of entries.
  * The comment is a function that can be formatted based on the number of entries.
  * <p>
@@ -22,64 +22,64 @@ import java.util.function.Function;
  *
  * @see LinkIndex
  */
-public class MarkdownSection implements Comparable<MarkdownSection> {
+public class Heading implements Comparable<Heading> {
 
     public static final int DEFAULT_PRIORITY = 1000;
 
-    private final String header;
-    private final Function<MarkdownSection, String> comment;
+    private final String text;
+    private final Function<Heading, String> comment;
     private final List<String> entries;
     private final int priority;
 
     /**
-     * @param header the header text of the section
-     * @see #MarkdownSection(String, Function, int) Section
+     * @param text the header text of the section
+     * @see #Heading(String, Function, int) Section
      */
-    public MarkdownSection(String header) {
-        this(header, null, DEFAULT_PRIORITY);
+    public Heading(String text) {
+        this(text, null, DEFAULT_PRIORITY);
     }
 
-    public MarkdownSection(String header, String comment) {
-        this(header, x -> comment, DEFAULT_PRIORITY);
+    public Heading(String text, String comment) {
+        this(text, x -> comment, DEFAULT_PRIORITY);
     }
 
     /**
-     * Calls {@link #MarkdownSection(String, Function, int)} with a priority of {@link MarkdownSection#DEFAULT_PRIORITY}.
+     * Calls {@link #Heading(String, Function, int)} with a priority of {@link Heading#DEFAULT_PRIORITY}.
      *
-     * @param header  the header text of the section
+     * @param text  the header text of the section
      * @param comment function that creates the comment based on the number of entries
-     * @see #MarkdownSection(String, Function, int) Section
+     * @see #Heading(String, Function, int) Section
      */
-    public MarkdownSection(String header, Function<MarkdownSection, String> comment) {
-        this(header, comment, DEFAULT_PRIORITY);
+    public Heading(String text, Function<Heading, String> comment) {
+        this(text, comment, DEFAULT_PRIORITY);
     }
 
     /**
-     * @param header   the header text of the section
+     * @param text   the header text of the section
      * @param comment  function that creates the comment based on the number of entries
      * @param priority the priority this Section has on the index page for sorting purposes
      */
-    public MarkdownSection(String header, Function<MarkdownSection, String> comment, int priority) {
-        this.header = header;
+    public Heading(String text, Function<Heading, String> comment, int priority) {
+        this.text = text;
         this.comment = comment;
         this.entries = new ArrayList<>();
         this.priority = priority;
     }
 
-    public static MarkdownSection containerIndex(ContainerHolder container) {
+    public static Heading containerIndex(ContainerHolder container) {
         var header = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.title", container.id()), container.name());
         var comment = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.description", container.id()), null);
-        return new MarkdownSection(I18n.format(header), comment == null ? null : md -> I18n.format(comment, md.entries.size()));
+        return new Heading(I18n.format(header), comment == null ? null : md -> I18n.format(comment, md.entries.size()));
     }
 
-    public static MarkdownSection fromContainer(ContainerHolder container) {
+    public static Heading fromContainer(ContainerHolder container) {
         var header = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.subtitle", container.id()), "groovyscript.wiki.categories");
         var comment = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.subtitle.comment", container.id()), "groovyscript.wiki.subcategories_count");
         return fromI18n(header, comment);
     }
 
-    public static MarkdownSection fromI18n(String header, String comment) {
-        return new MarkdownSection(I18n.format(header), md -> I18n.format(comment, md.entries.size()));
+    public static Heading fromI18n(String header, String comment) {
+        return new Heading(I18n.format(header), md -> I18n.format(comment, md.entries.size()));
     }
 
     /**
@@ -101,10 +101,10 @@ public class MarkdownSection implements Comparable<MarkdownSection> {
         return get(2);
     }
 
-    public String get(int headerLevel) {
+    public String get(int headingLevel) {
         var sb = new StringBuilder();
-        sb.append(StringUtils.repeat('#', headerLevel));
-        sb.append(' ').append(header).append("\n\n");
+        sb.append(StringUtils.repeat('#', headingLevel));
+        sb.append(' ').append(text).append("\n\n");
         if (comment != null) {
             var sub = comment.apply(this);
             if (!sub.isEmpty()) sb.append(sub).append("\n\n");
@@ -114,10 +114,10 @@ public class MarkdownSection implements Comparable<MarkdownSection> {
     }
 
     @Override
-    public int compareTo(@NotNull MarkdownSection o) {
+    public int compareTo(@NotNull Heading o) {
         return ComparisonChain.start()
                 .compare(priority, o.priority)
-                .compare(header, o.header)
+                .compare(text, o.text)
                 .result();
     }
 }
