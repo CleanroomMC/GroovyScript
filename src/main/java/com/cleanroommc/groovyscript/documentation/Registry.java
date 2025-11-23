@@ -371,12 +371,11 @@ public class Registry implements IRegistryDocumentation {
 
     public String methodDescription(MethodAnnotation<MethodDescription> method) {
         String lang = method.annotation().description();
-        String registryDefault = String.format("%s.%s", getBaseLangKey(), method.method().getName());
-        String globalDefault = String.format("%s.%s", Registry.BASE_LANG_LOCATION, method.method().getName());
         if (lang.isEmpty()) {
-            // If the `globalDefault` is not defined, we always want to use `registryDefault` for logging the missing key.
-            if (I18n.hasKey(registryDefault) || !I18n.hasKey(globalDefault)) lang = registryDefault;
-            else lang = globalDefault;
+            lang = LangHelper.fallback(
+                    0,
+                    String.format("%s.%s", getBaseLangKey(), method.method().getName()),
+                    String.format("%s.%s", Registry.BASE_LANG_LOCATION, method.method().getName()));
         }
 
         return String.format(

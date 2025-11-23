@@ -357,12 +357,11 @@ public class Builder {
 
     private String title() {
         String lang = annotation.title();
-        String registryDefault = String.format("%s.%s.title", langLocation, builderMethod.getName());
-        String globalDefault = String.format("%s.recipe_builder.title", Registry.BASE_LANG_LOCATION);
 
         if (lang.isEmpty()) {
-            if (I18n.hasKey(registryDefault)) lang = registryDefault;
-            else lang = globalDefault;
+            lang = LangHelper.fallback(
+                    String.format("%s.%s.title", langLocation, builderMethod.getName()),
+                    String.format("%s.recipe_builder.title", Registry.BASE_LANG_LOCATION));
         }
 
         return LangHelper.translate(lang);
@@ -371,13 +370,12 @@ public class Builder {
     public String creationMethod() {
         StringBuilder out = new StringBuilder();
         String lang = annotation.description();
-        String registryDefault = String.format("%s.%s.description", langLocation, builderMethod.getName());
-        String globalDefault = String.format("%s.recipe_builder.description", Registry.BASE_LANG_LOCATION);
 
         if (lang.isEmpty()) {
             // If the method is complex, we want to require defining the key via the annotation or as the registryDefault.
-            if (I18n.hasKey(registryDefault) || hasComplexMethod()) lang = registryDefault;
-            else lang = globalDefault;
+            String registryDefault = String.format("%s.%s.description", langLocation, builderMethod.getName());
+            if (hasComplexMethod()) lang = registryDefault;
+            else lang = LangHelper.fallback(registryDefault, String.format("%s.recipe_builder.description", Registry.BASE_LANG_LOCATION));
         }
 
         var example = location + "." + DescriptorHelper.shortSignature(builderMethod);
