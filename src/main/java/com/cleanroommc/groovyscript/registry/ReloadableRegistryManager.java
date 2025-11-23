@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
+import com.cleanroommc.groovyscript.helper.StyleConstant;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.Internal;
 import mezz.jei.JustEnoughItems;
@@ -17,7 +18,10 @@ import mezz.jei.ingredients.IngredientFilter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
@@ -158,15 +162,17 @@ public class ReloadableRegistryManager {
                     if (plugin instanceof JEISonarPlugin jeiSonarPlugin) jeiSonarPlugin.providers.clear();
                 });
             }
+            boolean isHei = false;
 
             try {
                 jeiProxy.getStarter().getClass().getDeclaredMethod("load", List.class, Textures.class, boolean.class).invoke(jeiProxy.getStarter(), jeiProxy.getPlugins(), jeiProxy.getTextures(), recipesOnly);
+                isHei = true;
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
                 jeiProxy.getStarter().start(jeiProxy.getPlugins(), jeiProxy.getTextures());
             }
             time = System.currentTimeMillis() - time;
             if (msgPlayer) {
-                Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Reloading JEI took " + time + "ms"));
+                Minecraft.getMinecraft().player.sendMessage(getReloadMessage(isHei, recipesOnly, time));
             }
 
             // Fix: HEI Removals Disappearing on Reload
@@ -180,6 +186,28 @@ public class ReloadableRegistryManager {
             } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
             }
         }
+    }
+
+    private static ITextComponent getReloadMessage(boolean isHei, boolean recipesOnly, long time) {
+        var name = isHei ? "HEI" : "JEI";
+        var recipes = new TextComponentString("recipes").setStyle(
+                StyleConstant.getTipStyle()
+                        .setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gs reload --entire-jei"))
+                        .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Only reloaded recipes - click to reload everything in " + name + "."))));
+        var everythingStyle = StyleConstant.getTipStyle();
+        if (isHei) {
+            everythingStyle
+                    .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Reloaded everything in " + name + ".")));
+        } else {
+            everythingStyle
+                    .setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.curseforge.com/minecraft/mc-mods/had-enough-items"))
+                    .setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Reloaded everything in " + name + ". Click and install HEI to be able to reload only recipes for improved reload speed.")));
+        }
+
+        return new TextComponentString("Reloading ")
+                .appendSibling(isHei && recipesOnly ? recipes : new TextComponentString("everything").setStyle(everythingStyle))
+                .appendSibling(new TextComponentString(" in " + name + " took "))
+                .appendSibling(new TextComponentString(time + "ms").setStyle(StyleConstant.getEmphasisStyle()));
     }
 
     protected static void reloadForgeRegistries(IForgeRegistry<?>... registries) {
