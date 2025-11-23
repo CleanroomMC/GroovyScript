@@ -1,12 +1,13 @@
 package com.cleanroommc.groovyscript.documentation.helper;
 
 import com.google.common.collect.ComparisonChain;
+import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntFunction;
+import java.util.function.Function;
 
 /**
  * This is used to create markdown sections on the wiki index page.
@@ -26,18 +27,30 @@ public class MarkdownSection implements Comparable<MarkdownSection> {
     public static final int DEFAULT_PRIORITY = 1000;
 
     private final String header;
-    private final IntFunction<String> comment;
+    private final Function<MarkdownSection, String> comment;
     private final List<String> entries;
     private final int priority;
 
     /**
-     * Calls {@link #MarkdownSection(String, IntFunction, int)} with a priority of {@link MarkdownSection#DEFAULT_PRIORITY}.
+     * @param header the header text of the section
+     * @see #MarkdownSection(String, Function, int) Section
+     */
+    public MarkdownSection(String header) {
+        this(header, null, DEFAULT_PRIORITY);
+    }
+
+    public MarkdownSection(String header, String comment) {
+        this(header, x -> comment, DEFAULT_PRIORITY);
+    }
+
+    /**
+     * Calls {@link #MarkdownSection(String, Function, int)} with a priority of {@link MarkdownSection#DEFAULT_PRIORITY}.
      *
      * @param header  the header text of the section
      * @param comment function that creates the comment based on the number of entries
-     * @see #MarkdownSection(String, IntFunction, int) Section
+     * @see #MarkdownSection(String, Function, int) Section
      */
-    public MarkdownSection(String header, IntFunction<String> comment) {
+    public MarkdownSection(String header, Function<MarkdownSection, String> comment) {
         this(header, comment, DEFAULT_PRIORITY);
     }
 
@@ -46,12 +59,27 @@ public class MarkdownSection implements Comparable<MarkdownSection> {
      * @param comment  function that creates the comment based on the number of entries
      * @param priority the priority this Section has on the index page for sorting purposes
      */
-    public MarkdownSection(String header, IntFunction<String> comment, int priority) {
+    public MarkdownSection(String header, Function<MarkdownSection, String> comment, int priority) {
         this.header = header;
         this.comment = comment;
         this.entries = new ArrayList<>();
         this.priority = priority;
+    }
 
+    public static MarkdownSection containerIndex(ContainerHolder container) {
+        var header = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.title", container.id()), container.name());
+        var comment = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.description", container.id()), null);
+        return new MarkdownSection(I18n.format(header), comment == null ? null : md -> I18n.format(comment, md.entries.size()));
+    }
+
+    public static MarkdownSection fromContainer(ContainerHolder container) {
+        var header = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.subtitle", container.id()), "groovyscript.wiki.categories");
+        var comment = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.subtitle.comment", container.id()), "groovyscript.wiki.subcategories_count");
+        return fromI18n(header, comment);
+    }
+
+    public static MarkdownSection fromI18n(String header, String comment) {
+        return new MarkdownSection(I18n.format(header), md -> I18n.format(comment, md.entries.size()));
     }
 
     /**
@@ -76,9 +104,11 @@ public class MarkdownSection implements Comparable<MarkdownSection> {
     public String get(int headerLevel) {
         var sb = new StringBuilder();
         sb.append(StringUtils.repeat('#', headerLevel));
-        sb.append(" ").append(header).append("\n\n");
-        var sub = comment.apply(entries.size());
-        if (!sub.isEmpty()) sb.append(sub).append("\n\n");
+        sb.append(' ').append(header).append("\n\n");
+        if (comment != null) {
+            var sub = comment.apply(this);
+            if (!sub.isEmpty()) sb.append(sub).append("\n\n");
+        }
         entries.forEach(entry -> sb.append(entry).append("\n\n"));
         return sb.toString();
     }

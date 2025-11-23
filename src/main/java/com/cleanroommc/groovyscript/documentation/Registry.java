@@ -214,26 +214,23 @@ public class Registry implements IRegistryDocumentation {
     }
 
     private String generateTitle() {
-        return String.format("# %s (%s)\n\n", getTitle(), container.name());
+        return new MarkdownSection(getTitle() + " " + container.name()).get(1);
     }
 
     private String generateDescription() {
-        StringBuilder out = new StringBuilder();
-        out.append("## ").append(I18n.format("groovyscript.wiki.description")).append("\n\n");
-        out.append(getDescription()).append("\n\n");
+        var md = new MarkdownSection(I18n.format("groovyscript.wiki.description"), getDescription());
 
         if (!description.isFullyDocumented()) {
-            out.append(
+            md.addEntry(
                     new AdmonitionBuilder()
                             .type(Admonition.Type.WARNING)
                             .note(I18n.format("groovyscript.wiki.not_fully_documented"))
                             .generate());
-            out.append("\n\n");
         }
 
         Admonition[] admonition = description.admonition();
         for (Admonition note : admonition) {
-            out.append(
+            md.addEntry(
                     new AdmonitionBuilder()
                             .type(note.type())
                             .title(note.title())
@@ -241,15 +238,12 @@ public class Registry implements IRegistryDocumentation {
                             .format(note.format())
                             .note(LangHelper.ensurePeriod(LangHelper.translate(note.value())))
                             .generate());
-            out.append("\n\n");
         }
-        return out.toString();
+        return md.get();
     }
 
     private String generateIdentifier() {
-        StringBuilder out = new StringBuilder();
-        out.append("## ").append(I18n.format("groovyscript.wiki.identifier")).append("\n\n");
-        out.append(I18n.format("groovyscript.wiki.import_default", getReference())).append("\n\n");
+        var md = new MarkdownSection(I18n.format("groovyscript.wiki.identifier"), I18n.format("groovyscript.wiki.import_default", getReference()));
 
         List<String> packages = getAliases();
 
@@ -275,28 +269,21 @@ public class Registry implements IRegistryDocumentation {
                     .note("\n")
                     .type(Admonition.Type.QUOTE);
             if (packages.size() >= TOO_MANY_PACKAGES) admonition.format(Admonition.Format.COLLAPSED);
-            out.append(admonition.generate()).append("\n\n");
+            md.addEntry(admonition.generate());
         }
-        return out.toString();
+        return md.get();
     }
 
     private String recipeBuilder() {
-        StringBuilder out = new StringBuilder();
+        var md = new MarkdownSection(I18n.format("groovyscript.wiki.recipe_builder"));
 
-        out.append("### ")
-                .append(I18n.format("groovyscript.wiki.recipe_builder"))
-                .append("\n\n")
-                .append(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle()))
-                .append("\n\n")
-                .append(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder()))
-                .append("\n\n");
+        md.addEntry(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle()));
+        md.addEntry(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder()));
 
-        int size = recipeBuilders.size();
-        for (int i = 0; i < size; i++) {
-            out.append(recipeBuilders.get(i).generateAdmonition());
-            if (i < size - 1) out.append("\n\n");
+        for (Builder recipeBuilder : recipeBuilders) {
+            md.addEntry(recipeBuilder.generateAdmonition());
         }
-        return out.toString();
+        return md.get(3);
     }
 
     public String documentationBlock() {
@@ -308,10 +295,10 @@ public class Registry implements IRegistryDocumentation {
         out.append(generateIdentifier());
 
         if (!methods.get(MethodDescription.Type.VALUE).isEmpty()) {
-            out.append("## ").append(I18n.format("groovyscript.wiki.editing_values")).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.VALUE))).append("\n");
+            out.append(documentMethods(I18n.format("groovyscript.wiki.editing_values"), MethodDescription.Type.VALUE));
         }
         if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilders.isEmpty()) {
-            out.append("## ").append(LangHelper.translate(description.category().adding())).append("\n\n");
+            out.append(new MarkdownSection(LangHelper.translate(description.category().adding())).get());
             if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
                 out.append(documentMethods(methods.get(MethodDescription.Type.ADDITION))).append("\n");
             }
@@ -320,14 +307,26 @@ public class Registry implements IRegistryDocumentation {
             }
         }
         if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) {
-            out.append("## ").append(LangHelper.translate(description.category().removing())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.REMOVAL))).append("\n");
+            out.append(documentMethods(LangHelper.translate(description.category().removing()), MethodDescription.Type.REMOVAL));
         }
         if (!methods.get(MethodDescription.Type.QUERY).isEmpty()) {
-            out.append("## ").append(LangHelper.translate(description.category().query())).append("\n\n").append(documentMethods(methods.get(MethodDescription.Type.QUERY), true)).append("\n");
+            out.append(documentMethods(LangHelper.translate(description.category().query()), MethodDescription.Type.QUERY));
         }
         out.append("\n");
 
         return out.toString();
+    }
+
+    public String documentMethods(String header, MethodDescription.Type type) {
+        Set<Method> describedMethods = new ObjectOpenHashSet<>();
+        var md = new MarkdownSection(header);
+        for (var method : methods.get(type)) {
+            // only add the method description if it is the first for the targeted method
+            if (describedMethods.add(method.method())) {
+                md.addEntry(methodDescription(method));
+            }
+        }
+        return md.get();
     }
 
     public String documentMethods(List<MethodAnnotation<MethodDescription>> methods) {

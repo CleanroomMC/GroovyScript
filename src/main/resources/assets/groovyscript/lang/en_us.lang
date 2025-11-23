@@ -134,6 +134,9 @@ groovyscript.wiki.and=and
 
 
 # Vanilla Minecraft
+groovyscript.wiki.minecraft.index.title=Vanilla Minecraft Registries
+groovyscript.wiki.minecraft.index.description=This is where GroovyScript handles compatibility with Vanilla Minecraft.%n%nSome documentation is not complete - particularly loot compat. To learn more, view the [example page](https://github.com/CleanroomMC/GroovyScript/blob/master/examples/postInit/custom/loottables.groovy).
+
 groovyscript.wiki.minecraft.crafting.title=Crafting Table
 groovyscript.wiki.minecraft.crafting.description=A normal crafting recipe that takes place in the Vanilla Crafting Table, converting up to 9 items in a shapeless or specific shaped arrangement into an output itemstack.
 groovyscript.wiki.minecraft.crafting.note0=While shorthand methods to create recipes have been supplied, it is far easier to use the recipe builder.

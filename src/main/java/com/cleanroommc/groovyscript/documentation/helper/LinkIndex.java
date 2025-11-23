@@ -1,6 +1,5 @@
 package com.cleanroommc.groovyscript.documentation.helper;
 
-import net.minecraft.client.resources.I18n;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,10 +21,6 @@ public class LinkIndex {
     private static final String PRIMARY_SECTION = "primary";
 
     private final Map<String, MarkdownSection> sections = new HashMap<>();
-
-    public LinkIndex() {
-        this(new MarkdownSection(I18n.format("groovyscript.wiki.categories"), count -> I18n.format("groovyscript.wiki.subcategories_count", count)));
-    }
 
     public LinkIndex(MarkdownSection primary) {
         register(PRIMARY_SECTION, primary);

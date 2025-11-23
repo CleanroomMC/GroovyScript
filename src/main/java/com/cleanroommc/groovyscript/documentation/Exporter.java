@@ -8,6 +8,7 @@ import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescri
 import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
 import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
 import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
+import com.cleanroommc.groovyscript.documentation.helper.MarkdownSection;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -29,14 +30,14 @@ public class Exporter {
     private static final String INDEX_FILE_NAME = "index" + MARKDOWN_FILE_EXTENSION;
     private static final String NAV_FILE_NAME = "!navigation" + MARKDOWN_FILE_EXTENSION;
     private static final String EXAMPLE_GENERATION_NOTE = "// Auto generated groovyscript example file\n";
-    private static final String INDEX_FILE_TEXT = "---\n%s\n---\n\n\n# %s\n\n%s\n\n";
+    private static final String INDEX_FILE_TEXT = "---\n%s\n---\n\n\n%s%s\n\n";
     private static final String BULLET_POINT_LINK = "* [%s](./%s)";
     private static final String NAVIGATION_FILE_TEXT = "---\nsearch:\n  exclude: true\n---\n\n\n" + BULLET_POINT_LINK + "\n%s";
 
     private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
     public static void generateWiki(File targetFolder, ContainerHolder container) {
-        var linkIndex = new LinkIndex();
+        var linkIndex = new LinkIndex(MarkdownSection.fromContainer(container));
 
         var registries = getRegistries(container, x -> x.skipDefaultWiki(container));
 
@@ -49,7 +50,7 @@ public class Exporter {
             registry.generateWiki(container, targetFolder, linkIndex);
         }
 
-        String indexText = String.format(INDEX_FILE_TEXT, Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), container.name(), linkIndex.get());
+        String indexText = String.format(INDEX_FILE_TEXT, Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), MarkdownSection.containerIndex(container).get(1), linkIndex.get());
         write(new File(targetFolder, INDEX_FILE_NAME), indexText);
 
         if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
