@@ -13,11 +13,11 @@ import java.util.function.Function;
 
 /**
  * Holds data for the container being documented.
- * Has two helper initialization methods.
+ * Has three helper initialization methods.
  *
  * @param id         the container id
  * @param name       the name of the container
- * @param access     the default method to access the container
+ * @param access     the default method to access the container, often {@code mod.{id}}
  * @param header     a function that takes the import block to allow adding text before and/or after it
  * @param aliases    all aliases the container has
  * @param registries all registries the container has
@@ -33,6 +33,14 @@ public record ContainerHolder(String id, String name, String access, Function<St
             %2$s
             log 'mod \\'%1$s\\' detected, running script'""";
 
+    /**
+     * @param id         the container id
+     * @param name       the name of the container
+     * @param access     the default method to access the container
+     * @param log        a message to be logged to {@code groovy.log} when running the script, typically "running this file"
+     * @param aliases    all aliases the container had
+     * @param registries all registries the container has
+     */
     public static ContainerHolder of(String id,
                                      String name,
                                      String access,
@@ -42,10 +50,17 @@ public record ContainerHolder(String id, String name, String access, Function<St
         return new ContainerHolder(id, name, access, importBlock -> importBlock + "%nlog '" + log + "'", aliases, registries);
     }
 
+    /**
+     * @param mod the groovy container, which represents a mod.
+     */
     public static ContainerHolder of(GroovyContainer<? extends GroovyPropertyContainer> mod) {
         return of(mod, mod.get().getRegistries());
     }
 
+    /**
+     * @param container  the container information
+     * @param registries all registries for that container
+     */
     public static ContainerHolder of(IGroovyContainer container, Collection<INamed> registries) {
         return new ContainerHolder(
                 container.getModId(),
