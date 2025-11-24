@@ -11,6 +11,8 @@ import java.util.regex.Matcher;
 
 public class CodeBlockBuilder {
 
+    private static final String TAB = "    ";
+
     private final List<String> lines = new ArrayList<>();
     private final List<String> annotations = new ArrayList<>();
     private final List<String> highlight = new ArrayList<>();
@@ -75,7 +77,7 @@ public class CodeBlockBuilder {
     @SuppressWarnings("StringBufferMayBeStringBuilder")
     public List<String> generate(IFormat format) {
         List<String> out = new ArrayList<>();
-        String indent = StringUtils.repeat("    ", indentation);
+        String indent = StringUtils.repeat(TAB, indentation);
 
         out.add(indent + "```" + lang + format.codeBlockHighlights(highlight));
         for (String line : lines) out.add(indent + line);
