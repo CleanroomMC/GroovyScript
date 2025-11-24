@@ -214,7 +214,7 @@ public class Registry implements IRegistryDocumentation {
     }
 
     private String generateTitle() {
-        return new Heading(getTitle() + " " + container.name()).get(1);
+        return new Heading(getTitle() + " (" + container.name() + ")").get(1);
     }
 
     private String generateDescription() {
