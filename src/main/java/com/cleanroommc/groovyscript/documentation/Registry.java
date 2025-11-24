@@ -296,21 +296,24 @@ public class Registry implements IRegistryDocumentation {
 
         if (!methods.get(MethodDescription.Type.VALUE).isEmpty()) {
             out.append(documentMethods(LangHelper.translate(LangHelper.fallback(description.category().values, getBaseLangKey() + ".operation.values")), MethodDescription.Type.VALUE));
+            out.append(methodExamples(MethodDescription.Type.VALUE));
         }
         if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilders.isEmpty()) {
-            out.append(new Heading(LangHelper.translate(LangHelper.fallback(description.category().adding, getBaseLangKey() + ".operation.adding"))).get());
+            out.append(documentMethods(LangHelper.translate(LangHelper.fallback(description.category().adding, getBaseLangKey() + ".operation.adding")), MethodDescription.Type.ADDITION));
             if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
-                out.append(documentMethods(methods.get(MethodDescription.Type.ADDITION))).append("\n");
+                out.append(methodExamples(MethodDescription.Type.ADDITION));
             }
             if (!recipeBuilders.isEmpty()) {
-                out.append(recipeBuilder()).append("\n\n");
+                out.append(recipeBuilder());
             }
         }
         if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) {
             out.append(documentMethods(LangHelper.translate(LangHelper.fallback(description.category().removing, getBaseLangKey() + ".operation.removing")), MethodDescription.Type.REMOVAL));
+            out.append(methodExamples(MethodDescription.Type.REMOVAL));
         }
         if (!methods.get(MethodDescription.Type.QUERY).isEmpty()) {
             out.append(documentMethods(LangHelper.translate(LangHelper.fallback(description.category().query, getBaseLangKey() + ".operation.query")), MethodDescription.Type.QUERY));
+//            out.append(methodExamples(MethodDescription.Type.QUERY));
         }
         out.append("\n");
 
@@ -323,49 +326,35 @@ public class Registry implements IRegistryDocumentation {
         for (var method : methods.get(type)) {
             // only add the method description if it is the first for the targeted method
             if (describedMethods.add(method.method())) {
-                md.addEntry(methodDescription(method));
+                md.addEntry(methodDescription(method).trim());
             }
         }
         return md.get();
     }
 
-    public String documentMethods(List<MethodAnnotation<MethodDescription>> methods) {
-        return documentMethods(methods, false);
-    }
-
-    public String documentMethods(List<MethodAnnotation<MethodDescription>> methods, boolean preventExamples) {
-        StringBuilder out = new StringBuilder();
+    public String methodExamples(MethodDescription.Type type) {
         List<String> exampleLines = new ArrayList<>();
         List<String> annotations = new ArrayList<>();
-        Set<Method> describedMethods = new ObjectOpenHashSet<>();
 
-        for (MethodAnnotation<MethodDescription> method : methods) {
-            // only add the method description if it is the first for the targeted method
-            if (describedMethods.add(method.method())) {
-                out.append(methodDescription(method));
-            }
-            if (method.annotation().example().length > 0 && Arrays.stream(method.annotation().example()).anyMatch(x -> !x.value().isEmpty())) {
-                exampleLines.addAll(Arrays.stream(method.annotation().example()).flatMap(example -> Stream.of(methodExample(method.method(), example.value()))).collect(Collectors.toList()));
+        for (var method : methods.get(type)) {
+            var example = method.annotation().example();
+            if (example.length > 0 && Arrays.stream(example).anyMatch(x -> !x.value().isEmpty())) {
+                for (var x : example) {
+                    exampleLines.add(methodExample(method.method(), x.value()));
+                }
             } else if (method.method().getParameterTypes().length == 0) {
                 exampleLines.add(methodExample(method.method()));
             }
-            Arrays.stream(method.annotation().example()).map(Example::annotations).flatMap(Arrays::stream).forEach(annotations::add);
+            for (var x : example) {
+                Collections.addAll(annotations, x.annotations());
+            }
         }
 
-        if (!exampleLines.isEmpty() && !preventExamples) {
-            out.append(
-                    new AdmonitionBuilder()
-                            .type(Admonition.Type.EXAMPLE)
-                            .note(
-                                    new CodeBlockBuilder()
-                                            .line(exampleLines)
-                                            .annotation(annotations)
-                                            .generate())
-                            .generate());
-            out.append("\n");
-        }
-
-        return out.toString();
+        if (exampleLines.isEmpty()) return "";
+        return new AdmonitionBuilder()
+                             .type(Admonition.Type.EXAMPLE)
+                             .note(new CodeBlockBuilder().line(exampleLines).annotation(annotations).generate())
+                             .generate() + "\n\n";
     }
 
     public String methodDescription(MethodAnnotation<MethodDescription> method) {
