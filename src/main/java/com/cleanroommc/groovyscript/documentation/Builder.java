@@ -60,17 +60,16 @@ public class Builder {
 
     private static DescriptorHelper.OfClass generateOfClass(Class<?> clazz, RecipeBuilderDescription annotation) {
         var methodSignatures = DescriptorHelper.generateOfClass(clazz);
-        if (annotation != null) {
-            var override = annotation.override();
+        Consumer<RecipeBuilderOverride> consumer = override -> {
             for (var entry : override.method()) {
                 methodSignatures.addAnnotation(entry, entry.method());
             }
             for (var entry : override.register()) {
                 methodSignatures.addAnnotation(entry, entry.method());
             }
-        }
-        getAnnotationsFromClassRecursive(RecipeBuilderMethodDescription.class, clazz).forEach(x -> methodSignatures.addAnnotation(x, x.method()));
-        getAnnotationsFromClassRecursive(RecipeBuilderRegistrationMethod.class, clazz).forEach(x -> methodSignatures.addAnnotation(x, x.method()));
+        };
+        if (annotation != null) consumer.accept(annotation.override());
+        getAnnotationsFromClassRecursive(RecipeBuilderOverride.class, clazz).forEach(consumer);
         return methodSignatures;
     }
 
@@ -85,14 +84,20 @@ public class Builder {
     private static Map<String, FieldDocumentation> gatherFields(Class<?> builderClass, RecipeBuilderDescription annotation, String langLocation) {
         Map<String, FieldDocumentation> fields = new HashMap<>();
         List<Field> allFields = getAllFields(builderClass);
+        // Attached to the class or any parent classes, to create/override requirements set in the parent
+        List<Property> classProperties = new ArrayList<>(getAnnotationsFromClassRecursive(Property.class, builderClass));
+        // Part of an override attached to the class or any parent classes, to create/override requirements set in the parent
+        for (var rbo : getAnnotationsFromClassRecursive(RecipeBuilderOverride.class, builderClass)) {
+            Collections.addAll(classProperties, rbo.requirement());
+        }
         for (Field field : allFields) {
             List<Property> annotations = Stream.of(
                     // (deprecated) Attached to the builder method's requirements field, an uncommon location for specific overrides
                     Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
                     // Attached to the builder method's override of the requirements field, an uncommon location for specific overrides
                     Arrays.stream(annotation.override().requirement()).filter(r -> r.property().equals(field.getName())),
-                    // Attached to the class or any parent classes, to create/override requirements set in the parent
-                    getAnnotationsFromClassRecursive(Property.class, builderClass).stream().filter(r -> r.property().equals(field.getName())),
+                    // Attached to the class or any parent classes either directly or via RecipeBuilderOverride, to create/override requirements set in the parent
+                    classProperties.stream().filter(r -> r.property().equals(field.getName())),
                     // Attached to the field, the typical place for property information to be created
                     Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
                         if (r.property().isEmpty() || r.property().equals(field.getName())) return true;

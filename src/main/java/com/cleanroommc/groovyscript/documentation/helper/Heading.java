@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.documentation.helper;
 import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

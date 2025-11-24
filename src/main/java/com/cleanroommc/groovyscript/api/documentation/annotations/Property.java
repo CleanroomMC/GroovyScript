@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  *     </li>
  *     <li>
  *         {@link ElementType#TYPE}: Marks the field targeted by {@link #property()} within the attached class and any subclasses with this {@link Property}.
- *         Multiple will be wrapped in {@link Properties}.
+ *         Multiple will be wrapped in {@link Properties} or contained inside {@link RecipeBuilderOverride#requirement()}.
  *     </li>
  *     <li>
  *         {@link ElementType#METHOD}: Marks the field targeted by {@link #property()} within the class the attached method returns with this {@link Property}.

@@ -19,9 +19,9 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Registry implements IRegistryDocumentation {
 
@@ -85,16 +85,18 @@ public class Registry implements IRegistryDocumentation {
 
     private static DescriptorHelper.OfClass generateOfClass(Class<?> clazz) {
         var methodSignatures = DescriptorHelper.generateOfClass(clazz);
-        var description = clazz.getAnnotation(RegistryDescription.class);
-        if (description != null) {
-            var override = description.override();
-            for (var annotation : override.method()) {
-                methodSignatures.addAnnotation(annotation, annotation.method());
+        Consumer<MethodOverride> consumer = override -> {
+            for (var entry : override.method()) {
+                methodSignatures.addAnnotation(entry, entry.method());
             }
             for (var annotation : override.recipeBuilder()) {
                 methodSignatures.addAnnotation(annotation, annotation.method());
             }
-        }
+        };
+        var description = clazz.getAnnotation(RegistryDescription.class);
+        if (description != null) consumer.accept(description.override());
+        var mo = clazz.getAnnotation(MethodOverride.class);
+        if (mo != null) consumer.accept(mo);
         return methodSignatures;
     }
 
@@ -352,9 +354,9 @@ public class Registry implements IRegistryDocumentation {
 
         if (exampleLines.isEmpty()) return "";
         return new AdmonitionBuilder()
-                             .type(Admonition.Type.EXAMPLE)
-                             .note(new CodeBlockBuilder().line(exampleLines).annotation(annotations).generate())
-                             .generate() + "\n\n";
+                .type(Admonition.Type.EXAMPLE)
+                .note(new CodeBlockBuilder().line(exampleLines).annotation(annotations).generate())
+                .generate() + "\n\n";
     }
 
     public String methodDescription(MethodAnnotation<MethodDescription> method) {
