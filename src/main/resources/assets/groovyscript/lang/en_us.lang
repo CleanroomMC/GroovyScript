@@ -209,6 +209,20 @@ groovyscript.wiki.minecraft.game_rule.setWarnNewGameRule=Sets if creating new Ga
 groovyscript.wiki.minecraft.game_rule.add=Adds a new entry in the format `name`, `value`, with `value` being a String that can represent a number (`-1`, `5`) or boolean (`true`, `false`)
 groovyscript.wiki.minecraft.game_rule.addMap=Adds a map of GameRule name to values
 
+## Content
+groovyscript.wiki.minecraft.content.title=Vanilla Content Creation
+groovyscript.wiki.minecraft.content.operation.query=Helper methods
+groovyscript.wiki.minecraft.content.operation.adding=Create Custom Content
+#groovyscript.wiki.minecraft.content.operation.removing=unused
+groovyscript.wiki.minecraft.content.operation.values=Creative Tab Manipulation
+groovyscript.wiki.minecraft.content.description=Creates custom items, blocks, and fluids for later use.
+groovyscript.wiki.minecraft.content.registerBlock=Register an already created block. Useful for when provided methods do not suffice to create the desired block
+groovyscript.wiki.minecraft.content.registerFluid=Register an already created fluid. Useful for when provided methods do not suffice to create the desired fluid
+groovyscript.wiki.minecraft.content.registerItem=Register an already created item. Useful for when provided methods do not suffice to create the desired item
+groovyscript.wiki.minecraft.content.createCreativeTab=Create a creative tab with the given icon
+groovyscript.wiki.minecraft.content.setDefaultCreativeTab=Sets the default Creative Tab used when registering items through GroovyScript
+groovyscript.wiki.minecraft.content.getDefaultTab=Get the default Creative Tab for GroovyScript, which is set by `setDefaultCreativeTab`
+
 # In-World Crafting
 groovyscript.wiki.in_world_crafting.chances.value=Sets the chance each input has to be consumed
 groovyscript.wiki.in_world_crafting.chances.required=exactly equal to the number of elements in `input`
