@@ -52,10 +52,19 @@ public class LangHelper {
         return keys[fallbackIndex];
     }
 
-    public static String translate(String translateKey, Object... parameters) {
-        if (GenerationFlags.LOG_MISSING_LANG_KEYS && !I18n.hasKey(translateKey)) {
-            MISSING_LANG_KEYS.add(translateKey);
+    private static void validateKey(String key) {
+        if (GenerationFlags.LOG_MISSING_LANG_KEYS && !I18n.hasKey(key)) {
+            MISSING_LANG_KEYS.add(key);
         }
+    }
+
+    public static String translate(String translateKey) {
+        validateKey(translateKey);
+        return I18n.format(translateKey);
+    }
+
+    public static String translate(String translateKey, Object... parameters) {
+        validateKey(translateKey);
         return I18n.format(translateKey, parameters);
     }
 
