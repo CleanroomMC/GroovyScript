@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.documentation.helper;
 
+import com.cleanroommc.groovyscript.documentation.Documentation;
 import com.google.common.collect.ComparisonChain;
 import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
@@ -103,8 +104,7 @@ public class Heading implements Comparable<Heading> {
 
     public String get(int headingLevel) {
         var sb = new StringBuilder();
-        sb.append(StringUtils.repeat('#', headingLevel));
-        sb.append(' ').append(text).append("\n\n");
+        sb.append(Documentation.DEFAULT_FORMAT.header(headingLevel, text)).append("\n\n");
         if (comment != null) {
             var sub = comment.apply(this);
             if (!sub.isEmpty()) sb.append(sub).append("\n\n");
