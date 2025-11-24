@@ -121,6 +121,13 @@ public @interface RegistryDescription {
     /**
      * Controls the localization keys used refer to adding, removing, or querying the registry.
      * Primarily used to control if the registry contains specifically "recipes" or more generic "entries".
+     * <p>
+     * Can be overridden by the presence of lang keys for the registry, checking these places for overrides:
+     * <code>
+     * <br>groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() {modId}}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() {name}}.operation.adding
+     * <br>groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() {modId}}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() {name}}.operation.removing
+     * <br>groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() {modId}}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() {name}}.operation.query
+     * </code>
      *
      * @return the name of the objects within the registry. Defaults to {@code Category.RECIPES}
      * @see Category

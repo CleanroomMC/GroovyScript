@@ -298,7 +298,7 @@ public class Registry implements IRegistryDocumentation {
             out.append(documentMethods(I18n.format("groovyscript.wiki.editing_values"), MethodDescription.Type.VALUE));
         }
         if (!methods.get(MethodDescription.Type.ADDITION).isEmpty() || !recipeBuilders.isEmpty()) {
-            out.append(new Heading(LangHelper.translate(description.category().adding())).get());
+            out.append(new Heading(LangHelper.translate(LangHelper.fallback(getBaseLangKey() + ".operation.adding", description.category().adding()))).get());
             if (!methods.get(MethodDescription.Type.ADDITION).isEmpty()) {
                 out.append(documentMethods(methods.get(MethodDescription.Type.ADDITION))).append("\n");
             }
@@ -307,10 +307,10 @@ public class Registry implements IRegistryDocumentation {
             }
         }
         if (!methods.get(MethodDescription.Type.REMOVAL).isEmpty()) {
-            out.append(documentMethods(LangHelper.translate(description.category().removing()), MethodDescription.Type.REMOVAL));
+            out.append(documentMethods(LangHelper.translate(LangHelper.fallback(getBaseLangKey() + ".operation.removing", description.category().removing())), MethodDescription.Type.REMOVAL));
         }
         if (!methods.get(MethodDescription.Type.QUERY).isEmpty()) {
-            out.append(documentMethods(LangHelper.translate(description.category().query()), MethodDescription.Type.QUERY));
+            out.append(documentMethods(LangHelper.translate(LangHelper.fallback(getBaseLangKey() + ".operation.query", description.category().query())), MethodDescription.Type.QUERY));
         }
         out.append("\n");
 
