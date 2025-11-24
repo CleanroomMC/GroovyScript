@@ -47,7 +47,7 @@ public record ContainerHolder(String id, String name, String access, Function<St
                                      String log,
                                      Collection<String> aliases,
                                      Collection<INamed> registries) {
-        return new ContainerHolder(id, name, access, importBlock -> importBlock + "%nlog '" + log + "'", aliases, registries);
+        return new ContainerHolder(id, name, access, importBlock -> importBlock + "\nlog '" + log + "'", aliases, registries);
     }
 
     /**
