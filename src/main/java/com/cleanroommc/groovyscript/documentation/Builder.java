@@ -279,63 +279,70 @@ public class Builder {
     }
 
     public String documentRegistration() {
-        StringBuilder out = new StringBuilder();
         if (registrationMethods.isEmpty()) {
             GroovyLog.get().warn("Couldn't find any registration methods for recipe builder '{}'", location);
-        } else {
-            for (var registerMethod : registrationMethods) {
-                out.append("- ");
+            return "";
+        }
+        StringBuilder out = new StringBuilder();
+        for (var registerMethod : registrationMethods) {
+            out.append("- ");
+            var desc = registerMethod.annotation().description();
+            if (desc.isEmpty()) {
                 String returnType = registerMethod.method().getAnnotatedReturnType().getType().getTypeName();
-                if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.recipe_builder.register"));
-                else out.append(I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
-                out.append("\n\n");
-                out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.method().getName())).indentation(1).toString());
-            }
+                boolean hasNoReturnValue = "void".equals(returnType) || "null".equals(returnType);
+                out.append(
+                        hasNoReturnValue
+                                ? I18n.format("groovyscript.wiki.recipe_builder.register")
+                                : I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
+            } else out.append(LangHelper.translate(desc));
+            out.append("\n\n");
+            out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.method().getName())).indentation(1).toString());
         }
         return out.toString();
     }
 
     public StringBuilder documentFields() {
         StringBuilder out = new StringBuilder();
-        fields.values()
-                .stream()
-                .sorted(ComparisonHelper::field)
-                .filter(FieldDocumentation::isUsed)
-                .forEach(fieldDocumentation -> {
+        var list = new ArrayList<>(fields.values());
+        list.sort(ComparisonHelper::field);
+        for (FieldDocumentation fieldDocumentation : list) {
+            if (!fieldDocumentation.isUsed()) continue;
 
-                    out.append(fieldDocumentation.getDescription());
+            out.append(fieldDocumentation.getDescription());
 
-                    if (fieldDocumentation.hasComparison()) {
-                        var value = fieldDocumentation.getComparison();
-                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
-                    }
+            if (fieldDocumentation.hasComparison()) {
+                var value = fieldDocumentation.getComparison();
+                if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
+            }
+            if (fieldDocumentation.hasRequirement()) {
+                var value = fieldDocumentation.getRequirement();
+                if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
+            }
+            if (fieldDocumentation.hasDefaultValue()) {
+                var value = fieldDocumentation.getDefaultValue();
+                if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.default", value));
+            }
 
-                    if (fieldDocumentation.hasRequirement()) {
-                        var value = fieldDocumentation.getRequirement();
-                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
-                    }
+            out.append("\n\n");
 
-                    if (fieldDocumentation.hasDefaultValue()) {
-                        var value = fieldDocumentation.getDefaultValue();
-                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.default", value));
-                    }
+            var recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
 
-                    out.append("\n\n");
-
-                    var recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
-
-                    if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
-                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location + "." + builderMethod.getName());
-                    } else {
-                        var lines = recipeBuilderMethods.stream()
-                                .sorted(ComparisonHelper::recipeBuilderMethod)
-                                .map(MethodAnnotation::method)
-                                .map(DescriptorHelper::shortSignature)
-                                .distinct()
-                                .collect(Collectors.toList());
-                        out.append(new CodeBlockBuilder().line(lines).indentation(1).toString());
-                    }
-                });
+            if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
+                GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location + "." + builderMethod.getName());
+                continue;
+            }
+            var lines = recipeBuilderMethods.stream()
+                    .sorted(ComparisonHelper::recipeBuilderMethod)
+                    .map(x -> {
+                        var desc = x.annotation().description();
+                        var method = DescriptorHelper.shortSignature(x.method());
+                        if (desc.isEmpty()) return method;
+                        return method + " // " + LangHelper.translate(desc);
+                    })
+                    .distinct()
+                    .collect(Collectors.toList());
+            out.append(new CodeBlockBuilder().line(lines).indentation(1).toString());
+        }
         return out;
     }
 

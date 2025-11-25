@@ -45,6 +45,18 @@ public @interface RecipeBuilderRegistrationMethod {
     String[] method() default {};
 
     /**
+     * The localization key for the description of the return method, will default to generating
+     * <code>
+     * <br>groovyscript.wiki.recipe_builder.register
+     * <br>groovyscript.wiki.recipe_builder.register_return
+     * </code>
+     * <br>depending on if the recipe builder returns a non-void value.
+     *
+     * @return localization key for the recipe builder return method
+     */
+    String description() default "";
+
+    /**
      * Hierarchy of the property, relative to other properties applying to the same method.
      * Annotations on methods that return {@link Object} are of lower priority by default.
      *
