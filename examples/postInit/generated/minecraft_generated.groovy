@@ -130,7 +130,7 @@ crafting.shapelessBuilder()
     .register()
 
 crafting.shapelessBuilder()
-    .name('minecraft:pink_dye_from_pink_tulp')
+    .name('minecraft:pink_dye_from_pink_tulip')
     .output(item('minecraft:clay'))
     .input([item('minecraft:nether_star')])
     .replaceByName()
@@ -154,7 +154,7 @@ crafting.shapelessBuilder()
 // crafting.replaceShaped('gold_to_diamonds', item('minecraft:diamond') * 8, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
 // crafting.replaceShaped(resource('minecraft:sea_lantern'), item('minecraft:clay'), [[item('minecraft:glowstone')],[item('minecraft:glowstone')],[item('minecraft:glowstone')]])
 // crafting.replaceShapeless(item('minecraft:ender_eye'), [item('minecraft:ender_pearl'),item('minecraft:nether_star')])
-// crafting.replaceShapeless('minecraft:pink_dye_from_pink_tulp', item('minecraft:clay'), [item('minecraft:nether_star')])
+// crafting.replaceShapeless('minecraft:pink_dye_from_pink_tulip', item('minecraft:clay'), [item('minecraft:nether_star')])
 // crafting.replaceShapeless(resource('minecraft:pink_dye_from_peony'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
 
 // Furnace:
