@@ -291,7 +291,7 @@ public class Builder {
                         hasNoReturnValue
                                 ? I18n.format("groovyscript.wiki.recipe_builder.register")
                                 : I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
-            } else out.append(LangHelper.translate(desc));
+            } else out.append(LangHelper.ensurePeriod(LangHelper.translate(desc)));
             out.append("\n\n");
             out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.method().getName())).indentation(1).toString());
         }
