@@ -325,7 +325,7 @@ public class Builder {
                     var recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
 
                     if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
-                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location);
+                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location + "." + builderMethod.getName());
                     } else {
                         var lines = recipeBuilderMethods.stream()
                                 .sorted(ComparisonHelper::recipeBuilderMethod)
