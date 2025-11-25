@@ -19,10 +19,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -310,18 +307,9 @@ public class Builder {
 
             out.append(fieldDocumentation.getDescription());
 
-            if (fieldDocumentation.hasComparison()) {
-                var value = fieldDocumentation.getComparison();
-                if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
-            }
-            if (fieldDocumentation.hasRequirement()) {
-                var value = fieldDocumentation.getRequirement();
-                if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
-            }
-            if (fieldDocumentation.hasDefaultValue()) {
-                var value = fieldDocumentation.getDefaultValue();
-                if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.default", value));
-            }
+            out.append(FieldDocumentation.documentValue(fieldDocumentation::hasComparison, fieldDocumentation::getComparison, "groovyscript.wiki.requires"));
+            out.append(FieldDocumentation.documentValue(fieldDocumentation::hasRequirement, fieldDocumentation::getRequirement, "groovyscript.wiki.requires"));
+            out.append(FieldDocumentation.documentValue(fieldDocumentation::hasDefaultValue, fieldDocumentation::getDefaultValue, "groovyscript.wiki.default"));
 
             out.append("\n\n");
 
@@ -460,6 +448,14 @@ public class Builder {
             this.langLocation = langLocation;
             this.annotations = annotations;
             this.firstAnnotation = annotations.get(0);
+        }
+
+        private static String documentValue(BooleanSupplier check, Supplier<String> string, String langKey) {
+            if (check.getAsBoolean()) {
+                var value = string.get();
+                if (!value.isEmpty()) return " " + I18n.format(langKey, value);
+            }
+            return "";
         }
 
         private static String parseComparisonRequirements(Comp comp, EnumSet<Comp.Type> usedTypes) {
