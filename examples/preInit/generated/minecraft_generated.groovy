@@ -15,6 +15,32 @@ log 'running Vanilla Minecraft example'
 
 content.setDefaultCreativeTab(content.createCreativeTab('groovyscript.example_creative_tab', _ -> item('groovyscriptdev:heartofauniverse')))
 
+content.createItem('heartofauniverse')
+    .setRarity(EnumRarity.EPIC)
+    .setMaxStackSize(1)
+    .register()
+
+content.createItem('clay_2')
+    .setMaxStackSize(5)
+    .setRarity(EnumRarity.RARE)
+    .register()
+
+content.createItem('clay_3')
+    .setCreativeTab(creativeTab('misc'))
+    .setEnchantedEffect()
+    .register()
+
+content.createBlock('generic_block')
+    .register()
+
+
+content.createFluid('amongium')
+    .setMetalTexture()
+    .setColor(0x00FF00)
+    .register()
+
+
+content.createCreativeTab('groovyscript.other_tab_clay', _ -> item('minecraft:clay'))
 content.registerItem('snack', (new ItemFood(20, 10, false) {
     protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
         if (!worldIn.isRemote) {
@@ -46,4 +72,3 @@ content.registerBlock('dragon_egg_lamp', (new Block(blockMaterial('redstone_ligh
         return BlockFaceShape.UNDEFINED
     }
 }).setLightLevel(1.0F))
-content.createCreativeTab('groovyscript.other_tab_clay', _ -> item('minecraft:clay'))

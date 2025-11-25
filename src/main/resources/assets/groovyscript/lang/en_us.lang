@@ -223,6 +223,68 @@ groovyscript.wiki.minecraft.content.createCreativeTab=Create a creative tab with
 groovyscript.wiki.minecraft.content.setDefaultCreativeTab=Sets the default Creative Tab used when registering items through GroovyScript
 groovyscript.wiki.minecraft.content.getDefaultTab=Get the default Creative Tab for GroovyScript, which is set by `setDefaultCreativeTab`
 
+groovyscript.wiki.minecraft.content.createBlock.title=Create Custom Block
+groovyscript.wiki.minecraft.content.createBlock.description0=Create a GroovyBlock with the given name and material
+groovyscript.wiki.minecraft.content.createBlock.description1=Create a GroovyBlock with the given name with the material `Material.ROCK`
+groovyscript.wiki.minecraft.content.createFluid.title=Create Custom Fluid
+groovyscript.wiki.minecraft.content.createFluid.description=Create a GroovyFluid with the given name
+groovyscript.wiki.minecraft.content.createItem.title=Create Custom Item
+groovyscript.wiki.minecraft.content.createItem.description=Create a GroovyItem with the given name
+
+groovyscript.wiki.minecraft.content.rarity.value=Sets the rarity this will be is displayed as, primarily impacts the color of its name
+
+# Item
+groovyscript.wiki.minecraft.content.tabToDisplayOn.value=Sets the Creative Tab the item should display on
+groovyscript.wiki.minecraft.content.maxStackSize.value=Sets the max stack size of the item
+groovyscript.wiki.minecraft.content.maxDamage.value=Sets the max damage of the item, used as durability for tools
+groovyscript.wiki.minecraft.content.bFull3D.value=Sets if the items render the object in full 3D, like tools
+groovyscript.wiki.minecraft.content.hasSubtypes.value=Sets if the item has subtypes, like dyes or terracotta
+groovyscript.wiki.minecraft.content.containerItem.value=Sets the Container Item, which will replace this item when it breaks
+groovyscript.wiki.minecraft.content.canRepair.value=Sets if the item can be repaired, typically by combining two of the same item in the crafting grid
+groovyscript.wiki.minecraft.content.effect.value=Sets if the item has the shimmer effect, typically associated with potions or enchantments
+groovyscript.wiki.minecraft.content.enchantability.value=Sets the enchantability level
+groovyscript.wiki.minecraft.content.item.translationKey.value=Sets the base String used for translation. Prefixed by `item.` and checks the suffix `.name` for the item display name
+groovyscript.wiki.minecraft.content.item.register.description=Registers the Item and returns itself (returns `GroovyItem`)
+
+# Block
+groovyscript.wiki.minecraft.content.displayOnCreativeTab.value=Sets the Creative Tab the item representing the block should be displayed on
+groovyscript.wiki.minecraft.content.fullBlock.value=Sets if the block is a full block
+groovyscript.wiki.minecraft.content.lightOpacity.value=Sets how much light is subtracted for going through this block
+groovyscript.wiki.minecraft.content.translucent.value=Sets if the block is translucent
+groovyscript.wiki.minecraft.content.lightValue.value=Sets how much light the block emits, multiplied by 15
+#groovyscript.wiki.minecraft.content.useNeighborBrightness.value=fieldOnly
+groovyscript.wiki.minecraft.content.blockHardness.value=Sets the difficulty of the block to break, primarily affecting the speed to break. A hardness of `0` will cause no durability loss, and a hardness of `-1` will be unbreakable
+groovyscript.wiki.minecraft.content.blockResistance.value=Sets the explosion resistance of the block
+#groovyscript.wiki.minecraft.content.enableStats.value=fieldOnly #Sets if the block is counted for the stats page
+groovyscript.wiki.minecraft.content.needsRandomTick.value=Sets if the block has random ticks
+groovyscript.wiki.minecraft.content.blockSoundType.value=Sets the sound played when stepping on the block
+#groovyscript.wiki.minecraft.content.blockParticleGravity.value=fieldOnly
+groovyscript.wiki.minecraft.content.defaultBlockState.value=Sets the default `IBlockState` for the block
+groovyscript.wiki.minecraft.content.block.translationKey.value=Sets the base String used for translation. Prefixed by `tile.` and checks the suffix `.name` for the block display name
+groovyscript.wiki.minecraft.content.block.setHardness.description=Also increases block resistance to itself * 5
+groovyscript.wiki.minecraft.content.block.setBlockUnbreakable.description=Makes the block unbreakable by setting hardness to -1.0f
+groovyscript.wiki.minecraft.content.block.register.description=Registers the Block and a corresponding ItemBlock and returns itself (returns `GroovyBlock`)
+
+# Fluid
+groovyscript.wiki.minecraft.content.still.value=Sets the texture used for when the fluid is still
+groovyscript.wiki.minecraft.content.flowing.value=Sets the texture used for when the fluid is flowing
+groovyscript.wiki.minecraft.content.overlay.value=Sets the texture used as an overlay for the fluid
+groovyscript.wiki.minecraft.content.color.value=Sets the color of the fluid
+groovyscript.wiki.minecraft.content.fillSound.value=Sets the sound played when the fluid is picked up
+groovyscript.wiki.minecraft.content.emptySound.value=Sets the sound played when the fluid is emptied out
+groovyscript.wiki.minecraft.content.luminosity.value=Sets how much light the fluid produces
+groovyscript.wiki.minecraft.content.density.value=Sets the density of the fluid, which controls what other fluids it can displace
+groovyscript.wiki.minecraft.content.temperature.value=Sets the temperature of the fluid
+groovyscript.wiki.minecraft.content.viscosity.value=Sets the viscosity of the fluid, which impacts how fast the fluid spreads
+groovyscript.wiki.minecraft.content.isGaseous.value=Sets if the fluid is gaseous, typically indicating a negative density
+groovyscript.wiki.minecraft.content.material.value=Sets the material the block has, if a block is created
+groovyscript.wiki.minecraft.content.createBlock.value=Sets if the fluid creates a block
+groovyscript.wiki.minecraft.content.finiteFluidBlock.value=Sets if the fluid is a finite block, if a block is created
+groovyscript.wiki.minecraft.content.fluid.setTexture0.description=still, flowing
+groovyscript.wiki.minecraft.content.fluid.setTexture1.description=still, flowing, overlay
+groovyscript.wiki.minecraft.content.fluid.register.description=Registers the Fluid and returns the registered Fluid (returns `Fluid`)
+
+
 # In-World Crafting
 groovyscript.wiki.in_world_crafting.chances.value=Sets the chance each input has to be consumed
 groovyscript.wiki.in_world_crafting.chances.required=exactly equal to the number of elements in `input`

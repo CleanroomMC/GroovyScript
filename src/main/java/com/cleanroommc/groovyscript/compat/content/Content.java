@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-@RegistryDescription(location = LoadStage.PRE_INIT, category = RegistryDescription.Category.CUSTOM)
+@RegistryDescription(location = LoadStage.PRE_INIT, category = RegistryDescription.Category.CUSTOM, priority = 500)
 public class Content extends NamedRegistry {
 
     public CreativeTabs defaultTab;
@@ -60,23 +60,23 @@ public class Content extends NamedRegistry {
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example(value = """
             'dragon_egg_lamp', (new Block(blockMaterial('redstone_light')) {
                 protected static final AxisAlignedBB DRAGON_EGG_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 1.0D, 0.9375D)
-            
+
                 AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
                     return DRAGON_EGG_AABB
                 }
-            
+
                 boolean isOpaqueCube(IBlockState state) {
                     return false
                 }
-            
+
                 boolean isFullCube(IBlockState state) {
                     return false
                 }
-            
+
                 boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
                     return true
                 }
-            
+
                 BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
                     return BlockFaceShape.UNDEFINED
                 }
@@ -94,23 +94,31 @@ public class Content extends NamedRegistry {
         FluidRegistry.registerFluid(fluid);
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example("('heartofauniverse').setRarity(EnumRarity.EPIC).setMaxStackSize(1)"),
+            @Example("('clay_2').setMaxStackSize(5).setRarity(EnumRarity.RARE)"),
+            @Example("('clay_3').setCreativeTab(creativeTab('misc')).setEnchantedEffect()")
+    })
     public GroovyItem createItem(String name) {
         return new GroovyItem(name);
     }
 
+    @RecipeBuilderDescription(description = "groovyscript.wiki.minecraft.content.createBlock.description0")
     public GroovyBlock createBlock(String name, Material material) {
         return new GroovyBlock(name, material);
     }
 
+    @RecipeBuilderDescription(description = "groovyscript.wiki.minecraft.content.createBlock.description1", example = @Example("('generic_block')"))
     public GroovyBlock createBlock(String name) {
         return new GroovyBlock(name, Material.ROCK);
     }
 
+    @RecipeBuilderDescription(example = @Example("('amongium').setMetalTexture().setColor(0x00FF00)"))
     public GroovyFluid.Builder createFluid(String name) {
         return new GroovyFluid.Builder(name);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION, priority = 500)
     public CreativeTabs createCreativeTab(String name, ItemStack icon) {
         return new CreativeTabs(name) {
 
@@ -121,7 +129,7 @@ public class Content extends NamedRegistry {
         };
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION, priority = 500)
     public CreativeTabs createCreativeTab(String name, Supplier<ItemStack> icon) {
         return new CreativeTabs(name) {
 
@@ -132,7 +140,7 @@ public class Content extends NamedRegistry {
         };
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'groovyscript.other_tab_clay', _ -> item('minecraft:clay')"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, priority = 500, example = @Example("'groovyscript.other_tab_clay', _ -> item('minecraft:clay')"))
     public CreativeTabs createCreativeTab(String name, Closure<ItemStack> icon) {
         return new CreativeTabs(name) {
 
@@ -143,7 +151,7 @@ public class Content extends NamedRegistry {
         };
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION, priority = 500)
     public CreativeTabs createCreativeTab(String name, Item icon) {
         return createCreativeTab(name, new ItemStack(icon));
     }

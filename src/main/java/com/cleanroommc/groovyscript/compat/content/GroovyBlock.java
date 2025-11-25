@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.content;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
@@ -26,6 +27,40 @@ import org.jetbrains.annotations.ApiStatus;
 import java.io.File;
 import java.util.Map;
 
+@Property(property = "displayOnCreativeTab")
+//@Property(property = "fullBlock")//fieldOnly
+@Property(property = "lightOpacity")
+//@Property(property = "translucent")//fieldOnly
+@Property(property = "lightValue")
+//@Property(property = "useNeighborBrightness")//protected fieldOnly
+@Property(property = "blockHardness", defaultValue = "2.0f")
+@Property(property = "blockResistance", defaultValue = "10.0f")
+//@Property(property = "enableStats")//protected
+@Property(property = "needsRandomTick")
+//@Property(property = "hasTileEntity")//protected fieldOnly
+@Property(property = "blockSoundType", defaultValue = "SoundType.STONE")
+//@Property(property = "blockParticleGravity")//fieldOnly
+//@Property(property = "slipperiness")//not a builder method
+//@Property(property = "defaultBlockState")//protected and not a builder method
+@Property(property = "translationKey", defaultValue = "registryName", value = "groovyscript.wiki.minecraft.content.item.translationKey.value")
+@RecipeBuilderOverride(method = {
+        @RecipeBuilderMethodDescription(method = "setSoundType", field = "blockSoundType"),
+        @RecipeBuilderMethodDescription(method = "setLightOpacity", field = "lightOpacity"),
+        @RecipeBuilderMethodDescription(method = "setLightLevel", field = "lightValue"),//15x float
+        @RecipeBuilderMethodDescription(method = "setResistance", field = "blockResistance"),//3x float
+        @RecipeBuilderMethodDescription(method = "setHardness", field = {
+                "blockHardness", "blockResistance"
+        }, description = "groovyscript.wiki.minecraft.content.block.setHardness.description"),//block resistance is increased to hardness*5
+        @RecipeBuilderMethodDescription(method = "setBlockUnbreakable", field = {
+                "blockHardness", "blockResistance"
+        }, description = "groovyscript.wiki.minecraft.content.block.setBlockUnbreakable.description"),
+        @RecipeBuilderMethodDescription(method = "setTickRandomly", field = "needsRandomTick"),
+        @RecipeBuilderMethodDescription(method = "setTranslationKey", field = "translationKey"),
+//        @RecipeBuilderMethodDescription(method = "setDefaultState", field = "defaultBlockState"),//protected and not a builder method
+//        @RecipeBuilderMethodDescription(method = "disableStats", field = "enableStats"),//protected
+//        @RecipeBuilderMethodDescription(method = "setDefaultSlipperiness", field = "slipperiness"),//not a builder method
+        @RecipeBuilderMethodDescription(method = "setCreativeTab", field = "displayOnCreativeTab"),
+})
 public class GroovyBlock extends Block {
 
     private static boolean initialised;
@@ -103,6 +138,7 @@ public class GroovyBlock extends Block {
         }
     }
 
+    @RecipeBuilderRegistrationMethod(description = "groovyscript.wiki.minecraft.content.block.register.description")
     public GroovyBlock register() {
         register(this, this.itemBlock);
         return this;
