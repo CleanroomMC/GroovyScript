@@ -2908,7 +2908,9 @@ groovyscript.wiki.tconstruct.casting_basin.consumesCast.value=Whether the cast i
 groovyscript.wiki.tconstruct.melting.title=Melting
 groovyscript.wiki.tconstruct.melting.description=Modifies what items can be melted down in the Smeltery.
 groovyscript.wiki.tconstruct.melting.add=Adds a new recipe in the format `input`, `output`, `time`
-groovyscript.wiki.tconstruct.melting.temp.value=Required temperature for melting. Also determines the speed of the melt
+groovyscript.wiki.tconstruct.melting.temperature.value=Required temperature for melting. Also determines the speed of the melt
+groovyscript.wiki.tconstruct.melting.time.value=Sets the time required for melting, which is based on temperature
+groovyscript.wiki.tconstruct.melting.time_temperature.unique=If time is set, temperature will be ignored
 
 groovyscript.wiki.tconstruct.entity_melting.title=Entity Melting
 groovyscript.wiki.tconstruct.entity_melting.description=Allows mobs to create a bit of fluid when hurt by the Smeltery.

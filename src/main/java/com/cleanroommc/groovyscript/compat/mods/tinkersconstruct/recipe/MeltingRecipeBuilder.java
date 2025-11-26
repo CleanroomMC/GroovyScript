@@ -17,8 +17,11 @@ import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
 @Property(property = "input", comp = @Comp(eq = 1))
 public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
 
-    @Property(defaultValue = "300", comp = @Comp(gte = 1))
-    private int temp = 300;
+    @Property(defaultValue = "300", comp = @Comp(gte = 1, unique = "groovyscript.wiki.tconstruct.melting.time_temperature.unique"))
+    private int temperature = 300;
+    @Property(comp = @Comp(unique = "groovyscript.wiki.tconstruct.melting.time_temperature.unique"))
+    private int time;
+
     private final StandardListRegistry<MeltingRecipe> registry;
     private final String recipeName;
 
@@ -37,16 +40,15 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
         this.recipeName = recipeName;
     }
 
-    @RecipeBuilderMethodDescription(field = "temp")
+    @RecipeBuilderMethodDescription
     public MeltingRecipeBuilder temperature(int temp) {
-        this.temp = temp + 300;
+        this.temperature = temp + 300;
         return this;
     }
 
-    @RecipeBuilderMethodDescription(field = "temp")
+    @RecipeBuilderMethodDescription
     public MeltingRecipeBuilder time(int time) {
-        int t = fluidOutput.get(0) != null ? fluidOutput.get(0).getFluid().getTemperature() : 300;
-        this.temp = MeltingRecipeAccessor.invokeCalcTemperature(t, time);
+        this.time = time;
         return this;
     }
 
@@ -63,9 +65,12 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
 
     @Override
     public void validate(GroovyLog.Msg msg) {
+        if (time != 0 && fluidOutput.get(0) != null) {
+            this.temperature = MeltingRecipeAccessor.invokeCalcTemperature(fluidOutput.get(0).getFluid().getTemperature(), time);
+        }
         validateItems(msg, 1, 1, 0, 0);
         validateFluids(msg, 0, 0, 1, 1);
-        msg.add(temp < 1, "Recipe temperature must be at least 1, got " + temp);
+        msg.add(temperature < 1, "Recipe temperature must be at least 1, got " + temperature);
     }
 
     @Override
@@ -75,7 +80,7 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipe> {
         int amount = fluidOutput.get(0).amount;
         IIngredient input = this.input.get(0);
         RecipeMatch match = recipeMatchFromIngredient(input, amount);
-        MeltingRecipe recipe = new MeltingRecipe(match, fluidOutput.get(0), temp);
+        MeltingRecipe recipe = new MeltingRecipe(match, fluidOutput.get(0), temperature);
         registry.add(recipe);
         return recipe;
     }
