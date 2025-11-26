@@ -1,16 +1,18 @@
 package com.cleanroommc.groovyscript.api.infocommand;
 
 import com.cleanroommc.groovyscript.event.GsHandEvent;
+import com.cleanroommc.groovyscript.helper.RayTracingHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.NotNull;
@@ -156,15 +158,36 @@ public class InfoParserPackage {
         this.tileEntity = tileEntity;
     }
 
-    public void copyFromPos(BlockPos pos) {
-        if (pos == null) return;
-        this.pos = pos;
+    public void copyFromPlayer(@NotNull EntityPlayer player) {
+        // mainhand -> offhand -> entity being looked at -> block being looked at -> self
+        var stack = player.getHeldItem(EnumHand.MAIN_HAND);
+        if (stack.isEmpty()) stack = player.getHeldItem(EnumHand.OFF_HAND);
+        if (stack.isEmpty()) {
+            var entity = RayTracingHelper.getEntityLookingAt(player);
+            if (entity == null) {
+                var rayTrace = RayTracingHelper.getBlockLookingAt(player);
+                if (rayTrace == null) {
+                    setEntity(player);
+                } else {
+                    copyFromPos(rayTrace);
+                }
+            } else {
+                setEntity(entity);
+            }
+        } else {
+            setStack(stack);
+        }
+    }
+
+    public void copyFromPos(RayTraceResult rayTrace) {
+        if (rayTrace == null) return;
+        this.pos = rayTrace.getBlockPos();
         this.blockState = player.world.getBlockState(pos);
         this.block = blockState.getBlock();
         this.tileEntity = player.world.getTileEntity(pos);
 
-        this.stack = block.getPickBlock(blockState, Minecraft.getMinecraft().objectMouseOver, player.world, pos, player);
-        if (this.stack.isEmpty()) this.stack = new ItemStack(block, 1, block.getMetaFromState(blockState));
+        stack = block.getPickBlock(blockState, rayTrace, player.world, pos, player);
+        if (stack.isEmpty()) stack = new ItemStack(block, 1, block.getMetaFromState(blockState));
     }
 
     public void parse() {

@@ -3,7 +3,6 @@ package com.cleanroommc.groovyscript.keybinds;
 import com.cleanroommc.groovyscript.api.infocommand.InfoParserPackage;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.mods.jei.JeiPlugin;
-import com.cleanroommc.groovyscript.helper.RayTracingHelper;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
 import com.google.common.collect.ImmutableList;
 import mezz.jei.api.IRecipesGui;
@@ -11,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.settings.KeyModifier;
@@ -23,6 +21,7 @@ import java.util.List;
 public class CopyKey extends GroovyScriptKeybinds.Key {
 
     private static final Minecraft mc = Minecraft.getMinecraft();
+    private static final List<String> ARGS = ImmutableList.of("all");
 
     public CopyKey() {
         super("copy", KeyModifier.CONTROL, Keyboard.KEY_C);
@@ -34,22 +33,21 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
 
     private static void gatherInfo(InfoParserPackage info, EntityPlayer player) {
         if (mc.inGameHasFocus) {
-            info.setStack(player.getHeldItem(EnumHand.MAIN_HAND));
-            if (info.getStack().isEmpty()) info.setStack(player.getHeldItem(EnumHand.OFF_HAND));
-            if (info.getStack().isEmpty()) {
-                info.setEntity(RayTracingHelper.getEntityLookingAt(player));
-                if (info.getEntity() == null) {
-                    info.copyFromPos(RayTracingHelper.getBlockLookingAt(player));
-                    if (info.getPos() == null) {
-                        info.setEntity(player);
-                    }
-                }
-            }
+            info.copyFromPlayer(player);
         } else {
-            if (mc.currentScreen instanceof GuiContainer container && container.hoveredSlot != null) {
-                info.setStack(container.hoveredSlot.getStack());
+            var jei = ModSupport.JEI.isLoaded();
+            if (mc.currentScreen instanceof GuiContainer container) {
+                var slot = container.getSlotUnderMouse();
+                if (slot != null) {
+                    info.setStack(slot.getStack());
+                } else if (jei && info.getStack().isEmpty()) {
+                    // check sidebars of normal guis
+                    info.setStack(getJeiStack());
+                }
+            } else if (jei && getJeiRecipesObject() != null) {
+                // have to check this separately for if IRecipesGui is open, since its GuiScreen not GuiContainer
+                info.setStack(getJeiStack());
             }
-            if (info.getStack().isEmpty() && ModSupport.JEI.isLoaded()) info.setStack(getJeiStack());
         }
     }
 
@@ -61,13 +59,18 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
     }
 
     private static Object getJeiObject() {
-        if (mc.currentScreen instanceof IRecipesGui gui) {
-            var entry = gui.getIngredientUnderMouse();
-            if (entry != null) return entry;
-        }
-        var entry = JeiPlugin.jeiRuntime.getBookmarkOverlay().getIngredientUnderMouse();
+        var entry = getJeiRecipesObject();
+        if (entry != null) return entry;
+        entry = JeiPlugin.jeiRuntime.getBookmarkOverlay().getIngredientUnderMouse();
         if (entry != null) return entry;
         return JeiPlugin.jeiRuntime.getIngredientListOverlay().getIngredientUnderMouse();
+    }
+
+    private static Object getJeiRecipesObject() {
+        if (mc.currentScreen instanceof IRecipesGui gui) {
+            return gui.getIngredientUnderMouse();
+        }
+        return null;
     }
 
     private static void print(EntityPlayer player, List<ITextComponent> messages) {
@@ -80,18 +83,22 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
         }
     }
 
-    @Override
-    public boolean isValid() {
-        return mc.isIntegratedServerRunning();
+    public static boolean isCapturingKeyboard() {
+        return mc.currentScreen != null && mc.currentScreen.isFocused();
     }
 
-    // only runs if isIntegratedServerRunning() is true, so getIntegratedServer() cannot be null
-    @SuppressWarnings("DataFlowIssue")
+    @Override
+    public boolean isValid() {
+        return mc.player != null && !isCapturingKeyboard();
+    }
+
     @Override
     public void runOperation() {
         var player = mc.player;
         List<ITextComponent> messages = new ArrayList<>();
-        InfoParserPackage info = new InfoParserPackage(mc.getIntegratedServer(), player, ImmutableList.of("all"), messages, false);
+        var server = mc.isIntegratedServerRunning() ? mc.getIntegratedServer() : player.getServer();
+        if (server == null) return; // unsure how this would happen, should be mutually exclusive
+        InfoParserPackage info = new InfoParserPackage(server, player, ARGS, messages, false);
         gatherInfo(info, player);
         info.parse(true);
         print(player, messages);
