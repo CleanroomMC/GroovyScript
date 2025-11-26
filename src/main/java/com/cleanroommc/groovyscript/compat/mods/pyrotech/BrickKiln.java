@@ -3,28 +3,39 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.ModuleTechMachine;
 import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickKilnRecipe;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition(
+                value = "groovyscript.wiki.pyrotech.brick_kiln.note0",
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
     public BrickKiln() {
         super(ModuleTechMachine.Registries.BRICK_KILN_RECIPES);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items_brick')"))
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
+    }
+
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:fish')).output(item('minecraft:cooked_fish')).burnTime(200000).failureChance(0.99f).failureOutput(item('minecraft:dragon_egg'), item('minecraft:dragon_breath')).name('meaning_of_life')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron_brick', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone')"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'beetroot_soup', item('minecraft:beetroot'), item('minecraft:beetroot_soup'), 1200, 0.1f, item('minecraft:beetroot_seeds')"))
     public BrickKilnRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, ItemStack... failureOutput) {
         return recipeBuilder()
                 .burnTime(burnTime)
@@ -36,7 +47,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
                 .register();
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:cobblestone')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing refractory oven recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -73,9 +84,9 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
         @Property
         private final ItemStackList failureOutput = new ItemStackList();
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int burnTime;
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float failureChance;
 
         @RecipeBuilderMethodDescription
@@ -106,8 +117,15 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder failureOutput(Iterable<ItemStack> failureOutputs) {
-            for (ItemStack itemStack : failureOutputs) failureOutput(itemStack);
+            for (ItemStack itemStack : failureOutputs) {
+                failureOutput(itemStack);
+            }
             return this;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_brick_kiln_";
         }
 
         @Override
@@ -117,12 +135,11 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             this.failureOutput.trim();
-            validateCustom(msg, failureOutput, 1, 100, "failure output");
-            msg.add(burnTime < 0, "burnTime must be a non negative integer, yet it was {}", burnTime);
-            msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
+            msg.add(failureChance < 0 || failureChance > 1, "failureChance must not be negative nor larger than 1.0, yet it was {}", failureChance);
             msg.add(ModuleTechMachine.Registries.BRICK_KILN_RECIPES.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -131,7 +148,7 @@ public class BrickKiln extends ForgeRegistryWrapper<BrickKilnRecipe> {
         public @Nullable BrickKilnRecipe register() {
             if (!validate()) return null;
             BrickKilnRecipe recipe = new BrickKilnRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
-            PyroTech.brickKiln.add(recipe);
+            ModSupport.PYROTECH.get().brickKiln.add(recipe);
             return recipe;
         }
     }
