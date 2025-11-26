@@ -61,6 +61,9 @@ public class RunConfig {
         modMetadata.version = "0.0.0";
     }
 
+    public static final String separatorRegex = File.separatorChar == '\\' ? "/" : "\\\\";
+    public static final String separatorReplacement = File.separatorChar == '\\' ? "\\\\" : File.separator;
+
     private final String packName;
     private final String packId;
     private final String version;
@@ -70,8 +73,6 @@ public class RunConfig {
     private final Set<String> packmodeSet = new ObjectOpenHashSet<>();
     private final Map<String, List<String>> packmodePaths = new Object2ObjectOpenHashMap<>();
     private boolean integratePackmodeMod;
-    // TODO asm
-    private final String asmClass = null;
     private boolean debug;
 
     private final boolean invalidPackId;
@@ -128,18 +129,12 @@ public class RunConfig {
 
     @ApiStatus.Internal
     public void reload(JsonObject json, boolean init) {
-        if (GroovyScript.isSandboxLoaded() && GroovyScript.getSandbox().isRunning()) {
-            throw new RuntimeException();
-        }
         this.debug = JsonHelper.getBoolean(json, false, "debug");
         this.loaderPaths.clear();
         this.packmodeList.clear();
         this.packmodeSet.clear();
         this.packmodePaths.clear();
         this.packmodeConfigState = 0;
-
-        String regex = File.separatorChar == '\\' ? "/" : "\\\\";
-        String replacement = getSeparator();
 
         JsonElement el = json.get("loaders");
         JsonObject jsonLoaders;
@@ -181,7 +176,7 @@ public class RunConfig {
             List<String> paths = new ArrayList<>();
 
             for (JsonElement element : loader) {
-                String path = sanitizePath(element.getAsString().replaceAll(regex, replacement));
+                String path = sanitizePath(element.getAsString());
                 if (paths.contains(path) || !checkValid(errorMsg, pathsList, entry.getKey(), path)) continue;
                 paths.add(path);
             }
@@ -350,6 +345,7 @@ public class RunConfig {
     }
 
     private static String sanitizePath(String path) {
+        path = path.replaceAll(separatorRegex, separatorReplacement);
         while (path.endsWith("/") || path.endsWith("\\")) {
             path = path.substring(0, path.length() - 1);
         }

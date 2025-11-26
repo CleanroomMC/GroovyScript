@@ -9,6 +9,7 @@ import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.core.mixin.jei.JeiProxyAccessor;
+import com.cleanroommc.groovyscript.sandbox.SandboxData;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import mezz.jei.Internal;
 import mezz.jei.JustEnoughItems;
@@ -74,7 +75,7 @@ public class ReloadableRegistryManager {
 
     @ApiStatus.Internal
     public static void onReload() {
-        GroovyScript.reloadRunConfig(false);
+        SandboxData.reloadRunConfig(false);
         ModSupport.getAllContainers()
                 .stream()
                 .filter(GroovyContainer::isLoaded)

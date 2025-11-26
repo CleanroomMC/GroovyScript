@@ -1,9 +1,8 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.engine;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
 import groovy.lang.GroovyResourceLoader;
-import groovy.util.CharsetToolkit;
 import groovyjarjarasm.asm.ClassVisitor;
 import groovyjarjarasm.asm.ClassWriter;
 import net.minecraft.launchwrapper.Launch;
@@ -17,12 +16,12 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
 
@@ -50,9 +49,7 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
     private String initSourceEncoding(CompilerConfiguration config) {
         String sourceEncoding = config.getSourceEncoding();
         if (null == sourceEncoding) {
-            // Keep the same default source encoding with the one used by #parseClass(InputStream, String)
-            // TODO should we use org.codehaus.groovy.control.CompilerConfiguration.DEFAULT_SOURCE_ENCODING instead?
-            return CharsetToolkit.getDefaultSystemCharset().name();
+            return StandardCharsets.UTF_8.displayName();
         }
         return sourceEncoding;
     }
@@ -286,12 +283,11 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
 
     public static class ClassCollector implements CompilationUnit.ClassgenCallback {
 
-        private Class<?> generatedClass;
-        private final GroovyScriptClassLoader cl;
-        private final SourceUnit su;
-        private final CompilationUnit unit;
-        private final Collection<Class<?>> loadedClasses;
-        private BiConsumer<byte[], Class<?>> creatClassCallback;
+        protected Class<?> generatedClass;
+        protected final GroovyScriptClassLoader cl;
+        protected final SourceUnit su;
+        protected final CompilationUnit unit;
+        protected final Collection<Class<?>> loadedClasses;
 
         protected ClassCollector(GroovyScriptClassLoader cl, CompilationUnit unit, SourceUnit su) {
             this.cl = cl;
@@ -304,14 +300,23 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
             return cl;
         }
 
-        protected Class<?> createClass(byte[] code, ClassNode classNode) {
+        @Override
+        public void call(ClassVisitor classWriter, ClassNode classNode) {
+            byte[] code = ((ClassWriter) classWriter).toByteArray();
+            Class<?> clz = generateClass(postProcessBytecode(code, classNode), classNode);
+        }
+
+        public byte[] postProcessBytecode(byte[] bytecode, ClassNode classNode) {
             BytecodeProcessor bytecodePostprocessor = unit.getConfiguration().getBytecodePostprocessor();
-            byte[] fcode = code;
             if (bytecodePostprocessor != null) {
-                fcode = bytecodePostprocessor.processBytecode(classNode.getName(), fcode);
+                bytecode = bytecodePostprocessor.processBytecode(classNode.getName(), bytecode);
             }
+            return bytecode;
+        }
+
+        protected Class<?> generateClass(byte[] code, ClassNode classNode) {
             GroovyScriptClassLoader cl = getDefiningClassLoader();
-            Class<?> theClass = cl.defineClass(classNode.getName(), fcode, 0, fcode.length, unit.getAST().getCodeSource());
+            Class<?> theClass = cl.defineClass(classNode.getName(), code, 0, code.length, unit.getAST().getCodeSource());
             this.loadedClasses.add(theClass);
 
             if (generatedClass == null) {
@@ -322,30 +327,11 @@ public abstract class GroovyScriptClassLoader extends GroovyClassLoader {
                 if (mn != null) main = mn.getClasses().get(0);
                 if (msu == su && main == classNode) generatedClass = theClass;
             }
-
-            if (this.creatClassCallback != null) {
-                this.creatClassCallback.accept(code, theClass);
-            }
             return theClass;
-        }
-
-        protected Class<?> onClassNode(ClassWriter classWriter, ClassNode classNode) {
-            byte[] code = classWriter.toByteArray();
-            return createClass(code, classNode);
-        }
-
-        @Override
-        public void call(ClassVisitor classWriter, ClassNode classNode) {
-            onClassNode((ClassWriter) classWriter, classNode);
         }
 
         public Collection<Class<?>> getLoadedClasses() {
             return this.loadedClasses;
-        }
-
-        public ClassCollector creatClassCallback(BiConsumer<byte[], Class<?>> creatClassCallback) {
-            this.creatClassCallback = creatClassCallback;
-            return this;
         }
     }
 

@@ -1,20 +1,24 @@
-package com.cleanroommc.groovyscript.sandbox;
+package com.cleanroommc.groovyscript.sandbox.engine;
 
-import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
+import com.cleanroommc.groovyscript.helper.PairList;
+import com.cleanroommc.groovyscript.sandbox.Preprocessor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-class CompiledScript extends CompiledClass {
+@ApiStatus.Internal
+public class CompiledScript extends CompiledClass {
 
     public static String classNameFromPath(String path) {
         int i = path.lastIndexOf('.');
@@ -24,7 +28,8 @@ class CompiledScript extends CompiledClass {
 
     final List<CompiledClass> innerClasses = new ArrayList<>();
     long lastEdited;
-    List<String> preprocessors;
+    PairList<String, String> preprocessors;
+    boolean requiresModLoaded = false;
     private boolean preprocessorCheckFailed;
     private boolean requiresReload;
 
@@ -42,9 +47,9 @@ class CompiledScript extends CompiledClass {
     }
 
     @Override
-    public void onCompile(Class<?> clazz, String basePath) {
+    public void onCompile(byte @NotNull [] data, @Nullable Class<?> clazz, String basePath) {
+        super.onCompile(data, clazz, basePath);
         setRequiresReload(this.data == null);
-        super.onCompile(clazz, basePath);
     }
 
     public CompiledClass findInnerClass(String clazz) {
@@ -58,35 +63,33 @@ class CompiledScript extends CompiledClass {
         return comp;
     }
 
-    public void ensureLoaded(GroovyClassLoader classLoader, Map<String, CompiledClass> cache, String basePath) {
-        for (CompiledClass comp : this.innerClasses) {
-            if (comp.clazz == null) {
-                if (comp.readData(basePath)) {
-                    comp.ensureLoaded(classLoader, cache, basePath);
-                } else {
-                    GroovyLog.get().error("Error loading inner class {} for class {}", comp.name, this.name);
-                }
-            }
-        }
-        super.ensureLoaded(classLoader, cache, basePath);
-    }
-
     public @NotNull JsonObject toJson() {
         JsonObject jsonEntry = new JsonObject();
         jsonEntry.addProperty("name", this.name);
         jsonEntry.addProperty("path", this.path);
         jsonEntry.addProperty("lm", this.lastEdited);
+        jsonEntry.addProperty("mixin", this.mixin);
         if (!this.innerClasses.isEmpty()) {
             JsonArray inner = new JsonArray();
             for (CompiledClass comp : this.innerClasses) {
-                inner.add(comp.name);
+                JsonObject json = new JsonObject();
+                json.addProperty("name", comp.name);
+                json.addProperty("mixin", comp.mixin);
+                inner.add(json);
             }
             jsonEntry.add("inner", inner);
         }
         if (this.preprocessors != null && !this.preprocessors.isEmpty()) {
             JsonArray jsonPp = new JsonArray();
-            for (String pp : this.preprocessors) {
-                jsonPp.add(pp);
+            for (Pair<String, String> pp : this.preprocessors) {
+                if (pp.getRight() == null) {
+                    jsonPp.add(pp.getLeft());
+                } else {
+                    JsonObject json = new JsonObject();
+                    json.addProperty("name", pp.getLeft());
+                    json.addProperty("args", pp.getRight());
+                    jsonPp.add(json);
+                }
             }
             jsonEntry.add("preprocessors", jsonPp);
         }
@@ -101,13 +104,21 @@ class CompiledScript extends CompiledClass {
         if (new File(scriptRoot, cs.path).exists()) {
             if (json.has("inner")) {
                 for (JsonElement element : json.getAsJsonArray("inner")) {
-                    cs.innerClasses.add(new CompiledClass(cs.path, element.getAsString()));
+                    JsonObject o = element.getAsJsonObject();
+                    cs.innerClasses.add(new CompiledClass(cs.path, o.get("name").getAsString(), o.get("mixin").getAsBoolean()));
                 }
             }
             if (json.has("preprocessors")) {
-                cs.preprocessors = new ArrayList<>();
+                cs.requiresModLoaded = false;
+                cs.preprocessors = new PairList<>();
                 for (JsonElement element : json.getAsJsonArray("preprocessors")) {
-                    cs.preprocessors.add(element.getAsString());
+                    if (element.isJsonPrimitive()) {
+                        cs.preprocessors.add(element.getAsString(), null);
+                    } else if (element.isJsonObject()) {
+                        String name = element.getAsJsonObject().get("name").getAsString();
+                        cs.preprocessors.add(name, element.getAsJsonObject().get("args").getAsString());
+                        cs.requiresModLoaded |= Preprocessor.MODS_LOADED.equals(name);
+                    }
                 }
             }
             return cs;
@@ -125,9 +136,48 @@ class CompiledScript extends CompiledClass {
         }
     }
 
+    @Override
+    protected void removeClass() {
+        super.removeClass();
+        for (CompiledClass cc : this.innerClasses) {
+            cc.removeClass();
+        }
+    }
+
+    public boolean checkRequiresReload(File file, long lastModified, String rootPath) {
+        // the file needs to be reparsed if:
+        // - caching is disabled
+        // - it wasn't parsed before
+        // - there is no class (mixins don't have classes)
+        // - the file was modified since the last parsing
+        setRequiresReload(!ScriptEngine.ENABLE_CACHE || !readData(rootPath) || isMissingAnyClass() || lastModified > this.lastEdited);
+        if (requiresReload()) {
+            removeClass();
+            // parse preprocessors if file was modified
+            if (this.preprocessors == null || lastModified > this.lastEdited) {
+                this.preprocessors = Preprocessor.parsePreprocessors(file);
+                this.requiresModLoaded = Preprocessor.containsPreProcessor(Preprocessor.MODS_LOADED, this.preprocessors);
+            }
+            this.lastEdited = lastModified;
+        }
+        return requiresReload();
+    }
+
+    public boolean isMissingAnyClass() {
+        if (!hasClass()) return true;
+        for (CompiledClass cc : this.innerClasses) {
+            if (!cc.hasClass()) return true;
+        }
+        return false;
+    }
+
     public boolean checkPreprocessorsFailed(File basePath) {
         setPreprocessorCheckFailed(this.preprocessors != null && !this.preprocessors.isEmpty() && !Preprocessor.validatePreprocessor(new File(basePath, this.path), this.preprocessors));
         return preprocessorCheckFailed();
+    }
+
+    public List<CompiledClass> getInnerClasses() {
+        return Collections.unmodifiableList(this.innerClasses);
     }
 
     public boolean requiresReload() {
@@ -144,6 +194,10 @@ class CompiledScript extends CompiledClass {
 
     protected void setPreprocessorCheckFailed(boolean preprocessorCheckFailed) {
         this.preprocessorCheckFailed = preprocessorCheckFailed;
+    }
+
+    public boolean requiresModLoaded() {
+        return requiresModLoaded;
     }
 
     @Override

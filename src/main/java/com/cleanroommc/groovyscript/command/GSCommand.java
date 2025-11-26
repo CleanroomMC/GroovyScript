@@ -65,7 +65,6 @@ public class GSCommand extends CommandTreeBase {
             sender.sendMessage(new TextComponentString("Applied the default GameRules to the current world."));
         }));
 
-
         addSubcommand(new SimpleCommand("wiki", (server, sender, args) -> sender.sendMessage(getTextForUrl("GroovyScript wiki", "Click to open wiki in browser", new TextComponentString("https://cleanroommc.com/groovy-script/"))), "doc", "docs", "documentation"));
 
         addSubcommand(new SimpleCommand("generateWiki", (server, sender, args) -> {

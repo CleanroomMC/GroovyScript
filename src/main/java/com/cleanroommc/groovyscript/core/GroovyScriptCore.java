@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.core;
 
+import com.cleanroommc.groovyscript.sandbox.MixinSandbox;
 import com.cleanroommc.groovyscript.sandbox.SandboxData;
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.common.ForgeVersion;
@@ -42,6 +43,11 @@ public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
         source = (File) data.getOrDefault("coremodLocation", null);
         SandboxData.initialize((File) FMLInjectionData.data()[6], LOG);
         SideOnlyConfig.init();
+        try {
+            MixinSandbox.loadEarlyMixins();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -51,6 +57,6 @@ public class GroovyScriptCore implements IFMLLoadingPlugin, IEarlyMixinLoader {
 
     @Override
     public List<String> getMixinConfigs() {
-        return ImmutableList.of("mixin.groovyscript.json");
+        return ImmutableList.of("mixin.groovyscript.groovy.json", "mixin.groovyscript.json");
     }
 }
