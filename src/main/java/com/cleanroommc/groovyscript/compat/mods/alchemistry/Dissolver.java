@@ -68,7 +68,7 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "probabilityGroup")
+        @RecipeBuilderMethodDescription(field = "probabilityGroup", description = "groovyscript.wiki.probability_default.description")
         public RecipeBuilder probabilityOutput(ItemStack... probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
@@ -79,25 +79,25 @@ public class Dissolver extends StandardListRegistry<DissolverRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "probabilityGroup")
+        @RecipeBuilderMethodDescription(field = "probabilityGroup", description = "groovyscript.wiki.probability_default.description")
         public RecipeBuilder probabilityOutput(Collection<ItemStack> probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = "probabilityGroup")
+        @RecipeBuilderMethodDescription(field = "probabilityGroup", description = "groovyscript.wiki.probability_default.description")
         public RecipeBuilder output(ItemStack probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = "probabilityGroup")
+        @RecipeBuilderMethodDescription(field = "probabilityGroup", description = "groovyscript.wiki.probability_default.description")
         public RecipeBuilder output(ItemStack... probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = "probabilityGroup")
+        @RecipeBuilderMethodDescription(field = "probabilityGroup", description = "groovyscript.wiki.probability_default.description")
         public RecipeBuilder output(Collection<ItemStack> probabilityOutputs) {
             return this.probabilityOutput(100, probabilityOutputs);
         }

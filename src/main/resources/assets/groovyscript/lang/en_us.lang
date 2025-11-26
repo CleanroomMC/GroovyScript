@@ -113,6 +113,8 @@ groovyscript.wiki.craftingrecipe.keyBasedMatrix.value=Sets the items required in
 groovyscript.wiki.craftingrecipe.keyMap.value=Sets the item the given char corresponds to
 groovyscript.wiki.craftingrecipe.ingredientMatrix.value=Sets the items required in each slot in the grid as IIngredients
 groovyscript.wiki.craftingrecipe.ingredients.value=Sets the items required for the recipe
+groovyscript.wiki.craftingrecipe.replace.replace.description=Makes the recipe remove by the ItemStack output
+groovyscript.wiki.craftingrecipe.replace.replaceByName.description=Makes the recipe remove by the Resource Location name
 
 groovyscript.wiki.removeByInput=Removes all recipes that match the given input
 groovyscript.wiki.removeByOutput=Removes all recipes that match the given output
@@ -122,6 +124,10 @@ groovyscript.wiki.removeByCatalyst=Removes all recipes that match the given cata
 groovyscript.wiki.removeByInputAndCatalyst=This removes all recipes that match the given input and Catalyst
 groovyscript.wiki.streamRecipes=Iterates through every entry in the registry, with the ability to call remove on any element to remove it
 groovyscript.wiki.removeAll=Removes all registered recipes
+
+groovyscript.wiki.probability_default.description=100% chance
+groovyscript.wiki.time_ticks.description=Sets the time in ticks
+groovyscript.wiki.time_seconds.description=Sets the time in seconds
 
 groovyscript.wiki.less_than=less than %s
 groovyscript.wiki.less_than_or_equal_to=less than or equal to %s
@@ -344,6 +350,8 @@ groovyscript.wiki.actuallyadditions.empowerer.time.value=Sets the amount of time
 groovyscript.wiki.actuallyadditions.empowerer.red.value=Sets the red color
 groovyscript.wiki.actuallyadditions.empowerer.blue.value=Sets the blue color
 groovyscript.wiki.actuallyadditions.empowerer.green.value=Sets the green color
+groovyscript.wiki.actuallyadditions.empowerer.color_hex.description=Sets the color via standardized hex code
+groovyscript.wiki.actuallyadditions.empowerer.color_var.description=red, green, blue
 groovyscript.wiki.actuallyadditions.empowerer.mainInput.required=either defined in mainInput or in input
 
 groovyscript.wiki.actuallyadditions.nether_mining_lens.title=Nether Mining Lens
@@ -1223,7 +1231,7 @@ groovyscript.wiki.botania_tweaks.agglomeration_plate.cornerReplacement.value=Set
 groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByCenter=Removes all recipes with the given center IBlockState
 groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByCorner=Removes all recipes with the given corner IBlockState
 groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByEdge=Removes all recipes with the given edge IBlockState
-
+groovyscript.wiki.botania_tweaks.agglomeration_plate.recipeBuilder.baseStructure.description=Makes the structure the default, with livingrock and lapis blocks
 
 # Botanic Additions
 groovyscript.wiki.botanicadds.gaia_plate.title=Gaia Plate
@@ -2525,7 +2533,7 @@ groovyscript.wiki.projecte.transmutation.description=Converts an input blockstat
 groovyscript.wiki.projecte.transmutation.input.value=Sets the input blockstate
 groovyscript.wiki.projecte.transmutation.output.value=Sets the normal output blockstate
 groovyscript.wiki.projecte.transmutation.altOutput.value=Sets the shift output blockstate
-
+groovyscript.wiki.projecte.transmutation.altOutput.description=output, altOutput
 
 # Random Things
 groovyscript.wiki.randomthings.anvil.title=Anvil Crafting
@@ -2614,6 +2622,8 @@ groovyscript.wiki.roots.mortar.generate.value=Sets if, when input has a single I
 groovyscript.wiki.roots.mortar.blue2.value=Sets the blue color value of the second version of the particle spawned
 groovyscript.wiki.roots.mortar.removeByName=Removes the Mortar recipe with the given name
 groovyscript.wiki.roots.mortar.removeByOutput=Removes the Mortar recipe with the given output itemstack
+groovyscript.wiki.roots.mortar.recipeBuilder.color_long.description=red1, green1, blue1, red2, green2, blue2
+groovyscript.wiki.roots.mortar.recipeBuilder.color.description=red, green, blue
 
 groovyscript.wiki.roots.moss.title=Moss
 groovyscript.wiki.roots.moss.description=Moss indicates a pair of items that can right click the input with a knife to turn it into the output and give a Terra Moss and right click the output with moss spores to turn it into the input.
