@@ -3,7 +3,8 @@ groovyscript.command.copy.copied_start=Copied [
 groovyscript.command.copy.copied_end=] to the clipboard
 
 key.categories.groovyscript=GroovyScript
-keybind.groovyscript.reload=Reload Scripts
+keybind.groovyscript.reload=Reload Scripts and JEI
+keybind.groovyscript.quick_reload=Reload Scripts (skip JEI)
 keybind.groovyscript.copy=Copy focused
 
 groovyscript.jei.category.groovyscript:fluid_recipe.name=In world fluid recipes
