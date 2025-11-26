@@ -125,7 +125,7 @@ public class AgglomerationPlate extends StandardListRegistry<AgglomerationRecipe
             return this;
         }
 
-        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.botania_tweaks.agglomeration_plate.recipeBuilder.baseStructure.description",field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.botania_tweaks.agglomeration_plate.recipeBuilder.baseStructure.description", field = {
                 "center", "edge", "corner"
         })
         public RecipeBuilder baseStructure() {

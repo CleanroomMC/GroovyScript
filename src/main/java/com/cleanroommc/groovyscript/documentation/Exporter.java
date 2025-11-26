@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -135,7 +134,8 @@ public class Exporter {
     public static void logSkippedClasses() {
         if (SKIPPED_CLASSES.isEmpty()) return;
         GroovyLog.Msg log = GroovyLog.msg("Skipped documenting the following potentially valid locations (this may be the correct behavior!)");
-        SKIPPED_CLASSES.entrySet().stream()
+        SKIPPED_CLASSES.entrySet()
+                .stream()
                 .sorted(Map.Entry.comparingByKey(ComparisonHelper::packages))
                 .forEach(x -> log.add(x.getKey() + ": " + x.getValue().getName()));
         log.debug().post();
