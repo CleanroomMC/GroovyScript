@@ -125,7 +125,7 @@ groovyscript.wiki.removeByInputAndCatalyst=This removes all recipes that match t
 groovyscript.wiki.streamRecipes=Iterates through every entry in the registry, with the ability to call remove on any element to remove it
 groovyscript.wiki.removeAll=Removes all registered recipes
 
-groovyscript.wiki.probability_default.description=100% chance
+groovyscript.wiki.probability_default.description=100%% chance
 groovyscript.wiki.time_ticks.description=Sets the time in ticks
 groovyscript.wiki.time_seconds.description=Sets the time in seconds
 
