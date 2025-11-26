@@ -292,6 +292,9 @@ groovyscript.wiki.minecraft.content.fluid.register.description=Registers the Flu
 
 
 # In-World Crafting
+groovyscript.wiki.in_world_crafting.index.title=In-World Crafting
+groovyscript.wiki.in_world_crafting.index.description=GroovyScript adds the ability to craft things in-world via specific processes. By default, no recipes are created and everything must be added by you through GroovyScript.
+
 groovyscript.wiki.in_world_crafting.chances.value=Sets the chance each input has to be consumed
 groovyscript.wiki.in_world_crafting.chances.required=exactly equal to the number of elements in `input`
 groovyscript.wiki.in_world_crafting.startCondition.value=Sets an additional check that must be passed before the recipe runs, with the Closure taking 2 parameters, `World world` and `BlockPos blockPos`
