@@ -12,7 +12,7 @@ import java.util.function.Function;
 /**
  * This is used to create headings on the wiki index page.
  * <p>
- * Contains header text (which will be formatted as h2 via {@link #get()}, but can be configured {@link #get(int)}),
+ * Contains header text to be formatted at the provided headingLevel,
  * an optional normal text comment below it, and some number of entries.
  * The comment is a function that can be formatted based on the number of entries.
  * <p>
@@ -25,51 +25,70 @@ import java.util.function.Function;
 public class Heading implements Comparable<Heading> {
 
     public static final int DEFAULT_PRIORITY = 1000;
+    public static final int DEFAULT_HEADING_LEVEL = 2;
 
     private final String text;
     private final Function<Heading, String> comment;
     private final List<String> entries;
+    private final int headingLevel;
     private final int priority;
 
     /**
      * @param text the header text of the section
-     * @see #Heading(String, Function, int) Section
+     * @see #Heading(String, Function, int, int) Heading
      */
     public Heading(String text) {
-        this(text, null, DEFAULT_PRIORITY);
-    }
-
-    public Heading(String text, String comment) {
-        this(text, x -> comment, DEFAULT_PRIORITY);
+        this(text, null, DEFAULT_HEADING_LEVEL, DEFAULT_PRIORITY);
     }
 
     /**
-     * Calls {@link #Heading(String, Function, int)} with a priority of {@link Heading#DEFAULT_PRIORITY}.
+     * @param text         the header text of the section
+     * @param headingLevel the heading level, {@code 0 < level <= 6}
+     * @see #Heading(String, Function, int, int) Heading
+     */
+    public Heading(String text, int headingLevel) {
+        this(text, null, headingLevel, DEFAULT_PRIORITY);
+    }
+
+
+    /**
+     * @param text    the header text of the section
+     * @param comment comment for the given header
+     * @see #Heading(String, Function, int, int) Heading
+     */
+    public Heading(String text, String comment) {
+        this(text, x -> comment, DEFAULT_HEADING_LEVEL, DEFAULT_PRIORITY);
+    }
+
+    /**
+     * Calls {@link #Heading(String, Function, int, int)} with a heading level of {@link Heading#DEFAULT_HEADING_LEVEL} and priority of {@link Heading#DEFAULT_PRIORITY}.
      *
-     * @param text  the header text of the section
+     * @param text    the header text of the section
      * @param comment function that creates the comment based on the number of entries
-     * @see #Heading(String, Function, int) Section
+     * @see #Heading(String, Function, int, int) Heading
      */
     public Heading(String text, Function<Heading, String> comment) {
-        this(text, comment, DEFAULT_PRIORITY);
+        this(text, comment, DEFAULT_HEADING_LEVEL, DEFAULT_PRIORITY);
     }
 
     /**
-     * @param text   the header text of the section
-     * @param comment  function that creates the comment based on the number of entries
-     * @param priority the priority this Section has on the index page for sorting purposes
+     * @param text         the header text of the section
+     * @param comment      function that creates the comment based on the number of entries
+     * @param headingLevel the heading level, {@code 0 < level <= 6}
+     * @param priority     the priority this Section has on the index page for sorting purposes
      */
-    public Heading(String text, Function<Heading, String> comment, int priority) {
+    public Heading(String text, Function<Heading, String> comment, int headingLevel, int priority) {
         this.text = text;
         this.comment = comment;
         this.entries = new ArrayList<>();
+        this.headingLevel = headingLevel <= 0 || headingLevel > 6 ? DEFAULT_HEADING_LEVEL : headingLevel;
         this.priority = priority;
     }
 
     public static Heading containerIndex(ContainerHolder container) {
         var header = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.title", container.id()), container.name());
         var comment = LangHelper.fallback(String.format("groovyscript.wiki.%s.index.description", container.id()), null);
-        return new Heading(I18n.format(header), comment == null ? null : md -> I18n.format(comment, md.entries.size()));
+        return new Heading(I18n.format(header), comment == null ? null : md -> I18n.format(comment, md.entries.size()), 1, DEFAULT_PRIORITY);
     }
 
     public static Heading fromContainer(ContainerHolder container) {
@@ -79,7 +98,7 @@ public class Heading implements Comparable<Heading> {
     }
 
     public static Heading fromI18n(String header, String comment) {
-        return new Heading(I18n.format(header), md -> I18n.format(comment, md.entries.size()));
+        return new Heading(LangHelper.translate(header), md -> LangHelper.translate(comment, md.entries.size()));
     }
 
     /**
@@ -98,10 +117,6 @@ public class Heading implements Comparable<Heading> {
     }
 
     public String get() {
-        return get(2);
-    }
-
-    public String get(int headingLevel) {
         var sb = new StringBuilder();
         sb.append(Documentation.DEFAULT_FORMAT.header(headingLevel, text)).append("\n\n");
         if (comment != null) {

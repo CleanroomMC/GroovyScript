@@ -26,9 +26,8 @@ import java.util.function.Predicate;
 
 public class Exporter {
 
-    private static final String MARKDOWN_FILE_EXTENSION = ".md";
-    private static final String INDEX_FILE_NAME = "index" + MARKDOWN_FILE_EXTENSION;
-    private static final String NAV_FILE_NAME = "!navigation" + MARKDOWN_FILE_EXTENSION;
+    private static final String INDEX_FILE_NAME = "index" + Documentation.MARKDOWN_FILE_EXTENSION;
+    private static final String NAV_FILE_NAME = "!navigation" + Documentation.MARKDOWN_FILE_EXTENSION;
     private static final String EXAMPLE_GENERATION_NOTE = "// Auto generated groovyscript example file\n";
     private static final String INDEX_FILE_TEXT = "---\n%s\n---\n\n\n%s%s";
     private static final String BULLET_POINT_LINK = "* [%s](./%s)";
@@ -50,7 +49,7 @@ public class Exporter {
             registry.generateWiki(container, targetFolder, linkIndex);
         }
 
-        String indexText = String.format(INDEX_FILE_TEXT, Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), Heading.containerIndex(container).get(1), linkIndex.get());
+        String indexText = String.format(INDEX_FILE_TEXT, Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), Heading.containerIndex(container).get(), linkIndex.get());
         write(new File(targetFolder, INDEX_FILE_NAME), indexText);
 
         if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
@@ -59,10 +58,10 @@ public class Exporter {
         }
     }
 
-    public static void writeNormalWikiFile(File targetFolder, LinkIndex linkIndex, String id, String title, String doc) {
-        String location = id + MARKDOWN_FILE_EXTENSION;
-        linkIndex.add(String.format(BULLET_POINT_LINK, title, location));
+    public static String writeNormalWikiFile(File targetFolder, String id, String title, String doc) {
+        String location = id + Documentation.MARKDOWN_FILE_EXTENSION;
         write(new File(targetFolder, location), doc.trim() + "\n");
+        return String.format(BULLET_POINT_LINK, title, location);
     }
 
     public static void generateExamples(File targetFile, LoadStage loadStage, ContainerHolder container) {

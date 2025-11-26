@@ -142,7 +142,8 @@ public class Registry implements IRegistryDocumentation {
 
     @Override
     public void generateWiki(ContainerHolder container, File suggestedFolder, LinkIndex linkIndex) {
-        Exporter.writeNormalWikiFile(suggestedFolder, linkIndex, getName(), getTitle(), documentationBlock());
+        var location = Exporter.writeNormalWikiFile(suggestedFolder, getName(), getTitle(), documentationBlock());
+        linkIndex.add(location);
     }
 
     @Override
@@ -216,7 +217,7 @@ public class Registry implements IRegistryDocumentation {
     }
 
     private String generateTitle() {
-        return new Heading(getTitle() + " (" + container.name() + ")").get(1);
+        return new Heading(getTitle() + " (" + container.name() + ")", 1).get();
     }
 
     private String generateDescription() {
@@ -277,7 +278,7 @@ public class Registry implements IRegistryDocumentation {
     }
 
     private String recipeBuilder() {
-        var md = new Heading(I18n.format("groovyscript.wiki.recipe_builder"));
+        var md = new Heading(I18n.format("groovyscript.wiki.recipe_builder"), 3);
 
         md.addEntry(I18n.format("groovyscript.wiki.uses_recipe_builder", getTitle()));
         md.addEntry(I18n.format("groovyscript.wiki.recipe_builder_note", Documentation.DEFAULT_FORMAT.linkToBuilder()));
@@ -285,7 +286,7 @@ public class Registry implements IRegistryDocumentation {
         for (Builder recipeBuilder : recipeBuilders) {
             md.addEntry(recipeBuilder.generateAdmonition());
         }
-        return md.get(3);
+        return md.get();
     }
 
     public String documentationBlock() {

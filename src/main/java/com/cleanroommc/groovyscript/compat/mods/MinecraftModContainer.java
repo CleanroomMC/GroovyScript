@@ -76,7 +76,8 @@ public final class MinecraftModContainer extends GroovyContainer<VanillaModule> 
     @Override
     public boolean generateWiki(File suggestedFolder) {
         var minecraftCompatFolder = new File(Documentation.WIKI_MINECRAFT, "helpers");
-        Exporter.generateWiki(minecraftCompatFolder, getContainer());
+        var container = getContainer();
+        Exporter.generateWiki(minecraftCompatFolder, container);
         return false;
     }
 }

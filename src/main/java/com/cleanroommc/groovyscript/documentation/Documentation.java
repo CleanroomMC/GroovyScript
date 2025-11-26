@@ -25,6 +25,7 @@ public class Documentation {
     public static final boolean USE_DEFAULT_BRANCH = FMLLaunchHandler.isDeobfuscatedEnvironment();
 
     public static final String GROOVY_FILE_EXTENSION = ".groovy";
+    public static final String MARKDOWN_FILE_EXTENSION = ".md";
 
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptFile().getParentFile(), "build"), "wiki");
