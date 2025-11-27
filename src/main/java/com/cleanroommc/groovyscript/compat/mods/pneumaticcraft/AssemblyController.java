@@ -126,7 +126,7 @@ public class AssemblyController extends VirtualizedRegistry<AssemblyRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<AssemblyRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Arrays.stream(AssemblyType.values()).map(this::map).flatMap(Collection::stream).collect(Collectors.toList()))
+        return new SimpleObjectStream<>(Arrays.stream(AssemblyType.values()).map(this::map).flatMap(Collection::stream).collect(Collectors.toList()), false)
                 .setRemover(this::remove);
     }
 

@@ -129,7 +129,7 @@ public class Compactor extends VirtualizedRegistry<Pair<CompactorManager.Mode, C
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<CompactorRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(Arrays.stream(CompactorManager.Mode.values()).map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()))
+        return new SimpleObjectStream<>(Arrays.stream(CompactorManager.Mode.values()).map(this::map).map(Map::values).flatMap(Collection::stream).collect(Collectors.toList()), false)
                 .setRemover(this::remove);
     }
 

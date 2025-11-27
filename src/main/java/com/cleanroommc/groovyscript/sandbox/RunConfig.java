@@ -74,12 +74,12 @@ public class RunConfig {
     private final String asmClass = null;
     private boolean debug;
 
-
     private final boolean invalidPackId;
     private boolean warnedAboutInvalidPackId;
     private int packmodeConfigState;
 
     public static final String[] GROOVY_SUFFIXES = SandboxData.GROOVY_SUFFIXES;
+    private static final Pattern ID_PATTERN = Pattern.compile("[a-z0-9_]+");
 
     public static boolean isGroovyFile(String path) {
         return SandboxData.isGroovyFile(path);
@@ -88,8 +88,7 @@ public class RunConfig {
     public RunConfig(JsonObject json) {
         String name = JsonHelper.getString(json, "", "packName", "name");
         String id = JsonHelper.getString(json, "", "packId", "id");
-        Pattern idPattern = Pattern.compile("[a-z_]+");
-        this.invalidPackId = id.isEmpty() || !idPattern.matcher(id).matches();
+        this.invalidPackId = id.isEmpty() || !ID_PATTERN.matcher(id).matches();
         if (name.isEmpty() && !this.invalidPackId) {
             name = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, id).replace('_', ' ');
         }

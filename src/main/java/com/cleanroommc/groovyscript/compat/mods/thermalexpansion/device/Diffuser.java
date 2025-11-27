@@ -76,7 +76,7 @@ public class Diffuser extends VirtualizedRegistry<Diffuser.DiffuserRecipe> {
                 .filter(DiffuserManagerAccessor.getReagentDurMap()::containsKey)
                 .map(DiffuserRecipe::new)
                 .collect(Collectors.toList());
-        return new SimpleObjectStream<>(list).setRemover(this::remove);
+        return new SimpleObjectStream<>(list, false).setRemover(this::remove);
     }
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))

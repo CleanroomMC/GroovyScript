@@ -77,7 +77,7 @@ public class Vat extends VirtualizedRegistry<VatRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<VatRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(VatRecipeManager.getInstance().getRecipes().stream().map(r -> (VatRecipe) r).collect(Collectors.toList()))
+        return new SimpleObjectStream<>(VatRecipeManager.getInstance().getRecipes().stream().map(r -> (VatRecipe) r).collect(Collectors.toList()), false)
                 .setRemover(this::remove);
     }
 

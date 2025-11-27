@@ -58,7 +58,7 @@ public class FluidCanner extends VirtualizedRegistry<MachineRecipe<ICannerEnrich
     }
 
     public SimpleObjectStream<MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack>> streamRecipes() {
-        return new SimpleObjectStream<>(asList()).setRemover(this::remove);
+        return new SimpleObjectStream<>(asList(), false).setRemover(this::remove);
     }
 
     public boolean remove(MachineRecipe<ICannerEnrichRecipeManager.Input, FluidStack> recipe) {

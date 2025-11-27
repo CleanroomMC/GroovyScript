@@ -189,7 +189,7 @@ public class Tank extends VirtualizedRegistry<TankMachineRecipe> {
         List<TankMachineRecipe> list = new ArrayList<>();
         list.addAll((Collection<? extends TankMachineRecipe>) MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.TANK_FILLING).values());
         list.addAll((Collection<? extends TankMachineRecipe>) MachineRecipeRegistry.instance.getRecipesForMachine(MachineRecipeRegistry.TANK_EMPTYING).values());
-        return new SimpleObjectStream<>(list).setRemover(this::remove);
+        return new SimpleObjectStream<>(list, false).setRemover(this::remove);
     }
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))

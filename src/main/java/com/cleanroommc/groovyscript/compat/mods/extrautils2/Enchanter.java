@@ -60,7 +60,7 @@ public class Enchanter extends VirtualizedRegistry<IMachineRecipe> {
         for (IMachineRecipe recipe : XUMachineEnchanter.INSTANCE.recipes_registry) {
             list.add(recipe);
         }
-        return new SimpleObjectStream<>(list).setRemover(this::remove);
+        return new SimpleObjectStream<>(list, false).setRemover(this::remove);
     }
 
     @MethodDescription(priority = 2000, example = @Example(commented = true))

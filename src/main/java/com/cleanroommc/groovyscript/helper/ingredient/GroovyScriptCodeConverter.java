@@ -2,8 +2,10 @@ package com.cleanroommc.groovyscript.helper.ingredient;
 
 import com.cleanroommc.groovyscript.core.mixin.CreativeTabsAccessor;
 import com.cleanroommc.groovyscript.helper.StyleConstant;
+import com.cleanroommc.groovyscript.mapper.ObjectParserHelper;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -207,6 +209,10 @@ public class GroovyScriptCodeConverter {
 
     public static String asGroovyCode(Block state, boolean colored) {
         return formatResourceLocation("block", state.getRegistryName(), colored);
+    }
+
+    public static String asGroovyCode(Material material, boolean colored) {
+        return formatGenericHandler("blockMaterial", ObjectParserHelper.materials.inverse().get(material), colored);
     }
 
     @SuppressWarnings("all")

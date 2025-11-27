@@ -94,7 +94,7 @@ public class StarlightAltar extends VirtualizedRegistry<AbstractAltarRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<AbstractAltarRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(AltarRecipeRegistry.recipes.entrySet().stream().flatMap(r -> r.getValue().stream()).collect(Collectors.toList()))
+        return new SimpleObjectStream<>(AltarRecipeRegistry.recipes.entrySet().stream().flatMap(r -> r.getValue().stream()).collect(Collectors.toList()), false)
                 .setRemover(this::remove);
     }
 

@@ -133,7 +133,7 @@ public class Amadron extends VirtualizedRegistry<AmadronOffer> {
         List<AmadronOffer> list = new ArrayList<>();
         list.addAll(AmadronOfferManager.getInstance().getStaticOffers());
         list.addAll(AmadronOfferManager.getInstance().getPeriodicOffers());
-        return new SimpleObjectStream<>(list).setRemover(this::removeStatic);
+        return new SimpleObjectStream<>(list, false).setRemover(this::removeStatic);
     }
 
     @Property(property = "input", comp = @Comp(gte = 0, lte = 1))

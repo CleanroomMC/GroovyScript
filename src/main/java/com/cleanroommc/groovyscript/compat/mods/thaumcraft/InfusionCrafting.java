@@ -113,7 +113,7 @@ public class InfusionCrafting extends VirtualizedRegistry<Pair<ResourceLocation,
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Map.Entry<ResourceLocation, IThaumcraftRecipe>> streamRecipes() {
         List<Map.Entry<ResourceLocation, IThaumcraftRecipe>> recipes = ThaumcraftApi.getCraftingRecipes().entrySet().stream().filter(x -> x.getValue() instanceof InfusionRecipe).collect(Collectors.toList());
-        return new SimpleObjectStream<>(recipes)
+        return new SimpleObjectStream<>(recipes, false)
                 .setRemover(x -> remove((InfusionRecipe) x.getValue()));
     }
 

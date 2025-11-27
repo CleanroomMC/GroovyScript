@@ -95,7 +95,7 @@ public class EntityMelting extends VirtualizedRegistry<EntityMeltingRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<EntityMeltingRecipe> streamRecipes() {
-        return new SimpleObjectStream<>(getAllRecipes()).setRemover(this::remove);
+        return new SimpleObjectStream<>(getAllRecipes(), false).setRemover(this::remove);
     }
 
     public class RecipeBuilder implements IRecipeBuilder<EntityMeltingRecipe> {
