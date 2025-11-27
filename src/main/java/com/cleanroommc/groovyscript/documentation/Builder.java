@@ -333,7 +333,6 @@ public class Builder {
                         if (desc.isEmpty()) return method;
                         return method + " // " + LangHelper.translate(desc);
                     })
-                    .distinct()
                     .collect(Collectors.toList());
             out.append(new CodeBlockBuilder().line(lines).indentation(1).toString());
         }
