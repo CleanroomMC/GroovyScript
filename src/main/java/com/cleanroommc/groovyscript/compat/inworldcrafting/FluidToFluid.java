@@ -2,6 +2,7 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
@@ -16,6 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
+@RegistryDescription
 public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
 
     @Override
@@ -24,11 +26,22 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         getBackupRecipes().forEach(FluidRecipe::add);
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".fluidInput(fluid('water')).input(item('minecraft:diamond'), item('minecraft:dirt')).fluidOutput(fluid('lava'))"),
+            @Example(".fluidInput(fluid('water')).input(item('minecraft:diamond'), item('minecraft:gold_nugget')).fluidOutput(fluid('lava'))"),
+            @Example(".fluidInput(fluid('water')).input(item('minecraft:diamond'), item('minecraft:diamond_block')).fluidOutput(fluid('lava')).startCondition({ world, pos -> pos.getY() < 50 })"),
+    })
+    public RecipeBuilder recipeBuilder() {
+        return new RecipeBuilder();
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.add_to_list", priority = 500)
     public void add(Recipe recipe) {
         addScripted(recipe);
         FluidRecipe.add(recipe);
     }
 
+    @MethodDescription(description = "groovyscript.wiki.remove_from_list", priority = 500)
     public boolean remove(Recipe recipe) {
         if (FluidRecipe.remove(recipe)) {
             addBackup(recipe);
@@ -37,6 +50,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         return false;
     }
 
+    @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public boolean removeByInput(FluidStack fluid) {
         if (IngredientHelper.isEmpty(fluid)) {
             GroovyLog.msg("Error removing in world fluid to fluid recipe")
@@ -55,6 +69,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         return true;
     }
 
+    @MethodDescription(example = @Example(value = "fluid('water'), item('minecraft:clay')", commented = true))
     public boolean removeByInput(FluidStack fluid, ItemStack... input) {
         if (GroovyLog.msg("Error removing in world fluid to fluid recipe")
                 .add(IngredientHelper.isEmpty(fluid), () -> "input fluid must not be empty")
@@ -73,14 +88,12 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         return true;
     }
 
+    @MethodDescription(priority = 2000, example = @Example(commented = true))
     public boolean removeAll() {
         return FluidRecipe.removeIf(fluidRecipe -> fluidRecipe.getClass() == Recipe.class, fluidRecipe -> addBackup((Recipe) fluidRecipe));
     }
 
-    public RecipeBuilder recipeBuilder() {
-        return new RecipeBuilder();
-    }
-
+    @MethodDescription(type = MethodDescription.Type.QUERY)
     public SimpleObjectStream<Recipe> streamRecipes() {
         return new SimpleObjectStream<>(FluidRecipe.findRecipesOfType(Recipe.class)).setRemover(this::remove);
     }
@@ -124,6 +137,7 @@ public class FluidToFluid extends VirtualizedRegistry<FluidToFluid.Recipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Recipe register() {
             Recipe recipe = new Recipe(
                     this.fluidInput.get(0).getFluid(),

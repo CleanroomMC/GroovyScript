@@ -32,17 +32,29 @@ public @interface RecipeBuilderRegistrationMethod {
      * If this {@link RecipeBuilderDescription} annotation is attached to a method, this element is set to the name of the method they are attached to.
      * When annotated on a method directly, this should not be set, as it has no functionality.
      * <br>
-     * If this is not annotated to a method, this should either be the method name
+     * If this is not annotated to a method, this should either be an array of each method name
      * (if only a single method has the given name)
-     * or needs to be the name and full descriptor of the method.
+     * or each element needs to be the name and full descriptor of the method.
      * <br>
      * Methods that are bridge, non-public, Object, or methods annotated with {@link com.cleanroommc.groovyscript.api.GroovyBlacklist}
      * cannot be targeted.
      *
-     * @return the target method, if not annotated to a method directly.
+     * @return any number of target methods, if not annotated to a method directly.
      * @see MethodOverride
      */
-    String method() default "";
+    String[] method() default {};
+
+    /**
+     * The localization key for the description of the return method, will default to generating
+     * <code>
+     * <br>groovyscript.wiki.recipe_builder.register
+     * <br>groovyscript.wiki.recipe_builder.register_return
+     * </code>
+     * <br>depending on if the recipe builder returns a non-void value.
+     *
+     * @return localization key for the recipe builder return method
+     */
+    String description() default "";
 
     /**
      * Hierarchy of the property, relative to other properties applying to the same method.

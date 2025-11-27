@@ -79,7 +79,7 @@ public class Transmutation extends StandardListRegistry<WorldTransmutations.Entr
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.projecte.transmutation.altOutput.description", field = {
                 "output", "altOutput"
         })
         public RecipeBuilder output(IBlockState output, IBlockState altOutput) {

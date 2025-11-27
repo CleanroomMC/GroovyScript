@@ -101,13 +101,13 @@ public abstract class AbstractCraftingRecipeBuilder<R> {
         return this;
     }
 
-    @RecipeBuilderMethodDescription
+    @RecipeBuilderMethodDescription(description = "groovyscript.wiki.craftingrecipe.replace.replace.description")
     public AbstractCraftingRecipeBuilder<R> replace() {
         this.replace = 1;
         return this;
     }
 
-    @RecipeBuilderMethodDescription(field = "replace")
+    @RecipeBuilderMethodDescription(field = "replace", description = "groovyscript.wiki.craftingrecipe.replace.replaceByName.description")
     public AbstractCraftingRecipeBuilder<R> replaceByName() {
         this.replace = 2;
         return this;

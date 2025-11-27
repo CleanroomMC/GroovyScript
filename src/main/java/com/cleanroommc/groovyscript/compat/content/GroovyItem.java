@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.content;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.cleanroommc.groovyscript.sandbox.FileUtil;
@@ -22,6 +23,24 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Map;
 
+@Property(property = "maxStackSize", defaultValue = "64")
+@Property(property = "hasSubtypes")
+@Property(property = "maxDamage")
+@Property(property = "bFull3D")
+@Property(property = "translationKey", defaultValue = "registryName", value = "groovyscript.wiki.minecraft.content.block.translationKey.value")
+@Property(property = "containerItem")//getContainerItem(ItemStack) // should we add overrides for the ItemStack version?
+@Property(property = "tabToDisplayOn", defaultValue = "content.getDefaultTab()")
+@Property(property = "canRepair", defaultValue = "true")
+@RecipeBuilderOverride(method = {
+        @RecipeBuilderMethodDescription(method = "setMaxStackSize", field = "maxStackSize"),
+        @RecipeBuilderMethodDescription(method = "setHasSubtypes", field = "hasSubtypes"),
+        @RecipeBuilderMethodDescription(method = "setMaxDamage", field = "maxDamage"),
+        @RecipeBuilderMethodDescription(method = "setFull3D", field = "bFull3D"),
+        @RecipeBuilderMethodDescription(method = "setTranslationKey", field = "translationKey"),
+        @RecipeBuilderMethodDescription(method = "setContainerItem", field = "containerItem"),
+        @RecipeBuilderMethodDescription(method = "setCreativeTab", field = "tabToDisplayOn"),
+        @RecipeBuilderMethodDescription(method = "setNoRepair", field = "canRepair"),
+})
 public class GroovyItem extends Item {
 
     private static boolean initialised;
@@ -71,8 +90,11 @@ public class GroovyItem extends Item {
         initialised = true;
     }
 
+    @Property
     private boolean effect;
+    @Property
     private int enchantability;
+    @Property
     private IRarity rarity;
 
     public GroovyItem(String loc) {
@@ -82,21 +104,25 @@ public class GroovyItem extends Item {
         }
     }
 
+    @RecipeBuilderMethodDescription(field = "effect")
     public GroovyItem setEnchantedEffect() {
         this.effect = true;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "enchantability")
     public GroovyItem setEnchantability(int enchantability) {
         this.enchantability = enchantability;
         return this;
     }
 
+    @RecipeBuilderMethodDescription(field = "rarity")
     public GroovyItem setRarity(IRarity rarity) {
         this.rarity = rarity;
         return this;
     }
 
+    @RecipeBuilderRegistrationMethod(description = "groovyscript.wiki.minecraft.content.item.register.description")
     public GroovyItem register() {
         registerItem(this);
         return this;

@@ -30,17 +30,26 @@ public @interface RecipeBuilderMethodDescription {
      * If this {@link RecipeBuilderMethodDescription} annotation is attached to a method, this element is set to the name of the method they are attached to.
      * When annotated on a method directly, this should not be set, as it has no functionality.
      * <br>
-     * If this is not annotated to a method, this should either be the method name
+     * If this is not annotated to a method, this should either be an array of each method name
      * (if only a single method has the given name)
-     * or needs to be the name and full descriptor of the method.
+     * or each element needs to be the name and full descriptor of the method.
      * <br>
      * Methods that are bridge, non-public, Object, or methods annotated with {@link com.cleanroommc.groovyscript.api.GroovyBlacklist}
      * cannot be targeted.
      *
-     * @return the target method, if not annotated to a method directly.
+     * @return any number of target methods, if not annotated to a method directly.
      * @see RecipeBuilderOverride
      */
-    String method() default "";
+    String[] method() default {};
+
+    /**
+     * The localization key for the description of the method.
+     * If present, will generate a comment in-line on the wiki when it appears.
+     * If it is an empty string, will not generate anything.
+     *
+     * @return localization key for the recipe builder method description
+     */
+    String description() default "";
 
     /**
      * An array of all fields this method modifies. By default, it checks for a field with the same name as the method.

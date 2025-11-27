@@ -235,9 +235,18 @@ public class DescriptorHelper {
         }
 
         /**
+         * @see #addAnnotation(Annotation, String)
+         */
+        public void addAnnotation(Annotation annotation, String[] methods) {
+            for (String method : methods) {
+                addAnnotation(annotation, method);
+            }
+        }
+
+        /**
          * @see #addAnnotation(Method, Annotation)
          */
-        public void addAnnotation(String method, Annotation annotation) {
+        public void addAnnotation(Annotation annotation, String method) {
             addAnnotation(getMethod(method), annotation);
         }
 

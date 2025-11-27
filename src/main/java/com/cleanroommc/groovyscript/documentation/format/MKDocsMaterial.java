@@ -35,6 +35,11 @@ public class MKDocsMaterial implements IFormat {
     }
 
     @Override
+    public String header(int level, String text) {
+        return StringUtils.repeat('#', level) + " " + text;
+    }
+
+    @Override
     public String removeTableOfContentsText() {
         return "hide: toc";
     }

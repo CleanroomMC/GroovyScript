@@ -11,6 +11,8 @@ import java.util.List;
 
 public class AdmonitionBuilder {
 
+    private static final String TAB = "    ";
+
     private final List<String> note = new ArrayList<>();
     private Admonition.Type admonitionType = Admonition.Type.NOTE;
     private String title = "";
@@ -64,7 +66,7 @@ public class AdmonitionBuilder {
 
     public String generate(IFormat format) {
         StringBuilder out = new StringBuilder();
-        String indent = StringUtils.repeat("    ", indentation);
+        String indent = StringUtils.repeat(TAB, indentation);
 
         out.append(format.admonitionStart(admonitionFormat, admonitionType, indentation, hasTitle ? title : ""));
         out.append("\n");
@@ -72,7 +74,7 @@ public class AdmonitionBuilder {
         for (int i = 0; i < note.size(); i++) {
             String line = note.get(i);
             if (!line.trim().isEmpty()) {
-                if (format.allowsIndentation()) out.append(indent).append("    ");
+                if (format.allowsIndentation()) out.append(indent).append(TAB);
                 out.append(line);
             }
             if (i < note.size() - 1) out.append("\n");

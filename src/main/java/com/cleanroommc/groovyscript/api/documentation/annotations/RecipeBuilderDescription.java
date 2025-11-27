@@ -86,10 +86,10 @@ public @interface RecipeBuilderDescription {
      * If this {@link RecipeBuilderDescription} annotation is attached to a method, this element is set to the name of the method they are attached to.
      * When annotated on a method directly, this should not be set, as it has no functionality.
      *
-     * @return the target method, if not annotated to a method directly.
+     * @return any number of target methods, if not annotated to a method directly.
      * @see MethodOverride
      */
-    String method() default "";
+    String[] method() default {};
 
     /**
      * The builder class. By default, this will use the return class of the target method.

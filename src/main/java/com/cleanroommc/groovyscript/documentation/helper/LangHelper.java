@@ -31,10 +31,40 @@ public class LangHelper {
         MISSING_LANG_KEYS.clear();
     }
 
-    public static String translate(String translateKey, Object... parameters) {
-        if (GenerationFlags.LOG_MISSING_LANG_KEYS && !I18n.hasKey(translateKey)) {
-            MISSING_LANG_KEYS.add(translateKey);
+    /**
+     * @param keys a list of strings to check if they are lang keys
+     * @return the first key that is a lang key, or if none match the last key passed in
+     * @see #fallback(int, String...)
+     */
+    public static String fallback(String... keys) {
+        return fallback(keys.length - 1, keys);
+    }
+
+    /**
+     * @param fallbackIndex the fallback position if no key matches
+     * @param keys          a list of strings to check if they are lang keys
+     * @return the first key that is a lang key, or if none match the key in the {@code fallbackIndex} position
+     */
+    public static String fallback(int fallbackIndex, String... keys) {
+        for (var key : keys) {
+            if (I18n.hasKey(key)) return key;
         }
+        return keys[fallbackIndex];
+    }
+
+    private static void validateKey(String key) {
+        if (GenerationFlags.LOG_MISSING_LANG_KEYS && !I18n.hasKey(key)) {
+            MISSING_LANG_KEYS.add(key);
+        }
+    }
+
+    public static String translate(String translateKey) {
+        validateKey(translateKey);
+        return I18n.format(translateKey);
+    }
+
+    public static String translate(String translateKey, Object... parameters) {
+        validateKey(translateKey);
         return I18n.format(translateKey, parameters);
     }
 

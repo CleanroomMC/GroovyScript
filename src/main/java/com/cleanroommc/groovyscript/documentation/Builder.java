@@ -14,14 +14,12 @@ import net.minecraft.client.resources.I18n;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,56 +36,65 @@ public class Builder {
     };
 
     private final String location;
+    private final String langLocation;
     private final Method builderMethod;
     private final RecipeBuilderDescription annotation;
     private final Map<String, FieldDocumentation> fields;
     private final Map<String, List<MethodAnnotation<RecipeBuilderMethodDescription>>> methods;
     private final List<MethodAnnotation<RecipeBuilderRegistrationMethod>> registrationMethods;
 
-    public Builder(Method builderMethod, RecipeBuilderDescription annotation, String location) {
+    public Builder(Method builderMethod, RecipeBuilderDescription annotation, String location, String langLocation) {
         this.builderMethod = builderMethod;
         this.location = location;
+        this.langLocation = langLocation;
         this.annotation = annotation;
         Class<?> builderClass = annotation.clazz() == void.class ? builderMethod.getReturnType() : annotation.clazz();
         var methodSignatures = generateOfClass(builderClass, annotation);
-        this.fields = gatherFields(builderClass, annotation, Registry.BASE_LANG_LOCATION + "." + location);
+        this.fields = gatherFields(builderClass, annotation, langLocation);
         this.methods = gatherMethods(methodSignatures, fields);
         this.registrationMethods = gatherRegistrationMethods(methodSignatures);
     }
 
     private static DescriptorHelper.OfClass generateOfClass(Class<?> clazz, RecipeBuilderDescription annotation) {
         var methodSignatures = DescriptorHelper.generateOfClass(clazz);
-        if (annotation != null) {
-            var override = annotation.override();
+        Consumer<RecipeBuilderOverride> consumer = override -> {
             for (var entry : override.method()) {
-                methodSignatures.addAnnotation(entry.method(), entry);
+                methodSignatures.addAnnotation(entry, entry.method());
             }
             for (var entry : override.register()) {
-                methodSignatures.addAnnotation(entry.method(), entry);
+                methodSignatures.addAnnotation(entry, entry.method());
             }
-        }
+        };
+        if (annotation != null) consumer.accept(annotation.override());
+        getAnnotationsFromClassRecursive(RecipeBuilderOverride.class, clazz).forEach(consumer);
         return methodSignatures;
     }
 
-    private static List<Property> getPropertyAnnotationsFromClassRecursive(Class<?> clazz) {
-        List<Property> list = new ArrayList<>();
-        Collections.addAll(list, clazz.getAnnotationsByType(Property.class));
+    private static <T extends Annotation> List<T> getAnnotationsFromClassRecursive(Class<T> annotation, Class<?> clazz) {
+        List<T> list = new ArrayList<>();
+        Collections.addAll(list, clazz.getAnnotationsByType(annotation));
         Class<?> superclass = clazz.getSuperclass();
-        if (superclass != null) list.addAll(getPropertyAnnotationsFromClassRecursive(superclass));
+        if (superclass != null) list.addAll(getAnnotationsFromClassRecursive(annotation, superclass));
         return list;
     }
 
     private static Map<String, FieldDocumentation> gatherFields(Class<?> builderClass, RecipeBuilderDescription annotation, String langLocation) {
         Map<String, FieldDocumentation> fields = new HashMap<>();
         List<Field> allFields = getAllFields(builderClass);
+        // Attached to the class or any parent classes, to create/override requirements set in the parent
+        List<Property> classProperties = new ArrayList<>(getAnnotationsFromClassRecursive(Property.class, builderClass));
+        // Part of an override attached to the class or any parent classes, to create/override requirements set in the parent
+        for (var rbo : getAnnotationsFromClassRecursive(RecipeBuilderOverride.class, builderClass)) {
+            Collections.addAll(classProperties, rbo.requirement());
+        }
         for (Field field : allFields) {
             List<Property> annotations = Stream.of(
                     // (deprecated) Attached to the builder method's requirements field, an uncommon location for specific overrides
                     Arrays.stream(annotation.requirement()).filter(r -> r.property().equals(field.getName())),
                     // Attached to the builder method's override of the requirements field, an uncommon location for specific overrides
                     Arrays.stream(annotation.override().requirement()).filter(r -> r.property().equals(field.getName())),
-                    // Attached to the class or any parent classes, to create/override requirements set in the parent
-                    getPropertyAnnotationsFromClassRecursive(builderClass).stream().filter(r -> r.property().equals(field.getName())),
+                    // Attached to the class or any parent classes either directly or via RecipeBuilderOverride, to create/override requirements set in the parent
+                    classProperties.stream().filter(r -> r.property().equals(field.getName())),
                     // Attached to the field, the typical place for property information to be created
                     Arrays.stream(field.getAnnotationsByType(Property.class)).filter(r -> {
                         if (r.property().isEmpty() || r.property().equals(field.getName())) return true;
@@ -209,16 +216,22 @@ public class Builder {
         List<String> output = new ArrayList<>();
         for (int i = 0; i < parts.size(); i++) {
             String part = parts.get(i);
-            if (!part.isEmpty()) {
-                int indent = 4;
-                if (!output.isEmpty()) {
-                    int lastIndex = output.get(i - 1).indexOf(part.charAt(0));
-                    if (lastIndex != -1) indent = lastIndex;
-                }
-                output.add(StringUtils.repeat(" ", indent) + part.trim() + "\n");
-            }
+            if (part.isEmpty()) continue;
+            int indent = output.isEmpty() ? -1 : getIndent(output.get(i - 1), part.charAt(0));
+            output.add(StringUtils.repeat(' ', indent == -1 ? 4 : indent) + part.trim() + "\n");
         }
         return output;
+    }
+
+    private static int getIndent(String priorLine, char target) {
+        // if we are trying to match [, in many cases it is in the format [[...]\n[...]...
+        // and we want the second line to have its starting brace matched with the *second* brace instead of the first
+        if (target == '[') {
+            int open = StringUtils.countMatches(priorLine, '[');
+            int close = StringUtils.countMatches(priorLine, ']');
+            return StringUtils.ordinalIndexOf(priorLine, "[", 1 + open - close);
+        }
+        return priorLine.indexOf(target);
     }
 
     public String builderExampleAdmonition() {
@@ -269,63 +282,60 @@ public class Builder {
     }
 
     public String documentRegistration() {
-        StringBuilder out = new StringBuilder();
         if (registrationMethods.isEmpty()) {
             GroovyLog.get().warn("Couldn't find any registration methods for recipe builder '{}'", location);
-        } else {
-            for (var registerMethod : registrationMethods) {
-                out.append("- ");
+            return "";
+        }
+        StringBuilder out = new StringBuilder();
+        for (var registerMethod : registrationMethods) {
+            out.append("- ");
+            var desc = registerMethod.annotation().description();
+            if (desc.isEmpty()) {
                 String returnType = registerMethod.method().getAnnotatedReturnType().getType().getTypeName();
-                if ("void".equals(returnType) || "null".equals(returnType)) out.append(I18n.format("groovyscript.wiki.recipe_builder.register"));
-                else out.append(I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
-                out.append("\n\n");
-                out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.method().getName())).indentation(1).toString());
-            }
+                boolean hasNoReturnValue = "void".equals(returnType) || "null".equals(returnType);
+                out.append(
+                        hasNoReturnValue
+                                ? I18n.format("groovyscript.wiki.recipe_builder.register")
+                                : I18n.format("groovyscript.wiki.recipe_builder.register_return", returnType));
+            } else out.append(LangHelper.ensurePeriod(LangHelper.translate(desc)));
+            out.append("\n\n");
+            out.append(new CodeBlockBuilder().line(String.format("%s()", registerMethod.method().getName())).indentation(1).toString());
         }
         return out.toString();
     }
 
     public StringBuilder documentFields() {
         StringBuilder out = new StringBuilder();
-        fields.values()
-                .stream()
-                .sorted(ComparisonHelper::field)
-                .filter(FieldDocumentation::isUsed)
-                .forEach(fieldDocumentation -> {
+        var list = new ArrayList<>(fields.values());
+        list.sort(ComparisonHelper::field);
+        for (FieldDocumentation fieldDocumentation : list) {
+            if (!fieldDocumentation.isUsed()) continue;
 
-                    out.append(fieldDocumentation.getDescription());
+            out.append(fieldDocumentation.getDescription());
 
-                    if (fieldDocumentation.hasComparison()) {
-                        var value = fieldDocumentation.getComparison();
-                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
-                    }
+            out.append(FieldDocumentation.documentValue(fieldDocumentation::hasComparison, fieldDocumentation::getComparison, "groovyscript.wiki.requires"));
+            out.append(FieldDocumentation.documentValue(fieldDocumentation::hasRequirement, fieldDocumentation::getRequirement, "groovyscript.wiki.requires"));
+            out.append(FieldDocumentation.documentValue(fieldDocumentation::hasDefaultValue, fieldDocumentation::getDefaultValue, "groovyscript.wiki.default"));
 
-                    if (fieldDocumentation.hasRequirement()) {
-                        var value = fieldDocumentation.getRequirement();
-                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.requires", value));
-                    }
+            out.append("\n\n");
 
-                    if (fieldDocumentation.hasDefaultValue()) {
-                        var value = fieldDocumentation.getDefaultValue();
-                        if (!value.isEmpty()) out.append(" ").append(I18n.format("groovyscript.wiki.default", value));
-                    }
+            var recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
 
-                    out.append("\n\n");
-
-                    var recipeBuilderMethods = methods.get(fieldDocumentation.getField().getName());
-
-                    if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
-                        GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location);
-                    } else {
-                        var lines = recipeBuilderMethods.stream()
-                                .sorted(ComparisonHelper::recipeBuilderMethod)
-                                .map(MethodAnnotation::method)
-                                .map(DescriptorHelper::shortSignature)
-                                .distinct()
-                                .collect(Collectors.toList());
-                        out.append(new CodeBlockBuilder().line(lines).indentation(1).toString());
-                    }
-                });
+            if (recipeBuilderMethods == null || recipeBuilderMethods.isEmpty()) {
+                GroovyLog.get().warn("Couldn't find any methods targeting field '{}' in recipe builder '{}'", fieldDocumentation.getField().getName(), location + "." + builderMethod.getName());
+                continue;
+            }
+            var lines = recipeBuilderMethods.stream()
+                    .sorted(ComparisonHelper::recipeBuilderMethod)
+                    .map(x -> {
+                        var desc = x.annotation().description();
+                        var method = DescriptorHelper.shortSignature(x.method());
+                        if (desc.isEmpty()) return method;
+                        return method + " // " + LangHelper.translate(desc);
+                    })
+                    .collect(Collectors.toList());
+            out.append(new CodeBlockBuilder().line(lines).indentation(1).toString());
+        }
         return out;
     }
 
@@ -352,12 +362,11 @@ public class Builder {
 
     private String title() {
         String lang = annotation.title();
-        String registryDefault = String.format("%s.%s.%s.title", Registry.BASE_LANG_LOCATION, location, builderMethod.getName());
-        String globalDefault = String.format("%s.recipe_builder.title", Registry.BASE_LANG_LOCATION);
 
         if (lang.isEmpty()) {
-            if (I18n.hasKey(registryDefault)) lang = registryDefault;
-            else lang = globalDefault;
+            lang = LangHelper.fallback(
+                    String.format("%s.%s.title", langLocation, builderMethod.getName()),
+                    String.format("%s.recipe_builder.title", Registry.BASE_LANG_LOCATION));
         }
 
         return LangHelper.translate(lang);
@@ -366,16 +375,15 @@ public class Builder {
     public String creationMethod() {
         StringBuilder out = new StringBuilder();
         String lang = annotation.description();
-        String registryDefault = String.format("%s.%s.%s.description", Registry.BASE_LANG_LOCATION, location, builderMethod.getName());
-        String globalDefault = String.format("%s.recipe_builder.description", Registry.BASE_LANG_LOCATION);
 
         if (lang.isEmpty()) {
             // If the method is complex, we want to require defining the key via the annotation or as the registryDefault.
-            if (I18n.hasKey(registryDefault) || hasComplexMethod()) lang = registryDefault;
-            else lang = globalDefault;
+            String registryDefault = String.format("%s.%s.description", langLocation, builderMethod.getName());
+            if (hasComplexMethod()) lang = registryDefault;
+            else lang = LangHelper.fallback(registryDefault, String.format("%s.recipe_builder.description", Registry.BASE_LANG_LOCATION));
         }
 
-        var example = Registry.BASE_ACCESS_COMPAT + "." + location + "." + DescriptorHelper.shortSignature(builderMethod);
+        var example = location + "." + DescriptorHelper.shortSignature(builderMethod);
 
         out.append("- ").append(LangHelper.ensurePeriod(LangHelper.translate(lang))).append("\n\n");
         out.append(new CodeBlockBuilder().line(example).indentation(1).toString());
@@ -384,7 +392,7 @@ public class Builder {
 
     private String createBuilder(Example example, boolean canBeCommented) {
         StringBuilder out = new StringBuilder();
-        var methodLocation = Registry.BASE_ACCESS_COMPAT + "." + location + "." + builderMethod.getName();
+        var methodLocation = location + "." + builderMethod.getName();
         var error = GroovyLog.msg("Error creating example for " + methodLocation).error();
 
         var prependComment = canBeCommented && example.commented();
@@ -445,6 +453,14 @@ public class Builder {
             this.langLocation = langLocation;
             this.annotations = annotations;
             this.firstAnnotation = annotations.get(0);
+        }
+
+        private static String documentValue(BooleanSupplier check, Supplier<String> string, String langKey) {
+            if (check.getAsBoolean()) {
+                var value = string.get();
+                if (!value.isEmpty()) return " " + I18n.format(langKey, value);
+            }
+            return "";
         }
 
         private static String parseComparisonRequirements(Comp comp, EnumSet<Comp.Type> usedTypes) {

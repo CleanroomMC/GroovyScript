@@ -2,13 +2,16 @@ package com.cleanroommc.groovyscript.compat.mods.mekanism;
 
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.IRegistryDocumentation;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Admonition;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
+import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import mekanism.api.infuse.InfuseObject;
 import mekanism.api.infuse.InfuseRegistry;
 import mekanism.api.infuse.InfuseType;
@@ -16,11 +19,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RegistryDescription(
@@ -33,14 +34,13 @@ import java.util.stream.Collectors;
                 value = "groovyscript.wiki.mekanism.infusion.note0"),
         priority = 100
 )
-public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
+public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> implements IRegistryDocumentation {
 
     private final AbstractReloadableStorage<Pair<ItemStack, InfuseObject>> objectStorage = new AbstractReloadableStorage<>();
 
     public static InfusionItems infusion(InfuseType type) {
         return new InfusionItems(type);
     }
-
 
     public static InfusionItems infusion(String type, ResourceLocation resource) {
         return new InfusionItems(type, resource);
@@ -55,6 +55,18 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
     }
 
     @Override
+    public @NotNull String generateExamples(ContainerHolder container, LoadStage loadStage, List<String> imports) {
+        if (loadStage == LoadStage.PRE_INIT) {
+            imports.add("net.minecraftforge.client.event.TextureStitchEvent");
+            return """
+                    eventManager.listen { TextureStitchEvent.Pre event ->
+                        event.getMap().registerSprite(resource('groovyscriptdev:blocks/mekanism_infusion_texture'))
+                    }""";
+        }
+        return "";
+    }
+
+    @Override
     public void onReload() {
         removeScripted().forEach(pair -> InfuseRegistry.getInfuseMap().put(pair.getKey(), pair.getValue()));
         restoreFromBackup().forEach(pair -> InfuseRegistry.getInfuseMap().remove(pair.getKey()));
@@ -63,7 +75,7 @@ public class Infusion extends VirtualizedRegistry<Pair<String, InfuseType>> {
         objectStorage.removeScripted().forEach(pair -> InfuseRegistry.getObjectMap().remove(pair.getKey()));
     }
 
-    @MethodDescription(example = @Example("'groovy_example', resource('placeholdername:blocks/mekanism_infusion_texture')"), type = MethodDescription.Type.ADDITION, priority = 500)
+    @MethodDescription(example = @Example("'groovy_example', resource('groovyscriptdev:blocks/mekanism_infusion_texture')"), type = MethodDescription.Type.ADDITION, priority = 500)
     public void addType(String name, ResourceLocation resource) {
         InfuseType infuse = new InfuseType(name.toUpperCase(Locale.ROOT), resource);
         infuse.unlocalizedName = name.toLowerCase(Locale.ROOT);

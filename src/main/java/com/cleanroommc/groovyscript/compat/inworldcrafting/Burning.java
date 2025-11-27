@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.BurningRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
 
     private static final Map<EntityItem, BurningRecipe> runningRecipes = new Object2ObjectOpenHashMap<>();
@@ -41,6 +43,11 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
         this.burningRecipes.sort(Comparator.comparingInt(BurningRecipe::getTicks));
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:netherrack')).output(item('minecraft:nether_star'))"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).ticks(100)"),
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:clay')).ticks(10).startCondition({ stack -> stack.getItem().getCount() > 5 })")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -76,16 +83,22 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
         }
     }
 
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<BurningRecipe> {
 
+        @Property(comp = @Comp(gt = 0), defaultValue = "40")
         private int ticks = 40;
+        @Property("groovyscript.wiki.in_world_crafting.startCondition.value")
         private Closure<Boolean> startCondition;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder ticks(int ticks) {
             this.ticks = ticks;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder startCondition(Closure<Boolean> startCondition) {
             this.startCondition = startCondition;
             return this;
@@ -107,6 +120,7 @@ public class Burning extends StandardListRegistry<Burning.BurningRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Burning.BurningRecipe register() {
             if (!validate()) return null;
             BurningRecipe burningRecipe = new BurningRecipe(this.input.get(0), this.output.get(0), this.ticks, this.startCondition);

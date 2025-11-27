@@ -14,15 +14,15 @@ import net.minecraft.item.crafting.IRecipe;
 
 public interface EnderRecipeBuilder {
 
-    @RecipeBuilderMethodDescription
+    @RecipeBuilderMethodDescription(description = "groovyscript.wiki.time_seconds.description")
     EnderRecipeBuilder time(int time);
 
-    @RecipeBuilderMethodDescription(field = "time")
+    @RecipeBuilderMethodDescription(field = "time", description = "groovyscript.wiki.time_seconds.description")
     default EnderRecipeBuilder seconds(int seconds) {
         return this.time(seconds);
     }
 
-    @RecipeBuilderMethodDescription(field = "time")
+    @RecipeBuilderMethodDescription(field = "time", description = "groovyscript.wiki.time_ticks.description")
     default EnderRecipeBuilder ticks(int ticks) {
         return this.time(ticks * 20);
     }
@@ -42,7 +42,7 @@ public interface EnderRecipeBuilder {
         }
 
         @Override
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.time_seconds.description")
         public Shaped time(int time) {
             this.time = time;
             return this;
@@ -96,7 +96,7 @@ public interface EnderRecipeBuilder {
         }
 
         @Override
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.time_seconds.description")
         public Shapeless time(int time) {
             this.time = time;
             return this;

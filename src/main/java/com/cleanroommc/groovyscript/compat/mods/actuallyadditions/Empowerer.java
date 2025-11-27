@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.Collection;
 
 @RegistryDescription
@@ -97,48 +96,40 @@ public class Empowerer extends StandardListRegistry<EmpowererRecipe> {
             return this;
         }
 
-
         @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.actuallyadditions.empowerer.color_var.description", field = {
                 "red", "green", "blue"
         })
-        public RecipeBuilder particleColor(float... color) {
-            if (color.length != 3) {
-                GroovyLog.get().warn("Error setting color in Actually Additions Empowerer recipe. color must contain 3 floats, yet it contained {}", color.length);
-                return this;
-            }
-            this.red = color[0];
-            this.green = color[1];
-            this.blue = color[2];
+        public RecipeBuilder particleColor(float red, float green, float blue) {
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.actuallyadditions.empowerer.color_var.description", field = {
                 "red", "green", "blue"
         })
-        public RecipeBuilder color(float... color) {
-            return this.particleColor(color);
+        public RecipeBuilder color(float red, float green, float blue) {
+            return this.particleColor(red, green, blue);
         }
 
-
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.actuallyadditions.empowerer.color_hex.description", field = {
                 "red", "green", "blue"
         })
         public RecipeBuilder particleColor(int hex) {
-            Color color = new Color(hex);
-            this.red = color.getRed() / 255.0f;
-            this.green = color.getGreen() / 255.0f;
-            this.blue = color.getBlue() / 255.0f;
+            this.red = ((hex >> 16) & 0xFF) / 255.0f;
+            this.green = ((hex >> 8) & 0xFF) / 255.0f;
+            this.blue = ((hex >> 0) & 0xFF) / 255.0f;
             return this;
         }
 
-
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.actuallyadditions.empowerer.color_hex.description", field = {
                 "red", "green", "blue"
         })
         public RecipeBuilder color(int hex) {

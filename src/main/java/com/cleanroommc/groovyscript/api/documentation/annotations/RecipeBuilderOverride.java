@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.api.documentation.annotations;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -16,7 +17,7 @@ import java.lang.annotation.Target;
  * and not overridden in the focused class.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({}) // No targets allowed
+@Target(ElementType.TYPE)
 public @interface RecipeBuilderOverride {
 
     /**

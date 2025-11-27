@@ -101,7 +101,7 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.probability_default.description", field = {
                 "output", "probabilities"
         })
         public RecipeBuilder result(ItemStack item) {
@@ -116,14 +116,14 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.probability_default.description", field = {
                 "output", "probabilities"
         })
         public RecipeBuilder output(ItemStack item) {
             return this.result(item, 1);
         }
 
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.probability_default.description", field = {
                 "fluidInput", "chances"
         })
         public RecipeBuilder component(FluidStack fluid, float chance) {
@@ -147,7 +147,7 @@ public class ChaliceInteraction extends StandardListRegistry<LiquidInteraction> 
         }
 
         @Override
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.probability_default.description", field = {
                 "fluidInput", "chances"
         })
         public RecipeBuilder fluidInput(FluidStack fluid) {

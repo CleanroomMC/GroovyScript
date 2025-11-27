@@ -3,161 +3,131 @@ package com.cleanroommc.groovyscript.documentation;
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.INamed;
+import com.cleanroommc.groovyscript.api.documentation.IRegistryDocumentation;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
-import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
-import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import com.cleanroommc.groovyscript.documentation.helper.ComparisonHelper;
+import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
+import com.cleanroommc.groovyscript.documentation.helper.Heading;
+import com.cleanroommc.groovyscript.documentation.helper.LinkIndex;
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
+import com.google.common.collect.ImmutableSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.resources.I18n;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class Exporter {
 
-    private static final String INDEX_FILE_NAME = "index.md";
-    private static final String NAV_FILE_NAME = "!navigation.md";
-    private static final String PRINT_MOD_DETECTED = "log.info 'mod \\'%s\\' detected, running script'";
+    private static final String INDEX_FILE_NAME = "index" + Documentation.MARKDOWN_FILE_EXTENSION;
+    private static final String NAV_FILE_NAME = "!navigation" + Documentation.MARKDOWN_FILE_EXTENSION;
+    private static final String EXAMPLE_GENERATION_NOTE = "// Auto generated groovyscript example file\n";
+    private static final String INDEX_FILE_TEXT = "---\n%s\n---\n\n\n%s%s";
+    private static final String BULLET_POINT_LINK = "* [%s](./%s)";
+    private static final String NAVIGATION_FILE_TEXT = "---\nsearch:\n  exclude: true\n---\n\n\n" + BULLET_POINT_LINK + "\n%s";
 
     private static final Map<String, Class<?>> SKIPPED_CLASSES = new Object2ObjectOpenHashMap<>();
 
-    public static void generateWiki(IFormat format, File folder, GroovyContainer<? extends GroovyPropertyContainer> mod) {
-        List<String> fileLinks = new ArrayList<>();
+    public static void generateWiki(File targetFolder, ContainerHolder container) {
+        var linkIndex = new LinkIndex(Heading.fromContainer(container));
 
-        Set<INamed> registries = new HashSet<>();
-        for (INamed named : mod.get().getRegistries()) {
-            var annotation = named.getClass().getAnnotation(RegistryDescription.class);
-            if (annotation == null) {
-                SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
-            } else {
-                registries.add(named);
-            }
-        }
+        var registries = getRegistries(container, x -> x.skipDefaultWiki(container));
 
         if (registries.isEmpty()) return;
 
-        registries.stream()
-                .sorted(ComparisonHelper::iNamed)
-                .forEach(registry -> {
-                    Registry example = new Registry(mod, registry);
-                    String location = String.format("%s.md", registry.getName());
-                    fileLinks.add(String.format("* [%s](./%s)", example.getTitle(), location));
-                    try {
-                        File file = new File(folder, location);
-                        Files.write(file.toPath(), example.documentationBlock().trim().concat("\n").getBytes());
-                    } catch (IOException e) {
-                        GroovyScript.LOGGER.throwing(e);
-                    }
-                });
+        Documentation.ensureDirectoryExists(targetFolder);
 
-        // TODO add bracket handlers
-        //  maybe also add commands?
-
-        StringBuilder index = new StringBuilder()
-                .append("---")
-                .append("\n")
-                .append(format.removeTableOfContentsText())
-                .append("\n") // Removes the table of contents from the sidebar of indexes.
-                .append("---")
-                .append("\n\n\n")
-                .append("# ")
-                .append(mod)
-                .append("\n\n")
-                .append("## ")
-                .append(I18n.format("groovyscript.wiki.categories"))
-                .append("\n\n")
-                .append(I18n.format("groovyscript.wiki.subcategories_count", registries.size()))
-                .append("\n\n");
-
-        StringBuilder navigation = new StringBuilder()
-                .append("---")
-                .append("\n")
-                .append("search:")
-                .append("\n")
-                .append("  exclude: true")
-                .append("\n") // Removes navigation files from the search index
-                .append("---")
-                .append("\n\n\n")
-                .append(String.format("* [%s](./%s)\n", mod, INDEX_FILE_NAME));
-
-        fileLinks.forEach(line -> {
-            index.append(line).append("\n\n");
-            navigation.append(line).append("\n");
-        });
-
-        try {
-            File file = new File(folder, INDEX_FILE_NAME);
-            Files.write(file.toPath(), index.toString().getBytes());
-        } catch (IOException e) {
-            GroovyScript.LOGGER.throwing(e);
+        for (var registry : registries) {
+            GroovyLog.msg("Generating wiki for the container {} and registry '{}'.", container.name(), registry.getName()).debug().post();
+            registry.generateWiki(container, targetFolder, linkIndex);
         }
 
-        if (format.requiresNavFile()) {
-            try {
-                File file = new File(folder, NAV_FILE_NAME);
-                Files.write(file.toPath(), navigation.toString().getBytes());
-            } catch (IOException e) {
-                GroovyScript.LOGGER.throwing(e);
-            }
+        String indexText = String.format(INDEX_FILE_TEXT, Documentation.DEFAULT_FORMAT.removeTableOfContentsText(), Heading.containerIndex(container).get(), linkIndex.get());
+        write(new File(targetFolder, INDEX_FILE_NAME), indexText);
+
+        if (Documentation.DEFAULT_FORMAT.requiresNavFile()) {
+            String navigation = String.format(NAVIGATION_FILE_TEXT, container.name(), INDEX_FILE_NAME, linkIndex.getLinks());
+            write(new File(targetFolder, NAV_FILE_NAME), navigation);
         }
     }
 
-    public static void generateExamples(String target, GroovyContainer<? extends GroovyPropertyContainer> mod) {
-        StringBuilder header = new StringBuilder();
+    public static String writeNormalWikiFile(File targetFolder, String id, String title, String doc) {
+        String location = id + Documentation.MARKDOWN_FILE_EXTENSION;
+        write(new File(targetFolder, location), doc.trim() + "\n");
+        return String.format(BULLET_POINT_LINK, title, location);
+    }
+
+    public static void generateExamples(File targetFile, LoadStage loadStage, ContainerHolder container) {
         StringBuilder body = new StringBuilder();
 
         List<String> imports = new ArrayList<>();
 
-        // Preprocessor to only run script if the mod is loaded
-        header.append("\n")
-                .append("// Auto generated groovyscript example file")
-                .append("\n")
-                .append("// MODS_LOADED: ")
-                .append(mod.getModId())
-                .append("\n");
-
-        // Iterate through every registry of the mod once, in alphabetical order.
-        Set<INamed> registries = new HashSet<>();
-        for (INamed named : mod.get().getRegistries()) {
-            var annotation = named.getClass().getAnnotation(RegistryDescription.class);
-            if (annotation == null) {
-                SKIPPED_CLASSES.put(mod.getModId() + "." + named.getName(), named.getClass());
-            } else {
-                if (annotation.location().equals(target)) {
-                    registries.add(named);
-                }
-            }
-        }
+        var registries = getRegistries(container, x -> x.skipDefaultExamples(container));
 
         if (registries.isEmpty()) return;
 
-        registries.stream()
-                .sorted(ComparisonHelper::iNamed)
-                .forEach(registry -> {
-                    GroovyLog.msg("Generating examples for the mod {} and registry '{}'.", mod.toString(), registry.getName()).debug().post();
-                    Registry example = new Registry(mod, registry);
-                    imports.addAll(example.getImports());
-                    body.append(example.exampleBlock());
-                });
+        for (var registry : registries) {
+            GroovyLog.msg("Generating examples for the container {} and registry '{}'.", container.name(), registry.getName()).debug().post();
+            body.append(registry.generateExamples(container, loadStage, imports));
+        }
 
-        if (!imports.isEmpty()) header.append("\n");
-        imports.stream().distinct().sorted().forEach(i -> header.append("import ").append(i).append("\n"));
+        if (body.length() == 0) return;
 
-        // Print that the script was loaded at the end of the header, after any imports have been added.
-        header.append("\n")
-                .append(String.format(PRINT_MOD_DETECTED, mod.getModId()))
-                .append("\n\n")
-                .append(body);
+        String header = EXAMPLE_GENERATION_NOTE + container.header().apply(getImportBlock(imports)) + "\n\n";
 
+        write(targetFile, "\n" + header + body.toString().trim() + "\n");
+    }
+
+    public static void write(File file, String text) {
         try {
-            File file = new File(new File(Documentation.EXAMPLES, target), mod.getModId() + ".groovy");
-            Files.write(file.toPath(), header.toString().getBytes());
+            Files.write(file.toPath(), text.getBytes());
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
+    }
+
+    public static void exportFile(File file, String resource) throws IOException {
+        try (InputStream inputStream = Exporter.class.getClassLoader().getResourceAsStream(resource); FileOutputStream outputStream = new FileOutputStream(file)) {
+            int i;
+            while ((i = inputStream.read()) != -1) {
+                outputStream.write(i);
+            }
+        }
+    }
+
+    private static List<IRegistryDocumentation> getRegistries(ContainerHolder container, Predicate<IRegistryDocumentation> check) {
+        List<IRegistryDocumentation> registries = new ArrayList<>();
+        for (INamed named : ImmutableSet.copyOf(container.registries())) {
+            if (named instanceof IRegistryDocumentation doc) {
+                registries.add(doc);
+                if (check.test(doc)) continue;
+            }
+            if (named.getClass().isAnnotationPresent(RegistryDescription.class)) {
+                registries.add(new Registry(container, named));
+                continue;
+            }
+            SKIPPED_CLASSES.put(container.id() + "." + named.getName(), named.getClass());
+        }
+        registries.sort(ComparisonHelper::iRegistryDocumentation);
+        return registries;
+    }
+
+    private static String getImportBlock(List<String> imports) {
+        if (imports.isEmpty()) return "";
+        var list = new ArrayList<>(new ObjectOpenHashSet<>(imports));
+        list.sort(ComparisonHelper::packages);
+        var sb = new StringBuilder();
+        for (var x : list) {
+            sb.append("\nimport ").append(x);
+        }
+        return sb + "\n";
     }
 
     public static void logSkippedClasses() {
@@ -165,8 +135,8 @@ public class Exporter {
         GroovyLog.Msg log = GroovyLog.msg("Skipped documenting the following potentially valid locations (this may be the correct behavior!)");
         SKIPPED_CLASSES.entrySet()
                 .stream()
-                .sorted(Map.Entry.comparingByKey(String.CASE_INSENSITIVE_ORDER))
-                .forEach(entry -> log.add(entry.getKey() + ": " + entry.getValue().getName()));
+                .sorted(Map.Entry.comparingByKey(ComparisonHelper::packages))
+                .forEach(x -> log.add(x.getKey() + ": " + x.getValue().getName()));
         log.debug().post();
         SKIPPED_CLASSES.clear();
     }

@@ -112,7 +112,7 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> {
                 .register();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.crafting.replaceShapeless1", example = @Example(value = "'minecraft:pink_dye_from_pink_tulp', item('minecraft:clay'), [item('minecraft:nether_star')]", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.crafting.replaceShapeless1", example = @Example(value = "'minecraft:pink_dye_from_pink_tulip', item('minecraft:clay'), [item('minecraft:nether_star')]", commented = true))
     public void replaceShapeless(String name, ItemStack output, List<IIngredient> input) {
         shapelessBuilder()
                 .input(input)
@@ -253,7 +253,7 @@ public class Crafting extends ForgeRegistryWrapper<IRecipe> {
             @Example(".name('precious_to_clay').output(item('minecraft:clay')).input([item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')])"),
             @Example(".name(resource('example:resource_location2')).output(item('minecraft:clay')).input([item('minecraft:cobblestone'), item('minecraft:gold_ingot')])"),
             @Example(".output(item('minecraft:ender_eye')).input([item('minecraft:ender_pearl'),item('minecraft:nether_star')]).replace()"),
-            @Example(".name('minecraft:pink_dye_from_pink_tulp').output(item('minecraft:clay')).input([item('minecraft:nether_star')]).replaceByName()"),
+            @Example(".name('minecraft:pink_dye_from_pink_tulip').output(item('minecraft:clay')).input([item('minecraft:nether_star')]).replaceByName()"),
             @Example(".name(resource('minecraft:pink_dye_from_peony')).output(item('minecraft:clay')).input([item('minecraft:cobblestone'), item('minecraft:gold_ingot')]).replaceByName()"),
     })
     public CraftingRecipeBuilder.Shapeless shapelessBuilder() {

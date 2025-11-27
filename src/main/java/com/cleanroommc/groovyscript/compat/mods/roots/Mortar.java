@@ -210,7 +210,7 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.roots.mortar.recipeBuilder.color_long.description", field = {
                 "red1", "green1", "blue1", "red2", "green2", "blue2"
         })
         public RecipeBuilder color(float red1, float green1, float blue1, float red2, float green2, float blue2) {
@@ -223,7 +223,7 @@ public class Mortar extends VirtualizedRegistry<MortarRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = {
+        @RecipeBuilderMethodDescription(description = "groovyscript.wiki.roots.mortar.recipeBuilder.color.description", field = {
                 "red1", "green1", "blue1", "red2", "green2", "blue2"
         })
         public RecipeBuilder color(float red, float green, float blue) {
