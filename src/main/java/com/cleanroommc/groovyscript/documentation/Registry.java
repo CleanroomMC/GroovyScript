@@ -253,28 +253,28 @@ public class Registry implements IRegistryDocumentation {
 
         int target = packages.indexOf(getReference());
         if (target == -1) {
-            GroovyLog.get().warn("Couldn't find identifier %s in packagess %s", getReference(), String.join(", ", packages));
-        } else {
-            packages.set(target, getReference() + "/*()!*/");
-            var codeBlock = new CodeBlockBuilder()
-                    .line(packages)
-                    .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
-                    // Highlighting and focusing are based on the line count, and is 1-indexed
-                    .highlight(String.valueOf(1 + target))
-                    .focus(1 + target)
-                    .toString();
-            var admonition = new AdmonitionBuilder()
-                    .hasTitle(true)
-                    .title(I18n.format("groovyscript.wiki.all_packages_title"))
-                    .note("\n")
-                    .note(I18n.format("groovyscript.wiki.import_instructions"))
-                    .note("\n")
-                    .note(codeBlock.trim())
-                    .note("\n")
-                    .type(Admonition.Type.QUOTE);
-            if (packages.size() >= TOO_MANY_PACKAGES) admonition.format(Admonition.Format.COLLAPSED);
-            md.addEntry(admonition.generate());
+            GroovyLog.get().warn("Couldn't find identifier %s in packages %s", getReference(), String.join(", ", packages));
+            return "";
         }
+        packages.set(target, getReference() + "/*()!*/");
+        var codeBlock = new CodeBlockBuilder()
+                .line(packages)
+                .annotation(I18n.format("groovyscript.wiki.defaultPackage"))
+                // Highlighting and focusing are based on the line count, and is 1-indexed
+                .highlight(String.valueOf(1 + target))
+                .focus(1 + target)
+                .toString();
+        var admonition = new AdmonitionBuilder()
+                .hasTitle(true)
+                .title(I18n.format("groovyscript.wiki.all_packages_title"))
+                .note("\n")
+                .note(I18n.format("groovyscript.wiki.import_instructions"))
+                .note("\n")
+                .note(codeBlock.trim())
+                .note("\n")
+                .type(Admonition.Type.QUOTE);
+        if (packages.size() >= TOO_MANY_PACKAGES) admonition.format(Admonition.Format.COLLAPSED);
+        md.addEntry(admonition.generate());
         return md.get();
     }
 
