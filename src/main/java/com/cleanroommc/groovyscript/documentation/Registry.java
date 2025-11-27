@@ -212,6 +212,7 @@ public class Registry implements IRegistryDocumentation {
         out.append("description: \"").append(getDescription()).append("\"\n");
         String link = getFileSourceCodeLink();
         if (!link.isEmpty()) out.append("source_code_link: \"").append(link).append("\"\n");
+        if (priority() != 1000) out.append("order: ").append(priority()).append("\n");
         out.append("---\n\n");
         return out.toString();
     }

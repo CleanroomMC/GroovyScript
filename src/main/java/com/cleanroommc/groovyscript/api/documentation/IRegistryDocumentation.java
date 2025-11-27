@@ -89,10 +89,10 @@ public interface IRegistryDocumentation extends INamed {
      * Priority of the registry, relative to other registries of the same container.
      * Priorities sort entries such that lowest is first, then by the natural order of {@link INamed#getName()}.
      *
-     * @return the registry priority, default {@code 100}
+     * @return the registry priority, default {@code 1000}
      * @see com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription#priority()
      */
     default int priority() {
-        return 100;
+        return 1000;
     }
 }
