@@ -61,30 +61,30 @@ crafting.shapedBuilder()
 crafting.shapedBuilder()
     .output(item('minecraft:gold_block'))
     .shape([[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],
-           [null, null, null],
-           [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
+            [null, null, null],
+            [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
     .register()
 
 crafting.shapedBuilder()
     .name('gold_v_to_clay')
     .output(item('minecraft:clay'))
     .shape([[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],
-           [null,item('minecraft:stone_pickaxe').transformDamage(2).whenAnyDamage(),null]])
+            [null,item('minecraft:stone_pickaxe').transformDamage(2).whenAnyDamage(),null]])
     .register()
 
 crafting.shapedBuilder()
     .name(resource('example:resource_location'))
     .output(item('minecraft:clay'))
     .shape([[item('minecraft:cobblestone')],
-           [item('minecraft:nether_star')],
-           [item('minecraft:cobblestone')]])
+            [item('minecraft:nether_star')],
+            [item('minecraft:cobblestone')]])
     .register()
 
 crafting.shapedBuilder()
     .output(item('minecraft:chest'))
     .shape([[ore('logWood'),ore('logWood'),ore('logWood')],
-           [ore('logWood'),null,ore('logWood')],
-           [ore('logWood'),ore('logWood'),ore('logWood')]])
+            [ore('logWood'),null,ore('logWood')],
+            [ore('logWood'),ore('logWood'),ore('logWood')]])
     .replace()
     .register()
 
@@ -92,8 +92,8 @@ crafting.shapedBuilder()
     .name('gold_to_diamonds')
     .output(item('minecraft:diamond') * 8)
     .shape([[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],
-           [item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],
-           [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
+            [item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],
+            [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
     .replaceByName()
     .register()
 
@@ -101,8 +101,8 @@ crafting.shapedBuilder()
     .name(resource('minecraft:sea_lantern'))
     .output(item('minecraft:clay'))
     .shape([[item('minecraft:glowstone')],
-           [item('minecraft:glowstone')],
-           [item('minecraft:glowstone')]])
+            [item('minecraft:glowstone')],
+            [item('minecraft:glowstone')]])
     .replaceByName()
     .register()
 

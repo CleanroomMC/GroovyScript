@@ -448,8 +448,8 @@ mods.techreborn.rolling_machine.shapedBuilder()
 mods.techreborn.rolling_machine.shapedBuilder()
     .output(item('minecraft:diamond') * 32)
     .matrix([[item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')],
-            [item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')],
-            [item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')]])
+             [item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')],
+             [item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')]])
     .register()
 
 mods.techreborn.rolling_machine.shapelessBuilder()

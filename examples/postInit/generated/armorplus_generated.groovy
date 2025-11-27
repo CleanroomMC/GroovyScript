@@ -41,8 +41,8 @@ mods.armorplus.high_tech_bench.removeByOutput(item('armorplus:emerald_helmet'))
 mods.armorplus.high_tech_bench.shapedBuilder()
     .output(item('minecraft:diamond') * 32)
     .matrix([[item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')],
-            [item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')],
-            [item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')]])
+             [item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')],
+             [item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:gold_ingot')]])
     .register()
 
 

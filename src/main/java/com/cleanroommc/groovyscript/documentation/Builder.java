@@ -216,16 +216,22 @@ public class Builder {
         List<String> output = new ArrayList<>();
         for (int i = 0; i < parts.size(); i++) {
             String part = parts.get(i);
-            if (!part.isEmpty()) {
-                int indent = 4;
-                if (!output.isEmpty()) {
-                    int lastIndex = output.get(i - 1).indexOf(part.charAt(0));
-                    if (lastIndex != -1) indent = lastIndex;
-                }
-                output.add(StringUtils.repeat(" ", indent) + part.trim() + "\n");
-            }
+            if (part.isEmpty()) continue;
+            int indent = output.isEmpty() ? -1 : getIndent(output.get(i - 1), part.charAt(0));
+            output.add(StringUtils.repeat(' ', indent == -1 ? 4 : indent) + part.trim() + "\n");
         }
         return output;
+    }
+
+    private static int getIndent(String priorLine, char target) {
+        // if we are trying to match [, in many cases it is in the format [[...]\n[...]...
+        // and we want the second line to have its starting brace matched with the *second* brace instead of the first
+        if (target == '[') {
+            int open = StringUtils.countMatches(priorLine, '[');
+            int close = StringUtils.countMatches(priorLine, ']');
+            return StringUtils.ordinalIndexOf(priorLine, "[", 1 + open - close);
+        }
+        return priorLine.indexOf(target);
     }
 
     public String builderExampleAdmonition() {

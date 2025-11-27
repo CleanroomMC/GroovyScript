@@ -14,9 +14,9 @@ mods.betterwithmods.anvil_crafting.removeByOutput(item('betterwithmods:steel_blo
 mods.betterwithmods.anvil_crafting.shapedBuilder()
     .output(item('minecraft:diamond') * 32)
     .matrix([[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),null],
-            [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),null],
-            [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),null],
-            [null,null,null,item('minecraft:gold_ingot').transform({ _ -> item('minecraft:diamond') })]])
+             [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),null],
+             [item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),null],
+             [null,null,null,item('minecraft:gold_ingot').transform({ _ -> item('minecraft:diamond') })]])
     .register()
 
 mods.betterwithmods.anvil_crafting.shapedBuilder()
