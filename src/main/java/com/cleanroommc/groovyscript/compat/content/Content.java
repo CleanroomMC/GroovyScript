@@ -2,10 +2,7 @@ package com.cleanroommc.groovyscript.compat.content;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
-import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RecipeBuilderDescription;
-import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.registry.NamedRegistry;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
 import groovy.lang.Closure;
@@ -22,7 +19,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-@RegistryDescription(location = LoadStage.PRE_INIT, category = RegistryDescription.Category.CUSTOM, priority = 500)
+@RegistryDescription(location = LoadStage.PRE_INIT, category = RegistryDescription.Category.CUSTOM, priority = 500, admonition = {
+        @Admonition(value = "groovyscript.wiki.minecraft.content.note0", type = Admonition.Type.WARNING),
+        @Admonition(value = "groovyscript.wiki.minecraft.content.note1", type = Admonition.Type.DANGER),
+})
 public class Content extends NamedRegistry {
 
     public CreativeTabs defaultTab;

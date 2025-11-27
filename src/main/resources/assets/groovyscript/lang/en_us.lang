@@ -221,7 +221,9 @@ groovyscript.wiki.minecraft.content.operation.query=Helper methods
 groovyscript.wiki.minecraft.content.operation.adding=Create Custom Content
 #groovyscript.wiki.minecraft.content.operation.removing=unused
 groovyscript.wiki.minecraft.content.operation.values=Creative Tab Manipulation
-groovyscript.wiki.minecraft.content.description=Creates custom items, blocks, and fluids for later use.
+groovyscript.wiki.minecraft.content.description=Creates custom items, blocks, and fluids for later use. Textures and other assets such as translations will be loaded from the `groovy/assets/` folder.
+groovyscript.wiki.minecraft.content.note0=Item and blocks will automatically generate a model file inside if one is not present. Textures will be `missingno` until assigned, and names will be the raw lang key until a localization file sets the relevant lang key to a value. The localization file must be all lowercase, such as `en_us.lang`!
+groovyscript.wiki.minecraft.content.note1=The [packid](../../getting_started/run_config.md#packid) must be valid for any content to be created!
 groovyscript.wiki.minecraft.content.registerBlock=Register an already created block. Useful for when provided methods do not suffice to create the desired block
 groovyscript.wiki.minecraft.content.registerFluid=Register an already created fluid. Useful for when provided methods do not suffice to create the desired fluid
 groovyscript.wiki.minecraft.content.registerItem=Register an already created item. Useful for when provided methods do not suffice to create the desired item
@@ -229,13 +231,13 @@ groovyscript.wiki.minecraft.content.createCreativeTab=Create a creative tab with
 groovyscript.wiki.minecraft.content.setDefaultCreativeTab=Sets the default Creative Tab used when registering items through GroovyScript
 groovyscript.wiki.minecraft.content.getDefaultTab=Get the default Creative Tab for GroovyScript, which is set by `setDefaultCreativeTab`
 
-groovyscript.wiki.minecraft.content.createBlock.title=Create Custom Block
-groovyscript.wiki.minecraft.content.createBlock.description0=Create a GroovyBlock with the given name and material
-groovyscript.wiki.minecraft.content.createBlock.description1=Create a GroovyBlock with the given name with the material `Material.ROCK`
-groovyscript.wiki.minecraft.content.createFluid.title=Create Custom Fluid
+groovyscript.wiki.minecraft.content.createBlock.title=Create Custom Blocks
+groovyscript.wiki.minecraft.content.createBlock.description0=Create a GroovyBlock with the given name and material. The name is the registry name used and must consist of exclusively lower case letters, numbers, and underscores `_`.
+groovyscript.wiki.minecraft.content.createBlock.description1=Create a GroovyBlock with the given name with the material `Material.ROCK`. The name is the registry name used and must consist of exclusively lower case letters, numbers, and underscores `_`.
+groovyscript.wiki.minecraft.content.createFluid.title=Create Custom Fluids
 groovyscript.wiki.minecraft.content.createFluid.description=Create a GroovyFluid with the given name
-groovyscript.wiki.minecraft.content.createItem.title=Create Custom Item
-groovyscript.wiki.minecraft.content.createItem.description=Create a GroovyItem with the given name
+groovyscript.wiki.minecraft.content.createItem.title=Create Custom Items
+groovyscript.wiki.minecraft.content.createItem.description=Create a GroovyItem with the given name. The name is the registry name used and must consist of exclusively lower case letters, numbers, and underscores `_`.
 
 groovyscript.wiki.minecraft.content.rarity.value=Sets the rarity this will be is displayed as, primarily impacts the color of its name
 

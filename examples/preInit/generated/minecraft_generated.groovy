@@ -11,7 +11,8 @@ import net.minecraft.entity.player.EntityPlayer
 log 'running Vanilla Minecraft example'
 
 // Vanilla Content Creation:
-// Creates custom items, blocks, and fluids for later use.
+// Creates custom items, blocks, and fluids for later use. Textures and other assets such as translations will be loaded
+// from the `groovy/assets/` folder.
 
 content.setDefaultCreativeTab(content.createCreativeTab('groovyscript.example_creative_tab', _ -> item('groovyscriptdev:heartofauniverse')))
 
