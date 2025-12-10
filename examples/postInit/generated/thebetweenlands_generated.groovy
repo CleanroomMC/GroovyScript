@@ -6,7 +6,7 @@ log 'mod \'thebetweenlands\' detected, running script'
 
 // Animator:
 // Converts an input item, Life amount from Life Crystals, and Fuel from Sulfur into an output itemstack, summoning an
-// entity, a random item from a loottable, or summoning an entity and outputting an itemstack.
+// entity, or a random item from a loottable.
 
 mods.thebetweenlands.animator.removeByInput(item('thebetweenlands:bone_leggings'))
 mods.thebetweenlands.animator.removeByEntity(entity('thebetweenlands:sporeling'))
@@ -33,14 +33,6 @@ mods.thebetweenlands.animator.recipeBuilder()
     .entity(entity('minecraft:zombie').getEntityClass())
     .life(1)
     .fuel(5)
-    .register()
-
-mods.thebetweenlands.animator.recipeBuilder()
-    .input(item('minecraft:diamond'))
-    .entity(entity('minecraft:enderman'))
-    .output(item('minecraft:clay'))
-    .life(3)
-    .fuel(10)
     .register()
 
 

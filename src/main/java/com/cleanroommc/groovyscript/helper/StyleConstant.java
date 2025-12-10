@@ -67,7 +67,7 @@ public class StyleConstant {
      * Used for titles to make them emphasised and keep them distinct from the surrounding text
      */
     public static Style getTitleStyle() {
-        return new Style().setColor(TextFormatting.WHITE).setBold(true);
+        return new Style().setColor(TextFormatting.WHITE).setBold(Boolean.TRUE);
     }
 
     /**
@@ -98,5 +98,13 @@ public class StyleConstant {
      */
     public static Style getErrorStyle() {
         return new Style().setColor(ERROR);
+    }
+
+    /**
+     * Used when the text is substituted based on outcome and should be slightly emphasized,
+     * but doesn't necessarily indicate status.
+     */
+    public static Style getTipStyle() {
+        return new Style().setItalic(Boolean.TRUE).setColor(TextFormatting.GRAY);
     }
 }

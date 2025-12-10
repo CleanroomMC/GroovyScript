@@ -26,6 +26,7 @@ public class GroovyScriptKeybinds {
 
     public static void initialize() {
         addKey(ReloadKey.createKeybind());
+        addKey(QuickReloadKey.createKeybind());
         addKey(CopyKey.createKeybind());
     }
 
@@ -91,6 +92,10 @@ public class GroovyScriptKeybinds {
         private final int keyCode;
 
         private final KeyBinding key;
+
+        public Key(String name) {
+            this(name, KeyConflictContext.UNIVERSAL, KeyModifier.NONE, Keyboard.KEY_NONE);
+        }
 
         public Key(String name, int keyCode) {
             this(name, KeyConflictContext.UNIVERSAL, KeyModifier.NONE, keyCode);
