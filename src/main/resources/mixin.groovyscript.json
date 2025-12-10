@@ -30,6 +30,7 @@
     "groovy.MetaClassImplMixin",
     "groovy.ModuleNodeAccessor",
     "groovy.ModuleNodeMixin",
+    "groovy.ResolveVisitorMixin",
     "loot.LoadTableEventMixin",
     "loot.LootPoolAccessor",
     "loot.LootTableAccessor",

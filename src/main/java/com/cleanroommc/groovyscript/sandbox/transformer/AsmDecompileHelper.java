@@ -1,8 +1,12 @@
 package com.cleanroommc.groovyscript.sandbox.transformer;
 
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.Launch;
+import net.minecraftforge.fml.common.asm.ASMTransformerWrapper;
+import net.minecraftforge.fml.common.asm.transformers.SideTransformer;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public class AsmDecompileHelper {
@@ -30,6 +35,8 @@ public class AsmDecompileHelper {
     private static Class<?> decompilerClass;
     private static Constructor<?> decompilerConstructor;
     private static Field resultField;
+
+    public static final Set<String> removedSidedClasses = new ObjectOpenHashSet<>();
 
     private static final Map<String, SoftReference<ClassStub>> stubCache = new Object2ObjectOpenHashMap<>();
 
@@ -73,6 +80,7 @@ public class AsmDecompileHelper {
             byte[] bytes = Launch.classLoader.getClassBytes(className);
             if (bytes == null) return null;
             bytes = transform(className, bytes);
+            if (bytes == null) return null;
             groovyjarjarasm.asm.ClassReader classReader = new groovyjarjarasm.asm.ClassReader(bytes);
             groovyjarjarasm.asm.ClassVisitor decompiler = makeGroovyDecompiler();
             classReader.accept(decompiler, ClassReader.SKIP_FRAMES);
@@ -96,7 +104,19 @@ public class AsmDecompileHelper {
         String untransformed = FMLDeobfuscatingRemapper.INSTANCE.unmap(className.replace('.', '/')).replace('/', '.');
         String transformed = FMLDeobfuscatingRemapper.INSTANCE.map(className.replace('.', '/')).replace('/', '.');
         for (IClassTransformer transformer : Launch.classLoader.getTransformers()) {
-            bytes = transformer.transform(untransformed, transformed, bytes);
+            try {
+                bytes = transformer.transform(untransformed, transformed, bytes);
+            } catch (Exception e) {
+                // groovy tries to load classes from imports, some of those are client only classes
+                // so with this cursed thing we check if it was removed by SideTransformer, which very likely means the class is loaded on the wrong side
+                // we add that class to a set, for a mixin to check
+                if (transformer instanceof SideTransformer || (transformer instanceof ASMTransformerWrapper.TransformerWrapper wrapper && wrapper.toString().contains("net.minecraftforge.fml.common.asm.transformers.SideTransformer"))) {
+                    removedSidedClasses.add(className);
+                } else {
+                    GroovyLog.get().error("Failed to apply transformer {} to class {}", transformer, className);
+                }
+                return null;
+            }
         }
         return bytes;
     }
