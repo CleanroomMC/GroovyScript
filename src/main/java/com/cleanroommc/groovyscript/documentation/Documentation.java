@@ -1,12 +1,11 @@
 package com.cleanroommc.groovyscript.documentation;
 
 import com.cleanroommc.groovyscript.GroovyScript;
-import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
-import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.api.documentation.IContainerDocumentation;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.documentation.format.IFormat;
 import com.cleanroommc.groovyscript.documentation.format.OutputFormat;
+import com.cleanroommc.groovyscript.documentation.helper.ContainerHolder;
 import com.cleanroommc.groovyscript.documentation.helper.GenerationFlags;
 import com.cleanroommc.groovyscript.documentation.helper.LangHelper;
 import com.cleanroommc.groovyscript.sandbox.LoadStage;
@@ -25,51 +24,75 @@ public class Documentation {
     public static final int MAX_LINE_LENGTH = 120;
     public static final boolean USE_DEFAULT_BRANCH = FMLLaunchHandler.isDeobfuscatedEnvironment();
 
+    public static final String GROOVY_FILE_EXTENSION = ".groovy";
+    public static final String MARKDOWN_FILE_EXTENSION = ".md";
+
     public static final File EXAMPLES = new File(GroovyScript.getScriptPath());
     public static final File WIKI = new File(new File(GroovyScript.getScriptFile().getParentFile(), "build"), "wiki");
+    public static final File WIKI_MODS = new File(WIKI, "mods");
+    public static final File WIKI_MINECRAFT = new File(WIKI, "minecraft");
 
     public static final IFormat DEFAULT_FORMAT = OutputFormat.VITEPRESS;
 
     public static void generate() {
-        if (GenerationFlags.GENERATE_EXAMPLES) generateExamples();
-        if (GenerationFlags.GENERATE_WIKI) generateWiki();
+        if (GenerationFlags.GENERATE_EXAMPLES) generateExamples(false);
+        if (GenerationFlags.GENERATE_WIKI) generateWiki(false);
+        logMissing();
         if (GenerationFlags.GENERATE_AND_CRASH) FMLCommonHandler.instance().exitJava(0, false);
     }
 
-    public static void generateExamples() {
+    public static void ensureDirectoryExists(File folder) {
         try {
-            Files.createDirectories(EXAMPLES.toPath());
-            for (LoadStage stage : LoadStage.getLoadStages()) {
-                File target = new File(EXAMPLES, stage.getName());
-                Files.createDirectories(target.toPath());
-
-                for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
-                    if (!mod.isLoaded()) continue;
-                    Exporter.generateExamples(stage.getName(), mod);
-                }
-            }
+            Files.createDirectories(folder.toPath());
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
         }
-        logMissing();
+    }
+
+    public static File generatedExampleFolder(LoadStage stage) {
+        return new File(new File(EXAMPLES, stage.getName()), "generated");
+    }
+
+    public static File generatedExampleFile(File parent, String location) {
+        return new File(parent, location + "_generated" + GROOVY_FILE_EXTENSION);
+    }
+
+    public static File generatedExampleFile(LoadStage stage, String location) {
+        return generatedExampleFile(generatedExampleFolder(stage), location);
+    }
+
+    public static void generateExamples() {
+        generateExamples(true);
+    }
+
+    private static void generateExamples(boolean log) {
+        for (LoadStage stage : LoadStage.getLoadStages()) {
+            File generatedFolder = generatedExampleFolder(stage);
+            ensureDirectoryExists(generatedFolder);
+            for (var container : ModSupport.getAllContainers()) {
+                if (!container.isLoaded()) continue;
+                File file = generatedExampleFile(generatedFolder, container.getModId());
+                if (!(container instanceof IContainerDocumentation doc) || doc.generateExamples(file, stage)) {
+                    Exporter.generateExamples(file, stage, ContainerHolder.of(container));
+                }
+            }
+        }
+        if (log) logMissing();
     }
 
     public static void generateWiki() {
-        try {
-            Files.createDirectories(WIKI.toPath());
-            for (GroovyContainer<? extends GroovyPropertyContainer> mod : ModSupport.getAllContainers()) {
-                if (!mod.isLoaded()) continue;
-                File target = new File(WIKI, mod.getModId());
-                if (target.exists() || Files.createDirectories(target.toPath()) != null) {
-                    Exporter.generateWiki(DEFAULT_FORMAT, target, mod);
-                } else {
-                    GroovyLog.get().error("Error creating file at {} to generate wiki files in", target);
-                }
+        generateWiki(true);
+    }
+
+    private static void generateWiki(boolean log) {
+        for (var container : ModSupport.getAllContainers()) {
+            if (!container.isLoaded()) continue;
+            File target = new File(WIKI_MODS, container.getModId());
+            if (!(container instanceof IContainerDocumentation doc) || doc.generateWiki(target)) {
+                Exporter.generateWiki(target, ContainerHolder.of(container));
             }
-        } catch (IOException e) {
-            GroovyScript.LOGGER.throwing(e);
         }
-        logMissing();
+        if (log) logMissing();
     }
 
     private static void logMissing() {

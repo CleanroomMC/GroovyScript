@@ -4,6 +4,7 @@ import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.ExplosionRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -21,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
 
     private final List<ExplosionRecipe> explosionRecipes = new ArrayList<>();
@@ -36,6 +38,11 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
         return this.explosionRecipes;
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:nether_star')).chance(0.4f)"),
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:clay')).startCondition({ entityItem, itemStack -> entityItem.posY <= 60 })"),
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond'))")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -99,16 +106,22 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
         }
     }
 
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ExplosionRecipe> {
 
+        @Property(comp = @Comp(gte = 0, lte = 1), defaultValue = "1.0f")
         private float chance = 1.0f;
+        @Property("groovyscript.wiki.in_world_crafting.startCondition.value")
         private Closure<Boolean> startCondition;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder chance(float chance) {
             this.chance = chance;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder startCondition(Closure<Boolean> startCondition) {
             this.startCondition = startCondition;
             return this;
@@ -130,6 +143,7 @@ public class Explosion extends StandardListRegistry<Explosion.ExplosionRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable Explosion.ExplosionRecipe register() {
             if (!validate()) return null;
             ExplosionRecipe explosionRecipe = new ExplosionRecipe(this.input.get(0), this.output.get(0), this.chance, this.startCondition);

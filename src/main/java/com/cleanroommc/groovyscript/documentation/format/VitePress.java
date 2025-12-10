@@ -41,6 +41,11 @@ public class VitePress implements IFormat {
     }
 
     @Override
+    public String header(int level, String text) {
+        return StringUtils.repeat('#', level) + " " + text;
+    }
+
+    @Override
     public String removeTableOfContentsText() {
         return "aside: false";
     }

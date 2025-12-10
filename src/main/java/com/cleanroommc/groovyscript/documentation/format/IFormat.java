@@ -40,6 +40,13 @@ public interface IFormat {
     String codeBlockHighlights(List<String> highlight);
 
     /**
+     * @param level the level of header
+     * @param text  the text of the header itself
+     * @return a header of the given size for the given text
+     */
+    String header(int level, String text);
+
+    /**
      * @return the String to hide the Table of Contents (sidebar showing Headers on focused file) from the page
      */
     String removeTableOfContentsText();

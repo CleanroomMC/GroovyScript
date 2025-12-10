@@ -113,8 +113,14 @@ public class GroovyScriptSandbox {
 
     public void registerBinding(INamed named) {
         Objects.requireNonNull(named);
-        for (String alias : named.getAliases()) {
-            bindings.put(alias, named);
+        registerBinding(named.getAliases(), named);
+    }
+
+    public void registerBinding(Collection<String> names, Object obj) {
+        Objects.requireNonNull(obj);
+        for (String name : names) {
+            Objects.requireNonNull(name);
+            bindings.put(name, obj);
         }
     }
 

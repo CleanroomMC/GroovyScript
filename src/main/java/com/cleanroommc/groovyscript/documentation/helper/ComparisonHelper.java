@@ -1,25 +1,25 @@
 package com.cleanroommc.groovyscript.documentation.helper;
 
-import com.cleanroommc.groovyscript.api.INamed;
+import com.cleanroommc.groovyscript.api.documentation.IRegistryDocumentation;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.documentation.Builder;
 import com.cleanroommc.groovyscript.documentation.helper.descriptor.DescriptorHelper;
 import com.cleanroommc.groovyscript.documentation.helper.descriptor.MethodAnnotation;
 import com.google.common.collect.ComparisonChain;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 
 /**
  * A helper class for comparing various documentation elements against each other.
- *
  */
 public final class ComparisonHelper {
 
     private ComparisonHelper() {}
 
-    public static int iNamed(INamed left, INamed right) {
+    public static int iRegistryDocumentation(IRegistryDocumentation left, IRegistryDocumentation right) {
         return ComparisonChain.start()
-                .compare(left.getClass().getAnnotation(RegistryDescription.class).priority(), right.getClass().getAnnotation(RegistryDescription.class).priority())
+                .compare(left.priority(), right.priority())
                 .compare(left.getName(), right.getName())
                 .result();
     }
@@ -33,13 +33,10 @@ public final class ComparisonHelper {
     }
 
     public static int example(Example left, Example right) {
-        var leftValue = left.value();
-        var rightValue = right.value();
         return ComparisonChain.start()
                 .compare(left.priority(), right.priority())
                 .compareFalseFirst(left.commented(), right.commented())
-                .compare(leftValue.length(), rightValue.length())
-                .compare(leftValue, rightValue)
+                .compare(left.value(), right.value(), ComparisonHelper::string)
                 .result();
     }
 
@@ -50,10 +47,8 @@ public final class ComparisonHelper {
         String rightPart = rightSignature.substring(0, rightSignature.indexOf("("));
         return ComparisonChain.start()
                 .compare(left.annotation().priority(), right.annotation().priority())
-                .compare(leftPart.length(), rightPart.length())
-                .compare(leftPart, rightPart, String::compareToIgnoreCase)
-                .compare(leftSignature.length(), rightSignature.length())
-                .compare(leftSignature, rightSignature, String::compareToIgnoreCase)
+                .compare(leftPart, rightPart, ComparisonHelper::string)
+                .compare(leftSignature, rightSignature, ComparisonHelper::string)
                 .result();
     }
 
@@ -76,8 +71,7 @@ public final class ComparisonHelper {
         var rightName = right.method().getName();
         return ComparisonChain.start()
                 .compare(left.annotation().priority(), right.annotation().priority())
-                .compare(leftName.length(), rightName.length())
-                .compare(leftName, rightName, String::compareToIgnoreCase)
+                .compare(leftName, rightName, ComparisonHelper::string)
                 .result();
     }
 
@@ -86,14 +80,31 @@ public final class ComparisonHelper {
         var rightName = right.getField().getName();
         return ComparisonChain.start()
                 .compare(left.priority(), right.priority())
-                .compare(leftName.length(), rightName.length())
-                .compare(leftName, rightName, String::compareToIgnoreCase)
+                .compare(leftName, rightName, ComparisonHelper::string)
                 .result();
     }
 
     public static int property(Property left, Property right) {
         return ComparisonChain.start()
                 .compare(left.hierarchy(), right.hierarchy())
+                .result();
+    }
+
+    public static int packages(String left, String right) {
+        var a = StringUtils.split(left, '.');
+        var b = StringUtils.split(right, '.');
+        var chain = ComparisonChain.start().compare(a.length, b.length);
+        int bound = Math.min(a.length, b.length);
+        for (int x = 0; x < bound; x++) {
+            chain = chain.compare(a[x], b[x], ComparisonHelper::string);
+        }
+        return chain.result();
+    }
+
+    private static int string(String left, String right) {
+        return ComparisonChain.start()
+                .compare(left.length(), right.length())
+                .compare(left, right, String::compareToIgnoreCase)
                 .result();
     }
 
@@ -104,12 +115,12 @@ public final class ComparisonHelper {
                 .result();
     }
 
-    private static int comparePriorityAndMethod(int leftPriority, int rightPriority, Method leftMethod, Method rightName) {
+    private static int comparePriorityAndMethod(int leftPriority, int rightPriority, Method leftMethod, Method rightMethod) {
         return ComparisonChain.start()
                 .compare(leftPriority, rightPriority)
-                .compare(leftMethod.getName(), rightName.getName(), String::compareToIgnoreCase)
-                .compare(DescriptorHelper.simpleParameters(leftMethod), DescriptorHelper.simpleParameters(rightName), String::compareToIgnoreCase)
+                .compare(leftMethod.getName(), rightMethod.getName(), ComparisonHelper::string)
+                .compare(DescriptorHelper.simpleParameters(leftMethod), DescriptorHelper.simpleParameters(rightMethod), ComparisonHelper::packages)
+                .compareFalseFirst(leftMethod.isVarArgs(), rightMethod.isVarArgs())
                 .result();
-
     }
 }

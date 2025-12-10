@@ -65,7 +65,9 @@ groovyscript.wiki.subcategories_count=Has %s subcategories.
 groovyscript.wiki.description=Description
 groovyscript.wiki.identifier=Identifier
 groovyscript.wiki.defaultPackage=Used as page default
-groovyscript.wiki.import_instructions=Refer to this via any of the following:
+groovyscript.wiki.import_default=The identifier `%s` will be used as the default on this page.
+groovyscript.wiki.all_packages_title=All Identifiers
+groovyscript.wiki.import_instructions=Any of these can be used to refer to this compat:
 groovyscript.wiki.editing_values=Editing Values
 groovyscript.wiki.adding_recipes=Adding Recipes
 groovyscript.wiki.adding_entries=Adding Entries
@@ -112,6 +114,8 @@ groovyscript.wiki.craftingrecipe.keyBasedMatrix.value=Sets the items required in
 groovyscript.wiki.craftingrecipe.keyMap.value=Sets the item the given char corresponds to
 groovyscript.wiki.craftingrecipe.ingredientMatrix.value=Sets the items required in each slot in the grid as IIngredients
 groovyscript.wiki.craftingrecipe.ingredients.value=Sets the items required for the recipe
+groovyscript.wiki.craftingrecipe.replace.replace.description=Makes the recipe remove by the ItemStack output
+groovyscript.wiki.craftingrecipe.replace.replaceByName.description=Makes the recipe remove by the Resource Location name
 
 groovyscript.wiki.removeByInput=Removes all recipes that match the given input
 groovyscript.wiki.removeByOutput=Removes all recipes that match the given output
@@ -121,6 +125,10 @@ groovyscript.wiki.removeByCatalyst=Removes all recipes that match the given cata
 groovyscript.wiki.removeByInputAndCatalyst=This removes all recipes that match the given input and Catalyst
 groovyscript.wiki.streamRecipes=Iterates through every entry in the registry, with the ability to call remove on any element to remove it
 groovyscript.wiki.removeAll=Removes all registered recipes
+
+groovyscript.wiki.probability_default.description=100%% chance
+groovyscript.wiki.time_ticks.description=Sets the time in ticks
+groovyscript.wiki.time_seconds.description=Sets the time in seconds
 
 groovyscript.wiki.less_than=less than %s
 groovyscript.wiki.less_than_or_equal_to=less than or equal to %s
@@ -133,6 +141,9 @@ groovyscript.wiki.and=and
 
 
 # Vanilla Minecraft
+groovyscript.wiki.minecraft.index.title=Vanilla Minecraft Registries
+groovyscript.wiki.minecraft.index.description=This is where GroovyScript handles compatibility with Vanilla Minecraft.%n%nSome documentation is not complete - particularly loot compat. To learn more, view the [example page](https://github.com/CleanroomMC/GroovyScript/blob/master/examples/postInit/custom/loottables.groovy).
+
 groovyscript.wiki.minecraft.crafting.title=Crafting Table
 groovyscript.wiki.minecraft.crafting.description=A normal crafting recipe that takes place in the Vanilla Crafting Table, converting up to 9 items in a shapeless or specific shaped arrangement into an output itemstack.
 groovyscript.wiki.minecraft.crafting.note0=While shorthand methods to create recipes have been supplied, it is far easier to use the recipe builder.
@@ -205,6 +216,118 @@ groovyscript.wiki.minecraft.game_rule.setWarnNewGameRule=Sets if creating new Ga
 groovyscript.wiki.minecraft.game_rule.add=Adds a new entry in the format `name`, `value`, with `value` being a String that can represent a number (`-1`, `5`) or boolean (`true`, `false`)
 groovyscript.wiki.minecraft.game_rule.addMap=Adds a map of GameRule name to values
 
+## Content
+groovyscript.wiki.minecraft.content.title=Vanilla Content Creation
+groovyscript.wiki.minecraft.content.operation.query=Helper methods
+groovyscript.wiki.minecraft.content.operation.adding=Create Custom Content
+#groovyscript.wiki.minecraft.content.operation.removing=unused
+groovyscript.wiki.minecraft.content.operation.values=Creative Tab Manipulation
+groovyscript.wiki.minecraft.content.description=Creates custom items, blocks, and fluids for later use. Textures and other assets such as translations will be loaded from the `groovy/assets/` folder.
+groovyscript.wiki.minecraft.content.note0=Item and blocks will automatically generate a model file inside if one is not present. Textures will be `missingno` until assigned, and names will be the raw lang key until a localization file sets the relevant lang key to a value. The localization file must be all lowercase, such as `en_us.lang`!
+groovyscript.wiki.minecraft.content.note1=The [packid](../../getting_started/run_config.md#packid) must be valid for any content to be created!
+groovyscript.wiki.minecraft.content.registerBlock=Register an already created block. Useful for when provided methods do not suffice to create the desired block
+groovyscript.wiki.minecraft.content.registerFluid=Register an already created fluid. Useful for when provided methods do not suffice to create the desired fluid
+groovyscript.wiki.minecraft.content.registerItem=Register an already created item. Useful for when provided methods do not suffice to create the desired item
+groovyscript.wiki.minecraft.content.createCreativeTab=Create a creative tab with the given icon
+groovyscript.wiki.minecraft.content.setDefaultCreativeTab=Sets the default Creative Tab used when registering items through GroovyScript
+groovyscript.wiki.minecraft.content.getDefaultTab=Get the default Creative Tab for GroovyScript, which is set by `setDefaultCreativeTab`
+
+groovyscript.wiki.minecraft.content.createBlock.title=Create Custom Blocks
+groovyscript.wiki.minecraft.content.createBlock.description0=Create a GroovyBlock with the given name and material. The name is the registry name used and must consist of exclusively lower case letters, numbers, and underscores `_`.
+groovyscript.wiki.minecraft.content.createBlock.description1=Create a GroovyBlock with the given name with the material `Material.ROCK`. The name is the registry name used and must consist of exclusively lower case letters, numbers, and underscores `_`.
+groovyscript.wiki.minecraft.content.createFluid.title=Create Custom Fluids
+groovyscript.wiki.minecraft.content.createFluid.description=Create a GroovyFluid with the given name
+groovyscript.wiki.minecraft.content.createItem.title=Create Custom Items
+groovyscript.wiki.minecraft.content.createItem.description=Create a GroovyItem with the given name. The name is the registry name used and must consist of exclusively lower case letters, numbers, and underscores `_`.
+
+groovyscript.wiki.minecraft.content.rarity.value=Sets the rarity this will be is displayed as, primarily impacts the color of its name
+
+# Item
+groovyscript.wiki.minecraft.content.tabToDisplayOn.value=Sets the Creative Tab the item should display on
+groovyscript.wiki.minecraft.content.maxStackSize.value=Sets the max stack size of the item
+groovyscript.wiki.minecraft.content.maxDamage.value=Sets the max damage of the item, used as durability for tools
+groovyscript.wiki.minecraft.content.bFull3D.value=Sets if the items render the object in full 3D, like tools
+groovyscript.wiki.minecraft.content.hasSubtypes.value=Sets if the item has subtypes, like dyes or terracotta
+groovyscript.wiki.minecraft.content.containerItem.value=Sets the Container Item, which will replace this item when it breaks
+groovyscript.wiki.minecraft.content.canRepair.value=Sets if the item can be repaired, typically by combining two of the same item in the crafting grid
+groovyscript.wiki.minecraft.content.effect.value=Sets if the item has the shimmer effect, typically associated with potions or enchantments
+groovyscript.wiki.minecraft.content.enchantability.value=Sets the enchantability level
+groovyscript.wiki.minecraft.content.item.translationKey.value=Sets the base String used for translation. Prefixed by `item.` and checks the suffix `.name` for the item display name
+groovyscript.wiki.minecraft.content.item.register.description=Registers the Item and returns itself (returns `GroovyItem`)
+
+# Block
+groovyscript.wiki.minecraft.content.displayOnCreativeTab.value=Sets the Creative Tab the item representing the block should be displayed on
+groovyscript.wiki.minecraft.content.fullBlock.value=Sets if the block is a full block
+groovyscript.wiki.minecraft.content.lightOpacity.value=Sets how much light is subtracted for going through this block
+groovyscript.wiki.minecraft.content.translucent.value=Sets if the block is translucent
+groovyscript.wiki.minecraft.content.lightValue.value=Sets how much light the block emits, multiplied by 15
+#groovyscript.wiki.minecraft.content.useNeighborBrightness.value=fieldOnly
+groovyscript.wiki.minecraft.content.blockHardness.value=Sets the difficulty of the block to break, primarily affecting the speed to break. A hardness of `0` will cause no durability loss, and a hardness of `-1` will be unbreakable
+groovyscript.wiki.minecraft.content.blockResistance.value=Sets the explosion resistance of the block
+#groovyscript.wiki.minecraft.content.enableStats.value=fieldOnly #Sets if the block is counted for the stats page
+groovyscript.wiki.minecraft.content.needsRandomTick.value=Sets if the block has random ticks
+groovyscript.wiki.minecraft.content.blockSoundType.value=Sets the sound played when stepping on the block
+#groovyscript.wiki.minecraft.content.blockParticleGravity.value=fieldOnly
+groovyscript.wiki.minecraft.content.defaultBlockState.value=Sets the default `IBlockState` for the block
+groovyscript.wiki.minecraft.content.block.translationKey.value=Sets the base String used for translation. Prefixed by `tile.` and checks the suffix `.name` for the block display name
+groovyscript.wiki.minecraft.content.block.setHardness.description=Also increases block resistance to itself * 5
+groovyscript.wiki.minecraft.content.block.setBlockUnbreakable.description=Makes the block unbreakable by setting hardness to -1.0f
+groovyscript.wiki.minecraft.content.block.register.description=Registers the Block and a corresponding ItemBlock and returns itself (returns `GroovyBlock`)
+
+# Fluid
+groovyscript.wiki.minecraft.content.still.value=Sets the texture used for when the fluid is still
+groovyscript.wiki.minecraft.content.flowing.value=Sets the texture used for when the fluid is flowing
+groovyscript.wiki.minecraft.content.overlay.value=Sets the texture used as an overlay for the fluid
+groovyscript.wiki.minecraft.content.color.value=Sets the color of the fluid
+groovyscript.wiki.minecraft.content.fillSound.value=Sets the sound played when the fluid is picked up
+groovyscript.wiki.minecraft.content.emptySound.value=Sets the sound played when the fluid is emptied out
+groovyscript.wiki.minecraft.content.luminosity.value=Sets how much light the fluid produces
+groovyscript.wiki.minecraft.content.density.value=Sets the density of the fluid, which controls what other fluids it can displace
+groovyscript.wiki.minecraft.content.temperature.value=Sets the temperature of the fluid
+groovyscript.wiki.minecraft.content.viscosity.value=Sets the viscosity of the fluid, which impacts how fast the fluid spreads
+groovyscript.wiki.minecraft.content.isGaseous.value=Sets if the fluid is gaseous, typically indicating a negative density
+groovyscript.wiki.minecraft.content.material.value=Sets the material the block has, if a block is created
+groovyscript.wiki.minecraft.content.createBlock.value=Sets if the fluid creates a block
+groovyscript.wiki.minecraft.content.finiteFluidBlock.value=Sets if the fluid is a finite block, if a block is created
+groovyscript.wiki.minecraft.content.fluid.setTexture0.description=still, flowing
+groovyscript.wiki.minecraft.content.fluid.setTexture1.description=still, flowing, overlay
+groovyscript.wiki.minecraft.content.fluid.register.description=Registers the Fluid and returns the registered Fluid (returns `Fluid`)
+
+
+# In-World Crafting
+groovyscript.wiki.in_world_crafting.index.title=In-World Crafting
+groovyscript.wiki.in_world_crafting.index.description=GroovyScript adds the ability to craft things in-world via specific processes. By default, no recipes are created and everything must be added by you through GroovyScript.
+
+groovyscript.wiki.in_world_crafting.chances.value=Sets the chance each input has to be consumed
+groovyscript.wiki.in_world_crafting.chances.required=exactly equal to the number of elements in `input`
+groovyscript.wiki.in_world_crafting.startCondition.value=Sets an additional check that must be passed before the recipe runs, with the Closure taking 2 parameters, `World world` and `BlockPos blockPos`
+groovyscript.wiki.in_world_crafting.afterRecipe.value=Sets a closure that will run after the recipe completes, with the Closure taking 2 parameters, `World world` and `BlockPos blockPos`
+
+groovyscript.wiki.in_world_crafting.burning.title=Burning Conversion
+groovyscript.wiki.in_world_crafting.burning.description=Converts an input item into an output itemstack after some number of ticks while burning. This also makes the input item effectively fireproof.
+groovyscript.wiki.in_world_crafting.burning.ticks.value=Sets the time in ticks the item must be burning before it converts
+
+groovyscript.wiki.in_world_crafting.explosion.title=Explosion Conversion
+groovyscript.wiki.in_world_crafting.explosion.description=Converts an input itemstack into an output itemstack, with an optional fail rate.
+groovyscript.wiki.in_world_crafting.explosion.chance.value=Sets the chance the conversion occurs instead of the input being destroyed
+
+groovyscript.wiki.in_world_crafting.fluid_to_block.title=Fluid and ItemStack To Block Conversion
+groovyscript.wiki.in_world_crafting.fluid_to_block.description=Converts any number of input itemstacks and a fluid source block into a block in-world, with each input having a chance to be consumed. Allows an additional closure check to start the recipe and a closure run after the recipe is finished.
+groovyscript.wiki.in_world_crafting.fluid_to_block.outputBlock.value=Sets the blockstate being output
+
+groovyscript.wiki.in_world_crafting.fluid_to_fluid.title=Fluid and ItemStack To Fluid Conversion
+groovyscript.wiki.in_world_crafting.fluid_to_fluid.description=Converts any number of input itemstacks and a fluid source block into a fluid block in-world, with each input having a chance to be consumed. Allows an additional closure check to start the recipe and a closure run after the recipe is finished.
+
+groovyscript.wiki.in_world_crafting.fluid_to_item.title=Fluid and ItemStack To ItemStack Conversion
+groovyscript.wiki.in_world_crafting.fluid_to_item.description=Converts any number of input itemstacks and a fluid source block into an itemstack in-world, with each input having a chance to be consumed and a chance to consume the fluid block. Allows an additional closure check to start the recipe and a closure run after the recipe is finished.
+groovyscript.wiki.in_world_crafting.fluid_to_item.fluidConsumptionChance.value=Sets the chance the fluid is consumed
+
+groovyscript.wiki.in_world_crafting.piston_push.title=Piston Pushing Conversion
+groovyscript.wiki.in_world_crafting.piston_push.description=Converts an input item into an output item when a piston pushes the item into a block, with an optional minimum harvest level requirement for the block. Amount converted in each entity item per push is configurable.
+groovyscript.wiki.in_world_crafting.piston_push.maxConversionsPerPush.value=Sets the maximum number of items converted from an itemstack in one press
+groovyscript.wiki.in_world_crafting.piston_push.minHarvestLevel.value=Sets the minimum harvest level required of the block being pushed against
+groovyscript.wiki.in_world_crafting.piston_push.startCondition.value=Sets an additional check that must be passed before the recipe runs, with the Closure taking 3 parameters, `EntityItem entityItem`, `ItemStack itemStack`, and `IBlockState pushingAgainst`
+
 
 # Actually Additions
 groovyscript.wiki.actuallyadditions.atomic_reconstructor.title=Atomic Reconstructor
@@ -233,6 +356,8 @@ groovyscript.wiki.actuallyadditions.empowerer.time.value=Sets the amount of time
 groovyscript.wiki.actuallyadditions.empowerer.red.value=Sets the red color
 groovyscript.wiki.actuallyadditions.empowerer.blue.value=Sets the blue color
 groovyscript.wiki.actuallyadditions.empowerer.green.value=Sets the green color
+groovyscript.wiki.actuallyadditions.empowerer.color_hex.description=Sets the color via standardized hex code
+groovyscript.wiki.actuallyadditions.empowerer.color_var.description=red, green, blue
 groovyscript.wiki.actuallyadditions.empowerer.mainInput.required=either defined in mainInput or in input
 
 groovyscript.wiki.actuallyadditions.nether_mining_lens.title=Nether Mining Lens
@@ -1113,7 +1238,7 @@ groovyscript.wiki.botania_tweaks.agglomeration_plate.cornerReplacement.value=Set
 groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByCenter=Removes all recipes with the given center IBlockState
 groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByCorner=Removes all recipes with the given corner IBlockState
 groovyscript.wiki.botania_tweaks.agglomeration_plate.removeByEdge=Removes all recipes with the given edge IBlockState
-
+groovyscript.wiki.botania_tweaks.agglomeration_plate.recipeBuilder.baseStructure.description=Makes the structure the default, with livingrock and lapis blocks
 
 # Botanic Additions
 groovyscript.wiki.botanicadds.gaia_plate.title=Gaia Plate
@@ -2415,7 +2540,7 @@ groovyscript.wiki.projecte.transmutation.description=Converts an input blockstat
 groovyscript.wiki.projecte.transmutation.input.value=Sets the input blockstate
 groovyscript.wiki.projecte.transmutation.output.value=Sets the normal output blockstate
 groovyscript.wiki.projecte.transmutation.altOutput.value=Sets the shift output blockstate
-
+groovyscript.wiki.projecte.transmutation.altOutput.description=output, altOutput
 
 # Random Things
 groovyscript.wiki.randomthings.anvil.title=Anvil Crafting
@@ -2504,6 +2629,8 @@ groovyscript.wiki.roots.mortar.generate.value=Sets if, when input has a single I
 groovyscript.wiki.roots.mortar.blue2.value=Sets the blue color value of the second version of the particle spawned
 groovyscript.wiki.roots.mortar.removeByName=Removes the Mortar recipe with the given name
 groovyscript.wiki.roots.mortar.removeByOutput=Removes the Mortar recipe with the given output itemstack
+groovyscript.wiki.roots.mortar.recipeBuilder.color_long.description=red1, green1, blue1, red2, green2, blue2
+groovyscript.wiki.roots.mortar.recipeBuilder.color.description=red, green, blue
 
 groovyscript.wiki.roots.moss.title=Moss
 groovyscript.wiki.roots.moss.description=Moss indicates a pair of items that can right click the input with a knife to turn it into the output and give a Terra Moss and right click the output with moss spores to turn it into the input.
@@ -2788,7 +2915,9 @@ groovyscript.wiki.tconstruct.casting_basin.consumesCast.value=Whether the cast i
 groovyscript.wiki.tconstruct.melting.title=Melting
 groovyscript.wiki.tconstruct.melting.description=Modifies what items can be melted down in the Smeltery.
 groovyscript.wiki.tconstruct.melting.add=Adds a new recipe in the format `input`, `output`, `time`
-groovyscript.wiki.tconstruct.melting.temp.value=Required temperature for melting. Also determines the speed of the melt
+groovyscript.wiki.tconstruct.melting.temperature.value=Required temperature for melting. Also determines the speed of the melt
+groovyscript.wiki.tconstruct.melting.time.value=Sets the time required for melting, which is based on temperature
+groovyscript.wiki.tconstruct.melting.time_temperature.unique=if time is set, temperature will be ignored
 
 groovyscript.wiki.tconstruct.entity_melting.title=Entity Melting
 groovyscript.wiki.tconstruct.entity_melting.description=Allows mobs to create a bit of fluid when hurt by the Smeltery.

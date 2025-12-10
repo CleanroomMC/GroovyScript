@@ -1,5 +1,7 @@
 package com.cleanroommc.groovyscript.api.documentation.annotations;
 
+import com.cleanroommc.groovyscript.sandbox.LoadStage;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -71,10 +73,10 @@ public @interface RegistryDescription {
     String linkGenerator() default "";
 
     /**
-     * @return the name of the stage all the compat with the registry uses. Defaults to {@code "postInit"}
+     * @return the stage all the compat with the registry uses. Defaults to {@link LoadStage#POST_INIT}
      * @see com.cleanroommc.groovyscript.sandbox.LoadStage
      */
-    String location() default "postInit";
+    LoadStage location() default LoadStage.POST_INIT;
 
     /**
      * An override to {@link MethodDescription} or {@link RecipeBuilderDescription} declarations,
@@ -119,6 +121,14 @@ public @interface RegistryDescription {
     /**
      * Controls the localization keys used refer to adding, removing, or querying the registry.
      * Primarily used to control if the registry contains specifically "recipes" or more generic "entries".
+     * <p>
+     * Using {@link Category#CUSTOM} it will instead try to read specific lang keys, checking these places for overrides:
+     * <code>
+     * <br>groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() {modId}}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() {name}}.operation.query
+     * <br>groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() {modId}}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() {name}}.operation.removing
+     * <br>groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() {modId}}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() {name}}.operation.values
+     * <br>groovyscript.wiki.{@link com.cleanroommc.groovyscript.compat.mods.GroovyContainer#getModId() {modId}}.{@link com.cleanroommc.groovyscript.registry.VirtualizedRegistry#getName() {name}}.operation.adding
+     * </code>
      *
      * @return the name of the objects within the registry. Defaults to {@code Category.RECIPES}
      * @see Category
@@ -165,29 +175,31 @@ public @interface RegistryDescription {
 
     /**
      * Controls the name of what the registry contains.
-     * Currently, either specifically "recipes" or generically "entries"
+     * Currently, either specifically "recipes", generically "entries", or entirely custom.
      */
     enum Category {
 
         RECIPES("recipes"),
-        ENTRIES("entries");
+        ENTRIES("entries"),
+        CUSTOM;
 
-        private final String category;
+        public final String query;
+        public final String adding;
+        public final String removing;
+        public final String values;
+
+        Category() {
+            this.query = null;
+            this.adding = null;
+            this.removing = null;
+            this.values = null;
+        }
 
         Category(String category) {
-            this.category = category;
-        }
-
-        public String adding() {
-            return "groovyscript.wiki.adding_" + category;
-        }
-
-        public String removing() {
-            return "groovyscript.wiki.removing_" + category;
-        }
-
-        public String query() {
-            return "groovyscript.wiki.query_" + category;
+            this.query = "groovyscript.wiki.query_" + category;
+            this.adding = "groovyscript.wiki.adding_" + category;
+            this.removing = "groovyscript.wiki.removing_" + category;
+            this.values = "groovyscript.wiki.editing_values";
         }
     }
 }

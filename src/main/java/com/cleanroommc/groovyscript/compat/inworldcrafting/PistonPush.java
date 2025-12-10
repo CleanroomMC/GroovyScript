@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.inworldcrafting;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.PistonPushRecipeCategory;
 import com.cleanroommc.groovyscript.compat.vanilla.VanillaModule;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@RegistryDescription
 public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe> {
 
     private final List<PistonPushRecipe> pistonPushRecipes = new ArrayList<>();
@@ -37,6 +39,11 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
         return this.pistonPushRecipes;
     }
 
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:gold_ingot')).output(item('minecraft:diamond')).minHarvestLevel(2).maxConversionsPerPush(3)"),
+            @Example(".input(item('minecraft:clay')).output(item('minecraft:gold_ingot'))"),
+            @Example(".input(item('minecraft:diamond')).output(item('minecraft:gold_ingot')).startCondition({entityItem, itemStack, pushingAgainst -> pushingAgainst.getBlock() == block('minecraft:clay') })"),
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -91,22 +98,30 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
         }
     }
 
+    @Property(property = "input", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<PistonPushRecipe> {
 
+        @Property(comp = @Comp(gt = 0, lte = 64), defaultValue = "64")
         private int maxConversionsPerPush = 64;
+        @Property(defaultValue = "-1")
         private int minHarvestLevel = -1;
+        @Property
         private Closure<Boolean> startCondition;
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder maxConversionsPerPush(int maxConversionsPerPush) {
             this.maxConversionsPerPush = maxConversionsPerPush;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder minHarvestLevel(int minHarvestLevel) {
             this.minHarvestLevel = minHarvestLevel;
             return this;
         }
 
+        @RecipeBuilderMethodDescription
         public RecipeBuilder startCondition(Closure<Boolean> beforeRecipe) {
             this.startCondition = beforeRecipe;
             return this;
@@ -121,13 +136,14 @@ public class PistonPush extends StandardListRegistry<PistonPush.PistonPushRecipe
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (this.maxConversionsPerPush < 0 || this.maxConversionsPerPush > 64) {
+            if (this.maxConversionsPerPush <= 0 || this.maxConversionsPerPush > 64) {
                 GroovyLog.get().warn("Piston push recipe chance should be greater than 0 and equal or less than 64.");
                 this.maxConversionsPerPush = MathHelper.clamp(this.maxConversionsPerPush, 1, 64);
             }
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable PistonPush.PistonPushRecipe register() {
             if (!validate()) return null;
             PistonPushRecipe pistonPushRecipe = new PistonPushRecipe(this.input.get(0), this.output.get(0), this.maxConversionsPerPush, this.minHarvestLevel, this.startCondition);

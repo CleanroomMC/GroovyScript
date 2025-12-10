@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.compat.inworldcrafting.InWorldCrafting;
 import com.cleanroommc.groovyscript.compat.loot.Loot;
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
 import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.sandbox.expand.ExpansionHelper;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.item.ItemStack;
@@ -61,8 +62,7 @@ public class VanillaModule extends GroovyPropertyContainer {
 
     @Override
     public void initialize(GroovyContainer<?> owner) {
-        GroovyScript.getSandbox().registerBinding("Minecraft", this);
-        GroovyScript.getSandbox().registerBinding("Vanilla", this);
+        GroovyScript.getSandbox().registerBinding(ModSupport.MINECRAFT.getAliases(), this);
 
         for (INamed registry : globalBindings) {
             GroovyScript.getSandbox().registerBinding(registry);
