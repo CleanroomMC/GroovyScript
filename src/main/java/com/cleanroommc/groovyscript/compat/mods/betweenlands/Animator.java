@@ -31,7 +31,6 @@ public class Animator extends StandardListRegistry<IAnimatorRecipe> {
             @Example(".input(item('minecraft:clay')).output(item('minecraft:diamond')).life(1).fuel(1)"),
             @Example(".input(item('minecraft:gold_ingot')).lootTable(resource('minecraft:entities/zombie')).life(5).fuel(1)"),
             @Example(".input(item('minecraft:gold_block')).entity(entity('minecraft:zombie').getEntityClass()).life(1).fuel(5)"),
-            @Example(".input(item('minecraft:diamond')).entity(entity('minecraft:enderman')).output(item('minecraft:clay')).life(3).fuel(10)"),
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -68,16 +67,16 @@ public class Animator extends StandardListRegistry<IAnimatorRecipe> {
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
-    @Property(property = "output", comp = @Comp(eq = 1))
+    @Property(property = "output", comp = @Comp(gte = 0, lte = 1, unique = "groovyscript.wiki.thebetweenlands.animator.pick_one.required"))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IAnimatorRecipe> {
 
         @Property(comp = @Comp(gte = 0))
         private int life;
         @Property(comp = @Comp(gte = 0))
         private int fuel;
-        @Property
+        @Property(comp = @Comp(unique = "groovyscript.wiki.thebetweenlands.animator.pick_one.required"))
         private ResourceLocation lootTable;
-        @Property
+        @Property(comp = @Comp(unique = "groovyscript.wiki.thebetweenlands.animator.pick_one.required"))
         private Class<? extends Entity> entity;
         @Property
         private ResourceLocation render;
@@ -135,10 +134,10 @@ public class Animator extends StandardListRegistry<IAnimatorRecipe> {
             msg.add(life < 0, "life must be a positive integer greater than 0, yet it was {}", life);
             msg.add(fuel < 0, "fuel must be a positive integer greater than 0, yet it was {}", fuel);
             if (lootTable != null) {
-                validateCustom(msg, output, 0, 0, "item output");
                 msg.add(entity != null, "entity was defined even though lootTable was defined");
                 msg.add(!output.isEmpty(), "output was defined even though lootTable was defined");
             }
+            msg.add(!output.isEmpty() && entity != null, "both entity and output were defined, yet only one can be");
             msg.add(output.isEmpty() && lootTable == null && entity == null, "output, lootTable, and entity were all not defined. one of them should be defined to properly create the recipe");
         }
 
@@ -168,21 +167,17 @@ public class Animator extends StandardListRegistry<IAnimatorRecipe> {
                     ModSupport.BETWEENLANDS.get().animator.add(recipe);
                 }
             } else if (entity != null) {
-                if (output.isEmpty()) {
-                    for (var stack : input.get(0).getMatchingStacks()) {
-                        recipe = new AnimatorRecipe(stack, fuel, life, entity);
-                        recipe.setRenderEntity(render);
-                        ModSupport.BETWEENLANDS.get().animator.add(recipe);
-                    }
-                } else {
-                    for (var stack : input.get(0).getMatchingStacks()) {
-                        recipe = new AnimatorRecipe(stack, fuel, life, output.get(0), entity);
-                        recipe.setRenderEntity(render);
-                        ModSupport.BETWEENLANDS.get().animator.add(recipe);
-                    }
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = new AnimatorRecipe(stack, fuel, life, entity);
+                    recipe.setRenderEntity(render);
+                    ModSupport.BETWEENLANDS.get().animator.add(recipe);
+                }
+            } else {
+                for (var stack : input.get(0).getMatchingStacks()) {
+                    recipe = new AnimatorRecipe(stack, fuel, life, output.get(0));
+                    ModSupport.BETWEENLANDS.get().animator.add(recipe);
                 }
             }
-            ModSupport.BETWEENLANDS.get().animator.add(recipe);
             return recipe;
         }
     }

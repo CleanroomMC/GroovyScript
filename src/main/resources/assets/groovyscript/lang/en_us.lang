@@ -776,12 +776,13 @@ groovyscript.wiki.betterwithmods.turntable.outputBlock.value=Sets the blockstate
 
 # The Betweenlands
 groovyscript.wiki.thebetweenlands.animator.title=Animator
-groovyscript.wiki.thebetweenlands.animator.description=Converts an input item, Life amount from Life Crystals, and Fuel from Sulfur into an output itemstack, summoning an entity, a random item from a loottable, or summoning an entity and outputting an itemstack.
+groovyscript.wiki.thebetweenlands.animator.description=Converts an input item, Life amount from Life Crystals, and Fuel from Sulfur into an output itemstack, summoning an entity, or a random item from a loottable.
 groovyscript.wiki.thebetweenlands.animator.fuel.value=Sets the fuel consumed
 groovyscript.wiki.thebetweenlands.animator.life.value=Sets the life consumed from the life crystal
 groovyscript.wiki.thebetweenlands.animator.entity.value=Sets the entity being spawned
 groovyscript.wiki.thebetweenlands.animator.render.value=Sets the entity to render, typically the same as the entity to be spawned
 groovyscript.wiki.thebetweenlands.animator.lootTable.value=Sets the LootTable used to generate outputs
+groovyscript.wiki.thebetweenlands.animator.pick_one.required=Only one of output, entity, or lootTable can be set
 groovyscript.wiki.thebetweenlands.animator.removeByEntity=Removes all entries that match the given entity
 groovyscript.wiki.thebetweenlands.animator.removeByLootTable=Removes all entries that output the given Loot Table
 
