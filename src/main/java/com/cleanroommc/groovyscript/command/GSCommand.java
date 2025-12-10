@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,12 +34,12 @@ public class GSCommand extends CommandTreeBase {
     public GSCommand() {
         addSubcommand(new SimpleCommand("log", (server, sender, args) -> postLogFiles(sender)));
 
-        addSubcommand(new SimpleCommand("reload", (server, sender, args) -> {
+        addSubcommand(new SimpleCommand("reload", "/gs reload [--clean|--skip-jei|--entire-jei]", (server, sender, args) -> {
             if (sender instanceof EntityPlayerMP player) {
                 if (hasArgument(args, "--clean")) {
                     GroovyLogImpl.LOG.cleanLog();
                 }
-                runReload(player, server);
+                runReload(player, server, Arrays.asList(args));
             }
         }));
 
@@ -128,7 +129,7 @@ public class GSCommand extends CommandTreeBase {
         }
     }
 
-    public static void runReload(EntityPlayerMP player, MinecraftServer server) {
+    public static void runReload(EntityPlayerMP player, MinecraftServer server, Collection<String> args) {
         if (server.isDedicatedServer()) {
             player.sendMessage(new TextComponentString("Reloading in multiplayer is currently not allowed to avoid desync."));
             return;
@@ -136,7 +137,7 @@ public class GSCommand extends CommandTreeBase {
         GroovyLog.get().info("========== Reloading Groovy scripts ==========");
         long time = GroovyScript.runGroovyScriptsInLoader(LoadStage.POST_INIT);
         GroovyScript.postScriptRunResult(player, false, true, false, time);
-        NetworkHandler.sendToPlayer(new SReloadScripts(null, false, true), player);
+        NetworkHandler.sendToPlayer(new SReloadScripts(null, false, !args.contains("--skip-jei"), !args.contains("--entire-jei")), player);
     }
 
     public static void postLogFiles(ICommandSender sender) {

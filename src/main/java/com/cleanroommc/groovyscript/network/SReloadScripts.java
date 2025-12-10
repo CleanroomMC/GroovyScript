@@ -16,13 +16,15 @@ public class SReloadScripts implements IPacket {
     private String packmode;
     private boolean changePackmode;
     private boolean reloadJei;
+    private boolean recipesOnly;
 
     public SReloadScripts() {}
 
-    public SReloadScripts(String packmode, boolean changePackmode, boolean reloadJei) {
+    public SReloadScripts(String packmode, boolean changePackmode, boolean reloadJei, boolean recipesOnly) {
         this.packmode = packmode;
         this.changePackmode = changePackmode;
         this.reloadJei = reloadJei;
+        this.recipesOnly = recipesOnly;
     }
 
     @Override
@@ -35,6 +37,7 @@ public class SReloadScripts implements IPacket {
             }
         }
         buf.writeBoolean(this.reloadJei);
+        buf.writeBoolean(this.recipesOnly);
     }
 
     @Override
@@ -44,6 +47,7 @@ public class SReloadScripts implements IPacket {
             this.packmode = buf.readBoolean() ? null : buf.readString(128);
         }
         this.reloadJei = buf.readBoolean();
+        this.recipesOnly = buf.readBoolean();
     }
 
     @Override
@@ -52,7 +56,7 @@ public class SReloadScripts implements IPacket {
             updatePackmode(Minecraft.getMinecraft().player, this.packmode);
         }
         if (this.reloadJei) {
-            ReloadableRegistryManager.reloadJei(!this.changePackmode);
+            ReloadableRegistryManager.reloadJei(!this.changePackmode, this.recipesOnly);
             if (this.changePackmode) {
                 Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Finished updating packmode and JEI. Enjoy :)"));
             }
