@@ -29,7 +29,7 @@ public class CReload implements IPacket {
 
     @Override
     public IPacket executeServer(NetHandlerPlayServer handler) {
-        GSCommand.runReload(handler.player, handler.player.getServer(), ImmutableList.of());
+        GSCommand.runReload(handler.player, handler.player.getServer(), reloadJei ? ImmutableList.of() : ImmutableList.of("--skip-jei"));
         return null;
     }
 }
