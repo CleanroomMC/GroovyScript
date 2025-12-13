@@ -80,15 +80,17 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         })) {
             return true;
         }
-        var log = GroovyLog.msg("Error removing Minecraft Furnace recipe").error();
-        log.add("Can't find recipe for input " + input);
+        //noinspection ConstantValue
         if ((Object) input instanceof ItemStack is && is.getMetadata() != OreDictionary.WILDCARD_VALUE) {
             var wild = new ItemStack(is.getItem(), 1, OreDictionary.WILDCARD_VALUE);
             if (!FurnaceRecipes.instance().getSmeltingResult(wild).isEmpty()) {
-                log.add("there was no input found for {}, but there was an input matching the wildcard itemstack {}", GroovyScriptCodeConverter.asGroovyCode(is, false), GroovyScriptCodeConverter.asGroovyCode(wild, false));
+                GroovyLog.msg("Error removing Minecraft Furnace recipe")
+                        .debug()
+                        .add("there was no input found for {}, but there was an input matching the wildcard itemstack {}", GroovyScriptCodeConverter.asGroovyCode(is, false), GroovyScriptCodeConverter.asGroovyCode(wild, false))
+                        .add("did you mean to run furnace.removeByInput({}) instead?", GroovyScriptCodeConverter.asGroovyCode(wild, false))
+                        .post();
             }
         }
-        log.post();
         return false;
     }
 
