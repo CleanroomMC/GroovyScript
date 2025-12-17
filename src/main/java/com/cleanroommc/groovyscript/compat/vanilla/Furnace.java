@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.GroovyScriptCodeConverter;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.AbstractReloadableStorage;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -65,12 +64,6 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
 
     @MethodDescription(example = @Example("item('minecraft:clay:*')"))
     public boolean removeByInput(IIngredient input) {
-        if (GroovyLog.msg("Error adding Minecraft Furnace recipe")
-                .add(IngredientHelper.isEmpty(input), () -> "Input must not be empty")
-                .error()
-                .postIfNotEmpty()) {
-            return false;
-        }
         if (FurnaceRecipes.instance().getSmeltingList().entrySet().removeIf(entry -> {
             if (input.test(entry.getKey())) {
                 addBackup(Recipe.of(entry.getKey(), entry.getValue()));
@@ -80,40 +73,29 @@ public class Furnace extends VirtualizedRegistry<Furnace.Recipe> {
         })) {
             return true;
         }
-        var log = GroovyLog.msg("Error removing Minecraft Furnace recipe").error();
-        log.add("Can't find recipe for input " + input);
+        //noinspection ConstantValue
         if ((Object) input instanceof ItemStack is && is.getMetadata() != OreDictionary.WILDCARD_VALUE) {
             var wild = new ItemStack(is.getItem(), 1, OreDictionary.WILDCARD_VALUE);
             if (!FurnaceRecipes.instance().getSmeltingResult(wild).isEmpty()) {
-                log.add("there was no input found for {}, but there was an input matching the wildcard itemstack {}", GroovyScriptCodeConverter.asGroovyCode(is, false), GroovyScriptCodeConverter.asGroovyCode(wild, false));
+                GroovyLog.msg("Error removing Minecraft Furnace recipe")
+                        .debug()
+                        .add("there was no input found for {}, but there was an input matching the wildcard itemstack {}", GroovyScriptCodeConverter.asGroovyCode(is, false), GroovyScriptCodeConverter.asGroovyCode(wild, false))
+                        .add("did you mean to run furnace.removeByInput({}) instead?", GroovyScriptCodeConverter.asGroovyCode(wild, false))
+                        .post();
             }
         }
-        log.post();
         return false;
     }
 
     @MethodDescription(example = @Example("item('minecraft:brick')"))
     public boolean removeByOutput(IIngredient output) {
-        if (GroovyLog.msg("Error adding Minecraft Furnace recipe")
-                .add(IngredientHelper.isEmpty(output), () -> "Output must not be empty")
-                .error()
-                .postIfNotEmpty()) {
-            return false;
-        }
-        if (FurnaceRecipes.instance().getSmeltingList().entrySet().removeIf(entry -> {
+        return FurnaceRecipes.instance().getSmeltingList().entrySet().removeIf(entry -> {
             if (output.test(entry.getValue())) {
                 addBackup(Recipe.of(entry.getKey(), entry.getValue()));
                 return true;
             }
             return false;
-        })) {
-            return true;
-        }
-        GroovyLog.msg("Error removing Minecraft Furnace recipe")
-                .add("Can't find recipe for output " + output)
-                .error()
-                .post();
-        return false;
+        });
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
