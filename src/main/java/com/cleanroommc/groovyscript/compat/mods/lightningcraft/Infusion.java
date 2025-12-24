@@ -50,6 +50,19 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
 
         private boolean nbtSensitiveChanged = false;
 
+        @GroovyBlacklist
+        private static boolean hasAnyNbt(ItemStack centerStack, List<ItemStack> input) {
+            if (centerStack.hasTagCompound()) {
+                return true;
+            }
+            for (var stack : input) {
+                if (stack.hasTagCompound()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         @RecipeBuilderMethodDescription
         public RecipeBuilder le(int le) {
             this.le = le;
@@ -96,27 +109,6 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
                 msg.add(IngredientHelper.isEmpty(it), "All inputs must not be empty");
             }
             msg.add(IngredientHelper.overMaxSize(center, 1), "centerItem must have a stack size of 1");
-            // check if any input items have NBT to enable NBT sensitive mode automatically
-            if (!nbtSensitiveChanged) {
-                nbtSensitive = hasAnyNbt();
-            }
-        }
-
-        @GroovyBlacklist
-        private boolean hasAnyNbt() {
-            for (var stack : center.getMatchingStacks()) {
-                if (stack.hasTagCompound()) {
-                    return true;
-                }
-            }
-            for (var i : input) {
-                for (var stack : i.getMatchingStacks()) {
-                    if (stack.hasTagCompound()) {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         @Override
@@ -128,7 +120,8 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
             for (var centerStack : center.getMatchingStacks()) {
                 for (List<ItemStack> cartesianProductItemStack : IngredientHelper.cartesianProductItemStacks(input)) {
                     recipe = new LightningInfusionRecipe(output.get(0), le, centerStack, cartesianProductItemStack.toArray());
-                    if (nbtSensitive) recipe.setNBTSensitive();
+                    // check if any input items have NBT if NBT sensitive mode isn't manually set
+                    if (nbtSensitiveChanged ? nbtSensitive : hasAnyNbt(centerStack, cartesianProductItemStack)) recipe.setNBTSensitive();
                     ModSupport.LIGHTNING_CRAFT.get().infusion.add(recipe);
                 }
             }
