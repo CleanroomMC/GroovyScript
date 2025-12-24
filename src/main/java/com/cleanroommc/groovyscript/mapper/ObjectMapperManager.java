@@ -128,7 +128,7 @@ public class ObjectMapperManager {
                 .toGroovyCode(x -> GroovyScriptCodeConverter.asGroovyCode(x, false))
                 .textureBinder(TextureBinder.of(ItemStack::new, TextureBinder.ofItem()))
                 .register();
-        ObjectMapper.builder("blockmaterial", Material.class)
+        ObjectMapper.builder("blockMaterial", Material.class)
                 .parser(IObjectParser.wrapStringGetter(ObjectParserHelper.materials::get))
                 .completerOfNames(ObjectParserHelper.materials::keySet)
                 .docOfType("block material")

@@ -9,14 +9,14 @@ log 'mod \'erebus\' detected, running script'
 // any Blocks using the valid Materials to be converted, and the Registry contains any valid ItemStacks. The conversion
 // takes 10 seconds, and is fueled by erebus wall plants.
 
-mods.erebus.composter.removeFromMaterial(blockmaterial('sponge'))
+mods.erebus.composter.removeFromMaterial(blockMaterial('sponge'))
 mods.erebus.composter.removeFromRegistry(item('minecraft:stick'))
 // mods.erebus.composter.removeFromBlacklist(item('erebus:wall_plants', 1))
 // mods.erebus.composter.removeAllFromMaterial()
 // mods.erebus.composter.removeAllFromRegistry()
 // mods.erebus.composter.removeAllFromBlacklist()
 
-mods.erebus.composter.addMaterial(blockmaterial('tnt'))
+mods.erebus.composter.addMaterial(blockMaterial('tnt'))
 mods.erebus.composter.addRegistry(item('minecraft:gold_ingot'))
 mods.erebus.composter.addBlacklist(item('erebus:wall_plants', 7))
 mods.erebus.composter.addBlacklist(item('erebus:wall_plants_cultivated', 7))

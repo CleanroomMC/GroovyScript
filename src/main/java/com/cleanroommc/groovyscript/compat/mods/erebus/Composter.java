@@ -51,7 +51,7 @@ public class Composter extends NamedRegistry implements IScriptReloadable {
     @Override
     public void afterScriptLoad() {}
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("blockmaterial('tnt')"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("blockMaterial('tnt')"))
     public boolean addMaterial(Material material) {
         return getMaterial().add(material) && materialStorage.addScripted(material);
     }
@@ -69,7 +69,7 @@ public class Composter extends NamedRegistry implements IScriptReloadable {
         return getBlacklist().add(stack) && blacklistStorage.addScripted(stack);
     }
 
-    @MethodDescription(example = @Example("blockmaterial('sponge')"))
+    @MethodDescription(example = @Example("blockMaterial('sponge')"))
     public boolean removeFromMaterial(Material material) {
         return getMaterial().removeIf(r -> material == r && materialStorage.addBackup(r));
     }
