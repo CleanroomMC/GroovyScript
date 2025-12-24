@@ -36,3 +36,21 @@ mods.lightningcraft.infusion.recipeBuilder()
     .output(item('minecraft:diamond_block'))
     .le(200)
     .register()
+
+
+// Lightning Transformation:
+// Converts any number of itemstacks on the ground into the output itemstack when the area is struck by lightning.
+
+mods.lightningcraft.transformation.removeByInput(item('minecraft:iron_ingot'))
+mods.lightningcraft.transformation.removeByOutput(item('lightningcraft:material', 11))
+// mods.lightningcraft.transformation.removeAll()
+
+mods.lightningcraft.transformation.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:diamond'))
+    .register()
+
+mods.lightningcraft.transformation.recipeBuilder()
+    .input(item('minecraft:gold_ingot') * 3, item('minecraft:diamond_block'))
+    .output(item('minecraft:clay') * 16)
+    .register()

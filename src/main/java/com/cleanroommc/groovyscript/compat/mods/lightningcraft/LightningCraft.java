@@ -6,4 +6,5 @@ public class LightningCraft extends GroovyPropertyContainer {
 
     public final Crusher crusher = new Crusher();
     public final Infusion infusion = new Infusion();
+    public final Transformation transformation = new Transformation();
 }
