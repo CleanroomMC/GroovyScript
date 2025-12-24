@@ -200,8 +200,8 @@ mods.pyrotech.brick_sawmill.recipeBuilder()
     .register()
 
 
-mods.pyrotech.brick_sawmill.add('glowstone_to_dust', item('minecraft:glowstone'), item('pyrotech:sawmill_blade_stone'), item('minecraft:glowstone_dust'), 200, 0)
 mods.pyrotech.brick_sawmill.add('bed_to_wool', item('minecraft:bed'), item('minecraft:wool') * 3, 500, 3)
+mods.pyrotech.brick_sawmill.add('glowstone_to_dust', item('minecraft:glowstone'), item('pyrotech:sawmill_blade_stone'), item('minecraft:glowstone_dust'), 200, 0)
 
 // Campfire:
 // Converts item into a new item on given amount of time.
@@ -466,7 +466,7 @@ mods.pyrotech.stone_crucible.recipeBuilder()
     .burnTime(1000)
     .inherit(true)
     .name('water_from_sugarcane')
-
+    .register()
 
 
 mods.pyrotech.stone_crucible.add('water_from_cactus', ore('blockCactus'), fluid('water') * 1000, 600, true)
@@ -541,8 +541,8 @@ mods.pyrotech.stone_sawmill.recipeBuilder()
     .register()
 
 
-mods.pyrotech.stone_sawmill.add('apple_to_gapple_with_golden_blade', item('minecraft:apple'), item('pyrotech:sawmill_blade_bone'), item('minecraft:golden_apple'), 2000, 0, false)
 mods.pyrotech.stone_sawmill.add('stone_to_cobblestone', ore('stone'), item('minecraft:cobblestone'), 500, 0, true)
+mods.pyrotech.stone_sawmill.add('apple_to_gapple_with_golden_blade', item('minecraft:apple'), item('pyrotech:sawmill_blade_bone'), item('minecraft:golden_apple'), 2000, 0, false)
 
 // Tanning Rack:
 // Converts an item over time into a new one.
@@ -632,8 +632,8 @@ mods.pyrotech.worktable.shapedBuilder()
     .name('irons_to_dirts')
     .output(item('minecraft:dirt') * 8)
     .shape([[item('minecraft:iron_ingot'),item('minecraft:iron_ingot'),item('minecraft:iron_ingot')],
-           [item('minecraft:iron_ingot'),null,item('minecraft:iron_ingot')],
-           [item('minecraft:iron_ingot'),item('minecraft:iron_ingot'),item('minecraft:iron_ingot')]])
+            [item('minecraft:iron_ingot'),null,item('minecraft:iron_ingot')],
+            [item('minecraft:iron_ingot'),item('minecraft:iron_ingot'),item('minecraft:iron_ingot')]])
     .replaceByName()
     .register()
 
@@ -641,8 +641,8 @@ mods.pyrotech.worktable.shapedBuilder()
     .name(resource('minecraft:sea_lantern'))
     .output(item('minecraft:clay'))
     .shape([[ore('blockRedstone')],
-           [ore('blockRedstone')],
-           [ore('blockRedstone')]])
+            [ore('blockRedstone')],
+            [ore('blockRedstone')]])
     .replaceByName()
     .register()
 
@@ -718,7 +718,7 @@ mods.pyrotech.worktable.shapelessBuilder()
     .register()
 
 mods.pyrotech.worktable.shapelessBuilder()
-    .name('minecraft:pink_dye_from_pink_tulp')
+    .name('minecraft:pink_dye_from_pink_tulip')
     .output(item('minecraft:clay'))
     .input([item('minecraft:stick')])
     .replaceByName()
@@ -734,28 +734,27 @@ mods.pyrotech.worktable.shapelessBuilder()
     .register()
 
 
-// mods.pyrotech.worktable.addShaped(item('minecraft:gold_block'), item('minecraft:diamond_pickaxe'), 2, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[null, null, null],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
 // mods.pyrotech.worktable.addShaped(item('minecraft:gold_block'), [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[null, null, null],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
-// mods.pyrotech.worktable.addShaped(resource('example:resource_location'), item('minecraft:clay'), item('minecraft:iron_shovel'), 2, [[item('minecraft:cobblestone')],[item('minecraft:nether_star')],[item('minecraft:cobblestone')]])
+// mods.pyrotech.worktable.addShaped('gold_v_to_clay', item('minecraft:clay'), [[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:gold_ingot'),null]])
+// mods.pyrotech.worktable.addShaped(item('minecraft:gold_block'), item('minecraft:diamond_pickaxe'), 2, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[null, null, null],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
 // mods.pyrotech.worktable.addShaped(resource('example:resource_location'), item('minecraft:clay'), [[item('minecraft:cobblestone')],[item('minecraft:nether_star')],[item('minecraft:cobblestone')]])
 // mods.pyrotech.worktable.addShaped('gold_v_to_clay', item('minecraft:clay'), item('minecraft:iron_pickaxe'), 3, [[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:gold_ingot'),null]])
-// mods.pyrotech.worktable.addShaped('gold_v_to_clay', item('minecraft:clay'), [[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[null,item('minecraft:gold_ingot'),null]])
-// mods.pyrotech.worktable.addShapeless(item('minecraft:clay'), item('minecraft:stone_shovel'), 3, [item('minecraft:cobblestone'),item('minecraft:nether_star'),item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.addShaped(resource('example:resource_location'), item('minecraft:clay'), item('minecraft:iron_shovel'), 2, [[item('minecraft:cobblestone')],[item('minecraft:nether_star')],[item('minecraft:cobblestone')]])
 // mods.pyrotech.worktable.addShapeless(item('minecraft:clay'), [item('minecraft:cobblestone'),item('minecraft:nether_star'),item('minecraft:gold_ingot')])
-// mods.pyrotech.worktable.addShapeless(resource('example:resource_location2'), item('minecraft:clay'), item('minecraft:stone_shovel'), 3, [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.addShapeless('precious_to_clay', item('minecraft:clay'), [item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.addShapeless(item('minecraft:clay'), item('minecraft:stone_shovel'), 3, [item('minecraft:cobblestone'),item('minecraft:nether_star'),item('minecraft:gold_ingot')])
 // mods.pyrotech.worktable.addShapeless(resource('example:resource_location2'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
 // mods.pyrotech.worktable.addShapeless('precious_to_clay', item('minecraft:clay'), item('minecraft:iron_shovel'), 2, [item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')])
-// mods.pyrotech.worktable.addShapeless('precious_to_clay', item('minecraft:clay'), [item('minecraft:diamond'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')])
-// mods.pyrotech.worktable.replaceShaped(item('minecraft:chest'), item('minecraft:iron_axe') | item('minecraft:stone_axe'), 3, [[ore('logWood'),ore('logWood'),ore('logWood')],[ore('logWood'),null,ore('logWood')],[ore('logWood'),ore('logWood'),ore('logWood')]])
+// mods.pyrotech.worktable.addShapeless(resource('example:resource_location2'), item('minecraft:clay'), item('minecraft:stone_shovel'), 3, [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
 // mods.pyrotech.worktable.replaceShaped(item('minecraft:chest'), [[ore('logWood'),ore('logWood'),ore('logWood')],[ore('logWood'),null,ore('logWood')],[ore('logWood'),ore('logWood'),ore('logWood')]])
-// mods.pyrotech.worktable.replaceShaped(resource('minecraft:sea_lantern'), item('minecraft:diamond_pickaxe'), 3, item('minecraft:clay'), [[item('minecraft:glowstone')],[item('minecraft:glowstone')],[item('minecraft:glowstone')]])
+// mods.pyrotech.worktable.replaceShaped('gold_to_diamonds', item('minecraft:diamond') * 8, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
+// mods.pyrotech.worktable.replaceShaped(item('minecraft:chest'), item('minecraft:iron_axe') | item('minecraft:stone_axe'), 3, [[ore('logWood'),ore('logWood'),ore('logWood')],[ore('logWood'),null,ore('logWood')],[ore('logWood'),ore('logWood'),ore('logWood')]])
 // mods.pyrotech.worktable.replaceShaped(resource('minecraft:sea_lantern'), item('minecraft:clay'), [[item('minecraft:glowstone')],[item('minecraft:glowstone')],[item('minecraft:glowstone')]])
 // mods.pyrotech.worktable.replaceShaped('gold_to_diamonds', item('minecraft:diamond') * 8, item('minecraft:diamond_pickaxe'), 4, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
-// mods.pyrotech.worktable.replaceShaped('gold_to_diamonds', item('minecraft:diamond') * 8, [[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),null,item('minecraft:gold_ingot')],[item('minecraft:gold_ingot'),item('minecraft:gold_ingot'),item('minecraft:gold_ingot')]])
-// mods.pyrotech.worktable.replaceShapeless(item('minecraft:ender_eye'), item('minecraft:shears'), 3, [item('minecraft:ender_pearl'),item('minecraft:nether_star')])
+// mods.pyrotech.worktable.replaceShaped(resource('minecraft:sea_lantern'), item('minecraft:diamond_pickaxe'), 3, item('minecraft:clay'), [[item('minecraft:glowstone')],[item('minecraft:glowstone')],[item('minecraft:glowstone')]])
 // mods.pyrotech.worktable.replaceShapeless(item('minecraft:ender_eye'), [item('minecraft:ender_pearl'),item('minecraft:nether_star')])
-// mods.pyrotech.worktable.replaceShapeless(resource('minecraft:pink_dye_from_peony'), item('minecraft:clay'), item('minecraft:stone_axe'), 2, [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
+// mods.pyrotech.worktable.replaceShapeless('minecraft:pink_dye_from_pink_tulip', item('minecraft:clay'), [item('minecraft:nether_star')])
+// mods.pyrotech.worktable.replaceShapeless(item('minecraft:ender_eye'), item('minecraft:shears'), 3, [item('minecraft:ender_pearl'),item('minecraft:nether_star')])
 // mods.pyrotech.worktable.replaceShapeless(resource('minecraft:pink_dye_from_peony'), item('minecraft:clay'), [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])
-// mods.pyrotech.worktable.replaceShapeless('minecraft:pink_dye_from_pink_tulp', item('minecraft:iron_axe'), 2, item('minecraft:clay'), [item('minecraft:nether_star')])
-// mods.pyrotech.worktable.replaceShapeless('minecraft:pink_dye_from_pink_tulp', item('minecraft:clay'), [item('minecraft:nether_star')])
-
+// mods.pyrotech.worktable.replaceShapeless('minecraft:pink_dye_from_pink_tulip', item('minecraft:iron_axe'), 2, item('minecraft:clay'), [item('minecraft:nether_star')])
+// mods.pyrotech.worktable.replaceShapeless(resource('minecraft:pink_dye_from_peony'), item('minecraft:clay'), item('minecraft:stone_axe'), 2, [item('minecraft:cobblestone'), item('minecraft:gold_ingot')])

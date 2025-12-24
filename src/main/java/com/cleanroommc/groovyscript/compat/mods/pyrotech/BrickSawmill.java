@@ -108,7 +108,7 @@ public class BrickSawmill extends ForgeRegistryWrapper<BrickSawmillRecipe> {
 
         @Property(comp = @Comp(gt = 0))
         private int duration;
-        @Property(value = "wood_chips", comp = @Comp(gte = 0))
+        @Property(value = "groovyscript.wiki.pyrotech.sawmill.wood_chips.value", comp = @Comp(gte = 0))
         private int woodChips;
 
         @RecipeBuilderMethodDescription
@@ -165,11 +165,11 @@ public class BrickSawmill extends ForgeRegistryWrapper<BrickSawmillRecipe> {
         ModSupport.PYROTECH.get().brickSawmill.add(recipe);
         ItemStack out = output.copy();
         out.setCount(Math.min(output.getMaxStackSize(), output.getCount() * 2));
-        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (1.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.FLINT_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModuleTechMachine.Items.BONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 2).setRegistryName(name + "_tier_1"));
-        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (0.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.IRON_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(name + "_tier_2"));
+        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (1.5 * duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.FLINT_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModuleTechMachine.Items.BONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 2).setRegistryName(name + "_tier_1"));
+        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (0.5 * duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.IRON_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(name + "_tier_2"));
         out = output.copy();
         out.setCount(Math.min(output.getMaxStackSize(), output.getCount() * 3));
-        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (1.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.DIAMOND_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(name + "_tier_3"));
+        ModSupport.PYROTECH.get().brickSawmill.add(new BrickSawmillRecipe(out, input, (int) (1.5 * duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.DIAMOND_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(name + "_tier_3"));
         return recipe;
     }
 }

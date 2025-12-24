@@ -125,7 +125,7 @@ public class StoneSawmill extends ForgeRegistryWrapper<StoneSawmillRecipe> {
 
         @Property(comp = @Comp(gt = 0))
         private int duration;
-        @Property(value = "wood_chips", comp = @Comp(gte = 0))
+        @Property(value = "groovyscript.wiki.pyrotech.sawmill.wood_chips.value", comp = @Comp(gte = 0))
         private int woodChips;
         @Property
         private boolean inherit;
@@ -186,15 +186,15 @@ public class StoneSawmill extends ForgeRegistryWrapper<StoneSawmillRecipe> {
                 StoneSawmillRecipe[] recipes = new StoneSawmillRecipe[4];
                 ItemStack out = output.get(0);
                 Ingredient in = input.get(0).toMcIngredient();
-                StoneSawmillRecipe recipe = new StoneSawmillRecipe(out, in, duration, Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.STONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips).setRegistryName(name + "_tier_0");
+                StoneSawmillRecipe recipe = new StoneSawmillRecipe(out, in, duration, Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.STONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips).setRegistryName(super.name + "_tier_0");
                 recipes[0] = recipe;
                 out = out.copy();
                 out.setCount(Math.min(out.getMaxStackSize(), out.getCount() * 2));
-                recipes[1] = new StoneSawmillRecipe(out, in, (int) (1.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.FLINT_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModuleTechMachine.Items.BONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 2).setRegistryName(name + "_tier_1");
-                recipes[2] = new StoneSawmillRecipe(out, in, (int) (0.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.IRON_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(name + "_tier_2");
+                recipes[1] = new StoneSawmillRecipe(out, in, (int) (1.5 * duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.FLINT_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ModuleTechMachine.Items.BONE_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 2).setRegistryName(super.name + "_tier_1");
+                recipes[2] = new StoneSawmillRecipe(out, in, (int) (0.5 * duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.IRON_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(super.name + "_tier_2");
                 out = out.copy();
                 out.setCount(Math.min(out.getMaxStackSize(), out.getCount() * 3));
-                recipes[3] = new StoneSawmillRecipe(out, in, (int) (1.5 * (double) duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.DIAMOND_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(name + "_tier_3");
+                recipes[3] = new StoneSawmillRecipe(out, in, (int) (1.5 * duration), Ingredient.fromStacks(new ItemStack(ModuleTechMachine.Items.DIAMOND_MILL_BLADE, 1, OreDictionary.WILDCARD_VALUE)), woodChips / 4).setRegistryName(super.name + "_tier_3");
                 for (StoneSawmillRecipe r : recipes) {
                     ModSupport.PYROTECH.get().stoneSawmill.add(r);
                     if (inherit) {

@@ -33,9 +33,7 @@ public class MechanicalCompactingBin extends ForgeRegistryWrapper<MechanicalComp
         return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechMachine.class);
     }
 
-    @RecipeBuilderDescription(example = {
-            @Example(".hits(2, 2, 1, 1).input(item('minecraft:melon') * 8).output(item('minecraft:melon_block')).name('melon_compacting')")
-    })
+    @RecipeBuilderDescription(example = @Example(".hits(2, 2, 1, 1).input(item('minecraft:melon') * 8).output(item('minecraft:melon_block')).name('melon_compacting')"))
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }

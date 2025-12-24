@@ -158,7 +158,7 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
                 .register();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.crafting.replaceShapeless1", example = @Example(value = "'minecraft:pink_dye_from_pink_tulp', item('minecraft:clay'), [item('minecraft:nether_star')]", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.crafting.replaceShapeless1", example = @Example(value = "'minecraft:pink_dye_from_pink_tulip', item('minecraft:clay'), [item('minecraft:nether_star')]", commented = true))
     public void replaceShapeless(String name, ItemStack output, List<IIngredient> input) {
         shapelessBuilder()
                 .input(input)
@@ -217,7 +217,7 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
                 .register();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.crafting.replaceShapeless1", example = @Example(value = "'minecraft:pink_dye_from_pink_tulp', item('minecraft:iron_axe'), 2, item('minecraft:clay'), [item('minecraft:nether_star')]", commented = true))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.minecraft.crafting.replaceShapeless1", example = @Example(value = "'minecraft:pink_dye_from_pink_tulip', item('minecraft:iron_axe'), 2, item('minecraft:clay'), [item('minecraft:nether_star')]", commented = true))
     public void replaceShapeless(String name, ItemStack output, IIngredient tool, int damage, List<IIngredient> input) {
         shapelessBuilder()
                 .tool(tool, damage)
@@ -361,7 +361,7 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
             @Example(".name('precious_to_clay').output(item('minecraft:clay')).input([item('minecraft:emerald'),item('minecraft:iron_ore'),item('minecraft:gold_ingot')])"),
             @Example(".name(resource('example:resource_location2')).output(item('minecraft:stone')).input([item('minecraft:gold_ore'), item('minecraft:gold_ingot')])"),
             @Example(".output(item('minecraft:ender_eye')).input([item('minecraft:ender_pearl'),item('minecraft:bowl')]).replace().tool(item('minecraft:iron_sword'), 4)"),
-            @Example(".name('minecraft:pink_dye_from_pink_tulp').output(item('minecraft:clay')).input([item('minecraft:stick')]).replaceByName().tool(item('minecraft:iron_pickaxe'), 2)"),
+            @Example(".name('minecraft:pink_dye_from_pink_tulip').output(item('minecraft:clay')).input([item('minecraft:stick')]).replaceByName().tool(item('minecraft:iron_pickaxe'), 2)"),
             @Example(".name(resource('minecraft:pink_dye_from_peony')).output(item('minecraft:coal')).input([item('minecraft:stone'), item('minecraft:iron_ingot')]).replaceByName().tool(item('minecraft:stone_axe'), 2)"),
     })
     public Shapeless shapelessBuilder() {
@@ -384,6 +384,9 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
             super(3, 3);
         }
 
+        @RecipeBuilderMethodDescription(field = {
+                "tool", "damage"
+        })
         public Shaped tool(IIngredient tool, int damage) {
             this.tool = tool;
             this.damage = damage;
@@ -395,14 +398,14 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
             if (replace == 1) {
                 ModSupport.PYROTECH.get().worktable.removeByOutput(IngredientHelper.toIIngredient(output), false);
             } else if (replace == 2) {
-                if (name == null) {
+                if (super.name == null) {
                     GroovyLog.msg("Error replacing Pyrotech Worktable recipe")
                             .add("Name must not be null when replacing by name")
                             .error()
                             .post();
                     return;
                 }
-                ReloadableRegistryManager.removeRegistryEntry(ModSupport.PYROTECH.get().worktable.getRegistry(), name);
+                ReloadableRegistryManager.removeRegistryEntry(ModSupport.PYROTECH.get().worktable.getRegistry(), super.name);
             }
         }
 
@@ -436,7 +439,7 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
                 WorktableRecipe rec = ModSupport.PYROTECH.get().worktable.getRegistry().getValue(this.name);
                 msg.add(rec != null && rec.getRecipe().canFit(1000, 1000), () -> "a recipe with that name already exists! Either replace or remove the recipe first");
                 if (msg.postIfNotEmpty()) return null;
-                WorktableRecipe worktableRecipe = new WorktableRecipe(recipe, tool == IIngredient.EMPTY ? null : tool.toMcIngredient(), damage, null).setRegistryName(name);
+                WorktableRecipe worktableRecipe = new WorktableRecipe(recipe, tool == IIngredient.EMPTY ? null : tool.toMcIngredient(), damage, null).setRegistryName(super.name);
                 ModSupport.PYROTECH.get().worktable.add(worktableRecipe);
                 return worktableRecipe;
             }
@@ -460,6 +463,9 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
             super(3, 3);
         }
 
+        @RecipeBuilderMethodDescription(field = {
+                "tool", "damage"
+        })
         public Shapeless tool(IIngredient tool, int damage) {
             this.tool = tool;
             this.damage = damage;
@@ -471,14 +477,14 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
             if (replace == 1) {
                 ModSupport.PYROTECH.get().worktable.removeByOutput(IngredientHelper.toIIngredient(output), false);
             } else if (replace == 2) {
-                if (name == null) {
+                if (super.name == null) {
                     GroovyLog.msg("Error replacing Pyrotech Worktable recipe")
                             .add("Name must not be null when replacing by name")
                             .error()
                             .post();
                     return;
                 }
-                ReloadableRegistryManager.removeRegistryEntry(ModSupport.PYROTECH.get().worktable.getRegistry(), name);
+                ReloadableRegistryManager.removeRegistryEntry(ModSupport.PYROTECH.get().worktable.getRegistry(), super.name);
             }
         }
 
@@ -508,7 +514,7 @@ public class Worktable extends ForgeRegistryWrapper<WorktableRecipe> {
             if (msg.postIfNotEmpty()) return null;
             ShapelessCraftingRecipe recipe = new ShapelessCraftingRecipe(output.copy(), ingredients, recipeFunction, recipeAction);
             rec = new WorktableRecipe(recipe, tool == IIngredient.EMPTY ? null : tool.toMcIngredient(), damage, null);
-            ReloadableRegistryManager.addRegistryEntry(ModSupport.PYROTECH.get().worktable.getRegistry(), name, rec);
+            ReloadableRegistryManager.addRegistryEntry(ModSupport.PYROTECH.get().worktable.getRegistry(), super.name, rec);
             return rec;
         }
     }

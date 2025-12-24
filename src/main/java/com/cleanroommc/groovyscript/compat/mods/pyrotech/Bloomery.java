@@ -129,7 +129,7 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
         @Property
         private ItemStack bloom = ItemStack.EMPTY;
         @Property
-        private ItemStack slag = null;
+        private ItemStack slag;
         @Property(comp = @Comp(gt = 0), defaultValue = "21600")
         private int burnTime = 21600;
         @Property(comp = @Comp(gte = 0))
@@ -144,7 +144,7 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
         private final List<BloomeryRecipeBase.FailureItem> failureOutput = new ArrayList<>(1);
         @Property
         private final EnumSet<AnvilRecipe.EnumTier> anvilTiers = EnumSet.noneOf(AnvilRecipe.EnumTier.class);
-        @Property(comp = @Comp(gt = 0))
+        @Property(comp = @Comp(gt = 0), defaultValue = "ModuleTechBloomeryConfig.BLOOM.HAMMER_HITS_IN_ANVIL_REQUIRED")
         private int anvilHit = ModuleTechBloomeryConfig.BLOOM.HAMMER_HITS_IN_ANVIL_REQUIRED;
         @Property(comp = @Comp(not = "null"), defaultValue = "hammer")
         private AnvilRecipe.EnumType anvilType = AnvilRecipe.EnumType.HAMMER;
@@ -194,28 +194,27 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder failureOutput(ItemStack failureOutput, int weight) {
-            if (failureOutput == null) failureOutput = ItemStack.EMPTY;
-            this.failureOutput.add(new BloomeryRecipeBase.FailureItem(failureOutput, weight));
+            this.failureOutput.add(new BloomeryRecipeBase.FailureItem(failureOutput == null ? ItemStack.EMPTY : failureOutput, weight));
             return this;
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "anvilTiers")
         public RecipeBuilder anvilTier(AnvilRecipe.EnumTier tier) {
             anvilTiers.add(tier);
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "anvilTier")
+        @RecipeBuilderMethodDescription(field = "anvilTiers")
         public RecipeBuilder tierGranite() {
             return anvilTier(AnvilRecipe.EnumTier.GRANITE);
         }
 
-        @RecipeBuilderMethodDescription(field = "anvilTier")
+        @RecipeBuilderMethodDescription(field = "anvilTiers")
         public RecipeBuilder tierIronclad() {
             return anvilTier(AnvilRecipe.EnumTier.IRONCLAD);
         }
 
-        @RecipeBuilderMethodDescription(field = "anvilTier")
+        @RecipeBuilderMethodDescription(field = "anvilTiers")
         public RecipeBuilder tierObsidian() {
             return anvilTier(AnvilRecipe.EnumTier.OBSIDIAN);
         }
@@ -231,7 +230,7 @@ public class Bloomery extends ForgeRegistryWrapper<BloomeryRecipe> {
             return anvilType(AnvilRecipe.EnumType.HAMMER);
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "anvilType")
         public RecipeBuilder typePickaxe() {
             return anvilType(AnvilRecipe.EnumType.PICKAXE);
         }

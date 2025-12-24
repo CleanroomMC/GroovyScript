@@ -127,6 +127,7 @@ public class StoneCrucible extends ForgeRegistryWrapper<StoneCrucibleRecipe> {
         }
 
         @Override
+        @RecipeBuilderRegistrationMethod
         public @Nullable StoneCrucibleRecipe register() {
             if (!validate()) return null;
             StoneCrucibleRecipe recipe = new StoneCrucibleRecipe(fluidOutput.get(0), input.get(0).toMcIngredient(), burnTime).setRegistryName(super.name);

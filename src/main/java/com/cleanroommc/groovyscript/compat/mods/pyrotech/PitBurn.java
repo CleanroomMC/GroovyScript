@@ -97,6 +97,7 @@ public class PitBurn extends ForgeRegistryWrapper<PitBurnRecipe> {
         private int burnStages;
         @Property(comp = @Comp(gt = 0))
         private int burnTime;
+        @Property
         private FluidStack fluidOutput;
         @Property(comp = @Comp(gte = 0, lte = 1))
         private float failureChance;
@@ -261,11 +262,11 @@ public class PitBurn extends ForgeRegistryWrapper<PitBurnRecipe> {
 
     private static Block getBlock(ItemStack stack) {
         Item item = stack.getItem();
-        if (item instanceof ItemBlock) {
-            return ((ItemBlock) item).getBlock();
+        if (item instanceof ItemBlock itemBlock) {
+            return itemBlock.getBlock();
         }
-        if (item instanceof ItemBlockSpecial) {
-            return ((ItemBlockSpecial) item).getBlock();
+        if (item instanceof ItemBlockSpecial itemBlockSpecial) {
+            return itemBlockSpecial.getBlock();
         }
         Block block = ForgeRegistries.BLOCKS.getValue(item.getRegistryName());
         if (block == null) block = Blocks.AIR;

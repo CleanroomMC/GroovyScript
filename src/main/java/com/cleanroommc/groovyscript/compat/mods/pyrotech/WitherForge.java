@@ -129,10 +129,10 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<WitherForgeRecipe> {
 
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.bloom.value")
+        @Property("groovyscript.wiki.pyrotech.bloomery.bloom.value")
         private ItemStack bloom = ItemStack.EMPTY;
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.slag.value")
-        private ItemStack slag = null;
+        @Property("groovyscript.wiki.pyrotech.bloomery.slag.value")
+        private ItemStack slag;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.burnTime.value", comp = @Comp(gt = 0), defaultValue = "21600")
         private int burnTime = 21600;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.experience.value", comp = @Comp(gte = 0))
@@ -143,15 +143,15 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
         private int bloomYieldMax = 15;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.failureChance.value", comp = @Comp(gte = 0, lte = 1))
         private float failureChance = 0.25F;
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.failureOutput.value")
+        @Property("groovyscript.wiki.pyrotech.bloomery.failureOutput.value")
         private final List<BloomeryRecipeBase.FailureItem> failureOutput = new ArrayList<>(1);
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilTiers.value")
+        @Property("groovyscript.wiki.pyrotech.bloomery.anvilTiers.value")
         private final EnumSet<AnvilRecipe.EnumTier> anvilTiers = EnumSet.noneOf(AnvilRecipe.EnumTier.class);
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilHit.value", comp = @Comp(gt = 0))
+        @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilHit.value", comp = @Comp(gt = 0), defaultValue = "ModuleTechBloomeryConfig.BLOOM.HAMMER_HITS_IN_ANVIL_REQUIRED")
         private int anvilHit = ModuleTechBloomeryConfig.BLOOM.HAMMER_HITS_IN_ANVIL_REQUIRED;
         @Property(value = "groovyscript.wiki.pyrotech.bloomery.anvilType.value", comp = @Comp(not = "null"))
         private AnvilRecipe.EnumType anvilType = AnvilRecipe.EnumType.HAMMER;
-        @Property(value = "groovyscript.wiki.pyrotech.bloomery.langKey.value")
+        @Property("groovyscript.wiki.pyrotech.bloomery.langKey.value")
         private String langKey;
 
         @RecipeBuilderMethodDescription
@@ -199,23 +199,23 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
             return this;
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "anvilTiers")
         public RecipeBuilder anvilTier(AnvilRecipe.EnumTier tier) {
             anvilTiers.add(tier);
             return this;
         }
 
-        @RecipeBuilderMethodDescription(field = "anvilTier")
+        @RecipeBuilderMethodDescription(field = "anvilTiers")
         public RecipeBuilder tierGranite() {
             return anvilTier(AnvilRecipe.EnumTier.GRANITE);
         }
 
-        @RecipeBuilderMethodDescription(field = "anvilTier")
+        @RecipeBuilderMethodDescription(field = "anvilTiers")
         public RecipeBuilder tierIronclad() {
             return anvilTier(AnvilRecipe.EnumTier.IRONCLAD);
         }
 
-        @RecipeBuilderMethodDescription(field = "anvilTier")
+        @RecipeBuilderMethodDescription(field = "anvilTiers")
         public RecipeBuilder tierObsidian() {
             return anvilTier(AnvilRecipe.EnumTier.OBSIDIAN);
         }
@@ -231,7 +231,7 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
             return anvilType(AnvilRecipe.EnumType.HAMMER);
         }
 
-        @RecipeBuilderMethodDescription
+        @RecipeBuilderMethodDescription(field = "anvilType")
         public RecipeBuilder typePickaxe() {
             return anvilType(AnvilRecipe.EnumType.PICKAXE);
         }
@@ -294,7 +294,7 @@ public class WitherForge extends ForgeRegistryWrapper<WitherForgeRecipe> {
         @Override
         public @Nullable WitherForgeRecipe register() {
             if (!validate()) return null;
-            WitherForgeRecipeBuilder builder = new WitherForgeRecipeBuilder(super.name, !output.isEmpty() ? output.get(0) : ItemStack.EMPTY, input.get(0).toMcIngredient());
+            WitherForgeRecipeBuilder builder = new WitherForgeRecipeBuilder(super.name, output.getOrEmpty(0), input.get(0).toMcIngredient());
             failureOutput.forEach(i -> builder.addFailureItem(i.getItemStack(), i.getWeight()));
             WitherForgeRecipe recipe = builder
                     .setSlagItem(slag, slag.getCount())
