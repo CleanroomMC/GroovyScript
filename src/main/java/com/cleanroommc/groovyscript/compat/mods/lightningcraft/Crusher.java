@@ -63,9 +63,8 @@ public class Crusher extends StandardListRegistry<LightningCrusherRecipe> {
             if (!validate()) return null;
             List<ItemStack> inputs = Arrays.asList(input.get(0).getMatchingStacks());
             LightningCrusherRecipe recipe = new LightningCrusherRecipe(output.get(0), inputs);
-            ModSupport.LIGHTNINGCRAFT.get().crusher.add(recipe);
+            ModSupport.LIGHTNING_CRAFT.get().crusher.add(recipe);
             return recipe;
         }
     }
-
 }

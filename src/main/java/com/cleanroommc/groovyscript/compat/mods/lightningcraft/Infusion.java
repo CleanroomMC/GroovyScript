@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.lightningcraft;
 
+import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
@@ -13,6 +14,7 @@ import sblectric.lightningcraft.api.recipes.LightningInfusionRecipe;
 import sblectric.lightningcraft.recipes.LightningInfusionRecipes;
 
 import java.util.Collection;
+import java.util.List;
 
 @RegistryDescription
 public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
@@ -28,8 +30,8 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
     }
 
     @RecipeBuilderDescription(example = {
-        @Example(".centerItem(item('minecraft:clay')).input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:iron_ingot'), item('minecraft:iron_ingot')).output(item('minecraft:nether_star')).le(500)"),
-        @Example(".centerItem(item('minecraft:clay')).input(item('minecraft:gold_ingot'), item('minecraft:potion').withNbt(['Potion': 'minecraft:leaping'])).output(item('minecraft:diamond_block')).le(200)"),
+            @Example(".center(item('minecraft:clay')).input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:iron_ingot'), item('minecraft:iron_ingot')).output(item('minecraft:nether_star')).le(500)"),
+            @Example(".center(item('minecraft:clay')).input(item('minecraft:gold_ingot'), item('minecraft:potion').withNbt(['Potion': 'minecraft:leaping'])).output(item('minecraft:diamond_block')).le(200)"),
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -39,13 +41,11 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<LightningInfusionRecipe> {
 
-        @Property
-        private IIngredient centerItem = null;
-
-        @Property(comp = @Comp(gte = 0), defaultValue = "-1")
-        private int le = -1;
-
-        @Property(defaultValue = "determined automatically based on the input items")
+        @Property(comp = @Comp(not = "empty"))
+        private IIngredient center;
+        @Property(comp = @Comp(gte = 0))
+        private int le;
+        @Property(defaultValue = "true if any input item has nbt data")
         private boolean nbtSensitive = false;
 
         private boolean nbtSensitiveChanged = false;
@@ -70,8 +70,8 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
         }
 
         @RecipeBuilderMethodDescription
-        public RecipeBuilder centerItem(IIngredient centerItem) {
-            this.centerItem = centerItem;
+        public RecipeBuilder center(IIngredient center) {
+            this.center = center;
             return this;
         }
 
@@ -90,13 +90,33 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 0, 4, 1, 1);
             validateFluids(msg);
-            msg.add(centerItem == null, "Center item must not be null");
-            msg.add(centerItem != null && centerItem.getMatchingStacks().length == 0, "Center item must not have a matching item");
+            msg.add(IngredientHelper.isEmpty(center), "Center item must not be empty");
             msg.add(le < 0, "LE cost must be positive");
             for (IIngredient it : this.input) {
-                msg.add(it == null || it.getMatchingStacks().length == 0, "All inputs must have a matching item");
+                msg.add(IngredientHelper.isEmpty(it), "All inputs must not be empty");
             }
-            msg.add(IngredientHelper.overMaxSize(centerItem, 1), "centerItem must have a stack size of 1");
+            msg.add(IngredientHelper.overMaxSize(center, 1), "centerItem must have a stack size of 1");
+            // check if any input items have NBT to enable NBT sensitive mode automatically
+            if (!nbtSensitiveChanged) {
+                nbtSensitive = hasAnyNbt();
+            }
+        }
+
+        @GroovyBlacklist
+        private boolean hasAnyNbt() {
+            for (var stack : center.getMatchingStacks()) {
+                if (stack.hasTagCompound()) {
+                    return true;
+                }
+            }
+            for (var i : input) {
+                for (var stack : i.getMatchingStacks()) {
+                    if (stack.hasTagCompound()) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         @Override
@@ -104,28 +124,15 @@ public class Infusion extends StandardListRegistry<LightningInfusionRecipe> {
         public @Nullable LightningInfusionRecipe register() {
             if (!validate()) return null;
 
-            ItemStack centerItem = this.centerItem.getMatchingStacks()[0];
-            ItemStack[] inputs = input.stream().map(i -> i.getMatchingStacks()[0]).toArray(ItemStack[]::new);
-
-            // check if any input items have NBT to enable NBT sensitive mode automatically
-            if (!nbtSensitiveChanged) {
-                if (centerItem.hasTagCompound()) {
-                    nbtSensitive = true;
-                } else {
-                    for (ItemStack i : inputs) {
-                        if (i.hasTagCompound()) {
-                            nbtSensitive = true;
-                            break;
-                        }
-                    }
+            LightningInfusionRecipe recipe = null;
+            for (var centerStack : center.getMatchingStacks()) {
+                for (List<ItemStack> cartesianProductItemStack : IngredientHelper.cartesianProductItemStacks(input)) {
+                    recipe = new LightningInfusionRecipe(output.get(0), le, centerStack, cartesianProductItemStack.toArray());
+                    if (nbtSensitive) recipe.setNBTSensitive();
+                    ModSupport.LIGHTNING_CRAFT.get().infusion.add(recipe);
                 }
             }
-
-            LightningInfusionRecipe recipe = new LightningInfusionRecipe(output.get(0), le, centerItem, (Object[]) inputs);
-            if (nbtSensitive) recipe.setNBTSensitive();
-            ModSupport.LIGHTNINGCRAFT.get().infusion.add(recipe);
             return recipe;
         }
     }
-
 }
