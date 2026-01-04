@@ -1,0 +1,56 @@
+
+// Auto generated groovyscript example file
+// MODS_LOADED: lightningcraft
+
+log 'mod \'lightningcraft\' detected, running script'
+
+// Lightning Crusher:
+// Consumes LE to convert 1 input itemstack into an output itemstack.
+
+mods.lightningcraft.crusher.removeByInput(item('minecraft:saddle'))
+mods.lightningcraft.crusher.removeByOutput(item('minecraft:redstone'))
+// mods.lightningcraft.crusher.removeAll()
+
+mods.lightningcraft.crusher.recipeBuilder()
+    .input(item('minecraft:diamond_block'))
+    .output(item('minecraft:nether_star'))
+    .register()
+
+
+// Lightning Infusion Table:
+// Consumes LE to convert up to 5 input itemstacks into an output itemstack.
+
+mods.lightningcraft.infusion.removeByOutput(item('minecraft:diamond'))
+// mods.lightningcraft.infusion.removeAll()
+
+mods.lightningcraft.infusion.recipeBuilder()
+    .center(item('minecraft:clay'))
+    .input(item('minecraft:gold_ingot'), item('minecraft:gold_ingot'), item('minecraft:iron_ingot'), item('minecraft:iron_ingot'))
+    .output(item('minecraft:nether_star'))
+    .le(500)
+    .register()
+
+mods.lightningcraft.infusion.recipeBuilder()
+    .center(item('minecraft:clay'))
+    .input(item('minecraft:gold_ingot'), item('minecraft:potion').withNbt(['Potion': 'minecraft:leaping']))
+    .output(item('minecraft:diamond_block'))
+    .le(200)
+    .register()
+
+
+// Lightning Transformation:
+// Converts any number of itemstacks on the ground into the output itemstack when the area is struck by lightning.
+
+mods.lightningcraft.transformation.removeByInput(item('minecraft:iron_ingot'))
+mods.lightningcraft.transformation.removeByOutput(item('lightningcraft:material', 11))
+// mods.lightningcraft.transformation.removeAll()
+
+mods.lightningcraft.transformation.recipeBuilder()
+    .input(item('minecraft:clay'))
+    .output(item('minecraft:diamond'))
+    .register()
+
+mods.lightningcraft.transformation.recipeBuilder()
+    .input(item('minecraft:gold_ingot') * 3, item('minecraft:diamond_block'))
+    .output(item('minecraft:clay') * 16)
+    .register()

@@ -2108,6 +2108,21 @@ groovyscript.wiki.threng.etcher.top.value=Sets the top slot of the recipe
 groovyscript.wiki.threng.etcher.bottom.value=Sets the bottom slot of the recipe
 
 
+# LightningCraft
+groovyscript.wiki.lightningcraft.crusher.title=Lightning Crusher
+groovyscript.wiki.lightningcraft.crusher.description=Consumes LE to convert 1 input itemstack into an output itemstack
+
+groovyscript.wiki.lightningcraft.infusion.title=Lightning Infusion Table
+groovyscript.wiki.lightningcraft.infusion.description=Consumes LE to convert up to 5 input itemstacks into an output itemstack
+groovyscript.wiki.lightningcraft.infusion.center.value=Sets the center slot of the recipe
+groovyscript.wiki.lightningcraft.infusion.le.value=Sets the LE cost for the recipe
+groovyscript.wiki.lightningcraft.infusion.nbtSensitive.value=Sets whether the recipe inputs require a specific NBT tag
+
+groovyscript.wiki.lightningcraft.transformation.title=Lightning Transformation
+groovyscript.wiki.lightningcraft.transformation.description=Converts any number of itemstacks on the ground into the output itemstack when the area is struck by lightning.
+groovyscript.wiki.lightningcraft.transformation.note=THe items on the ground must match the stack size of the recipe exactly.
+
+
 # Magneticraft
 groovyscript.wiki.magneticraft.crushing_table.title=Crushing Table
 groovyscript.wiki.magneticraft.crushing_table.description=Converts an input itemstack into an output itemstack when placed on top of the Crushing Table and interacted with by a Hammer which has

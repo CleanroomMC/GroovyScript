@@ -73,9 +73,8 @@ public @interface Property {
      * For instance, "0" is the default value for {@code int}s, and so does not have to be declared.
      *
      * @return what the default value is, defaults to {@code false}, {@code 0}, {@code 0.0f}, {@code "null"}, etc depending on the property class.
-     * @see com.cleanroommc.groovyscript.documentation.Builder#defaultValueConverter
+     * @see com.cleanroommc.groovyscript.documentation.helper.descriptor.DescriptorHelper#defaultValueConverter
      */
-    @SuppressWarnings("JavadocReference")
     String defaultValue() default "";
 
     /**
