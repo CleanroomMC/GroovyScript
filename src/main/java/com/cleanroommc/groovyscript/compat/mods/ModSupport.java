@@ -1,6 +1,7 @@
 package com.cleanroommc.groovyscript.compat.mods;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.GroovyScriptConfig;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyPlugin;
 import com.cleanroommc.groovyscript.compat.mods.actuallyadditions.ActuallyAdditions;
@@ -78,6 +79,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -196,6 +198,10 @@ public class ModSupport {
             throw new RuntimeException("Groovy mod containers must be registered at construction event! Tried to register '" + container.getContainerName() + "' too late.");
         }
         if (!Loader.isModLoaded(container.getModId())) return;
+        if (ArrayUtils.contains(GroovyScriptConfig.compat.blacklistedContainers, container.getModId())) {
+            GroovyScript.LOGGER.warn("Not registering compat for '{}' as it was in the config blacklist", container.getContainerName());
+            return;
+        }
         if (hasCompatFor(container.getModId())) {
             GroovyContainer<?> current = getContainer(container.getModId());
             if (current.getOverridePriority().ordinal() >= container.getOverridePriority().ordinal()) {
@@ -221,6 +227,10 @@ public class ModSupport {
     void registerContainer(GroovyContainer<?> container) {
         if (containerList.contains(container) || containers.containsKey(container.getModId())) {
             throw new IllegalStateException("Container already present!");
+        }
+        if (ArrayUtils.contains(GroovyScriptConfig.compat.blacklistedContainers, container.getModId())) {
+            GroovyScript.LOGGER.warn("Not registering compat for '{}' as it was in the config blacklist", container.getContainerName());
+            return;
         }
         containerList.add(container);
         for (String alias : container.getAliases()) {

@@ -26,5 +26,14 @@ public class GroovyScriptConfig {
         @Config.Name("ExtendedCrafting recipe maker makes grs recipes")
         @Config.Comment("If this is true, the recipe maker from ExtendedCrafting will produce a script for GroovyScript instead of CraftTweaker.")
         public boolean extendedCraftingRecipeMakerMakesGrsRecipes = true;
+
+        @Config.Name("Blacklisted Containers")
+        @Config.Comment({
+                "This is a list of modids to not register containers for. Only do this if the containers cause errors or crash when registered.",
+                "This happens when a mod uses the same modid as a mod with direct compat, but has different internals,",
+                "typically a fork of the original mod that breaks compatibility."
+        })
+        @Config.RequiresMcRestart
+        public String[] blacklistedContainers = {};
     }
 }
