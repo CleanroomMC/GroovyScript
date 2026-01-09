@@ -3,9 +3,11 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.TanningRackRecipe;
 import net.minecraft.item.ItemStack;
@@ -14,9 +16,13 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
 
-
     public TanningRack() {
         super(ModuleTechBasic.Registries.TANNING_RACK_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')"))
@@ -35,7 +41,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
                 .register();
     }
 
-    @MethodDescription(example = @Example("item('minecraft:wheat')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing tanning rack recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -50,7 +56,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         }
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:leather')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing tanning rack recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -70,10 +76,10 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<TanningRackRecipe> {
 
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int dryTime;
-        @Property
-        private ItemStack failureItem;
+        @Property(comp = @Comp(not = "null"))
+        private ItemStack failureItem = ItemStack.EMPTY;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder failureItem(ItemStack stack) {
@@ -85,6 +91,11 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         public RecipeBuilder dryTime(int time) {
             this.dryTime = time;
             return this;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_tanning_rack_";
         }
 
         @Override
@@ -100,9 +111,10 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(dryTime < 0, "dryTime must be a non negative integer, yet it was {}", dryTime);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(dryTime <= 0, "dryTime must be a non negative integer that is larger than 0, yet it was {}", dryTime);
+            msg.add(failureItem == null, "failureItem must not be null");
             msg.add(ModuleTechBasic.Registries.TANNING_RACK_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -112,7 +124,7 @@ public class TanningRack extends ForgeRegistryWrapper<TanningRackRecipe> {
         public @Nullable TanningRackRecipe register() {
             if (!validate()) return null;
             TanningRackRecipe recipe = new TanningRackRecipe(output.get(0), input.get(0).toMcIngredient(), failureItem, dryTime).setRegistryName(super.name);
-            PyroTech.tanningRack.add(recipe);
+            ModSupport.PYROTECH.get().tanningRack.add(recipe);
             return recipe;
         }
     }
