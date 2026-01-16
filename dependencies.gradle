@@ -146,6 +146,21 @@ final Map<String, List<String>> runtime_dependencies = [
         'curse.maven:vintagefix-871198:5536276'             : [dev_vintagefix],
 ]
 
+configurations {
+    specialEmbed
+    implementation.extendsFrom(specialEmbed)
+}
+
+jar {
+    from provider {
+        configurations.specialEmbed.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }, {
+        exclude 'META-INF', 'META-INF/**', 'about*.html'
+    }
+}
+
 dependencies {
     embed "org.apache.groovy:groovy:${project.groovy_version}"
 

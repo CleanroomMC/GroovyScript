@@ -27,18 +27,3 @@ minecraft {
 
     //extraTweakClasses << "${modGroup}.LaunchTweaker"
 }
-
-configurations {
-    specialEmbed
-    implementation.extendsFrom(specialEmbed)
-}
-
-jar {
-    from provider {
-        configurations.specialEmbed.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }, {
-        exclude 'META-INF', 'META-INF/**', 'about*.html'
-    }
-}
