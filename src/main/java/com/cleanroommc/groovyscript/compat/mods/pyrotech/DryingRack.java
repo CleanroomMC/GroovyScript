@@ -3,30 +3,54 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.DryingRackRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickOvenRecipesAdd;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.StoneOvenRecipesAdd;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.BrickOvenRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneOvenRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-@RegistryDescription
+@RegistryDescription(
+        admonition = @Admonition(
+                value = "groovyscript.wiki.pyrotech.drying_rack.note0",
+                format = Admonition.Format.STANDARD,
+                hasTitle = true))
 public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
-
 
     public DryingRack() {
         super(ModuleTechBasic.Registries.DRYING_RACK_RECIPE);
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')"))
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
+    }
+
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).dryTime(260).name('iron_to_gold_drying_rack')"),
+            @Example(".input(item('minecraft:ender_eye')).output(item('minecraft:ender_pearl')).dryTime(500).inherit(true).name('ender_eye_to_ender_pearl')")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public DryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime) {
+        return add(name, input, output, dryTime, false);
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.drying_rack.add.inherit", example = @Example("'apple_to_dirt', item('minecraft:apple'), item('minecraft:dirt'), 1200, true"))
+    public DryingRackRecipe add(String name, IIngredient input, ItemStack output, int dryTime, boolean inherit) {
         return recipeBuilder()
+                .inherit(inherit)
                 .dryTime(dryTime)
                 .name(name)
                 .input(input)
@@ -34,7 +58,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
                 .register();
     }
 
-    @MethodDescription(example = @Example("item('minecraft:wheat')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:wheat')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing drying rack recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -49,7 +73,7 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         }
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:sponge')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing drying rack recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -69,13 +93,26 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<DryingRackRecipe> {
 
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int dryTime;
+        @Property
+        private boolean inherit;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder dryTime(int time) {
             this.dryTime = time;
             return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder inherit(boolean inherit) {
+            this.inherit = inherit;
+            return this;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_drying_rack_";
         }
 
         @Override
@@ -91,9 +128,9 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(dryTime < 0, "dryTime must be a non negative integer, yet it was {}", dryTime);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(dryTime <= 0, "dryTime must be a non negative integer that is larger than 0, yet it was {}", dryTime);
             msg.add(ModuleTechBasic.Registries.DRYING_RACK_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -102,7 +139,14 @@ public class DryingRack extends ForgeRegistryWrapper<DryingRackRecipe> {
         public @Nullable DryingRackRecipe register() {
             if (!validate()) return null;
             DryingRackRecipe recipe = new DryingRackRecipe(output.get(0), input.get(0).toMcIngredient(), dryTime).setRegistryName(super.name);
-            PyroTech.dryingRack.add(recipe);
+            ModSupport.PYROTECH.get().dryingRack.add(recipe);
+            if (inherit && ModSupport.PYROTECH.get().stoneOven.isEnabled()) {
+                ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "drying_rack/" + super.name.getPath());
+                StoneOvenRecipe stoneOvenRecipe = StoneOvenRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
+                ModSupport.PYROTECH.get().stoneOven.add(stoneOvenRecipe);
+                BrickOvenRecipe brickOvenRecipe = BrickOvenRecipesAdd.INHERIT_TRANSFORMER.apply(stoneOvenRecipe).setRegistryName(location);
+                ModSupport.PYROTECH.get().brickOven.add(brickOvenRecipe);
+            }
             return recipe;
         }
     }

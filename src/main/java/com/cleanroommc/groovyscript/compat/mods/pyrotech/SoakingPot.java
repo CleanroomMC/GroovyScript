@@ -3,9 +3,11 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.SoakingPotRecipe;
 import net.minecraft.item.ItemStack;
@@ -17,6 +19,11 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
 
     public SoakingPot() {
         super(ModuleTechBasic.Registries.SOAKING_POT_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).fluidInput(fluid('amongium') * 125).output(item('minecraft:emerald')).time(400).campfireRequired(true).name('diamond_to_emerald_with_amongium_soaking_pot')"))
@@ -35,7 +42,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
                 .register();
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('pyrotech:hide_washed')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing soaking pot recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -50,7 +57,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         }
     }
 
-    @MethodDescription(example = @Example("item('pyrotech:material', 54)"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('pyrotech:material', 54)"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing soaking pot recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -73,8 +80,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
 
         @Property
         private boolean campfireRequired;
-
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int time;
 
         @RecipeBuilderMethodDescription
@@ -90,6 +96,11 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         }
 
         @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_soaking_pot_";
+        }
+
+        @Override
         public String getErrorMsg() {
             return "Error adding Pyrotech Soaking Pot Recipe";
         }
@@ -101,9 +112,10 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg, 1, 1, 0, 0);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(time <= 0, "time must be a non negative integer that is larger than 0, yet it was {}", time);
             msg.add(ModuleTechBasic.Registries.SOAKING_POT_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -112,7 +124,7 @@ public class SoakingPot extends ForgeRegistryWrapper<SoakingPotRecipe> {
         public @Nullable SoakingPotRecipe register() {
             if (!validate()) return null;
             SoakingPotRecipe recipe = new SoakingPotRecipe(output.get(0), input.get(0).toMcIngredient(), fluidInput.get(0), campfireRequired, time).setRegistryName(super.name);
-            PyroTech.soakingPot.add(recipe);
+            ModSupport.PYROTECH.get().soakingPot.add(recipe);
             return recipe;
         }
     }

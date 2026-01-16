@@ -3,9 +3,11 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CompostBinRecipe;
 import net.minecraft.item.ItemStack;
@@ -15,9 +17,13 @@ import org.jetbrains.annotations.Nullable;
 @RegistryDescription
 public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
 
-
     public CompostBin() {
         super(ModuleTechBasic.Registries.COMPOST_BIN_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald') * 4).compostValue(25).name('diamond_to_emerald_compost_bin')"))
@@ -25,7 +31,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay2', ore('ingotIron') * 5, item('minecraft:clay_ball') * 20, 2"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'iron_to_clay2', ore('ingotIron'), item('minecraft:clay_ball') * 20, 2"))
     public CompostBinRecipe add(String name, IIngredient input, ItemStack output, int compostValue) {
         return recipeBuilder()
                 .compostValue(compostValue)
@@ -35,7 +41,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
                 .register();
     }
 
-    @MethodDescription(example = @Example("item('minecraft:golden_carrot')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:golden_carrot')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing compost bin recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -50,7 +56,7 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
         }
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example(value = "item('pyrotech:mulch') * 4", commented = true))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing compost bin recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -70,13 +76,18 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<CompostBinRecipe> {
 
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int compostValue;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder compostValue(int compostValue) {
             this.compostValue = compostValue;
             return this;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_compost_bin_";
         }
 
         @Override
@@ -92,9 +103,9 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(compostValue < 0, "compostValue must be a non negative integer, yet it was {}", compostValue);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(compostValue <= 0, "compostValue must be a non negative integer that is larger than 0, yet it was {}", compostValue);
             msg.add(ModuleTechBasic.Registries.COMPACTING_BIN_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -108,12 +119,12 @@ public class CompostBin extends ForgeRegistryWrapper<CompostBinRecipe> {
                 for (ItemStack i : in) {
                     ResourceLocation rl = new ResourceLocation(super.name.getNamespace(), super.name.getPath() + "_" + (j++));
                     CompostBinRecipe recipe = new CompostBinRecipe(output.get(0), i, compostValue).setRegistryName(rl);
-                    PyroTech.compostBin.add(recipe);
+                    ModSupport.PYROTECH.get().compostBin.add(recipe);
                 }
                 return null;
             }
             CompostBinRecipe recipe = new CompostBinRecipe(output.get(0), in[0], compostValue).setRegistryName(super.name);
-            PyroTech.compostBin.add(recipe);
+            ModSupport.PYROTECH.get().compostBin.add(recipe);
             return recipe;
         }
     }

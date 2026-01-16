@@ -35,7 +35,7 @@ public class ForgeRegistryWrapper<T extends IForgeRegistryEntry<T>> extends Name
 
     public ForgeRegistryWrapper(IForgeRegistry<T> registry, Collection<String> aliases) {
         super(aliases);
-        this.registry = Objects.requireNonNull(registry);
+        this.registry = isEnabled() ? Objects.requireNonNull(registry) : null;
     }
 
     @GroovyBlacklist

@@ -3,9 +3,11 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.CampfireRecipe;
 import net.minecraft.item.ItemStack;
@@ -16,6 +18,11 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
 
     public Campfire() {
         super(ModuleTechBasic.Registries.CAMPFIRE_RECIPE);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
     }
 
     @RecipeBuilderDescription(example = @Example(".input(item('minecraft:diamond')).output(item('minecraft:emerald')).duration(400).name('diamond_campfire_to_emerald')"))
@@ -33,7 +40,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
                 .register();
     }
 
-    @MethodDescription(example = @Example("item('minecraft:porkchop')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:porkchop')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing campfire recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -48,7 +55,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         }
     }
 
-    @MethodDescription(example = @Example("item('minecraft:cooked_porkchop')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('minecraft:cooked_porkchop')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing campfire recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -68,13 +75,18 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
     @Property(property = "name")
     public static class RecipeBuilder extends AbstractRecipeBuilder<CampfireRecipe> {
 
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int duration;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder duration(int time) {
             this.duration = time;
             return this;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_campfire_";
         }
 
         @Override
@@ -90,9 +102,9 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
-            msg.add(duration < 0, "duration must be a non negative integer, yet it was {}", duration);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(duration <= 0, "duration must be a non negative integer that is larger than 0, yet it was {}", duration);
             msg.add(ModuleTechBasic.Registries.CAMPFIRE_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -101,7 +113,7 @@ public class Campfire extends ForgeRegistryWrapper<CampfireRecipe> {
         public @Nullable CampfireRecipe register() {
             if (!validate()) return null;
             CampfireRecipe recipe = new CampfireRecipe(output.get(0), input.get(0).toMcIngredient(), duration).setRegistryName(super.name);
-            PyroTech.campfire.add(recipe);
+            ModSupport.PYROTECH.get().campfire.add(recipe);
             return recipe;
         }
     }

@@ -3,14 +3,20 @@ package com.cleanroommc.groovyscript.compat.mods.pyrotech;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
+import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.helper.ingredient.ItemStackList;
 import com.cleanroommc.groovyscript.helper.recipe.AbstractRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.ForgeRegistryWrapper;
+import com.codetaylor.mc.pyrotech.ModPyrotech;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.KilnPitRecipe;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.BrickKilnRecipesAdd;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.init.recipe.StoneKilnRecipesAdd;
+import com.codetaylor.mc.pyrotech.modules.tech.machine.recipe.StoneKilnRecipe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription
@@ -20,14 +26,28 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         super(ModuleTechBasic.Registries.KILN_PIT_RECIPE, Alias.generateOfClass(PitKiln.class).andGenerate("Kiln"));
     }
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')"))
+    @Override
+    public boolean isEnabled() {
+        return ModPyrotech.INSTANCE.isModuleEnabled(ModuleTechBasic.class);
+    }
+
+    @RecipeBuilderDescription(example = {
+            @Example(".input(item('minecraft:iron_ingot')).output(item('minecraft:gold_ingot')).burnTime(400).failureChance(1f).failureOutput(item('minecraft:wheat'), item('minecraft:carrot'), item('minecraft:sponge')).name('iron_to_gold_kiln_with_failure_items')"),
+            @Example(".input(item('minecraft:record_11')).output(item('minecraft:record_13')).burnTime(200).failureChance(0f).inherit(true).name('record_11_to_record_13')")
+    })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("'clay_to_iron', item('minecraft:clay_ball') * 5, item('minecraft:iron_ingot'), 1200, 0.5f, [item('minecraft:dirt'), item('minecraft:cobblestone')]"))
-    public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, Iterable<ItemStack> failureOutput) {
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, float failureChance, ItemStack... failureOutput) {
+        return add(name, input, output, burnTime, false, failureChance, failureOutput);
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION, description = "groovyscript.wiki.pyrotech.pit_kiln.add.inherit", example = @Example("'brick_to_iron', item('minecraft:brick'), item('minecraft:iron_ingot'), 1200, true, 0.5f, item('minecraft:dirt'), item('minecraft:cobblestone')"))
+    public KilnPitRecipe add(String name, IIngredient input, ItemStack output, int burnTime, boolean inherit, float failureChance, ItemStack... failureOutput) {
         return recipeBuilder()
+                .inherit(inherit)
                 .burnTime(burnTime)
                 .failureChance(failureChance)
                 .failureOutput(failureOutput)
@@ -37,7 +57,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
                 .register();
     }
 
-    @MethodDescription
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('pyrotech:bucket_refractory_unfired')"))
     public void removeByInput(ItemStack input) {
         if (GroovyLog.msg("Error removing pit kiln recipe")
                 .add(IngredientHelper.isEmpty(input), () -> "Input 1 must not be empty")
@@ -52,7 +72,7 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         }
     }
 
-    @MethodDescription(example = @Example("item('pyrotech:bucket_clay')"))
+    @MethodDescription(type = MethodDescription.Type.REMOVAL, example = @Example("item('pyrotech:bucket_clay')"))
     public void removeByOutput(IIngredient output) {
         if (GroovyLog.msg("Error removing pit kiln recipe")
                 .add(IngredientHelper.isEmpty(output), () -> "Output 1 must not be empty")
@@ -74,10 +94,12 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
 
         @Property
         private final ItemStackList failureOutput = new ItemStackList();
-        @Property(comp = @Comp(gte = 1))
+        @Property(comp = @Comp(gt = 0))
         private int burnTime;
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0, lte = 1))
         private float failureChance;
+        @Property
+        private boolean inherit;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder burnTime(int time) {
@@ -107,8 +129,21 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder failureOutput(Iterable<ItemStack> failureOutputs) {
-            for (ItemStack itemStack : failureOutputs) failureOutput(itemStack);
+            for (ItemStack itemStack : failureOutputs) {
+                failureOutput(itemStack);
+            }
             return this;
+        }
+
+        @RecipeBuilderMethodDescription
+        public RecipeBuilder inherit(boolean inherit) {
+            this.inherit = inherit;
+            return this;
+        }
+
+        @Override
+        public String getRecipeNamePrefix() {
+            return "groovyscript_pit_kiln_";
         }
 
         @Override
@@ -123,12 +158,11 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
 
         @Override
         public void validate(GroovyLog.Msg msg) {
+            validateName();
             validateItems(msg, 1, 1, 1, 1);
             this.failureOutput.trim();
-            validateCustom(msg, failureOutput, 1, 100, "failure output");
-            msg.add(burnTime < 0, "burnTime must be a non negative integer, yet it was {}", burnTime);
-            msg.add(failureChance < 0, "failureChance must be a non negative float, yet it was {}", failureChance);
-            msg.add(super.name == null, "name cannot be null.");
+            msg.add(burnTime <= 0, "burnTime must be a non negative integer that is larger than 0, yet it was {}", burnTime);
+            msg.add(failureChance < 0, "failureChance must not be negative nor larger than 1.0, yet it was {}", failureChance);
             msg.add(ModuleTechBasic.Registries.KILN_PIT_RECIPE.getValue(super.name) != null, "tried to register {}, but it already exists.", super.name);
         }
 
@@ -137,7 +171,13 @@ public class PitKiln extends ForgeRegistryWrapper<KilnPitRecipe> {
         public @Nullable KilnPitRecipe register() {
             if (!validate()) return null;
             KilnPitRecipe recipe = new KilnPitRecipe(output.get(0), input.get(0).toMcIngredient(), burnTime, failureChance, failureOutput.toArray(new ItemStack[0])).setRegistryName(super.name);
-            PyroTech.pitKiln.add(recipe);
+            ModSupport.PYROTECH.get().pitKiln.add(recipe);
+            if (inherit && ModSupport.PYROTECH.get().stoneKiln.isEnabled()) {
+                ResourceLocation location = new ResourceLocation(super.name.getNamespace(), "pit_kiln/" + super.name.getPath());
+                StoneKilnRecipe stoneKilnRecipe = StoneKilnRecipesAdd.INHERIT_TRANSFORMER.apply(recipe).setRegistryName(location);
+                ModSupport.PYROTECH.get().stoneKiln.add(stoneKilnRecipe);
+                ModSupport.PYROTECH.get().brickKiln.add(BrickKilnRecipesAdd.INHERIT_TRANSFORMER.apply(stoneKilnRecipe).setRegistryName(location));
+            }
             return recipe;
         }
     }
