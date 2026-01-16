@@ -4,53 +4,27 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.GroovyFile;
 import com.cleanroommc.groovyscript.mapper.AbstractObjectMapper;
 import com.cleanroommc.groovyscript.mapper.ObjectMapperManager;
-import org.codehaus.groovy.ast.ClassCodeExpressionTransformer;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.Parameter;
-import org.codehaus.groovy.ast.expr.*;
+import org.codehaus.groovy.ast.expr.ClosureExpression;
+import org.codehaus.groovy.ast.expr.ConstructorCallExpression;
+import org.codehaus.groovy.ast.expr.Expression;
+import org.codehaus.groovy.ast.expr.MethodCallExpression;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.syntax.SyntaxException;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
+public class GroovyScriptTransformer extends AbstractTransformer {
 
     private static final ClassNode groovyFile = ClassHelper.makeCached(GroovyFile.class);
-    private final SourceUnit source;
-    private final ClassNode classNode;
 
     public GroovyScriptTransformer(SourceUnit source, ClassNode classNode) {
-        this.source = source;
-        this.classNode = classNode;
-    }
-
-    @Override
-    protected SourceUnit getSourceUnit() {
-        return source;
-    }
-
-    private static Expression makeCheckedCall(ClassNode classNode, String name, List<Expression> arguments) {
-        return new StaticMethodCallExpression(classNode, name, new ArgumentListExpression(arguments));
-    }
-
-    private static Expression makeCheckedCall(ClassNode classNode, String name, Expression arguments) {
-        return makeCheckedCall(classNode, name, getArguments(arguments));
-    }
-
-    private static List<Expression> getArguments(Expression expr) {
-        List<Expression> args;
-        if (expr instanceof TupleExpression te) {
-            args = new ArrayList<>(te.getExpressions());
-        } else {
-            args = new ArrayList<>();
-            args.add(expr);
-        }
-        return args;
+        super(source, classNode);
     }
 
     @Override
@@ -77,7 +51,7 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
                 cce.setType(groovyFile);
             } else if (cce.getType().getName().equals(PrintWriter.class.getName())) {
                 // we need to whitelist PrintWriter for print methods, but creating PrintWriter is still disallowed
-                source.addError(new SyntaxException("Not allowed to create PrintWriter!", expr));
+                getSourceUnit().addError(new SyntaxException("Not allowed to create PrintWriter!", expr));
             }
         }
         return expr;
@@ -107,7 +81,7 @@ public class GroovyScriptTransformer extends ClassCodeExpressionTransformer {
                         .map(goh -> goh.getMod() == null ? goh.getName() : "mods." + goh.getMod().getModId() + "." + goh.getName())
                         .collect(Collectors.toList());
                 String msg = GroovyLog.format("Can't infer ObjectMapper from name {}, since one is added by {} mods. " + "Please choose one of the following: {}", mce.getMethodAsString(), conflicts.size(), suggestions);
-                source.addError(new SyntaxException(msg, mce));
+                getSourceUnit().addError(new SyntaxException(msg, mce));
             }
         }
         return mce;
