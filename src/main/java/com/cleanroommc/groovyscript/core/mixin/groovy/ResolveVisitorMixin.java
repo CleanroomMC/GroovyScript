@@ -1,6 +1,8 @@
 package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.sandbox.transformer.AsmDecompileHelper;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.classgen.VariableScopeVisitor;
 import org.codehaus.groovy.control.ResolveVisitor;
@@ -8,6 +10,7 @@ import org.codehaus.groovy.control.SourceUnit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -155,5 +158,14 @@ public abstract class ResolveVisitorMixin extends ClassCodeExpressionTransformer
                 visitAnnotations(node); // GROOVY-10750, GROOVY-11206
         }
         currentClass = oldNode;
+    }
+
+    @WrapOperation(method = "transformVariableExpression", at = @At(value = "INVOKE", target = "Lorg/codehaus/groovy/control/ResolveVisitor;resolve(Lorg/codehaus/groovy/ast/ClassNode;)Z"))
+    public boolean transformVariableExpression(ResolveVisitor instance, ClassNode type, Operation<Boolean> original) {
+        if (currentClass.getNameWithoutPackage().equals(type.getName())) {
+            // if the variable name is just the simple class name of the class its inside, assume it's not referring to itself
+            return false;
+        }
+        return original.call(instance, type);
     }
 }
