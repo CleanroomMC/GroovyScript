@@ -38,6 +38,7 @@ public class SandboxData {
     private static File runConfigFile;
     private static File resourcesFile;
     private static File cachePath;
+    private static File sideOnlyGeneratedFile;
     private static URL rootUrl;
     private static URL[] rootUrls;
     private static boolean initialised = false;
@@ -69,6 +70,7 @@ public class SandboxData {
         }
         runConfigFile = new File(scriptPath, "runConfig.json");
         resourcesFile = new File(scriptPath, "assets");
+        sideOnlyGeneratedFile = new File(scriptPath, "sideOnlyGenerated.json");
         try {
             rootUrl = scriptPath.toURI().toURL();
             rootUrls = new URL[]{
@@ -107,6 +109,11 @@ public class SandboxData {
     public static @NotNull File getCachePath() {
         ensureLoaded();
         return cachePath;
+    }
+
+    public static File getSideOnlyGeneratedFile() {
+        ensureLoaded();
+        return sideOnlyGeneratedFile;
     }
 
     public static @NotNull URL getRootUrl() {

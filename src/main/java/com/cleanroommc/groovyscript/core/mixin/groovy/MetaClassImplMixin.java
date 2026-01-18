@@ -149,7 +149,7 @@ public abstract class MetaClassImplMixin {
         try {
             original.call();
         } catch (Throwable t) {
-            throw new JavaBeanException(t, (MetaClassImpl) (Object) this);
+            throw JavaBeanException.of(t, (MetaClassImpl) (Object) this);
         }
     }
 }

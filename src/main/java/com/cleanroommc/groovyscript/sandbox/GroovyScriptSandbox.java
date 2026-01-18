@@ -129,7 +129,11 @@ public class GroovyScriptSandbox {
         try {
             load();
         } catch (ScriptRunException e) {
-            GroovyLog.get().exception("Script '" + e.script.name + "' ran into an issue while executing.", e.parent);
+            if (e.parent instanceof JavaBeanException jbe) {
+                jbe.logError(e.script.name);
+            } else {
+                GroovyLog.get().exception("Script '" + e.script.name + "' ran into an issue while executing.", e.parent);
+            }
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.get().exception("An exception occurred while trying to run groovy code! This is might be a internal groovy issue.", e);
         } catch (Throwable t) {
