@@ -260,8 +260,8 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         Class<?> scriptClass = null;
         try {
             scriptClass = parseDynamicScript(file, isFileRelative);
-        } catch (Exception e) {
-            GroovyLog.get().exception("An error occurred while trying to load script class " + file.toString(), e);
+        } catch (Throwable e) {
+            GroovyLog.get().exception("An error occurred while trying to compile script class " + file.toString(), e);
         }
         return scriptClass;
     }

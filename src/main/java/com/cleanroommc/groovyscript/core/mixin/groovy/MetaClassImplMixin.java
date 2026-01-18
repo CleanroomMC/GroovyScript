@@ -1,8 +1,11 @@
 package com.cleanroommc.groovyscript.core.mixin.groovy;
 
 import com.cleanroommc.groovyscript.GroovyScript;
+import com.cleanroommc.groovyscript.sandbox.JavaBeanException;
 import com.cleanroommc.groovyscript.sandbox.meta.ClassMetaClass;
 import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import groovy.lang.*;
 import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;
 import org.spongepowered.asm.mixin.*;
@@ -139,5 +142,14 @@ public abstract class MetaClassImplMixin {
         }
 
         return invokeMissingMethod(object, methodName, originalArguments, null, isCallToSuper);
+    }
+
+    @WrapMethod(method = "addProperties")
+    public void addProperties(Operation<Void> original) {
+        try {
+            original.call();
+        } catch (Throwable t) {
+            throw new JavaBeanException(t, (MetaClassImpl) (Object) this);
+        }
     }
 }

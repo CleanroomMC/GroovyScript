@@ -128,10 +128,12 @@ public class GroovyScriptSandbox {
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             load();
+        } catch (ScriptRunException e) {
+            GroovyLog.get().exception("Script '" + e.script.name + "' ran into an issue while executing.", e.parent);
         } catch (IOException | ScriptException | ResourceException e) {
             GroovyLog.get().exception("An exception occurred while trying to run groovy code! This is might be a internal groovy issue.", e);
         } catch (Throwable t) {
-            GroovyLog.get().exception(t);
+            GroovyLog.get().exception("An unknown error occurred while running scripts", t);
         } finally {
             GroovyLog.get().infoMC("Groovy scripts took {}ms to compile and {}ms to run in {}.", this.compileTime, this.runTime, currentLoadStage.getName());
             this.currentLoadStage = null;
@@ -257,7 +259,11 @@ public class GroovyScriptSandbox {
                     // script is a class
                     if (run && shouldRunFile(compiledScript.path)) {
                         t = System.currentTimeMillis();
-                        runClass(compiledScript.clazz);
+                        try {
+                            runClass(compiledScript.clazz);
+                        } catch (Throwable e) {
+                            throw new ScriptRunException(e, compiledScript);
+                        }
                         this.runTime += System.currentTimeMillis() - t;
                     }
                     executedClasses.add(compiledScript.path);
@@ -266,7 +272,11 @@ public class GroovyScriptSandbox {
                 if (run && shouldRunFile(compiledScript.path)) {
                     Script script = InvokerHelper.createScript(compiledScript.clazz, binding);
                     t = System.currentTimeMillis();
-                    runScript(script);
+                    try {
+                        runScript(script);
+                    } catch (Throwable e) {
+                        throw new ScriptRunException(e, compiledScript);
+                    }
                     this.runTime += System.currentTimeMillis() - t;
                 }
             }
@@ -369,5 +379,17 @@ public class GroovyScriptSandbox {
 
     public long getLastRunTime() {
         return runTime;
+    }
+
+    static class ScriptRunException extends RuntimeException {
+
+        Throwable parent;
+        CompiledScript script;
+
+        ScriptRunException(Throwable parent, CompiledScript script) {
+            super();
+            this.parent = parent;
+            this.script = script;
+        }
     }
 }
