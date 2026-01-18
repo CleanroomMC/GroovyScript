@@ -31,7 +31,7 @@ jobs:
       uses: madhead/read-java-properties@latest
       id: gradle_properties
       with:
-        file: gradle.properties
+        file: buildscript.properties
         all: true
 
     - name: Retrieve SHA short
@@ -40,7 +40,7 @@ jobs:
       run: echo "SHA_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       
     - name: Change mod version
-      run: sed -i "s/mod_version.*=.*/mod_version = ${{ steps.gradle_properties.outputs.mod_version }}-${{ steps.vars.outputs.SHA_SHORT }}/g" gradle.properties
+      run: sed -i -E "s/^[[:space:]]*modVersion[[:space:]]*=.*/modVersion = ${{ steps.gradle_properties.outputs.modVersion }}-${{ steps.vars.outputs.SHA_SHORT }}/" buildscript.properties
 
     - name: Set up Temurin JDK 8
       uses: actions/setup-java@v4
