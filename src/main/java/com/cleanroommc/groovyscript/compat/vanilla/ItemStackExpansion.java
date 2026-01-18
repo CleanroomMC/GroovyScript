@@ -3,6 +3,7 @@ package com.cleanroommc.groovyscript.compat.vanilla;
 import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 public class ItemStackExpansion {
@@ -30,5 +31,13 @@ public class ItemStackExpansion {
 
     public static boolean isSame(ItemStack self, ItemStack itemStack, boolean ignoreNbt) {
         return ItemStack.areItemsEqual(self, itemStack) && (ignoreNbt || ItemStack.areItemStackTagsEqual(self, itemStack));
+    }
+
+    public static ResourceLocation getRegistryName(ItemStack self) {
+        return self.getItem().getRegistryName();
+    }
+
+    public static String getMod(ItemStack self) {
+        return getRegistryName(self).getNamespace();
     }
 }
