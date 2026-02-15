@@ -202,7 +202,7 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
         setNbt(null);
         grs$setMatcher(self -> {
             NBTTagCompound nbt = self.getTagCompound();
-            return nbt == null || nbt.isEmpty();
+            return OreDictionary.itemMatches(grs$getItemStack(), self, false) && (nbt == null || nbt.isEmpty());
         });
         return this;
     }
@@ -211,7 +211,7 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
         setNbt(new NBTTagCompound());
         grs$setMatcher(self -> {
             NBTTagCompound nbt = self.getTagCompound();
-            return nbt != null && !nbt.isEmpty();
+            return OreDictionary.itemMatches(grs$getItemStack(), self, false) && nbt != null && !nbt.isEmpty();
         });
         return this;
     }
