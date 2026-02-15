@@ -66,12 +66,16 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
 
     @Override
     default boolean test(ItemStack stack) {
-        if (!OreDictionary.itemMatches(grs$getItemStack(), stack, false) || (grs$getMatcher() != null && !grs$getMatcher().test(stack))) {
+        var matcher = grs$getMatcher();
+        if (matcher != null) {
+            if (!matcher.test(stack)) return false;
+        } else if (!OreDictionary.itemMatches(grs$getItemStack(), stack, false)) {
             return false;
         }
-        if (grs$getNbtMatcher() != null) {
+        var nbtMatcher = grs$getNbtMatcher();
+        if (nbtMatcher != null) {
             NBTTagCompound nbt = stack.getTagCompound();
-            return nbt != null && grs$getNbtMatcher().test(nbt);
+            return nbt != null && nbtMatcher.test(nbt);
         }
         return true;
     }
