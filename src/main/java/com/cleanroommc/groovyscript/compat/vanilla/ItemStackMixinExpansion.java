@@ -194,26 +194,27 @@ public interface ItemStackMixinExpansion extends IIngredient, INbtIngredient {
     }
 
     default INbtIngredient withNbtFilter(Predicate<NBTTagCompound> nbtFilter) {
-        this.grs$setNbtMatcher(nbtFilter == null ? nbt -> true : nbtFilter);
-        return this;
+        ItemStackMixinExpansion itemStackMixin = exactCopy();
+        itemStackMixin.grs$setNbtMatcher(nbtFilter == null ? nbt -> true : nbtFilter);
+        return itemStackMixin;
     }
 
     default INbtIngredient whenNoNbt() {
-        setNbt(null);
-        grs$setMatcher(self -> {
-            NBTTagCompound nbt = self.getTagCompound();
-            return OreDictionary.itemMatches(grs$getItemStack(), self, false) && (nbt == null || nbt.isEmpty());
-        });
-        return this;
+        var itemStackMixin = of(when(stack -> {
+            NBTTagCompound nbt = stack.getTagCompound();
+            return OreDictionary.itemMatches(grs$getItemStack(), stack, false) && (nbt == null || nbt.isEmpty());
+        }));
+        itemStackMixin.setNbt(null);
+        return itemStackMixin;
     }
 
     default INbtIngredient whenAnyNbt() {
-        setNbt(new NBTTagCompound());
-        grs$setMatcher(self -> {
-            NBTTagCompound nbt = self.getTagCompound();
-            return OreDictionary.itemMatches(grs$getItemStack(), self, false) && nbt != null && !nbt.isEmpty();
-        });
-        return this;
+        var itemStackMixin = of(when(stack -> {
+            NBTTagCompound nbt = stack.getTagCompound();
+            return OreDictionary.itemMatches(grs$getItemStack(), stack, false) && nbt != null && !nbt.isEmpty();
+        }));
+        itemStackMixin.setNbt(new NBTTagCompound());
+        return itemStackMixin;
     }
 
     default ItemStack withMeta(int meta) {
