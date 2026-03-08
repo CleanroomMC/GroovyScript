@@ -7,6 +7,7 @@ import com.cleanroommc.groovyscript.sandbox.security.GroovySecurityManager;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import groovy.lang.*;
+import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,9 +37,6 @@ public abstract class MetaClassImplMixin {
                                                   RuntimeException original,
                                                   boolean isCallToSuper);
 
-    @Shadow
-    protected abstract MetaProperty getMetaProperty(String name, boolean useStatic);
-
     @Mutable
     @Shadow
     @Final
@@ -51,6 +49,14 @@ public abstract class MetaClassImplMixin {
 
     @Shadow
     protected MetaClassRegistry registry;
+
+    @Shadow
+    @Final
+    private Map<CachedClass, Map<String, MetaProperty>> classPropertyIndex;
+
+    @Shadow
+    @Final
+    protected CachedClass theCachedClass;
 
     @Inject(method = "<init>(Ljava/lang/Class;[Lgroovy/lang/MetaMethod;)V", at = @At("TAIL"))
     public void removeBlacklistedAdditional(Class<?> theClass, MetaMethod[] add, CallbackInfo ci) {
@@ -115,7 +121,10 @@ public abstract class MetaClassImplMixin {
                                            Object[] originalArguments,
                                            boolean fromInsideClass,
                                            boolean isCallToSuper) {
-        MetaProperty metaProperty = getMetaProperty(methodName, false);
+        MetaProperty metaProperty = null;
+
+        Map<String, MetaProperty> propertyMap = classPropertyIndex.get(theCachedClass);
+        if (propertyMap != null) metaProperty = propertyMap.get(methodName);
 
         Object value = null;
         if (metaProperty != null) {
@@ -125,10 +134,12 @@ public abstract class MetaClassImplMixin {
         } else if (object instanceof Script script) {
             value = script.getBinding().getVariables().get(methodName);
         } else if (object instanceof GroovyObject) {
+            // GroovyScript: added this branch
             value = GroovyScript.getSandbox().getBindings().get(methodName);
         }
 
         if (value instanceof Closure<?>closure) {
+            // GroovyScript: simplify closure call
             return closure.call(originalArguments);
         }
 
