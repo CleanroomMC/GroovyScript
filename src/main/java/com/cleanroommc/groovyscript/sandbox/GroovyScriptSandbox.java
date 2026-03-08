@@ -303,6 +303,10 @@ public class GroovyScriptSandbox {
 
     @ApiStatus.OverrideOnly
     protected void initEngine(CompilerConfiguration config) {
+        config.setDisabledGlobalASTTransformations(new ObjectOpenHashSet<>() {{
+            // this is some dependency management thing for grape, we don't want this
+            add("groovy.grape.GrabAnnotationTransformation");
+        }});
         config.addCompilationCustomizers(this.importCustomizer);
         config.addCompilationCustomizers(new GroovyScriptCompiler());
         config.addCompilationCustomizers(new GroovyScriptEarlyCompiler());
