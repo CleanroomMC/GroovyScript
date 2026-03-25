@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Pseudo
-@Mixin(targets = "org/codehaus/groovy/control/CompilationUnit$3", remap = false)
+@Mixin(targets = "org/codehaus/groovy/control/CompilationUnit$2", remap = false)
 public class CompUnitClassGenMixin {
 
     @Inject(

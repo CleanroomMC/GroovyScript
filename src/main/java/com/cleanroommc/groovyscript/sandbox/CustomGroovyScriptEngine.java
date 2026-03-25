@@ -234,6 +234,10 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
                 comp.clazz = null;
             }
             comp.setRequiresReload(true);
+            if (lastModified > comp.lastEdited) {
+                // delete class bytes to make sure it's recompiled
+                comp.deleteCache(this.cacheRoot.getPath());
+            }
             if (lastModified > comp.lastEdited || comp.preprocessors == null) {
                 // recompile preprocessors if there is no data or script was edited
                 comp.preprocessors = Preprocessor.parsePreprocessors(file);
