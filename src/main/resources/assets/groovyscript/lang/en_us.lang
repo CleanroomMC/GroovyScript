@@ -3085,14 +3085,11 @@ groovyscript.wiki.thaumcraft.aspect_helper.object.value=Sets the item being modi
 groovyscript.wiki.thaumcraft.aspect_helper.aspects.value=Sets the Aspects of the entity or item
 groovyscript.wiki.thaumcraft.aspect_helper.stripAspects.value=Sets if all pre-existing Aspects should be removed from the entity or item before adding Aspects, if any are added
 groovyscript.wiki.thaumcraft.aspect_helper.add_entity=Adds an Aspect to the given entity in the format `entity`, `aspect`
-groovyscript.wiki.thaumcraft.aspect_helper.add_ore=Adds an Aspect to the given oredict in the format `oreDict`, `aspect`
-groovyscript.wiki.thaumcraft.aspect_helper.add_item=Adds an Aspect to the given itemstack in the format `item`, `aspect`
+groovyscript.wiki.thaumcraft.aspect_helper.add_item=Adds an Aspect to the item stacks matching the given ingredient in the format `ingredient`, `aspect`
 groovyscript.wiki.thaumcraft.aspect_helper.remove_entity=Removes an Aspect from the given entity in the format `entity`, `aspect`
-groovyscript.wiki.thaumcraft.aspect_helper.remove_ore=Removes an Aspect from the given oredict in the format `oreDict`, `aspect`
-groovyscript.wiki.thaumcraft.aspect_helper.remove_item=Removes an Aspect from the given itemstack in the format `item`, `aspect`
+groovyscript.wiki.thaumcraft.aspect_helper.remove_item=Removes an Aspect from the item stacks matching the given ingredient in the format `item`, `aspect`
 groovyscript.wiki.thaumcraft.aspect_helper.removeAll_entity=Removes all Aspects from the given entity
-groovyscript.wiki.thaumcraft.aspect_helper.removeAll_ore=Removes all Aspects from the given oredict
-groovyscript.wiki.thaumcraft.aspect_helper.removeAll_item=Removes all Aspects from the given itemstack
+groovyscript.wiki.thaumcraft.aspect_helper.removeAll_item=Removes all Aspects from the item stacks matching the given ingredient
 
 groovyscript.wiki.thaumcraft.crucible.title=Crucible
 groovyscript.wiki.thaumcraft.crucible.description=Combines an item with any number of Aspects to drop an output itemstack, potentially requiring a specific research to be completed.
