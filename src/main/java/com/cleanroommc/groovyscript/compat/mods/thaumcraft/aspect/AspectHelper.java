@@ -103,8 +103,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.add_item", type = MethodDescription.Type.ADDITION)
-    public void add(IIngredient oreDict, AspectStack aspect) {
-        add(oreDict, aspect, true);
+    public void add(IIngredient ingredient, AspectStack aspect) {
+        add(ingredient, aspect, true);
     }
 
     @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.remove_entity")
@@ -113,8 +113,8 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     }
 
     @MethodDescription(description = "groovyscript.wiki.thaumcraft.aspect_helper.remove_item")
-    public void remove(IIngredient oreDict, AspectStack aspect) {
-        remove(oreDict, aspect, true);
+    public void remove(IIngredient ingredient, AspectStack aspect) {
+        remove(ingredient, aspect, true);
     }
 
     private static AspectList getAspects(ItemStack stack, boolean add) {
@@ -157,13 +157,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     @GroovyBlacklist
     public void add(IIngredient ingredient, AspectStack aspect, boolean doBackup) {
         if (ingredient != null && aspect != null) {
-            ItemStack[] ores = ingredient.getMatchingStacks();
-            if (ores != null) {
-                for (ItemStack ore : ores) {
-                    ItemStack oc = ore.copy();
-                    oc.setCount(1);
-                    add(oc, aspect, doBackup);
-                }
+            for (ItemStack ore : ingredient.getMatchingStacks()) {
+                ItemStack oc = ore.copy();
+                oc.setCount(1);
+                add(oc, aspect, doBackup);
             }
             return;
         }
@@ -214,13 +211,10 @@ public class AspectHelper extends VirtualizedRegistry<AspectListHelper> {
     @GroovyBlacklist
     public void remove(IIngredient ingredient, AspectStack aspect, boolean doBackup) {
         if (ingredient != null && aspect != null) {
-            ItemStack[] ores = ingredient.getMatchingStacks();
-            if (ores != null) {
-                for (ItemStack ore : ores) {
-                    ItemStack oc = ore.copy();
-                    oc.setCount(1);
-                    remove(oc, aspect, doBackup);
-                }
+            for (ItemStack ore : ingredient.getMatchingStacks()) {
+                ItemStack oc = ore.copy();
+                oc.setCount(1);
+                remove(oc, aspect, doBackup);
             }
             return;
         }
