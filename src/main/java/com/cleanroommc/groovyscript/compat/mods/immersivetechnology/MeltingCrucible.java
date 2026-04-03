@@ -19,12 +19,12 @@ public class MeltingCrucible extends StandardListRegistry<MeltingCrucibleRecipe>
 
     @Override
     public boolean isEnabled() {
-        return Config.ITConfig.Machines.Multiblock.enable_meltingCrucible;
+        return Config.ITConfig.Multiblocks.enable.enable_meltingCrucible;
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".input(item('minecraft:diamond')).fluidOutput(fluid('hot_spring_water')).time(100)"),
-            @Example(".input(item('minecraft:clay') * 8).fluidOutput(fluid('lava') * 50).time(50).energy(5000)")
+            @Example(".input(item('minecraft:diamond')).fluidOutput(fluid('hotwater')).time(100)"),
+            @Example(".input(item('minecraft:clay') * 8).fluidOutput(fluid('lava') * 50).time(50)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -66,18 +66,10 @@ public class MeltingCrucible extends StandardListRegistry<MeltingCrucibleRecipe>
 
         @Property(comp = @Comp(gte = 0))
         private int time;
-        @Property(comp = @Comp(gte = 0))
-        private int energy;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder energy(int energy) {
-            this.energy = energy;
             return this;
         }
 
@@ -91,14 +83,13 @@ public class MeltingCrucible extends StandardListRegistry<MeltingCrucibleRecipe>
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg, 0, 0, 1, 1);
             msg.add(time <= 0, "time must be greater than or equal to 1, yet it was {}", time);
-            msg.add(energy < 0, "energy must be a non negative integer, yet it was {}", energy);
         }
 
         @Override
         @RecipeBuilderRegistrationMethod
         public @Nullable MeltingCrucibleRecipe register() {
             if (!validate()) return null;
-            MeltingCrucibleRecipe recipe = new MeltingCrucibleRecipe(fluidOutput.get(0), ImmersiveEngineering.toIngredientStack(input.get(0)), energy, time);
+            MeltingCrucibleRecipe recipe = new MeltingCrucibleRecipe(fluidOutput.get(0), ImmersiveEngineering.toIngredientStack(input.get(0)), time);
             ModSupport.IMMERSIVE_TECHNOLOGY.get().meltingCrucible.add(recipe);
             return recipe;
         }

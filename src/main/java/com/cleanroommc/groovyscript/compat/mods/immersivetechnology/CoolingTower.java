@@ -18,12 +18,12 @@ public class CoolingTower extends StandardListRegistry<CoolingTowerRecipe> {
 
     @Override
     public boolean isEnabled() {
-        return Config.ITConfig.Machines.Multiblock.enable_coolingTower;
+        return Config.ITConfig.Multiblocks.enable.enable_coolingTower;
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".fluidInput(fluid('lava') * 100).fluidOutput(fluid('hot_spring_water') * 500).time(100)"),
-            @Example(".fluidInput(fluid('water') * 50, fluid('hot_spring_water') * 50).fluidOutput(fluid('lava') * 50, fluid('water') * 50, fluid('lava') * 50).time(50)")
+            @Example(".fluidInput(fluid('lava') * 100).fluidOutput(fluid('hotwater') * 500).time(100)"),
+            @Example(".fluidInput(fluid('water') * 50, fluid('hotwater') * 50).fluidOutput(fluid('lava') * 50, fluid('water') * 50, fluid('lava') * 50).time(50)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -34,7 +34,7 @@ public class CoolingTower extends StandardListRegistry<CoolingTowerRecipe> {
         return CoolingTowerRecipe.recipeList;
     }
 
-    @MethodDescription(example = @Example("fluid('hot_spring_water')"))
+    @MethodDescription(example = @Example("fluid('hotwater')"))
     public void removeByInput(IIngredient input) {
         getRecipes().removeIf(r -> {
             for (FluidStack fluidStack : r.getFluidInputs()) {

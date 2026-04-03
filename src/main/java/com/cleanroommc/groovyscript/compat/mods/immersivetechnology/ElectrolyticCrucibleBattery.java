@@ -18,12 +18,12 @@ public class ElectrolyticCrucibleBattery extends StandardListRegistry<Electrolyt
 
     @Override
     public boolean isEnabled() {
-        return Config.ITConfig.Machines.Multiblock.enable_electrolyticCrucibleBattery;
+        return Config.ITConfig.Multiblocks.enable.enable_electrolyticCrucibleBattery;
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".fluidInput(fluid('lava') * 100).fluidOutput(fluid('hot_spring_water') * 500).output(item('minecraft:clay')).time(100)"),
-            @Example(".fluidInput(fluid('water') * 500).fluidOutput(fluid('lava') * 50, fluid('hot_spring_water') * 50, fluid('water') * 400).output(item('minecraft:diamond')).time(50).energy(5000)")
+            @Example(".fluidInput(fluid('lava') * 100).fluidOutput(fluid('hotwater') * 500).output(item('minecraft:clay')).time(100)"),
+            @Example(".fluidInput(fluid('water') * 500).fluidOutput(fluid('lava') * 50, fluid('hotwater') * 50, fluid('water') * 400).output(item('minecraft:diamond')).time(50).energy(5000)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();

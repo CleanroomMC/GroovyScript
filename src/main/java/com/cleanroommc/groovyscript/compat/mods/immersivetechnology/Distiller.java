@@ -19,11 +19,11 @@ public class Distiller extends StandardListRegistry<DistillerRecipe> {
 
     @Override
     public boolean isEnabled() {
-        return Config.ITConfig.Machines.Multiblock.enable_distiller;
+        return Config.ITConfig.Multiblocks.enable.enable_distiller;
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".fluidInput(fluid('lava') * 100).fluidOutput(fluid('hot_spring_water') * 500).time(100)"),
+            @Example(".fluidInput(fluid('lava') * 100).fluidOutput(fluid('hotwater') * 500).time(100)"),
             @Example(".fluidInput(fluid('water') * 50).fluidOutput(fluid('lava') * 50).output(item('minecraft:diamond')).chance(0.5f).time(50).energy(5000)")
     })
     public RecipeBuilder recipeBuilder() {

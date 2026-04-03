@@ -18,12 +18,12 @@ public class HeatExchanger extends StandardListRegistry<HeatExchangerRecipe> {
 
     @Override
     public boolean isEnabled() {
-        return Config.ITConfig.Machines.Multiblock.enable_heatExchanger;
+        return Config.ITConfig.Multiblocks.enable.enable_heatExchanger;
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".fluidInput(fluid('lava') * 100, fluid('lava') * 50).fluidOutput(fluid('hot_spring_water') * 500).time(100)"),
-            @Example(".fluidInput(fluid('water') * 50, fluid('hot_spring_water') * 50).fluidOutput(fluid('lava') * 50, fluid('water') * 10).time(50).energy(5000)")
+            @Example(".fluidInput(fluid('lava') * 100, fluid('lava') * 50).fluidOutput(fluid('hotwater') * 500).time(100)"),
+            @Example(".fluidInput(fluid('water') * 50, fluid('hotwater') * 50).fluidOutput(fluid('lava') * 50, fluid('water') * 10).time(50).energy(5000)")
     })
     public RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
@@ -47,7 +47,7 @@ public class HeatExchanger extends StandardListRegistry<HeatExchangerRecipe> {
         });
     }
 
-    @MethodDescription(example = @Example("fluid('hot_spring_water')"))
+    @MethodDescription(example = @Example("fluid('hotwater')"))
     public void removeByOutput(IIngredient output) {
         getRecipes().removeIf(r -> {
             // would iterate through r.getFluidOutputs() as with the other IE compats, but they forgot to define it so its null.

@@ -18,11 +18,11 @@ public class GasTurbine extends StandardListRegistry<GasTurbineRecipe> {
 
     @Override
     public boolean isEnabled() {
-        return Config.ITConfig.Machines.Multiblock.enable_gasTurbine;
+        return Config.ITConfig.Multiblocks.enable.enable_gasTurbine;
     }
 
     @RecipeBuilderDescription(example = {
-            @Example(".fluidInput(fluid('lava') * 100).fluidOutput(fluid('hot_spring_water') * 500).time(100)"),
+            @Example(".fluidInput(fluid('lava') * 100).fluidOutput(fluid('hotwater') * 500).time(100)"),
             @Example(".fluidInput(fluid('water') * 50).fluidOutput(fluid('lava') * 50).time(50)")
     })
     public RecipeBuilder recipeBuilder() {

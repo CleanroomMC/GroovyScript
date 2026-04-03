@@ -18,7 +18,7 @@ public class BoilerFuel extends StandardListRegistry<BoilerRecipe.BoilerFuelReci
 
     @Override
     public boolean isEnabled() {
-        return Config.ITConfig.Machines.Multiblock.enable_boiler;
+        return Config.ITConfig.Multiblocks.enable.enable_boiler;
     }
 
     @RecipeBuilderDescription(example = {
