@@ -92,7 +92,7 @@ final Map<String, List<String>> mod_dependencies = [
         'llibrary-243298:2504999'                             : [debug_ice_and_fire_old, debug_ice_and_fire_rotn],
         'magneticraft-224808:3791484'                         : [debug_magneticraft],
         'mantle-74924:2713386'                                : [debug_inspirations, debug_tinkers_construct],
-        'mct-immersive-technology-359407:5108047'             : [debug_immersive_technology],
+        'mct-immersive-technology-359407:7752858'             : [debug_immersive_technology],
         'mekanism-268560:2835175'                             : [debug_mekanism],
         'modelloader-277663:2744735'                          : [debug_magneticraft],
         'mystical_agriculture-246640:2704562'                 : [debug_mystical_agriculture],
