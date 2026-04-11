@@ -6,7 +6,6 @@ public class FactoryTech extends GroovyPropertyContainer {
 
     public final Agitator agitator = new Agitator();
     public final Centrifuge centrifuge = new Centrifuge();
-    public final CircuitScribe circuitScribe = new CircuitScribe();
     public final Compressor compressor = new Compressor();
     public final Crucible crucible = new Crucible();
     public final DeepDrill deepDrill = new DeepDrill();

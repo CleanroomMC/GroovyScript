@@ -61,25 +61,6 @@ mods.factorytech.centrifuge.recipeBuilder()
     .register()
 
 
-// Circuit Scribe:
-// Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
-
-mods.factorytech.circuit_scribe.removeByInput(item('factorytech:circuit_intermediate:8'))
-// mods.factorytech.circuit_scribe.removeByOutput(item('factorytech:circuit_intermediate:8'))
-// mods.factorytech.circuit_scribe.removeAll()
-
-mods.factorytech.circuit_scribe.recipeBuilder()
-    .input(item('minecraft:clay'))
-    .output(item('minecraft:diamond'))
-    .register()
-
-mods.factorytech.circuit_scribe.recipeBuilder()
-    .input(item('minecraft:gold_ingot'))
-    .output(item('minecraft:clay'))
-    .allowStoneParts()
-    .register()
-
-
 // Compression Chamber:
 // Converts an input itemstack and input fluidstack into an output itemstack.
 
