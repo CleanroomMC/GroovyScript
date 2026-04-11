@@ -34,9 +34,12 @@ mods.jei.category.hideCategory('minecraft.fuel')
 // Description Category:
 // Modify the description of the input items, where the description is a unique JEI tab containing text.
 
+// mods.jei.description.remove(fluid('water'))
 // mods.jei.description.remove(item('thaumcraft:triple_meat_treat'))
 
+mods.jei.description.add(fluid('water'), 'groovyscript.recipe.fluid_recipe')
 mods.jei.description.add(item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe')
+mods.jei.description.add(fluid('lava'), ['very', 'hot', 'fluid'])
 mods.jei.description.add(item('minecraft:clay'), ['wow', 'this', 'is', 'neat'])
 
 // Ingredient Sidebar:
