@@ -6,6 +6,9 @@ public class FactoryTech extends GroovyPropertyContainer {
 
     public final Agitator agitator = new Agitator();
     public final Centrifuge centrifuge = new Centrifuge();
+    // Circuit Etcher is not supported because the Tile Entity in the mod is hardcoded
+    // to only accept quartz plates and output etched quartz plates, there's a recipe registry in the mod but it's not used
+    // https://gitlab.com/dalapo/FactoryTech/-/blob/master/src/main/java/dalapo/factech/tileentity/specialized/TileEntityCircuitScribe.java
     public final Compressor compressor = new Compressor();
     public final Crucible crucible = new Crucible();
     public final DeepDrill deepDrill = new DeepDrill();
