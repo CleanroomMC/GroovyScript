@@ -37,9 +37,9 @@ mods.jei.category.hideCategory('minecraft.fuel')
 // mods.jei.description.remove(fluid('water'))
 // mods.jei.description.remove(item('thaumcraft:triple_meat_treat'))
 
-mods.jei.description.add(fluid('water'), 'groovyscript.recipe.fluid_recipe')
-mods.jei.description.add(item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe')
-mods.jei.description.add(fluid('lava'), ['very', 'hot', 'fluid'])
+mods.jei.description.add(fluid('water') * 1000, 'groovyscript.recipe.fluid_recipe')
+mods.jei.description.add(item('minecraft:gold_ingot') | item('minecraft:iron_block'), 'groovyscript.recipe.fluid_recipe')
+mods.jei.description.add(fluid('lava') * 500, ['very', 'hot', 'fluid'])
 mods.jei.description.add(item('minecraft:clay'), ['wow', 'this', 'is', 'neat'])
 
 // Ingredient Sidebar:
