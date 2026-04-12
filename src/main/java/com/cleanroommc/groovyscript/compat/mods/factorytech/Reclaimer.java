@@ -63,11 +63,6 @@ public class Reclaimer extends StandardListRegistry<MachineRecipes.MachineRecipe
         }
 
         @Override
-        protected int getMaxItemInput() {
-            return 1;
-        }
-
-        @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);

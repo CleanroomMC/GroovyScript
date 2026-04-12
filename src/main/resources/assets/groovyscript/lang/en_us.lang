@@ -1624,10 +1624,6 @@ groovyscript.wiki.factorytech.agitator.description=Converts either one or two in
 groovyscript.wiki.factorytech.centrifuge.title=Centrifuge
 groovyscript.wiki.factorytech.centrifuge.description=Converts an input itemstack into up to 3 output itemstacks, with the ability to control if stone parts are allowed.
 
-groovyscript.wiki.factorytech.circuit_scribe.title=Circuit Scribe
-groovyscript.wiki.factorytech.circuit_scribe.description=Converts an input itemstack into an output itemstack, with the ability to control if stone parts are allowed.
-groovyscript.wiki.factorytech.circuit_scribe.note0=Recipes will not appear properly in JEI
-
 groovyscript.wiki.factorytech.compressor.title=Compression Chamber
 groovyscript.wiki.factorytech.compressor.description=Converts an input itemstack and input fluidstack into an output itemstack.
 
