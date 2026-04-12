@@ -59,7 +59,6 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
     @GroovyBlacklist
     public void applyAdditions(IModRegistry modRegistry) {
         for (DescriptionEntry<?> entry : this.getScriptedRecipes()) {
-            System.out.println("adding entry: " + entry);
             if (entry.representative instanceof ItemStack) {
                 modRegistry.addIngredientInfo((List<ItemStack>) entry.ingredients, (IIngredientType<ItemStack>) entry.ingredientType, entry.descriptionKeys);
             } else if (entry.representative instanceof FluidStack) {
@@ -95,7 +94,6 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
                 IngredientInfoRecipeAccessor<?> accessor = (IngredientInfoRecipeAccessor<?>) wrapper;
 
                 for (DescriptionEntry<?> entry : this.getBackupRecipes()) {
-                    System.out.println("removing entry: " + entry);
                     if (!entry.ingredientType.equals(accessor.getIngredientType())) continue;
                     if (entry.ingredients
                             .stream()
