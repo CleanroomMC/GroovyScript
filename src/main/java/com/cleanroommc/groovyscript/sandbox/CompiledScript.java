@@ -123,6 +123,7 @@ class CompiledScript extends CompiledClass {
         for (CompiledClass cc : this.innerClasses) {
             cc.deleteCache(cachePath);
         }
+        this.innerClasses.clear();
     }
 
     public boolean checkPreprocessorsFailed(File basePath) {
