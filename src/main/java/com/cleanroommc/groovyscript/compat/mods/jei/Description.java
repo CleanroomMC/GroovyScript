@@ -1,5 +1,6 @@
 package com.cleanroommc.groovyscript.compat.mods.jei;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -118,81 +119,51 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
         removeScripted();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(IIngredient[] target, String... description) {
-        addScripted(new DescriptionEntry(
-            Stream.of(target).flatMap(x -> Stream.of(x.getMatchingStacks())).collect(Collectors.toList()),
-            Arrays.asList(description)));
+    private @Nullable List<Object> toStacks(List<Object> target) {
+        if (target == null || target.isEmpty()) {
+            GroovyLog.msg("The ingredient list cannot be empty")
+                .error()
+                .post();
+            return null;
+        }
+
+        return target.stream()
+            .<Object> flatMap(x ->
+                x instanceof IIngredient && !(x instanceof FluidStack)
+                ? Stream.of(((IIngredient)x).getMatchingStacks()) : Stream.of(x))
+            .collect(Collectors.toList());
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(IIngredient[] target, List<String> description) {
+    public void add(List<Object> target, String... description) {
+        target = toStacks(target);
+        if (target != null) {
+            addScripted(new DescriptionEntry(target, Arrays.asList(description)));
+        }
+    }
+
+    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    public void add(List<Object> target, List<String> description) {
         add(target, description.toArray(new String[0]));
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:clay'), ['wow', 'this', 'is', 'neat']"))
-    public void add(IIngredient target, List<String> description) {
-        add(new IIngredient[]{target}, description);
+    public void add(Object target, List<String> description) {
+        List<Object> objects = new ArrayList<>();
+        objects.add(target);
+        add(objects, description);
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:gold_ingot') | item('minecraft:iron_block'), 'groovyscript.recipe.fluid_recipe'"))
-    public void add(IIngredient target, String... description) {
-        add(new IIngredient[]{target}, description);
-    }
-
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(Object[] target, String... description) {
-        addScripted(new DescriptionEntry(
-            Arrays.asList(target),
-            Arrays.asList(description)));
-    }
-
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(Object[] target, List<String> description) {
-        add(target, description.toArray(new String[0]));
-    }
-
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(Object target, List<String> description) {
-        add(new Object[]{target}, description);
-    }
-
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(Object target, String... description) {
-        add(new Object[]{target}, description);
-    }
-
-    // This overload set is the same as Object one. It exists because FluidStack implements IIngredient, but does not have any matching stacks,
-    // which causes a JEI startup crash when trying to add that description
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(FluidStack[] target, String... description) {
-        addScripted(new DescriptionEntry(
-            Arrays.asList(target),
-            Arrays.asList(description)));
-    }
-
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(FluidStack[] target, List<String> description) {
-        add(target, description.toArray(new String[0]));
-    }
-
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("fluid('lava') * 500, ['very', 'hot', 'fluid']"))
-    public void add(FluidStack target, List<String> description) {
-        add(new FluidStack[]{target}, description);
-    }
-
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("fluid('water') * 1000, 'groovyscript.recipe.fluid_recipe'"))
-    public void add(FluidStack target, String... description) {
-        add(new FluidStack[]{target}, description);
+        List<Object> objects = new ArrayList<>();
+        objects.add(target);
+        add(objects, description);
     }
 
     @MethodDescription(example = @Example(value = "item('thaumcraft:triple_meat_treat')", commented = true))
-    public void remove(IIngredient target) {
-        addBackup(new DescriptionEntry(Arrays.asList(target.getMatchingStacks()), null));
-    }
-
-    @MethodDescription(example = @Example(value = "fluid('water')", commented = true))
     public void remove(Object target) {
-        addBackup(new DescriptionEntry(Arrays.asList(target), null));
+        List<Object> targets = toStacks(Arrays.asList(target));
+        addBackup(new DescriptionEntry(targets, null));
     }
 }
