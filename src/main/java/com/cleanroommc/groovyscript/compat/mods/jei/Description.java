@@ -3,15 +3,12 @@ package com.cleanroommc.groovyscript.compat.mods.jei;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
@@ -25,7 +22,6 @@ import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.recipe.IIngredientType;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.plugins.jei.info.IngredientInfoRecipeCategory;
-import net.minecraftforge.fluids.FluidStack;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
 public class Description extends VirtualizedRegistry<Description.DescriptionEntry> {
@@ -119,24 +115,8 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
         removeScripted();
     }
 
-    private @Nullable List<Object> toStacks(List<Object> target) {
-        if (target == null || target.isEmpty()) {
-            GroovyLog.msg("The ingredient list cannot be empty")
-                .error()
-                .post();
-            return null;
-        }
-
-        return target.stream()
-            .<Object> flatMap(x ->
-                x instanceof IIngredient && !(x instanceof FluidStack)
-                ? Stream.of(((IIngredient)x).getMatchingStacks()) : Stream.of(x))
-            .collect(Collectors.toList());
-    }
-
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public void add(List<Object> target, String... description) {
-        target = toStacks(target);
         if (target != null) {
             addScripted(new DescriptionEntry(target, Arrays.asList(description)));
         }
@@ -163,7 +143,6 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
 
     @MethodDescription(example = @Example(value = "item('thaumcraft:triple_meat_treat')", commented = true))
     public void remove(Object target) {
-        List<Object> targets = toStacks(Arrays.asList(target));
-        addBackup(new DescriptionEntry(targets, null));
+        addBackup(new DescriptionEntry(Arrays.asList(target), null));
     }
 }
