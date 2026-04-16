@@ -44,17 +44,22 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
 
         @Nullable
         IIngredientType<Object> validateIngredientType(IModRegistry modRegistry) {
-            Object first = ingredients.get(0);
-            IIngredientType<Object> ingredientType = modRegistry.getIngredientRegistry().getIngredientType(first);
-            if (ingredientType == null) {
-                return null;
-            }
-            for (Object o : ingredients) {
-                if (!ingredientType.equals(modRegistry.getIngredientRegistry().getIngredientType(o))) {
+            try {
+                Object first = ingredients.get(0);
+                IIngredientType<Object> ingredientType = modRegistry.getIngredientRegistry().getIngredientType(first);
+                if (ingredientType == null) {
                     return null;
                 }
+                for (Object o : ingredients) {
+                    if (!ingredientType.equals(modRegistry.getIngredientRegistry().getIngredientType(o))) {
+                        return null;
+                    }
+                }
+                return ingredientType;
+            } catch (IllegalArgumentException e) {
+                // unchecked exception thrown when there's an unknown ingredient class
+                return null;
             }
-            return ingredientType;
         }
     }
 
@@ -74,7 +79,7 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
             if (ingredientType != null) {
                 addIngredientInfo(modRegistry, entry.ingredients, ingredientType, entry.descriptionKeys);
             } else {
-                GroovyLog.msg("Unable to obtain an ingredient type for items {}", entry.ingredients.toArray())
+                GroovyLog.msg("Unable to obtain an ingredient type for the ingredients [{}]", entry.ingredients.toArray())
                     .error()
                     .post();
             }
@@ -115,7 +120,7 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
         removeScripted();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("[item('minecraft:diamond'), item('minecraft:emerald')], 'groovyscript.recipe.fluid_recipe'"))
     public void add(List<Object> target, String... description) {
         if (target != null) {
             addScripted(new DescriptionEntry(target, Arrays.asList(description)));
@@ -134,7 +139,7 @@ public class Description extends VirtualizedRegistry<Description.DescriptionEntr
         add(objects, description);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:gold_ingot') | item('minecraft:iron_block'), 'groovyscript.recipe.fluid_recipe'"))
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {@Example("item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe'"), @Example("fluid('lava') * 500, 'some moderately cold fluid'")})
     public void add(Object target, String... description) {
         List<Object> objects = new ArrayList<>();
         objects.add(target);
