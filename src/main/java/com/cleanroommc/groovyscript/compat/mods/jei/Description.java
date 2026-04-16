@@ -1,60 +1,112 @@
 package com.cleanroommc.groovyscript.compat.mods.jei;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.IIngredient;
+import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.Example;
 import com.cleanroommc.groovyscript.api.documentation.annotations.MethodDescription;
 import com.cleanroommc.groovyscript.api.documentation.annotations.RegistryDescription;
 import com.cleanroommc.groovyscript.core.mixin.jei.IngredientInfoRecipeAccessor;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.IRecipeRegistry;
-import mezz.jei.api.ingredients.VanillaTypes;
+import mezz.jei.api.ingredients.IIngredientHelper;
+import mezz.jei.api.ingredients.IIngredientRegistry;
+import mezz.jei.api.recipe.IIngredientType;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.plugins.jei.info.IngredientInfoRecipeCategory;
-import net.minecraft.item.ItemStack;
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RegistryDescription(category = RegistryDescription.Category.ENTRIES)
-public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, List<String>>> {
+public class Description extends VirtualizedRegistry<Description.DescriptionEntry> {
+
+    public static class DescriptionEntry {
+        List<Object> ingredients;
+        String[] descriptionKeys;
+
+        @SuppressWarnings("unchecked")
+        DescriptionEntry(@Nonnull List<?> ingredients, @Nullable List<String> descriptionKeys) {
+            if (ingredients.isEmpty()) {
+                throw new IllegalArgumentException("JEI Description Entries must not have an empty list of ingredients, got " + ingredients);
+            }
+
+            // This cast is not exactly correct, but Java/JVM allows it due to type erasure
+            this.ingredients = (List<Object>) ingredients;
+
+            this.descriptionKeys = descriptionKeys == null ? new String[0] : descriptionKeys.toArray(new String[0]);
+        }
+
+        @Nullable
+        IIngredientType<Object> validateIngredientType(IModRegistry modRegistry) {
+            try {
+                Object first = ingredients.get(0);
+                IIngredientType<Object> ingredientType = modRegistry.getIngredientRegistry().getIngredientType(first);
+                if (ingredientType == null) {
+                    return null;
+                }
+                for (Object o : ingredients) {
+                    if (!ingredientType.equals(modRegistry.getIngredientRegistry().getIngredientType(o))) {
+                        return null;
+                    }
+                }
+                return ingredientType;
+            } catch (IllegalArgumentException e) {
+                // unchecked exception thrown when there's an unknown ingredient class
+                return null;
+            }
+        }
+    }
+
+    private <T> void addIngredientInfo(IModRegistry modRegistry, List<T> ingredients, IIngredientType<T> ingredientType, String[] description) {
+        // Force Java to pick the correct overload we use
+        // This is needed because the method has overloads in a way T = Object cannot be substituted
+        modRegistry.addIngredientInfo(ingredients, ingredientType, description);
+    }
 
     /**
      * Called by {@link JeiPlugin#register}
      */
     @GroovyBlacklist
     public void applyAdditions(IModRegistry modRegistry) {
-        for (Pair<List<IIngredient>, List<String>> entry : this.getScriptedRecipes()) {
-            modRegistry.addIngredientInfo(
-                    entry.getLeft().stream().flatMap(x -> Stream.of(x.getMatchingStacks())).collect(Collectors.toList()),
-                    // Currently, it is only possible to add VanillaTypes.ITEM. It may be desirable to add the ability to do other types.
-                    VanillaTypes.ITEM,
-                    entry.getRight().toArray(new String[0]));
+        for (DescriptionEntry entry : this.getScriptedRecipes()) {
+            IIngredientType<Object> ingredientType = entry.validateIngredientType(modRegistry);
+            if (ingredientType != null) {
+                addIngredientInfo(modRegistry, entry.ingredients, ingredientType, entry.descriptionKeys);
+            } else {
+                GroovyLog.msg("Unable to obtain an ingredient type for the ingredients [{}]", entry.ingredients.toArray())
+                    .error()
+                    .post();
+            }
         }
     }
 
     /**
      * Called by {@link JeiPlugin#afterRuntimeAvailable()}
      */
+    @SuppressWarnings("unchecked")
     @GroovyBlacklist
-    public void applyRemovals(IRecipeRegistry recipeRegistry) {
+    public void applyRemovals(IModRegistry modRegistry, IRecipeRegistry recipeRegistry) {
+        IIngredientRegistry ingredientRegistry = modRegistry.getIngredientRegistry();
         IngredientInfoRecipeCategory category = (IngredientInfoRecipeCategory) recipeRegistry.getRecipeCategory(VanillaRecipeCategoryUid.INFORMATION);
         if (category != null) {
             recipeRegistry.getRecipeWrappers(category).forEach(wrapper -> {
                 IngredientInfoRecipeAccessor<?> accessor = (IngredientInfoRecipeAccessor<?>) wrapper;
 
-                // Currently, it is only possible to remove VanillaTypes.ITEM. It may be desirable to add the ability to do other types.
-                if (!VanillaTypes.ITEM.equals(accessor.getIngredientType())) return;
-
-                for (Pair<List<IIngredient>, List<String>> entry : this.getBackupRecipes()) {
-                    if (entry.getKey()
+                for (DescriptionEntry entry : this.getBackupRecipes()) {
+                    IIngredientType<Object> ingredientType = entry.validateIngredientType(modRegistry);
+                    IIngredientHelper<Object> helper = ingredientRegistry.getIngredientHelper(ingredientType);
+                    if (ingredientType == null || !ingredientType.equals(accessor.getIngredientType())) continue;
+                    if (entry.ingredients
                             .stream()
-                            .anyMatch(x -> accessor.getIngredients().stream().anyMatch(a -> a instanceof ItemStack itemStack && x.test(itemStack)))) {
+                            .anyMatch(x -> accessor.getIngredients().stream().anyMatch(a -> helper.getUniqueId(a).equals(helper.getUniqueId(x))))) {
+                        // the API seems to be broken hence the cast
+                        entry.descriptionKeys = ((List<String>)wrapper.getDescription()).toArray(new String[0]);
                         recipeRegistry.hideRecipe(wrapper, VanillaRecipeCategoryUid.INFORMATION);
                     }
                 }
@@ -68,33 +120,34 @@ public class Description extends VirtualizedRegistry<Pair<List<IIngredient>, Lis
         removeScripted();
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(List<IIngredient> target, List<String> description) {
-        addScripted(Pair.of(target, description));
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("[item('minecraft:diamond'), item('minecraft:emerald')], 'groovyscript.recipe.fluid_recipe'"))
+    public void add(List<Object> target, String... description) {
+        if (target != null) {
+            addScripted(new DescriptionEntry(target, Arrays.asList(description)));
+        }
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
-    public void add(List<IIngredient> target, String... description) {
-        addScripted(Pair.of(target, Arrays.asList(description)));
+    public void add(List<Object> target, List<String> description) {
+        add(target, description.toArray(new String[0]));
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:clay'), ['wow', 'this', 'is', 'neat']"))
-    public void add(IIngredient target, List<String> description) {
-        addScripted(Pair.of(Collections.singletonList(target), description));
+    public void add(Object target, List<String> description) {
+        List<Object> objects = new ArrayList<>();
+        objects.add(target);
+        add(objects, description);
     }
 
-    @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe'"))
-    public void add(IIngredient target, String... description) {
-        addScripted(Pair.of(Collections.singletonList(target), Arrays.asList(description)));
+    @MethodDescription(type = MethodDescription.Type.ADDITION, example = {@Example("item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe'"), @Example("fluid('lava') * 500, 'some moderately cold fluid'")})
+    public void add(Object target, String... description) {
+        List<Object> objects = new ArrayList<>();
+        objects.add(target);
+        add(objects, description);
     }
 
     @MethodDescription(example = @Example(value = "item('thaumcraft:triple_meat_treat')", commented = true))
-    public void remove(List<IIngredient> target) {
-        addBackup(Pair.of(target, null));
-    }
-
-    @MethodDescription
-    public void remove(IIngredient... target) {
-        addBackup(Pair.of(Arrays.asList(target), null));
+    public void remove(Object target) {
+        addBackup(new DescriptionEntry(Arrays.asList(target), null));
     }
 }

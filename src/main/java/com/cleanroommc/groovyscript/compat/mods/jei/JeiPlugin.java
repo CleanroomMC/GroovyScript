@@ -1,5 +1,9 @@
 package com.cleanroommc.groovyscript.compat.mods.jei;
 
+import java.util.Comparator;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.command.GSCommand;
@@ -8,8 +12,14 @@ import com.cleanroommc.groovyscript.compat.inworldcrafting.jei.InWorldCraftingJe
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapedCraftingRecipe;
 import com.cleanroommc.groovyscript.compat.vanilla.ShapelessCraftingRecipe;
+
 import mezz.jei.Internal;
-import mezz.jei.api.*;
+import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IJeiRuntime;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.IModRegistry;
+import mezz.jei.api.IRecipeRegistry;
+import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.ingredients.IIngredientRenderer;
@@ -22,9 +32,6 @@ import mezz.jei.plugins.vanilla.crafting.ShapelessRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Comparator;
 
 @SuppressWarnings("AssignmentToStaticFieldFromInstanceMethod")
 @GroovyBlacklist
@@ -47,7 +54,7 @@ public class JeiPlugin implements IModPlugin {
     public static void afterRuntimeAvailable() {
         ModSupport.JEI.get().ingredient.applyChanges(modRegistry.getIngredientRegistry());
         ModSupport.JEI.get().category.applyChanges(jeiRuntime.getRecipeRegistry());
-        ModSupport.JEI.get().description.applyRemovals(jeiRuntime.getRecipeRegistry());
+        ModSupport.JEI.get().description.applyRemovals(modRegistry, jeiRuntime.getRecipeRegistry());
     }
 
     /**
