@@ -35,17 +35,14 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
         if (mc.inGameHasFocus) {
             info.copyFromPlayer(player);
         } else {
-            var jei = ModSupport.JEI.isLoaded();
             if (mc.currentScreen instanceof GuiContainer container) {
                 var slot = container.getSlotUnderMouse();
                 if (slot != null) {
                     info.setStack(slot.getStack());
-                } else if (jei && info.getStack().isEmpty()) {
-                    // check sidebars of normal guis
-                    info.setStack(getJeiStack());
                 }
-            } else if (jei && getJeiObject() != null) {
-                // have to check this separately for if IRecipesGui is open, since its GuiScreen not GuiContainer
+            }
+            // if we haven't found anything, check jei
+            if (ModSupport.JEI.isLoaded() && info.getStack().isEmpty()) {
                 info.setStack(getJeiStack());
             }
         }
