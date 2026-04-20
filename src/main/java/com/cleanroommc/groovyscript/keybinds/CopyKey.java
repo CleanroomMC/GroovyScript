@@ -44,7 +44,7 @@ public class CopyKey extends GroovyScriptKeybinds.Key {
                     // check sidebars of normal guis
                     info.setStack(getJeiStack());
                 }
-            } else if (jei && getJeiRecipesObject() != null) {
+            } else if (jei && getJeiObject() != null) {
                 // have to check this separately for if IRecipesGui is open, since its GuiScreen not GuiContainer
                 info.setStack(getJeiStack());
             }
