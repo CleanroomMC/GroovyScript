@@ -23,21 +23,24 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
                 mods.railcraft.api.fuel.FluidFuelManager.addFuel(entry.fluid, entry.heatValue);
             } catch (Exception e) {
                 GroovyLog.msg("Error restoring Railcraft Fluid Fuel")
-                        .add("{}", e.getMessage())
                         .error()
+                        .add("fluid: {}", entry.fluid.getFluid().getName())
+                        .add("heat value: {}", entry.heatValue)
+                        .add("exception: {}", e.getMessage())
                         .post();
             }
         });
         // Remove scripted
         removeScripted().forEach(entry -> {
             try {
-                // Note: Railcraft doesn't have a direct remove method, 
+                // Note: Railcraft doesn't have a direct remove method,
                 // so we rely on the internal map being modified
                 backupFuels.put(entry.fluid.getFluid().getName(), entry.heatValue);
             } catch (Exception e) {
                 GroovyLog.msg("Error removing Railcraft Fluid Fuel")
-                        .add("{}", e.getMessage())
                         .error()
+                        .add("fluid: {}", entry.fluid.getFluid().getName())
+                        .add("exception: {}", e.getMessage())
                         .post();
             }
         });
@@ -47,27 +50,30 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
     public void add(FluidStack fuel, int heatValue) {
         if (IngredientHelper.isEmpty(fuel)) {
             GroovyLog.msg("Error adding Railcraft Fluid Fuel")
-                    .add("fuel must not be empty")
                     .error()
+                    .add("fuel must not be empty")
                     .post();
             return;
         }
         if (heatValue <= 0) {
             GroovyLog.msg("Error adding Railcraft Fluid Fuel")
-                    .add("heat value must be greater than 0")
                     .error()
+                    .add("fluid: {}", fuel.getFluid().getName())
+                    .add("heat value: {} (must be > 0)", heatValue)
                     .post();
             return;
         }
-        
+
         addScripted(new FuelEntry(fuel.copy(), heatValue));
-        
+
         try {
             mods.railcraft.api.fuel.FluidFuelManager.addFuel(fuel, heatValue);
         } catch (Exception e) {
             GroovyLog.msg("Error adding Railcraft Fluid Fuel")
-                    .add("{}", e.getMessage())
                     .error()
+                    .add("fluid: {}", fuel.getFluid().getName())
+                    .add("heat value: {}", heatValue)
+                    .add("exception: {}", e.getMessage())
                     .post();
         }
     }
@@ -81,26 +87,27 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
     public void remove(FluidStack fuel) {
         if (IngredientHelper.isEmpty(fuel)) {
             GroovyLog.msg("Error removing Railcraft Fluid Fuel")
-                    .add("fuel must not be empty")
                     .error()
+                    .add("fuel must not be empty")
                     .post();
             return;
         }
-        
+
         // Store current value for backup
         int currentValue = mods.railcraft.api.fuel.FluidFuelManager.getFuelValue(fuel);
         if (currentValue > 0) {
             addBackup(new FuelEntry(fuel.copy(), currentValue));
         }
-        
+
         // Note: Railcraft's FluidFuelManager doesn't have a direct remove method
         // We can only add with 0 heat value to effectively disable it
         try {
             mods.railcraft.api.fuel.FluidFuelManager.addFuel(fuel, 0);
         } catch (Exception e) {
             GroovyLog.msg("Error removing Railcraft Fluid Fuel")
-                    .add("{}", e.getMessage())
                     .error()
+                    .add("fluid: {}", fuel.getFluid().getName())
+                    .add("exception: {}", e.getMessage())
                     .post();
         }
     }
@@ -110,8 +117,8 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
         // Note: This is a limitation - we can't truly remove all without reflection
         // This method is provided for API compatibility but may not work as expected
         GroovyLog.msg("Warning: Railcraft FluidFuels.removeAll() may not work as expected")
-                .add("Railcraft doesn't provide a way to clear all fluid fuels")
                 .warn()
+                .add("Railcraft doesn't provide a way to clear all fluid fuels")
                 .post();
     }
 

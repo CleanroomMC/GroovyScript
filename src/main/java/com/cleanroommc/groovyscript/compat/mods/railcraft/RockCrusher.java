@@ -40,6 +40,27 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IRockCrusherCrafter.IRecipe add(IIngredient input, List<ItemStack> outputs, List<Float> chances, int time) {
+        if (time <= 0) {
+            GroovyLog.msg("Error adding Railcraft Rock Crusher recipe")
+                    .error()
+                    .add("time must be greater than 0, got: {}", time)
+                    .post();
+            return null;
+        }
+        if (outputs == null || outputs.isEmpty()) {
+            GroovyLog.msg("Error adding Railcraft Rock Crusher recipe")
+                    .error()
+                    .add("outputs must not be empty")
+                    .post();
+            return null;
+        }
+        if (chances == null || chances.isEmpty()) {
+            GroovyLog.msg("Error adding Railcraft Rock Crusher recipe")
+                    .error()
+                    .add("chances must not be empty")
+                    .post();
+            return null;
+        }
         RecipeBuilder builder = recipeBuilder();
         builder.input(input);
         builder.time = time;
@@ -58,8 +79,8 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
     public void removeByOutput(IIngredient output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Railcraft Rock Crusher recipe")
-                    .add("output must not be empty")
                     .error()
+                    .add("output must not be empty")
                     .post();
             return;
         }
@@ -74,8 +95,8 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
             return false;
         })) {
             GroovyLog.msg("Error removing Railcraft Rock Crusher recipe")
-                    .add("no recipes found for {}", output)
                     .error()
+                    .add("no recipes found for {}", output)
                     .post();
         }
     }
@@ -84,8 +105,8 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
     public void removeByInput(IIngredient input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Railcraft Rock Crusher recipe")
-                    .add("input must not be empty")
                     .error()
+                    .add("input must not be empty")
                     .post();
             return;
         }
@@ -97,8 +118,8 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
             return false;
         })) {
             GroovyLog.msg("Error removing Railcraft Rock Crusher recipe")
-                    .add("no recipes found for {}", input)
                     .error()
+                    .add("no recipes found for {}", input)
                     .post();
         }
     }
@@ -146,7 +167,10 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg);
-            if (time < 0) time = IRockCrusherCrafter.PROCESS_TIME;
+            if (time <= 0) {
+                msg.add("time must be greater than 0, got: {}", time);
+                time = IRockCrusherCrafter.PROCESS_TIME;
+            }
             if (outputs.isEmpty()) {
                 msg.add("At least one output must be defined");
             }
@@ -156,7 +180,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
         @RecipeBuilderRegistrationMethod
         public @Nullable IRockCrusherCrafter.IRecipe register() {
             if (!validate()) return null;
-            Ingredient inputIngredient = Railcraft.toIngredient(input.get(0));
+            Ingredient inputIngredient = input.get(0).toMcIngredient();
             List<IOutputEntry> outputsCopy = new ArrayList<>(outputs);
 
             IRockCrusherCrafter.IRecipe recipe = new IRockCrusherCrafter.IRecipe() {

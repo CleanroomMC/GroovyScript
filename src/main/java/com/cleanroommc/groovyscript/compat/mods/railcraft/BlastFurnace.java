@@ -30,6 +30,20 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IBlastFurnaceCrafter.IRecipe add(IIngredient input, ItemStack output, int time, int slag) {
+        if (time <= 0) {
+            GroovyLog.msg("Error adding Railcraft Blast Furnace recipe")
+                    .error()
+                    .add("time must be greater than 0, got: {}", time)
+                    .post();
+            return null;
+        }
+        if (slag < 0) {
+            GroovyLog.msg("Error adding Railcraft Blast Furnace recipe")
+                    .error()
+                    .add("slag must be non-negative, got: {}", slag)
+                    .post();
+            return null;
+        }
         RecipeBuilder builder = recipeBuilder();
         builder.input(input);
         builder.output(output);
@@ -52,8 +66,8 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Railcraft Blast Furnace recipe")
-                    .add("output must not be empty")
                     .error()
+                    .add("output must not be empty")
                     .post();
             return;
         }
@@ -65,8 +79,8 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
             return false;
         })) {
             GroovyLog.msg("Error removing Railcraft Blast Furnace recipe")
-                    .add("no recipes found for {}", output)
                     .error()
+                    .add("no recipes found for {}", output)
                     .post();
         }
     }
@@ -75,8 +89,8 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
     public void removeByInput(IIngredient input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Railcraft Blast Furnace recipe")
-                    .add("input must not be empty")
                     .error()
+                    .add("input must not be empty")
                     .post();
             return;
         }
@@ -88,8 +102,8 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
             return false;
         })) {
             GroovyLog.msg("Error removing Railcraft Blast Furnace recipe")
-                    .add("no recipes found for {}", input)
                     .error()
+                    .add("no recipes found for {}", input)
                     .post();
         }
     }
@@ -124,8 +138,14 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (time < 0) time = IBlastFurnaceCrafter.SMELT_TIME;
-            if (slag < 0) slag = 1;
+            if (time <= 0) {
+                msg.add("time must be greater than 0, got: {}", time);
+                time = IBlastFurnaceCrafter.SMELT_TIME;
+            }
+            if (slag < 0) {
+                msg.add("slag must be non-negative, got: {}", slag);
+                slag = 1;
+            }
         }
 
         @Override
@@ -133,7 +153,7 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
         public @Nullable IBlastFurnaceCrafter.IRecipe register() {
             if (!validate()) return null;
             ItemStack outputStack = output.get(0);
-            Ingredient inputIngredient = Railcraft.toIngredient(input.get(0));
+            Ingredient inputIngredient = input.get(0).toMcIngredient();
 
             IBlastFurnaceCrafter.IRecipe recipe = new IBlastFurnaceCrafter.IRecipe() {
                 @Override

@@ -220,7 +220,7 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
                     for (List<IIngredient> row : matrix) {
                         for (IIngredient ing : row) {
                             if (ing != null) {
-                                ingredients.add(Railcraft.toIngredient(ing));
+                                ingredients.add(ing.toMcIngredient());
                             }
                         }
                     }
@@ -380,7 +380,7 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
                 public NonNullList<Ingredient> getIngredients() {
                     NonNullList<Ingredient> ingredients = NonNullList.create();
                     for (IIngredient ing : input) {
-                        ingredients.add(Railcraft.toIngredient(ing));
+                        ingredients.add(ing.toMcIngredient());
                     }
                     return ingredients;
                 }

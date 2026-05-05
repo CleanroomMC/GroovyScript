@@ -31,6 +31,13 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public ICokeOvenCrafter.IRecipe add(IIngredient input, ItemStack output, FluidStack fluidOutput, int time) {
+        if (time <= 0) {
+            GroovyLog.msg("Error adding Railcraft Coke Oven recipe")
+                    .error()
+                    .add("time must be greater than 0, got: {}", time)
+                    .post();
+            return null;
+        }
         RecipeBuilder builder = recipeBuilder();
         builder.input(input);
         builder.output(output);
@@ -58,8 +65,8 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
     public void removeByOutput(ItemStack output) {
         if (IngredientHelper.isEmpty(output)) {
             GroovyLog.msg("Error removing Railcraft Coke Oven recipe")
-                    .add("output must not be empty")
                     .error()
+                    .add("output must not be empty")
                     .post();
             return;
         }
@@ -71,8 +78,8 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
             return false;
         })) {
             GroovyLog.msg("Error removing Railcraft Coke Oven recipe")
-                    .add("no recipes found for {}", output)
                     .error()
+                    .add("no recipes found for {}", output)
                     .post();
         }
     }
@@ -81,8 +88,8 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
     public void removeByInput(IIngredient input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Railcraft Coke Oven recipe")
-                    .add("input must not be empty")
                     .error()
+                    .add("input must not be empty")
                     .post();
             return;
         }
@@ -94,8 +101,8 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
             return false;
         })) {
             GroovyLog.msg("Error removing Railcraft Coke Oven recipe")
-                    .add("no recipes found for {}", input)
                     .error()
+                    .add("no recipes found for {}", input)
                     .post();
         }
     }
@@ -135,7 +142,10 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (time < 0) time = ICokeOvenCrafter.DEFAULT_COOK_TIME;
+            if (time <= 0) {
+                msg.add("time must be greater than 0, got: {}", time);
+                time = ICokeOvenCrafter.DEFAULT_COOK_TIME;
+            }
         }
 
         @Override
@@ -143,7 +153,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
         public @Nullable ICokeOvenCrafter.IRecipe register() {
             if (!validate()) return null;
             ItemStack outputStack = output.get(0);
-            Ingredient inputIngredient = Railcraft.toIngredient(input.get(0));
+            Ingredient inputIngredient = input.get(0).toMcIngredient();
             FluidStack fluidCopy = fluid != null ? fluid.copy() : null;
 
             ICokeOvenCrafter.IRecipe recipe = new ICokeOvenCrafter.IRecipe() {
