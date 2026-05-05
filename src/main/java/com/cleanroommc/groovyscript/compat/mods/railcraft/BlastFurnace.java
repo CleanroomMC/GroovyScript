@@ -31,12 +31,12 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IBlastFurnaceCrafter.IRecipe add(IIngredient input, ItemStack output, int time, int slag) {
-        return recipeBuilder()
-                .input(input)
-                .output(output)
-                .time(time)
-                .slag(slag)
-                .register();
+        RecipeBuilder builder = recipeBuilder();
+        builder.input(input);
+        builder.output(output);
+        builder.time = time;
+        builder.slag = slag;
+        return builder.register();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)

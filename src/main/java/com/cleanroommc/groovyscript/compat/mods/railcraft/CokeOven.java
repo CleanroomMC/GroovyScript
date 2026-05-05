@@ -31,12 +31,12 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public ICokeOvenCrafter.IRecipe add(IIngredient input, ItemStack output, FluidStack fluidOutput, int time) {
-        return recipeBuilder()
-                .input(input)
-                .output(output)
-                .fluid(fluidOutput)
-                .time(time)
-                .register();
+        RecipeBuilder builder = recipeBuilder();
+        builder.input(input);
+        builder.output(output);
+        builder.fluid = fluidOutput;
+        builder.time = time;
+        return builder.register();
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)

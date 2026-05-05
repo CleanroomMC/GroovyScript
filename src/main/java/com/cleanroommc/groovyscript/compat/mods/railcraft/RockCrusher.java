@@ -40,7 +40,8 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IRockCrusherCrafter.IRecipe add(IIngredient input, List<ItemStack> outputs, List<Float> chances, int time) {
-        RecipeBuilder builder = recipeBuilder().input(input);
+        RecipeBuilder builder = recipeBuilder();
+        builder.input(input);
         builder.time = time;
         for (int i = 0; i < outputs.size() && i < chances.size(); i++) {
             builder.output(outputs.get(i), chances.get(i));
