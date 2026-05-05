@@ -51,7 +51,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IRockCrusherCrafter.IRecipe add(IIngredient input, List<ItemStack> outputs, List<Float> chances) {
-        return add(input, outputs, chances, 200);
+        return add(input, outputs, chances, IRockCrusherCrafter.PROCESS_TIME);
     }
 
     @MethodDescription(example = @Example("item('minecraft:cobblestone')"))
@@ -106,8 +106,8 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
     @Property(property = "input", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IRockCrusherCrafter.IRecipe> {
 
-        @Property(comp = @Comp(gte = 0))
-        private int time = 200;
+        @Property(comp = @Comp(gte = 0), defaultValue = "IRockCrusherCrafter.PROCESS_TIME")
+        private int time = IRockCrusherCrafter.PROCESS_TIME;
         private final List<IOutputEntry> outputs = new ArrayList<>();
 
         @RecipeBuilderMethodDescription
@@ -146,7 +146,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 0, 0);
             validateFluids(msg);
-            if (time < 0) time = 200;
+            if (time < 0) time = IRockCrusherCrafter.PROCESS_TIME;
             if (outputs.isEmpty()) {
                 msg.add("At least one output must be defined");
             }
@@ -158,7 +158,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
             if (!validate()) return null;
             Ingredient inputIngredient = Railcraft.toIngredient(input.get(0));
             List<IOutputEntry> outputsCopy = new ArrayList<>(outputs);
-            
+
             IRockCrusherCrafter.IRecipe recipe = new IRockCrusherCrafter.IRecipe() {
                 @Override
                 public ResourceLocation getName() {
@@ -180,7 +180,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
                     return time;
                 }
             };
-            
+
             ModSupport.RAILCRAFT.get().rockCrusher.add(recipe);
             return recipe;
         }

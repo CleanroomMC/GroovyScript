@@ -41,7 +41,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public ICokeOvenCrafter.IRecipe add(IIngredient input, ItemStack output, FluidStack fluidOutput) {
-        return add(input, output, fluidOutput, 1800);
+        return add(input, output, fluidOutput, ICokeOvenCrafter.DEFAULT_COOK_TIME);
     }
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
@@ -51,7 +51,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public ICokeOvenCrafter.IRecipe add(IIngredient input, ItemStack output) {
-        return add(input, output, null, 1800);
+        return add(input, output, null, ICokeOvenCrafter.DEFAULT_COOK_TIME);
     }
 
     @MethodDescription(example = @Example("item('railcraft:fuel_coke')"))
@@ -104,8 +104,8 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<ICokeOvenCrafter.IRecipe> {
 
-        @Property(comp = @Comp(gte = 0))
-        private int time = 1800;
+        @Property(comp = @Comp(gte = 0), defaultValue = "ICokeOvenCrafter.DEFAULT_COOK_TIME")
+        private int time = ICokeOvenCrafter.DEFAULT_COOK_TIME;
         @Property
         private FluidStack fluid;
 
@@ -135,7 +135,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (time < 0) time = 1800;
+            if (time < 0) time = ICokeOvenCrafter.DEFAULT_COOK_TIME;
         }
 
         @Override
@@ -145,7 +145,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
             ItemStack outputStack = output.get(0);
             Ingredient inputIngredient = Railcraft.toIngredient(input.get(0));
             FluidStack fluidCopy = fluid != null ? fluid.copy() : null;
-            
+
             ICokeOvenCrafter.IRecipe recipe = new ICokeOvenCrafter.IRecipe() {
                 @Override
                 public net.minecraft.util.ResourceLocation getName() {
@@ -172,7 +172,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
                     return outputStack.copy();
                 }
             };
-            
+
             ModSupport.RAILCRAFT.get().cokeOven.add(recipe);
             return recipe;
         }

@@ -14,7 +14,6 @@ import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.function.ToIntFunction;
 
 @RegistryDescription
 public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRecipe> {
@@ -46,7 +45,7 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IBlastFurnaceCrafter.IRecipe add(IIngredient input, ItemStack output) {
-        return add(input, output, 1280, 1);
+        return add(input, output, IBlastFurnaceCrafter.SMELT_TIME, 1);
     }
 
     @MethodDescription(example = @Example("item('railcraft:ingot:1')"))
@@ -99,9 +98,9 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
     @Property(property = "output", comp = @Comp(eq = 1))
     public static class RecipeBuilder extends AbstractRecipeBuilder<IBlastFurnaceCrafter.IRecipe> {
 
-        @Property(comp = @Comp(gte = 0))
-        private int time = 1280;
-        @Property(comp = @Comp(gte = 0))
+        @Property(comp = @Comp(gte = 0), defaultValue = "IBlastFurnaceCrafter.SMELT_TIME")
+        private int time = IBlastFurnaceCrafter.SMELT_TIME;
+        @Property(comp = @Comp(gte = 0), defaultValue = "1")
         private int slag = 1;
 
         @RecipeBuilderMethodDescription
@@ -125,7 +124,7 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (time < 0) time = 1280;
+            if (time < 0) time = IBlastFurnaceCrafter.SMELT_TIME;
             if (slag < 0) slag = 1;
         }
 
@@ -135,7 +134,7 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
             if (!validate()) return null;
             ItemStack outputStack = output.get(0);
             Ingredient inputIngredient = Railcraft.toIngredient(input.get(0));
-            
+
             IBlastFurnaceCrafter.IRecipe recipe = new IBlastFurnaceCrafter.IRecipe() {
                 @Override
                 public net.minecraft.util.ResourceLocation getName() {
@@ -162,7 +161,7 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
                     return slag;
                 }
             };
-            
+
             ModSupport.RAILCRAFT.get().blastFurnace.add(recipe);
             return recipe;
         }
