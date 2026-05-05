@@ -20,6 +20,20 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
 
     @Override
     public void onReload() {
+        // Remove scripted (disable them by setting heat to 0)
+        removeScripted().forEach(entry -> {
+            try {
+                // Disable the fuel by setting heat value to 0
+                FluidFuelManager.addFuel(entry.fluid, 0);
+            } catch (Exception e) {
+                GroovyLog.msg("Error removing Railcraft Fluid Fuel")
+                        .error()
+                        .add("fluid: {}", entry.fluid.getFluid().getName())
+                        .add("exception: {}", e.getMessage())
+                        .post();
+            }
+        });
+        
         // Restore from backup
         restoreFromBackup().forEach(entry -> {
             try {
@@ -29,20 +43,6 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
                         .error()
                         .add("fluid: {}", entry.fluid.getFluid().getName())
                         .add("heat value: {}", entry.heatValue)
-                        .add("exception: {}", e.getMessage())
-                        .post();
-            }
-        });
-        // Remove scripted
-        removeScripted().forEach(entry -> {
-            try {
-                // Note: Railcraft doesn't have a direct remove method,
-                // so we rely on the internal map being modified
-                backupFuels.put(entry.fluid.getFluid().getName(), entry.heatValue);
-            } catch (Exception e) {
-                GroovyLog.msg("Error removing Railcraft Fluid Fuel")
-                        .error()
-                        .add("fluid: {}", entry.fluid.getFluid().getName())
                         .add("exception: {}", e.getMessage())
                         .post();
             }
@@ -67,6 +67,12 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
             return;
         }
 
+        // Store the original value for backup before adding
+        int originalValue = FluidFuelManager.getFuelValue(fuel);
+        if (originalValue > 0) {
+            addBackup(new FuelEntry(fuel.copy(), originalValue));
+        }
+        
         addScripted(new FuelEntry(fuel.copy(), heatValue));
 
         try {
@@ -97,7 +103,7 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
         }
 
         // Store current value for backup
-        int currentValue = mods.railcraft.api.fuel.FluidFuelManager.getFuelValue(fuel);
+        int currentValue = FluidFuelManager.getFuelValue(fuel);
         if (currentValue > 0) {
             addBackup(new FuelEntry(fuel.copy(), currentValue));
         }
