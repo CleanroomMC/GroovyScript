@@ -1,5 +1,6 @@
 // Railcraft GroovyScript Example
 // This file demonstrates how to use the Railcraft compat features
+// pls Railcraft 1.2.1.0 beta8
 
 // ============================================
 // Blast Furnace
