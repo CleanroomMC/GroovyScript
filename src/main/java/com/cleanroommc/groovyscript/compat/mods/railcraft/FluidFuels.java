@@ -4,11 +4,14 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import mods.railcraft.api.fuel.FluidFuelManager;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+
+
 
 @RegistryDescription
 public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
@@ -20,7 +23,7 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
         // Restore from backup
         restoreFromBackup().forEach(entry -> {
             try {
-                mods.railcraft.api.fuel.FluidFuelManager.addFuel(entry.fluid, entry.heatValue);
+                FluidFuelManager.addFuel(entry.fluid, entry.heatValue);
             } catch (Exception e) {
                 GroovyLog.msg("Error restoring Railcraft Fluid Fuel")
                         .error()
@@ -67,7 +70,7 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
         addScripted(new FuelEntry(fuel.copy(), heatValue));
 
         try {
-            mods.railcraft.api.fuel.FluidFuelManager.addFuel(fuel, heatValue);
+            FluidFuelManager.addFuel(fuel, heatValue);
         } catch (Exception e) {
             GroovyLog.msg("Error adding Railcraft Fluid Fuel")
                     .error()
@@ -102,7 +105,7 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
         // Note: Railcraft's FluidFuelManager doesn't have a direct remove method
         // We can only add with 0 heat value to effectively disable it
         try {
-            mods.railcraft.api.fuel.FluidFuelManager.addFuel(fuel, 0);
+            FluidFuelManager.addFuel(fuel, 0);
         } catch (Exception e) {
             GroovyLog.msg("Error removing Railcraft Fluid Fuel")
                     .error()
