@@ -19,7 +19,7 @@ import java.util.Collection;
 @RegistryDescription
 public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
 
-    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:log')).output(item('railcraft:fuel_coke')).fluid(fluid('creosote') * 500).time(1800)"))
+    @RecipeBuilderDescription(example = @Example(".input(item('minecraft:log')).output(item('railcraft:fuel_coke')).fluidOutput(fluid('creosote') * 500).time(1800)"))
     public static RecipeBuilder recipeBuilder() {
         return new RecipeBuilder();
     }
@@ -31,17 +31,12 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public ICokeOvenCrafter.IRecipe add(IIngredient input, ItemStack output, FluidStack fluidOutput, int time) {
-        if (time <= 0) {
-            GroovyLog.msg("Error adding Railcraft Coke Oven recipe")
-                    .error()
-                    .add("time must be greater than 0, got: {}", time)
-                    .post();
-            return null;
-        }
         RecipeBuilder builder = recipeBuilder();
         builder.input(input);
         builder.output(output);
-        builder.fluid = fluidOutput;
+        if (fluidOutput != null) {
+            builder.fluidOutput(fluidOutput);
+        }
         builder.time = time;
         return builder.register();
     }
@@ -113,18 +108,10 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
 
         @Property(comp = @Comp(gte = 0), defaultValue = "ICokeOvenCrafter.DEFAULT_COOK_TIME")
         private int time = ICokeOvenCrafter.DEFAULT_COOK_TIME;
-        @Property
-        private FluidStack fluid;
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
             this.time = time;
-            return this;
-        }
-
-        @RecipeBuilderMethodDescription
-        public RecipeBuilder fluid(FluidStack fluid) {
-            this.fluid = fluid;
             return this;
         }
 
@@ -141,11 +128,8 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
-            validateFluids(msg);
-            if (time <= 0) {
-                msg.add("time must be greater than 0, got: {}", time);
-                time = ICokeOvenCrafter.DEFAULT_COOK_TIME;
-            }
+            validateFluids(msg, 0, 1, 0, 1);
+            msg.add(time <= 0, "time must be greater than 0, got: {}", time);
         }
 
         @Override
@@ -154,7 +138,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
             if (!validate()) return null;
             ItemStack outputStack = output.get(0);
             Ingredient inputIngredient = input.get(0).toMcIngredient();
-            FluidStack fluidCopy = fluid != null ? fluid.copy() : null;
+            FluidStack fluidCopy = fluidOutput.isEmpty() ? null : fluidOutput.get(0).copy();
 
             ICokeOvenCrafter.IRecipe recipe = new ICokeOvenCrafter.IRecipe() {
                 @Override

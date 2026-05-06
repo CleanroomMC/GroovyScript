@@ -8,15 +8,8 @@ import mods.railcraft.api.fuel.FluidFuelManager;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
-
 @RegistryDescription
 public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
-
-    private final Map<String, Integer> backupFuels = new HashMap<>();
 
     @Override
     public void onReload() {

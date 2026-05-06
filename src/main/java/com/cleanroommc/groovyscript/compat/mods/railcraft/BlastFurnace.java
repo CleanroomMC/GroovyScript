@@ -30,20 +30,6 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
 
     @MethodDescription(type = MethodDescription.Type.ADDITION)
     public IBlastFurnaceCrafter.IRecipe add(IIngredient input, ItemStack output, int time, int slag) {
-        if (time <= 0) {
-            GroovyLog.msg("Error adding Railcraft Blast Furnace recipe")
-                    .error()
-                    .add("time must be greater than 0, got: {}", time)
-                    .post();
-            return null;
-        }
-        if (slag < 0) {
-            GroovyLog.msg("Error adding Railcraft Blast Furnace recipe")
-                    .error()
-                    .add("slag must be non-negative, got: {}", slag)
-                    .post();
-            return null;
-        }
         RecipeBuilder builder = recipeBuilder();
         builder.input(input);
         builder.output(output);
@@ -138,14 +124,8 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
             validateFluids(msg);
-            if (time <= 0) {
-                msg.add("time must be greater than 0, got: {}", time);
-                time = IBlastFurnaceCrafter.SMELT_TIME;
-            }
-            if (slag < 0) {
-                msg.add("slag must be non-negative, got: {}", slag);
-                slag = 1;
-            }
+            msg.add(time <= 0, "time must be greater than 0, got: {}", time);
+            msg.add(slag < 0, "slag must be non-negative, got: {}", slag);
         }
 
         @Override

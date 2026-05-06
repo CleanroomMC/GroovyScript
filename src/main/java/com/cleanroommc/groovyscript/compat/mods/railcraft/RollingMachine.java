@@ -106,13 +106,8 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
     }
 
     public boolean remove(IRollingMachineCrafter.IRollingRecipe recipe) {
-        return Crafters.rollingMachine().getRecipes().removeIf(r -> {
-            if (r == recipe) {
-                addBackup(Pair.of(r.getRegistryName(), r));
-                return true;
-            }
-            return false;
-        });
+        addBackup(Pair.of(recipe.getRegistryName(), recipe));
+        return Crafters.rollingMachine().getRecipes().remove(recipe);
     }
 
     @MethodDescription(type = MethodDescription.Type.QUERY)
