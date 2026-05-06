@@ -5,7 +5,6 @@ import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.cleanroommc.groovyscript.compat.mods.ModSupport;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
-import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IRollingMachineCrafter;
@@ -122,6 +121,7 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
     }
 
     public static class ShapedRecipeBuilder {
+
         private ItemStack output;
         private List<List<IIngredient>> matrix;
         private int time = 200;
@@ -188,6 +188,7 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
             ResourceLocation name = new ResourceLocation("groovyscript", "rolling_shaped_" + System.currentTimeMillis());
 
             IRecipe recipe = new IRecipe() {
+
                 @Override
                 public boolean matches(InventoryCrafting inv, World worldIn) {
                     // Simple matching logic
@@ -239,6 +240,7 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
             };
 
             IRollingMachineCrafter.IRollingRecipe rollingRecipe = new IRollingMachineCrafter.IRollingRecipe() {
+
                 @Override
                 public int getTickTime() {
                     return finalTime;
@@ -305,6 +307,7 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
     }
 
     public static class ShapelessRecipeBuilder {
+
         private ItemStack output;
         private List<IIngredient> input = new ArrayList<>();
         private int time = 200;
@@ -351,6 +354,7 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
             ResourceLocation name = new ResourceLocation("groovyscript", "rolling_shapeless_" + System.currentTimeMillis());
 
             IRecipe recipe = new IRecipe() {
+
                 @Override
                 public boolean matches(InventoryCrafting inv, World worldIn) {
                     return false;
@@ -397,6 +401,7 @@ public class RollingMachine extends VirtualizedRegistry<Pair<ResourceLocation, I
             };
 
             IRollingMachineCrafter.IRollingRecipe rollingRecipe = new IRollingMachineCrafter.IRollingRecipe() {
+
                 @Override
                 public int getTickTime() {
                     return finalTime;

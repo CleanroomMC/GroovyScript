@@ -128,7 +128,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
         @Override
         public void validate(GroovyLog.Msg msg) {
             validateItems(msg, 1, 1, 1, 1);
-            validateFluids(msg, 0, 1, 0, 1);
+            validateFluids(msg, 0, 0, 0, 1);
             msg.add(time <= 0, "time must be greater than 0, got: {}", time);
         }
 
@@ -141,6 +141,7 @@ public class CokeOven extends StandardListRegistry<ICokeOvenCrafter.IRecipe> {
             FluidStack fluidCopy = fluidOutput.isEmpty() ? null : fluidOutput.get(0).copy();
 
             ICokeOvenCrafter.IRecipe recipe = new ICokeOvenCrafter.IRecipe() {
+
                 @Override
                 public net.minecraft.util.ResourceLocation getName() {
                     return new net.minecraft.util.ResourceLocation("groovyscript", "cokeoven_" + System.currentTimeMillis());

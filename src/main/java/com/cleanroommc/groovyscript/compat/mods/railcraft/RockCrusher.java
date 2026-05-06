@@ -184,6 +184,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
             List<IOutputEntry> outputsCopy = new ArrayList<>(outputs);
 
             IRockCrusherCrafter.IRecipe recipe = new IRockCrusherCrafter.IRecipe() {
+
                 @Override
                 public ResourceLocation getName() {
                     return new ResourceLocation("groovyscript", "rockcrusher_" + System.currentTimeMillis());
@@ -211,6 +212,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
     }
 
     private static class RandomChanceGenRule implements IGenRule {
+
         private final float randomChance;
         private List<ITextComponent> toolTip;
 
@@ -233,6 +235,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
     }
 
     private static class OutputEntry implements IOutputEntry {
+
         private final ItemStack output;
         private final IGenRule genRule;
 

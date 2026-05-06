@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.helper.ingredient.IngredientHelper;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import mods.railcraft.api.fuel.FluidFuelManager;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.Nullable;
 
 @RegistryDescription
 public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
@@ -26,7 +25,7 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
                         .post();
             }
         });
-        
+
         // Restore from backup
         restoreFromBackup().forEach(entry -> {
             try {
@@ -65,7 +64,7 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
         if (originalValue > 0) {
             addBackup(new FuelEntry(fuel.copy(), originalValue));
         }
-        
+
         addScripted(new FuelEntry(fuel.copy(), heatValue));
 
         try {
@@ -125,6 +124,7 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
     }
 
     public static class FuelEntry {
+
         public final FluidStack fluid;
         public final int heatValue;
 

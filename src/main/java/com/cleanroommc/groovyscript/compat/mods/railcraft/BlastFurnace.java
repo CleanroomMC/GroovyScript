@@ -136,6 +136,7 @@ public class BlastFurnace extends StandardListRegistry<IBlastFurnaceCrafter.IRec
             Ingredient inputIngredient = input.get(0).toMcIngredient();
 
             IBlastFurnaceCrafter.IRecipe recipe = new IBlastFurnaceCrafter.IRecipe() {
+
                 @Override
                 public net.minecraft.util.ResourceLocation getName() {
                     return new net.minecraft.util.ResourceLocation("groovyscript", "blastfurnace_" + System.currentTimeMillis());
