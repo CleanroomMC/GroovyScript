@@ -136,6 +136,14 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
         }
 
         @RecipeBuilderMethodDescription
+        public RecipeBuilder output(ItemStack output) {
+            if (!IngredientHelper.isEmpty(output)) {
+                this.output.add(new OutputEntry(output.copy(), new RandomChanceGenRule(1.0f)));
+            }
+            return this;
+        }
+
+        @RecipeBuilderMethodDescription
         public RecipeBuilder output(ItemStack output, float chance) {
             if (!IngredientHelper.isEmpty(output)) {
                 this.output.add(new OutputEntry(output.copy(), new RandomChanceGenRule(chance)));
