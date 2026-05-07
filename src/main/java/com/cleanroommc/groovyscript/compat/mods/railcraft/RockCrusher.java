@@ -102,26 +102,23 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
     }
 
     @MethodDescription(example = @Example("item('minecraft:stone')"))
-    public void removeByInput(IIngredient input) {
+    public boolean removeByInput(IIngredient input) {
         if (IngredientHelper.isEmpty(input)) {
             GroovyLog.msg("Error removing Railcraft Rock Crusher recipe")
                     .error()
                     .add("input must not be empty")
                     .post();
-            return;
+            return false;
         }
-        if (!getRecipes().removeIf(recipe -> {
-            if (recipe.getInput().test(input.getMatchingStacks()[0])) {
-                addBackup(recipe);
-                return true;
+        return getRecipes().removeIf(recipe -> {
+            for (ItemStack stack : input.getMatchingStacks()) {
+                if (recipe.getInput().test(stack)) {
+                    addBackup(recipe);
+                    return true;
+                }
             }
             return false;
-        })) {
-            GroovyLog.msg("Error removing Railcraft Rock Crusher recipe")
-                    .error()
-                    .add("no recipes found for {}", input)
-                    .post();
-        }
+        });
     }
 
     @Property(property = "input", comp = @Comp(eq = 1))
