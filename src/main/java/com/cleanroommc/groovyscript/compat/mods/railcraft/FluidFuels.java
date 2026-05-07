@@ -43,19 +43,11 @@ public class FluidFuels extends VirtualizedRegistry<FluidFuels.FuelEntry> {
 
     @MethodDescription(type = MethodDescription.Type.ADDITION, example = @Example("fluid('lava'), 32000"))
     public void add(FluidStack fuel, int heatValue) {
-        if (IngredientHelper.isEmpty(fuel)) {
-            GroovyLog.msg("Error adding Railcraft Fluid Fuel")
-                    .error()
-                    .add("fuel must not be empty")
-                    .post();
-            return;
-        }
-        if (heatValue <= 0) {
-            GroovyLog.msg("Error adding Railcraft Fluid Fuel")
-                    .error()
-                    .add("fluid: {}", fuel.getFluid().getName())
-                    .add("heat value: {} (must be > 0)", heatValue)
-                    .post();
+        if (GroovyLog.msg("Error adding Railcraft Fluid Fuel")
+                .error()
+                .add(IngredientHelper.isEmpty(fuel), () -> "fuel must not be empty")
+                .add(heatValue <= 0, () -> "heat value must be greater than 0")
+                .postIfNotEmpty()) {
             return;
         }
 
