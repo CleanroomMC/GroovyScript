@@ -126,7 +126,8 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
 
         @Property(comp = @Comp(gte = 0), defaultValue = "IRockCrusherCrafter.PROCESS_TIME")
         private int time = IRockCrusherCrafter.PROCESS_TIME;
-        private final List<IOutputEntry> outputs = new ArrayList<>();
+        @Property
+        private final List<IOutputEntry> output = new ArrayList<>();
 
         @RecipeBuilderMethodDescription
         public RecipeBuilder time(int time) {
@@ -137,7 +138,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
         @RecipeBuilderMethodDescription
         public RecipeBuilder output(ItemStack output, float chance) {
             if (!IngredientHelper.isEmpty(output)) {
-                outputs.add(new OutputEntry(output.copy(), new RandomChanceGenRule(chance)));
+                this.output.add(new OutputEntry(output.copy(), new RandomChanceGenRule(chance)));
             }
             return this;
         }
@@ -145,7 +146,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
         @RecipeBuilderMethodDescription
         public RecipeBuilder output(ItemStack output, IGenRule rule) {
             if (!IngredientHelper.isEmpty(output)) {
-                outputs.add(new OutputEntry(output.copy(), rule));
+                this.output.add(new OutputEntry(output.copy(), rule));
             }
             return this;
         }
@@ -168,7 +169,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
                 msg.add("time must be greater than 0, got: {}", time);
                 time = IRockCrusherCrafter.PROCESS_TIME;
             }
-            if (outputs.isEmpty()) {
+            if (output.isEmpty()) {
                 msg.add("At least one output must be defined");
             }
         }
@@ -178,7 +179,7 @@ public class RockCrusher extends StandardListRegistry<IRockCrusherCrafter.IRecip
         public @Nullable IRockCrusherCrafter.IRecipe register() {
             if (!validate()) return null;
             Ingredient inputIngredient = input.get(0).toMcIngredient();
-            List<IOutputEntry> outputsCopy = new ArrayList<>(outputs);
+            List<IOutputEntry> outputsCopy = new ArrayList<>(output);
 
             IRockCrusherCrafter.IRecipe recipe = new IRockCrusherCrafter.IRecipe() {
 
