@@ -146,7 +146,6 @@ public class SandboxData {
 
     static Collection<File> getSortedFilesOf(File root, Collection<String> paths, boolean debug) {
         Object2IntLinkedOpenHashMap<File> files = new Object2IntLinkedOpenHashMap<>();
-        String separator = File.separatorChar == '\\' ? "\\\\" : File.separator;
 
         for (String path : paths) {
             File rootFile = new File(root, path);
@@ -155,7 +154,7 @@ public class SandboxData {
             }
             // if we are looking at a specific file, we don't want that to be overridden.
             // otherwise, we want to use the specificity based on the number of file separators.
-            int pathSize = StringUtils.countMatches(path, separator);
+            int pathSize = StringUtils.countMatches(rootFile.getPath(), File.separatorChar);
             try (Stream<Path> stream = Files.walk(rootFile.toPath(), debug ? FOLLOW_LINKS : NO_VISIT_OPTIONS)) {
                 stream.filter(path1 -> isGroovyFile(path1.toString()))
                         .map(Path::toFile)
