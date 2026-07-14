@@ -1,27 +1,14 @@
 package com.cleanroommc.groovyscript.sandbox.security;
 
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
-import com.cleanroommc.groovyscript.api.IScriptReloadable;
-import com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer;
-import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import com.cleanroommc.groovyscript.sandbox.GroovyLogImpl;
-import com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure;
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyShell;
 import groovy.lang.MetaMethod;
-import groovy.ui.GroovyMain;
-import groovy.ui.GroovySocketServer;
-import groovy.util.Eval;
-import groovy.util.GroovyScriptEngine;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.runtime.*;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 
-import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -41,9 +28,15 @@ public class GroovySecurityManager {
     }
 
     public void initDefaults() {
-        unBanClasses(GroovyLogImpl.class, LambdaClosure.class);
-        unBanClasses(NullObject.class, FormatHelper.class, GStringImpl.class, RegexSupport.class);
-        unBanClass(PrintWriter.class); // for print methods
+        unBanClasses(
+                "com.cleanroommc.groovyscript.sandbox.GroovyLogImpl",
+                "com.cleanroommc.groovyscript.sandbox.expand.LambdaClosure");
+        unBanClasses(
+                "org.codehaus.groovy.runtime.NullObject",
+                "org.codehaus.groovy.runtime.FormatHelper",
+                "org.codehaus.groovy.runtime.GStringImpl",
+                "org.codehaus.groovy.runtime.RegexSupport");
+        unBanClass("java.io.PrintWriter"); // for print methods
 
         banPackage("java.lang.reflect");
         banPackage("java.lang.invoke");
@@ -66,13 +59,24 @@ public class GroovySecurityManager {
         banPackage("org.spongepowered");
         banPackage("zone.rong.mixinbooter");
         banPackage("net.minecraftforge.gradle");
-        banClasses(Runtime.class, ClassLoader.class, Scanner.class);
-        banClasses(GroovyScriptEngine.class, Eval.class, GroovyMain.class, GroovySocketServer.class, GroovyShell.class, GroovyClassLoader.class);
-        banMethods(System.class, "exit", "gc", "setSecurityManager");
-        banMethods(Class.class, "getResource", "getResourceAsStream");
-        banMethods(String.class, "execute");
-        banMethods(ProcessGroovyMethods.class, "execute");
-        banClasses(FileUtils.class, org.apache.logging.log4j.core.util.FileUtils.class);
+        banClasses(
+                    "java.lang.Runtime",
+                    "java.lang.ClassLoader",
+                    "java.util.Scanner");
+        banClasses(
+                    "groovy.util.GroovyScriptEngine",
+                    "groovy.util.Eval",
+                    "groovy.ui.GroovyMain",
+                    "groovy.ui.GroovySocketServer",
+                    "groovy.lang.GroovyShell",
+                    "groovy.lang.GroovyClassLoader");
+        banMethods("java.lang.System", "exit", "gc", "setSecurityManager");
+        banMethods("java.lang.Class", "getResource", "getResourceAsStream");
+        banMethods("java.lang.String", "execute");
+        banMethods("org.codehaus.groovy.runtime.ProcessGroovyMethods", "execute");
+        banClasses(
+                    "org.apache.commons.io.FileUtils",
+                    "org.apache.logging.log4j.core.util.FileUtils");
 
         // mod specific
         banPackage("com.cleanroommc.groovyscript.command");
@@ -80,18 +84,28 @@ public class GroovySecurityManager {
         banPackage("com.cleanroommc.groovyscript.sandbox");
         banPackage("com.cleanroommc.groovyscript.server");
         banPackage("net.prominic");
-        banMethods(IScriptReloadable.class, "onReload", "afterScriptLoad");
-        banMethods(VirtualizedRegistry.class, "createRecipeStorage");
-        banMethods(GroovyPropertyContainer.class, "initialize");
+        banMethods("com.cleanroommc.groovyscript.api.IScriptReloadable", "onReload", "afterScriptLoad");
+        banMethods("com.cleanroommc.groovyscript.registry.VirtualizedRegistry", "createRecipeStorage");
+        banMethods("com.cleanroommc.groovyscript.compat.mods.GroovyPropertyContainer", "initialize");
     }
 
     public void unBanClass(Class<?> clazz) {
         whiteListedClasses.add(clazz.getName());
     }
 
+    public void unBanClass(String className) {
+        whiteListedClasses.add(className);
+    }
+
     public void unBanClasses(Class<?>... classes) {
         for (Class<?> clazz : classes) {
             unBanClass(clazz);
+        }
+    }
+
+    public void unBanClasses(String... classNames) {
+        for (String className : classNames) {
+            unBanClass(className);
         }
     }
 
@@ -103,14 +117,28 @@ public class GroovySecurityManager {
         bannedClasses.add(clazz.getName());
     }
 
+    public void banClass(String className) {
+        bannedClasses.add(className);
+    }
+
     public void banClasses(Class<?>... classes) {
         for (Class<?> clazz : classes) {
             banClass(clazz);
         }
     }
 
+    public void banClasses(String... classNames) {
+        for (String className : classNames) {
+            banClass(className);
+        }
+    }
+
     public void banMethods(Class<?> clazz, String... method) {
         Collections.addAll(bannedMethods.computeIfAbsent(clazz.getName(), key -> new ObjectOpenHashSet<>()), method);
+    }
+
+    public void banMethods(String className, String... method) {
+        Collections.addAll(bannedMethods.computeIfAbsent(className, key -> new ObjectOpenHashSet<>()), method);
     }
 
     public void banMethods(Class<?> clazz, Collection<String> method) {
