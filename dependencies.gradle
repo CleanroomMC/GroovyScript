@@ -89,7 +89,7 @@ final Map<String, List<String>> mod_dependencies = [
         'libnine-322344:3509087'                              : [debug_lazy_ae2],
         'libvulpes-236541:3801015'                            : [debug_advanced_rocketry],
         'lightningcraft-237422:2872478'                       : [debug_lightningcraft],
-        'llibrary-243298:2504999'                             : [debug_ice_and_fire_old, debug_ice_and_fire_rotn],
+        'llibrary-243298:2504999'                             : [debug_ice_and_fire_old, debug_ice_and_fire_rotn, debug_ice_and_fire_rlcraft],
         'magneticraft-224808:3791484'                         : [debug_magneticraft],
         'mantle-74924:2713386'                                : [debug_inspirations, debug_tinkers_construct],
         'mct-immersive-technology-359407:7752858'             : [debug_immersive_technology],
@@ -220,10 +220,13 @@ dependencies {
     // WARNING: rotn must be placed before normal, otherwise you will not be able to properly detect sources for the LightningForge
     compileOnly rfg.deobf('curse.maven:ice-and-fire-rotn-edition-457668:5738729')
     compileOnly rfg.deobf('curse.maven:iceandfire-264231:2939529')
+    compileOnly rfg.deobf('curse.maven:ice-and-fire-rlcraft-edition-888556:8350620')
     if (debug_ice_and_fire_rotn.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:ice-and-fire-rotn-edition-457668:5738729')
     } else if (debug_ice_and_fire_old.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:iceandfire-264231:2939529')
+    } else if (debug_ice_and_fire_rlcraft.toBoolean()) {
+        runtimeOnly rfg.deobf('curse.maven:ice-and-fire-rlcraft-edition-888556:8350620')
     }
 
     // WARNING: experimental must be placed before classic, otherwise you will crash when debugging either. Check FluidGenerator compat to confirm
