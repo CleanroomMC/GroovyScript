@@ -29,7 +29,7 @@ public class IceAndFire extends GroovyPropertyContainer {
         if (entry.getName().contains("RotN")) return Version.ROTN;
         // Ice And Fire 2.x most likely means RLCraft edition
         else if (entry.getVersion().startsWith("2")) return Version.RLCRAFT;
-        else return Version.ORIGINAL;
+        return Version.ORIGINAL;
     }
 
     @Deprecated

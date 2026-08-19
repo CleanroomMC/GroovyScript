@@ -17,7 +17,7 @@ import java.util.Collection;
 public class LightningForge extends DragonForge {
 
     public LightningForge(Collection<DragonForgeRecipe> recipes) {
-        super(recipes);
+        super("Lightning", recipes);
     }
 
     @RecipeBuilderDescription(example = {

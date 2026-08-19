@@ -12,9 +12,11 @@ import java.util.Collection;
 
 public abstract class DragonForge extends StandardListRegistry<DragonForgeRecipe> {
 
+    private final String type;
     private final Collection<DragonForgeRecipe> recipes;
 
-    public DragonForge(Collection<DragonForgeRecipe> recipes) {
+    protected DragonForge(String type, Collection<DragonForgeRecipe> recipes) {
+        this.type = type;
         this.recipes = recipes;
     }
 
@@ -41,7 +43,7 @@ public abstract class DragonForge extends StandardListRegistry<DragonForgeRecipe
 
         @Override
         public String getErrorMsg() {
-            return "Error adding Ice And Fire Fire Forge recipe";
+            return "Error adding Ice And Fire " + DragonForge.this.type + " Forge recipe";
         }
 
         @Override

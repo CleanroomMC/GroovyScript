@@ -10,7 +10,7 @@ import java.util.Collection;
 public class IceForge extends DragonForge {
 
     public IceForge(Collection<DragonForgeRecipe> recipes) {
-        super(recipes);
+        super("Ice", recipes);
     }
 
     @RecipeBuilderDescription(example = {
