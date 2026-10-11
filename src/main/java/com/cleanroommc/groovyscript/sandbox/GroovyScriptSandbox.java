@@ -125,6 +125,8 @@ public class GroovyScriptSandbox {
     }
 
     public void run(LoadStage currentLoadStage) {
+        // Cache validation failures must escape the script-error handler: stale code must not execute.
+        this.engine.prepareCache();
         this.currentLoadStage = Objects.requireNonNull(currentLoadStage);
         try {
             load();

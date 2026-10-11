@@ -2,7 +2,6 @@ package com.cleanroommc.groovyscript.sandbox;
 
 import com.cleanroommc.groovyscript.GroovyScript;
 import com.cleanroommc.groovyscript.api.GroovyLog;
-import com.cleanroommc.groovyscript.helper.JsonHelper;
 import com.google.common.collect.AbstractIterator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -11,7 +10,6 @@ import groovy.lang.GroovyCodeSource;
 import groovy.util.ResourceConnector;
 import groovy.util.ResourceException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.apache.commons.io.FileUtils;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.classgen.GeneratorContext;
@@ -33,6 +31,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Path;
 import java.security.CodeSource;
 import java.util.*;
 
@@ -42,7 +41,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
      * Changing this number will force the cache to be deleted and every script has to be recompiled.
      * Useful when changes to the compilation process were made.
      */
-    public static final int CACHE_VERSION = 4;
+    public static final int CACHE_VERSION = 5;
     /**
      * Setting this to false will cause compiled classes to never be cached.
      * As a side effect some compilation behaviour might change. Can be useful for debugging.
@@ -71,14 +70,19 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
     private final ScriptClassLoader classLoader;
     private final Map<String, CompiledScript> index = new Object2ObjectOpenHashMap<>();
     private final Map<String, CompiledClass> loadedClasses = new Object2ObjectOpenHashMap<>();
+    private String inputFingerprint;
+    private boolean cachePrepared;
+    private final ScriptCacheStore cacheStore;
+    private final Map<String, Path> cacheDependencies = new TreeMap<>();
 
     public CustomGroovyScriptEngine(URL[] scriptEnvironment, File cacheRoot, File scriptRoot, CompilerConfiguration config) {
         this.scriptEnvironment = scriptEnvironment;
         this.cacheRoot = cacheRoot;
         this.scriptRoot = scriptRoot;
         this.config = config;
+        this.cacheStore = new ScriptCacheStore(cacheRoot.toPath(), CACHE_VERSION);
         this.classLoader = new ScriptClassLoader(CustomGroovyScriptEngine.class.getClassLoader(), config, Collections.unmodifiableMap(this.loadedClasses));
-        readIndex();
+        // Defer reading persisted classes until mod construction and compiler setup have finished.
     }
 
     public File getScriptRoot() {
@@ -124,30 +128,54 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         };
     }
 
-    void readIndex() {
-        this.index.clear();
-        JsonElement jsonElement = JsonHelper.loadJson(new File(this.cacheRoot, "_index.json"));
-        if (jsonElement == null || !jsonElement.isJsonObject()) return;
-        JsonObject json = jsonElement.getAsJsonObject();
-        int cacheVersion = json.get("version").getAsInt();
-        String java = json.has("java") ? json.get("java").getAsString() : "";
-        if (cacheVersion != CACHE_VERSION || !java.equals(VMPlugin.getJavaVersion())) {
-            // cache version changed -> force delete cache
-            deleteScriptCache();
-            return;
+    /**
+     * Register external files read by a compilation customizer, during mod construction.
+     * Use a stable, namespaced key. Files read when a script executes do not need registration.
+     */
+    public void addCacheDependency(String key, File file) {
+        if (this.cachePrepared) throw new IllegalStateException("Cache dependencies must be registered before scripts load");
+        if (this.cacheDependencies.putIfAbsent(Objects.requireNonNull(key), Objects.requireNonNull(file).toPath()) != null) {
+            throw new IllegalArgumentException("Duplicate Groovy cache dependency: " + key);
         }
-        for (JsonElement element : json.getAsJsonArray("index")) {
-            if (element.isJsonObject()) {
-                CompiledScript cs = CompiledScript.fromJson(element.getAsJsonObject(), this.scriptRoot.getPath(), this.cacheRoot.getPath());
-                if (cs != null) {
-                    this.index.put(cs.path, cs);
-                    this.loadedClasses.put(cs.name, cs);
-                    for (CompiledClass cc : cs.innerClasses) {
-                        this.loadedClasses.put(cc.name, cc);
+    }
+
+    @ApiStatus.Internal
+    public void prepareCache() {
+        if (this.cachePrepared) return;
+        try {
+            this.inputFingerprint = ScriptCacheInputs.capture(this.scriptEnvironment, this.config, this.cacheDependencies);
+            readIndex();
+            this.cachePrepared = true;
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not validate Groovy cache before script loading; startup aborted", e);
+        }
+    }
+
+    void readIndex() throws IOException {
+        this.index.clear();
+        this.loadedClasses.clear();
+        JsonObject json = this.cacheStore.open(this.inputFingerprint);
+        if (json != null) {
+            try {
+                if (VMPlugin.getJavaVersion().equals(json.get("java").getAsString())) {
+                    for (JsonElement element : json.getAsJsonArray("index")) {
+                        CompiledScript cs = CompiledScript.fromJson(element.getAsJsonObject(), this.scriptRoot.getPath(), this.cacheRoot.getPath());
+                        if (cs != null) {
+                            this.index.put(cs.path, cs);
+                            this.loadedClasses.put(cs.name, cs);
+                            for (CompiledClass cc : cs.innerClasses) this.loadedClasses.put(cc.name, cc);
+                        }
                     }
+                    GroovyScript.LOGGER.info("Reusing Groovy cache: compilation inputs and class contents match");
+                    return;
                 }
+            } catch (IllegalStateException | IllegalArgumentException | NullPointerException e) {
+                GroovyScript.LOGGER.warn("Discarding malformed Groovy cache index", e);
             }
         }
+        // Invalidate the entire generation, including helper classes and their dependents.
+        if (!deleteScriptCache()) throw new IOException("Could not clear invalid Groovy cache");
+        GroovyScript.LOGGER.info("Invalidated Groovy cache: missing, changed or incomplete compilation inputs");
     }
 
     void writeIndex() {
@@ -156,22 +184,33 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         json.addProperty("!DANGER!", "DO NOT EDIT THIS FILE!!!");
         json.addProperty("version", CACHE_VERSION);
         json.addProperty("java", VMPlugin.getJavaVersion());
+        json.addProperty("inputs", this.inputFingerprint);
         JsonArray index = new JsonArray();
         json.add("index", index);
         for (Map.Entry<String, CompiledScript> entry : this.index.entrySet()) {
             index.add(entry.getValue().toJson());
         }
-        JsonHelper.saveJson(new File(this.cacheRoot, "_index.json"), json);
+        try {
+            if (!this.inputFingerprint.equals(ScriptCacheInputs.capture(this.scriptEnvironment, this.config, this.cacheDependencies))) {
+                GroovyScript.LOGGER.warn("Compilation inputs changed during startup; Groovy cache will be rebuilt next launch");
+                return;
+            }
+            this.cacheStore.publish(this.inputFingerprint, json);
+        } catch (IOException e) {
+            GroovyScript.LOGGER.warn("Could not publish Groovy cache; it will be rebuilt next launch", e);
+        }
     }
 
     @ApiStatus.Internal
     public boolean deleteScriptCache() {
-        this.index.values().forEach(script -> script.deleteCache(this.cacheRoot.getPath()));
-        this.index.clear();
-        this.loadedClasses.clear();
-        getClassLoader().clearCache();
         try {
-            if (this.cacheRoot.exists()) FileUtils.cleanDirectory(this.cacheRoot);
+            this.cacheStore.clear();
+            this.loadedClasses.values().forEach(compiled -> {
+                if (compiled.clazz != null) InvokerHelper.removeClass(compiled.clazz);
+            });
+            this.index.clear();
+            this.loadedClasses.clear();
+            getClassLoader().clearCache();
             return true;
         } catch (IOException e) {
             GroovyScript.LOGGER.throwing(e);
@@ -207,6 +246,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
     }
 
     CompiledScript checkScriptLoadability(File file) {
+        prepareCache();
         String relativeFileName = FileUtil.relativize(this.scriptRoot.getPath(), file.getPath());
         if (!FileUtil.validateScriptPath(relativeFileName)) {
             // skip
@@ -347,6 +387,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
      */
     @ApiStatus.Internal
     public Class<?> onRecompileClass(URL source, String className) {
+        prepareCache();
         String path = source.toExternalForm();
         String rel = FileUtil.relativize(this.scriptRoot.getPath(), path);
         CompiledScript cs = this.index.get(rel);
