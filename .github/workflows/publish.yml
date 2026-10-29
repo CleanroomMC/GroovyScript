@@ -1,0 +1,29 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+-*'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+jobs:
+  release:
+    uses: CleanroomMC/Conventions/.github/workflows/release.yml@1.4.5
+    with:
+      publish-maven: true
+      publish-mods: true
+    secrets:
+      MAVEN_NAME: ${{ secrets.MAVEN_NAME }}
+      MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
+      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+      # master is protected, so the changelog commit needs a token that may push to it
+      CHANGELOG_TOKEN: ${{ secrets.PAT }}

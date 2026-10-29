@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022-2026 CleanroomMC contributors
+ * SPDX-License-Identifier: LGPL-3.0-only
+ */
+
 package com.cleanroommc.groovyscript.api.documentation;
 
 import com.cleanroommc.groovyscript.compat.mods.GroovyContainer;
@@ -18,7 +23,7 @@ public interface IContainerDocumentation {
      * @param suggestedFile the default file that the example code is suggested to be generated in.
      * @param stage         the load stage the examples are being generated for.
      * @return if the normal generation method should occur
-     * @see com.cleanroommc.groovyscript.documentation.Exporter#generateExamples(File, LoadStage, GroovyContainer)
+     * @see com.cleanroommc.groovyscript.documentation.Exporter#generateExamples(File, LoadStage, com.cleanroommc.groovyscript.documentation.helper.ContainerHolder)
      */
     default boolean generateExamples(File suggestedFile, LoadStage stage) {
         return true;
@@ -29,7 +34,7 @@ public interface IContainerDocumentation {
      *
      * @param suggestedFolder the default folder that the wiki is suggested to be generated in.
      * @return if the normal generation method should occur
-     * @see com.cleanroommc.groovyscript.documentation.Exporter#generateWiki(File, GroovyContainer)
+     * @see com.cleanroommc.groovyscript.documentation.Exporter#generateWiki(File, com.cleanroommc.groovyscript.documentation.helper.ContainerHolder)
      */
     default boolean generateWiki(File suggestedFolder) {
         return true;

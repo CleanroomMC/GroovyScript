@@ -1,6 +1,35 @@
 // Add any additional repositories for your dependencies here
 
 repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'CleanroomMC CurseMaven'
+                url = 'https://curse.cleanroommc.com'
+            }
+        }
+        filter {
+            includeGroup 'curse.maven'
+        }
+    }
+    maven {
+        // used for HadEnoughItems, Conventions only resolves Cleanroom's own groups from here
+        name = 'CleanroomMC HEI Maven'
+        url = 'https://maven.cleanroommc.com'
+        content {
+            includeGroup 'mezz'
+        }
+    }
+    maven {
+        // used for JEI
+        name = 'BlameJared Maven'
+        url = 'https://maven.blamejared.com'
+    }
+    maven {
+        // used for CodeChickenLib and EnderIO
+        name = 'GTCEu Maven'
+        url = 'https://maven.gtceu.com'
+    }
 //    maven {
 //        // formerly used for EnderIO, currently unused
 //        url 'http://maven.tterrag.com/'
@@ -8,10 +37,10 @@ repositories {
 //    }
     maven {
         // used for TechReborn
-        name 'Mod Maven'
-        url 'https://modmaven.dev'
+        name = 'Mod Maven'
+        url = 'https://modmaven.dev'
     }
     maven {
-        url 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'
+        url = 'https://mvnrepository.com/artifact/org.apache.groovy/groovy'
     }
 }

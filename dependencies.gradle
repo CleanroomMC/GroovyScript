@@ -17,7 +17,7 @@
  * To add a mod with CurseMaven, replace '("g:n:v:c")' in the above with 'rfg.deobf("curse.maven:project_slug-project_id:file_id")'
  * Example: implementation rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:4527757")
  *
- * To shadow a dependency, use 'shadowImplementation'. For more info, see https://github.com/GregTechCEu/Buildscripts/blob/master/docs/shadow.md
+ * To bundle a dependency into the mod jar, use 'shade'.
  *
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
@@ -147,38 +147,39 @@ final Map<String, List<String>> runtime_dependencies = [
 ]
 
 configurations {
-    specialEmbed
-    implementation.extendsFrom(specialEmbed)
-}
-
-jar {
-    from provider {
-        configurations.specialEmbed.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }, {
-        exclude 'META-INF', 'META-INF/**', 'about*.html'
-    }
+    shade
+    implementation.extendsFrom shade
 }
 
 dependencies {
-    embed "org.apache.groovy:groovy:${project.groovy_version}"
+    runtimeOnly 'com.cleanroommc:strip-latest-forge-requirements:1.0'
+    runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
+
+    shade "org.apache.groovy:groovy:${project.groovy_version}"
 
     // TODO: check if there is anything to exclude
-    specialEmbed "io.github.classgraph:classgraph:4.8.165"
+    shade "io.github.classgraph:classgraph:4.8.165"
     // have to include compileOnly for if any mods we're adding compat for shade an older version of classgraph, such as Reborn Core.
     compileOnly "io.github.classgraph:classgraph:4.8.165"
 
-    specialEmbed("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
+    shade("org.eclipse.lsp4j:org.eclipse.lsp4j:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
-    specialEmbed("org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.20.1") {
+    shade("org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.20.1") {
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'com.google.code.gson', module: 'gson'
     }
 
-    api "codechicken:codechickenlib:3.2.3.358"
+    // Compile against JEI's API, run with HadEnoughItems
+    compileOnly 'mezz.jei:jei_1.12.2:4.16.1.302'
+    runtimeOnly 'mezz:jei:4.36.1'
+    runtimeOnly rfg.deobf('curse.maven:top-245211:2667280') // TOP 1.4.28
+
+    // CodeChickenLib pulls in JEI, which would clash with HadEnoughItems at runtime
+    api("codechicken:codechickenlib:3.2.3.358") {
+        exclude group: 'mezz.jei'
+    }
     // api "gregtech:gregtech:2.8.10-beta", { transitive false }
 
     // compiles all mods, and selectively enables mods being debugged

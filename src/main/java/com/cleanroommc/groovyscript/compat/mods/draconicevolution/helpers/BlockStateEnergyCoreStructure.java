@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022-2026 CleanroomMC contributors
+ * SPDX-License-Identifier: LGPL-3.0-only
+ */
+
 package com.cleanroommc.groovyscript.compat.mods.draconicevolution.helpers;
 
 import com.brandon3055.brandonscore.lib.Vec3D;

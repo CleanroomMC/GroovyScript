@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022-2026 CleanroomMC contributors
+ * SPDX-License-Identifier: LGPL-3.0-only
+ */
+
 package com.cleanroommc.groovyscript.api.documentation.annotations;
 
 import java.lang.annotation.*;
@@ -97,6 +102,7 @@ public @interface Property {
      * Here is a quick shortcut table to better understand what the logic is:
      *
      * <table>
+     *  <caption>Validation shortcuts</caption>
      *  <tr>
      *   <th>validation</th>
      *   <th>code</th>
@@ -143,12 +149,12 @@ public @interface Property {
      *   <td>^1</td>
      *  </tr>
      *  <tr>
-     *   <td><code>x >= 0 && x <= 5</code></td>
+     *   <td>{@code x >= 0 && x <= 5}</td>
      *   <td><code>@Comp({@link Comp#types types} = {{@link Comp.Type#GTE GTE}, {@link Comp.Type#LTE LTE}}, {@link Comp#gte gte} = 0, {@link Comp#lte lte} = 5)</code></td>
      *   <td>types checks gte and lte, gte is set to 0 and lte is set to 5</td>
      *  </tr>
      *  <tr>
-     *   <td><code>x > 0 && x <= 2</code></td>
+     *   <td>{@code x > 0 && x <= 2}</td>
      *   <td><code>@Comp({@link Comp#gt gt} = 0, {@link Comp#lte lte} = 2)</code></td>
      *   <td>^1</td>
      *  </tr>
@@ -158,12 +164,12 @@ public @interface Property {
      *   <td>^1</td>
      *  </tr>
      *  <tr>
-     *   <td><code>x >= 0 && complex logic</code></td>
+     *   <td>{@code x >= 0 && complex logic}</td>
      *   <td><code>@Comp({@link Comp#gte gte} = 0, {@link Comp#unique unique} = "complex logic")</code></td>
      *   <td>^1</td>
      *  </tr>
      *  <tr>
-     *   <td><code>x >= 1 && x <= 9 && complex logic</code></td>
+     *   <td>{@code x >= 1 && x <= 9 && complex logic}</td>
      *   <td><code>@Comp({@link Comp#gte gte} = 1, {@link Comp#lte lte} = 9, {@link Comp#unique unique} = "complex logic")</code></td>
      *   <td>^1</td>
      *  </tr>

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022-2026 CleanroomMC contributors
+ * SPDX-License-Identifier: LGPL-3.0-only
+ */
+
 package com.cleanroommc.groovyscript.api.documentation.annotations;
 
 import java.lang.annotation.Retention;
@@ -104,6 +109,7 @@ public @interface Comp {
      * Used to determine the type of comparison. Contains a symbol representation and a localization key.
      *
      * <table>
+     *  <caption>Comparison types</caption>
      *  <tr>
      *   <th>name</th>
      *   <th>symbol</th>
@@ -126,12 +132,12 @@ public @interface Comp {
      *  </tr>
      *  <tr>
      *   <th>LTE</th>
-     *   <th><=</th>
+     *   <th>&lt;=</th>
      *   <th>groovyscript.wiki.less_than_or_equal_to</th>
      *  </tr>
      *  <tr>
      *   <th>LT</th>
-     *   <th><</th>
+     *   <th>&lt;</th>
      *   <th>groovyscript.wiki.less_than</th>
      *  </tr>
      *  <tr>
