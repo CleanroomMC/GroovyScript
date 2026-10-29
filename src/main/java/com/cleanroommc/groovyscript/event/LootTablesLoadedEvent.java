@@ -17,20 +17,38 @@ import groovy.lang.Closure;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraft.world.storage.loot.LootTableManager;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class LootTablesLoadedEvent extends Event {
 
-    public final Loot loot = new Loot();
+    public final Loot loot;
+
+    public LootTablesLoadedEvent(LootTableManager manager) {
+        this.loot = new Loot(manager);
+    }
 
     public static class Loot {
 
         public static final LootTable EMPTY_LOOT_TABLE = new LootTable(new LootPool[0]);
 
+        private final LootTableManager manager;
+
+        public Loot(LootTableManager manager) {
+            this.manager = manager;
+        }
+
         public LootTable getTable(ResourceLocation name) {
             LootTable lootTable = VanillaModule.INSTANCE.loot.tables.get(name);
-            if (lootTable == null) GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
+            if (lootTable == null) {
+                lootTable = manager.getLootTableFromLocation(name);
+                if (lootTable == LootTable.EMPTY_LOOT_TABLE) {
+                    GroovyLog.msg("GroovyScript found 0 LootTable(s) named " + name).post();
+                    return null;
+                }
+                VanillaModule.INSTANCE.loot.tables.put(name, lootTable);
+            }
             return lootTable;
         }
 
