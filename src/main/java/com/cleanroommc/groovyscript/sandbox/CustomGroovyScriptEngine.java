@@ -17,6 +17,7 @@ import groovy.util.ResourceConnector;
 import groovy.util.ResourceException;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.ast.ClassHelper;
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.classgen.GeneratorContext;
@@ -314,7 +315,7 @@ public class CustomGroovyScriptEngine implements ResourceConnector {
         Class<?> clazz = null;
         try {
             String encoding = config.getSourceEncoding();
-            String content = IOGroovyMethods.getText(new FileInputStream(file), encoding);
+            String content = StringUtils.removeStart(IOGroovyMethods.getText(new FileInputStream(file), encoding), "\uFEFF");
             clazz = this.classLoader.parseClassRaw(content, file.toPath().toUri().toURL().toExternalForm());
             // manually load the file as a groovy script
             //clazz = this.classLoader.parseClassRaw(path.toFile());

@@ -58,6 +58,7 @@ public class GroovyScriptSandbox {
 
     public GroovyScriptSandbox() {
         CompilerConfiguration config = new CompilerConfiguration();
+        config.setSourceEncoding("UTF-8");
         initEngine(config);
         this.engine = new CustomGroovyScriptEngine(SandboxData.getRootUrls(), SandboxData.getCachePath(), SandboxData.getScriptFile(), config);
         registerBinding("Mods", ModSupport.INSTANCE);

@@ -15,11 +15,14 @@ import io.sommers.packmode.api.PackModeAPI;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiPredicate;
 
@@ -55,11 +58,11 @@ public class Preprocessor {
         int lines = 0;
         int empty = 0;
         boolean lastEmpty = false;
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             boolean isComment = false;
             String line;
             while ((line = br.readLine()) != null) {
-                lines++;
+                if (lines++ == 0) line = StringUtils.removeStart(line, "\uFEFF");
                 line = line.trim();
                 if (!lastEmpty) empty = 0;
                 if (line.isEmpty()) {
