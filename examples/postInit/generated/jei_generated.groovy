@@ -36,7 +36,9 @@ mods.jei.category.hideCategory('minecraft.fuel')
 
 // mods.jei.description.remove(item('thaumcraft:triple_meat_treat'))
 
+mods.jei.description.add(fluid('lava') * 500, 'some moderately cold fluid')
 mods.jei.description.add(item('minecraft:gold_ingot'), 'groovyscript.recipe.fluid_recipe')
+mods.jei.description.add([item('minecraft:diamond'), item('minecraft:emerald')], 'groovyscript.recipe.fluid_recipe')
 mods.jei.description.add(item('minecraft:clay'), ['wow', 'this', 'is', 'neat'])
 
 // Ingredient Sidebar:
