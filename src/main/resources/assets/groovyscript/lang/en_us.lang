@@ -1746,7 +1746,7 @@ groovyscript.wiki.iceandfire.ice_forge.description=Converts two input itemstacks
 
 groovyscript.wiki.iceandfire.lightning_forge.title=Lightning Dragonforge
 groovyscript.wiki.iceandfire.lightning_forge.description=Converts two input itemstacks into an output itemstack in a multiblock Dragonforge Lightning Multiblock while there is a stage 3+ Lightning Dragon nearby.
-groovyscript.wiki.iceandfire.lightning_forge.note=Requires [Ice And Fire: RotN edition](https://www.curseforge.com/minecraft/mc-mods/ice-and-fire-rotn-edition) to be installed to be enabled
+groovyscript.wiki.iceandfire.lightning_forge.note=Requires [Ice And Fire: RotN Edition](https://www.curseforge.com/minecraft/mc-mods/ice-and-fire-rotn-edition) or [I&F: RLCraft Edition](https://www.curseforge.com/minecraft/mc-mods/iceandfire-rlcraft) to be installed to be enabled
 
 
 # Immersive Engineering
