@@ -220,7 +220,6 @@ dependencies {
     // WARNING: rotn must be placed before normal, otherwise you will not be able to properly detect sources for the LightningForge
     compileOnly rfg.deobf('curse.maven:ice-and-fire-rotn-edition-457668:5738729')
     compileOnly rfg.deobf('curse.maven:iceandfire-264231:2939529')
-    compileOnly rfg.deobf('curse.maven:ice-and-fire-rlcraft-edition-888556:8350620')
     if (debug_ice_and_fire_rotn.toBoolean()) {
         runtimeOnly rfg.deobf('curse.maven:ice-and-fire-rotn-edition-457668:5738729')
     } else if (debug_ice_and_fire_old.toBoolean()) {

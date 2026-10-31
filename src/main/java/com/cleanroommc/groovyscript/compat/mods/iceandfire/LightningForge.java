@@ -1,12 +1,10 @@
 package com.cleanroommc.groovyscript.compat.mods.iceandfire;
 
-import com.cleanroommc.groovyscript.api.IIngredient;
 import com.cleanroommc.groovyscript.api.documentation.annotations.*;
 import com.github.alexthe666.iceandfire.recipe.DragonForgeRecipe;
 
 import java.util.Collection;
 
-// want all the examples to be commented
 @RegistryDescription(
         admonition = @Admonition("groovyscript.wiki.iceandfire.lightning_forge.note"),
         override = @MethodOverride(method = {
@@ -26,24 +24,5 @@ public class LightningForge extends DragonForge {
 
     public LightningForge(Collection<DragonForgeRecipe> recipes) {
         super("Lightning", recipes);
-    }
-
-    @Override
-    public RecipeBuilder recipeBuilder() {
-        return super.recipeBuilder();
-    }
-
-    @MethodDescription(example = {
-
-    })
-    @Override
-    public boolean removeByInput(IIngredient input) {
-        return super.removeByInput(input);
-    }
-
-    @MethodDescription()
-    @Override
-    public boolean removeByOutput(IIngredient output) {
-        return super.removeByOutput(output);
     }
 }
