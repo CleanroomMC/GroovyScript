@@ -125,7 +125,8 @@ final Map<String, List<String>> mod_dependencies = [
         'thermal_foundation-222880:2926428'                   : [debug_thermal_expansion],
         'tinkers-complement-272671:2843439'                   : [debug_tinkers_construct],
         'tinkers_construct-74072:2902483'                     : [debug_tinkers_construct],
-        'woot-244049:2712670'                                 : [debug_woot],
+        'railcraft-51195:3853491'                             : [debug_railcraft],
+        'woot-244049:2712670'                                   : [debug_woot],
 ]
 
 // Maps mods from CurseMaven to the properties that enable the mod.
